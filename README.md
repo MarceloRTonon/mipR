@@ -11,6 +11,6 @@ Aulas e Material dadas por mim e @felipecornelio para as aulas extras de R volta
 
 **O que não é o objetivo deste curso:** 
 
--Ensinar todo o conteúado existente de R;
+-Ensinar todo o conteúdo existente de R;
 
 -Ensinar tudo sobre programação para os alunos.
