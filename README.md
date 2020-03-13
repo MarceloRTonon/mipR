@@ -13,4 +13,4 @@ Aulas e Material dadas por mim e @felipecornelio para as aulas extras de R volta
 
 -Ensinar todo o conteúado existente de R;
 
--Ensinar tudo sobre programação para os alunos;
+-Ensinar tudo sobre programação para os alunos.
