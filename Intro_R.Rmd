@@ -195,6 +195,7 @@ b <- sum(((((a+d)*4)^(2))-2)/3)
 # * é o comando da multiplicação
 # / é o comando da divisão
 # ^ é o comando da exponencial. Para raizes a n°, faça ^(1/n).
+# c() é uma função. Falaremos mais dela a frente.
 ## Detalhe: solve() é o mesmo que ^(-1)
 
 # Podemos escrever uma função que tome a e d como insumos e devolva b.
