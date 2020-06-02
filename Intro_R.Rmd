@@ -142,7 +142,7 @@ d <- c(a,b, 5) #"d" é uma variável. c() é uma função que combina elementos 
 
 Se você não usar `<-` na programação, a conta será feita, o valor estabelecido não será associado à nenhum objeto, e deste modo não poderá ser recuperado depois, lhe obrigando a fazer todas as contas no futuro.
 
-**R** é em sua base uma linguagem orientada ao objeto ([Clique aqui](https://pt.wikipedia.org/wiki/Orienta%C3%A7%C3%A3o_a_objetos) para ler mais.). O uso de outros pacotes tal qual `purrr`, que permite que você use dentro do **R** um formato de linguagem funcional. Desse modo **R** se torna uma linguagem multiparadigma. Para baixar um pacote, devemos usar a função `install.packages()`, e para carrega-lo depois, devemos usar a função `library()`. O código no **R** pode ser escrito de duas formas, veja abaixo:
+**R** é em sua base uma linguagem multiparadigma . Ou seja, você pode usar ela tanto como [orientada à objetos](https://pt.wikipedia.org/wiki/Orienta%C3%A7%C3%A3o_a_objetos), quanto no [modo funcional](https://pt.wikipedia.org/wiki/Programa%C3%A7%C3%A3o_funcional), com o uso de  pacotes tal qual o `purrr`. Desse modo, para usar o pacote `purrr` no **R** por exemplo,  devemos instala-lo, usando a função `install.packages()`, e depois carrega-lo, com a função `library()`. O código no **R** pode ser escrito de duas formas, veja abaixo:
 
 ```{r eval=FALSE, include=FALSE}
 install.packages("purrr")
