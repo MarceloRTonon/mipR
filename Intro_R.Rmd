@@ -1,5 +1,5 @@
 ---
-title: "Apresentação do curso e Introdução ao R"
+title: "Aula 0 - Apresentação do curso e Introdução ao R"
 author: "Marcelo Tonon e Felipe Cornelio"
 date: '2020'
 output:
@@ -7,13 +7,11 @@ output:
 ---
 
 
-
-
 ```{r setup, include=FALSE, eval = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-O inicio deste documento se dedicará a explicar os objetivos e motivos curso, bem como o porquê de estarmos utilizando o **R** enquanto linguagem. Se você não se interessa por isto, pode pular para a parte "Onde eu Começo". Se você já tem o **R**, **RStudio** e o **Rtools** (opcional) instalado, podem pular a parte das instalações.
+O inicio deste documento se dedicará a explicar os objetivos e motivos curso, bem como o porquê de estarmos utilizando o **R** enquanto linguagem. Se você não se interessa por isto, pode pular para a parte "Onde eu Começo". Se você já tem o **R**, **RStudio** e o **Rtools** (opcional) instalado, pode pular a parte das instalações.
 
 
 ## Apresentação do Curso
