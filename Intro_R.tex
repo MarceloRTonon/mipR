@@ -1,0 +1,724 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Apresentação do curso e Introdução ao R},
+  pdfauthor={Marcelo Tonon e Felipe Cornelio},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Apresentação do curso e Introdução ao R}
+\author{Marcelo Tonon e Felipe Cornelio}
+\date{2020}
+
+\begin{document}
+\maketitle
+
+O inicio deste documento se dedicará a explicar os objetivos e motivos
+curso, bem como o porquê de estarmos utilizando o \textbf{R} enquanto
+linguagem. Se você não se interessa por isto, pode pular para a parte
+``Onde eu Começo''. Se você já tem o \textbf{R}, \textbf{RStudio} e o
+\textbf{Rtools} (opcional) instalado, podem pular a parte das
+instalações.
+
+\hypertarget{apresentauxe7uxe3o-do-curso}{%
+\subsection{Apresentação do Curso}\label{apresentauxe7uxe3o-do-curso}}
+
+Este curso de \textbf{R} nasceu de uma demanda derivada. A tradição do
+Instituto de Economia da UFRJ no que tange às técnicas de Insumo-Produto
+gerou a demanda pela oferta de uma disciplina no PPGE que abrangesse o
+tópico. Por consequência a necessidade de um curso que desse um
+ferramental básico de programação se fez presente.
+
+Neste sentido, o curso \textbf{NÃO} tem como escopo fornecer uma
+formação completa em \textbf{R} ou em programação. Vamos nos manter ao
+básico neste curso. Também \textbf{NÃO} serão trabalhadas a aplicação do
+\textbf{R} à áreas da economia, como a econometria. Este curso
+\textbf{é} voltado para a aplicação do \textbf{R} em técnicas
+Insumo-Produto. No entanto, se espera que o aprendizado adquirido neste
+curso, combinado com outros materiais que indicaremos mais a frente,
+abra as portas para outros conhecimentos em termos do \textbf{R} e de
+programação.
+
+Dito isso, existe muito material disponível na Internet sobre a
+programação e \textbf{R}. Livros, vídeo-aulas, tutoriais, cursos online
+e mais importante pessoas tendo as suas dúvidas e seus problemas sendo
+resolvidos. É todo um universo de pessoas que assim como eu e você não
+nasceram sabendo e nem sabem tudo. E para além de todos os problemas da
+internet, \textbf{as pessoas se ajudam}. No entanto, há um
+\textbf{porém}! Precisamos de algum conhecimento mínimo até mesmo para a
+nossa pesquisa do Google nos responda o que estamos procurando. Em
+última instância, programação é saber se virar. E é exatamente
+\textbf{como se virar} que queremos ensinar neste curso.
+
+Explicados, minimamente, a motivação, o escopo e o objetivo deste curso,
+cabe no entanto expressar a sua justificativa. Por que simplesmente não
+usar programas como o \textbf{Excel}, que são mais visuais e
+inegavelmente mais simples de manejar (clicar e arrastar com o mouse)?
+
+\hypertarget{por-que-usar-programauxe7uxe3o}{%
+\subsection{Por que usar
+programação?}\label{por-que-usar-programauxe7uxe3o}}
+
+O uso de uma linguagem de programação para realizar trabalhos
+quantitativos tem vantagens em relação aos trabalhos feitos em programas
+a base de planilhas ou cliques como o Excel:
+
+\hypertarget{clareza}{%
+\subsubsection{Clareza}\label{clareza}}
+
+Um problema comum quando realizamos trabalhos mais complexos em
+programas como o Excel é que se torna fácil nos desorientarmos ao longo
+do processo. Não raro se confunde a aba, a célula ou mesmo o arquivo
+onde estavamos trabalhando ou que deveriamos usar. Muitas vezes, achamos
+que selecionamos mais de uma aba e não o fizemos. Ou desconfiguramos uma
+célula que era dependente de outra. Na maioria das vezes, percebemos o
+que ocorreu e conseguimos resolver isto na base de múltiplos apertos no
+\texttt{ctrl\ z}. No entanto, um erro deste que passa desapercebido pode
+nos custar caro em termos do resultado final de trabalho que dispendemos
+muito tempo.
+
+Neste sentido um código (ou conjunto deles) é um texto com começo, meio
+e fim. Desse modo, ele nos possibilita estruturar com facilidade o que
+iremos fazer e compreender o que já fizemos. Com alguma prática e
+leitura, conseguimos escreve-lo de tal forma que resolver problemas
+facilmente.
+
+Para exemplificar: imagine, usando EXCEL, que erramos \emph{apenas} uma
+coisa no inicio do projeto em que estamos trabalhando. Uma coluna que
+somamos a mais (ou a menos) que seja. E numa transposição aqui, uns bons
+\texttt{ctrl\ c\ +\ ctrl\ v} ali, e não temos certeza que ao mudarmos
+apenas aqueles dados já resolveremos o problema. Para termos 100\% de
+certeza, teriamos que ir refazer todo o trabalho de clicar e arrastar.
+Algo nada agradável. Por outro lado, ao fazermos o mesmo erro só que
+usando \textbf{R}, podemos simplesmente executar o código novamente do
+inicio ao fim e temos o nosso resultado correto. Se o seu computador for
+demorar para executar tudo de novo, você pode até ir no banheiro ou ir
+tomar aquele cafézinho batendo um papo enquanto espera.
+
+\hypertarget{exiguxeancia-computacional}{%
+\subsubsection{Exigência
+computacional}\label{exiguxeancia-computacional}}
+
+No entanto, alguém pode argumentar que se pode conectar várias
+planilhas, abas e pastas do Excel de modo que ao alterarmos uma
+planilha, faremos por efeito cascata o resultado final mudarmos para o
+correto. Sim, isso é verdade. No entanto, quanto mais fizermos multiplas
+conexões no Excel, mais este irá requerer do seu processador e da sua
+memória RAM. Abra um arquivo de excel em que todas das suas muitas abas
+estão conectadas e você entenderá o que eu quero dizer. Neste caso você
+ficará com um empasse entre perder a conexão rápida ou ter de enfrentar
+corriqueiramente o seu computador travando.
+
+Ao usarmos a programação, podemos remover variaveis que não nos servirão
+mais e, ao termos escrito o código, manter a conexão.
+
+Além disso, ao trabalhar com bases de dados muito grandes o Excel se
+torna extremamente ineficiente.
+
+\hypertarget{generalizauxe7uxe3o-e-automauxe7uxe3o}{%
+\subsubsection{Generalização e
+Automação}\label{generalizauxe7uxe3o-e-automauxe7uxe3o}}
+
+Existe uma outra questão relevante quando tratamos da dimensão do nosso
+projeto: se vamos fazer uma mesma tarefa multiplas vezes, o processo de
+arrastar e clicar se torna por si só um castigo dantesco. Por outro
+lado, ao programarmos podemos facilmente generalizar uma rotina que
+antes era para apenas um ano ou país.
+
+Outro aspecto interessante é que ao estabelecer um código para um
+trabalho que você faz recorrentemente, você pode muitas vezes apenas
+mudar uma ou duas linhas e pronto. Trabalho feito, pode ir tomar o
+cafézinho enquanto espera.
+
+\hypertarget{replicauxe7uxe3o-e-transparuxeancia}{%
+\subsubsection{Replicação e
+transparência}\label{replicauxe7uxe3o-e-transparuxeancia}}
+
+Todos os motivos expostos até aqui dizem respeito a problemas
+relacionados ao trabalho de modo geral. Por outro lado, quando se pensa
+na academia e na ciência, uma questão merece atenção especial: a
+replicabilidade e transparência da forma como você atingiu o seu
+resultado. O método científico pressupõe que você dê ao seu interlocutor
+condições deste acompanhar a forma como os seus resultados foram
+alcançados. Deste modo, para além de simplesmente mostrar a metodologia
+no paper, a boa prática cientifica deveria ser também apresentar o
+código em que você executou a metodologia, de modo que possíveis erros
+possam ser apontados e corrigidos.
+
+Podemos aqui relembrar o embaraçoso caso do artigo de Reinhart e Rogoff
+(2010), em que os autores deixaram de fora 5 dos 20 países da sua
+amostra por um erro de Excel. Poucos se atentam no entanto ao fato de
+que \href{https://en.wikipedia.org/wiki/Thomas_Herndon}{Thomas Herdon}
+pretendia apenas replicar os resultados do paper original para um
+trabalho de uma displina\footnote{A crítica no artigo de
+  \href{http://www.peri.umass.edu/fileadmin/pdf/working_papers/working_papers_301-350/WP322.pdf}{Herdon,
+  Ash e Pollin (2013)} não se resume a essa questão apenas, porém foi o
+  que deu notoriedade ao caso.}. O erro de Reinhart e Rogoff só foi
+descoberto pois Herdon passou um semestre tentando replicar os
+resultados e de modo algum conseguia.
+
+\hypertarget{por-que-r}{%
+\subsection{Por que R?}\label{por-que-r}}
+
+Podemos dizer que algumas das qualidades do \textbf{R} que mais nos
+interessam neste momento são\footnote{A lista de qualidades e defeitos
+  abaixo é em muito baseada na lista \emph{Why R?} apresentada por
+  \href{https://adv-r.hadley.nz/introduction.html}{Hadley Wickham
+  (2019)}. Porém eu selecionei apenas alguns dos itens, uma vez que esta
+  apostila não se trata de uma introdução ás caracteristicas do
+  \textbf{R} à programadores intermediários. Eu também adicionei algumas
+  outras também que eu achei pertinente.} :
+
+\begin{itemize}
+\item
+  Ele é \emph{Open Source} e gratuíto, o que lhe garante acessabilidade.
+  Você pode rodar \textbf{R} em qualquer sistema operacional e de graça.
+\item
+  O \textbf{R} tem uma comunidade fantástica e ativa. Ao longo de foruns
+  pela internet, há uma comunidade sempre ativa para ajudar e explicar.
+\item
+  \textbf{R} é uma linguagem que carrega consigo 20 anos de
+  desenvolvimento. Isso faz com que se você tem um problema, muito
+  provavelmente alguém também já teve, perguntou na internet e teve sua
+  dúvida respondida.
+\item
+  Dada a natureza colaborativa do programa, muitos pacotes já foram
+  feitos para ajudar o programador nos seus objetivos. Isso é um
+  vantagem do \textbf{R} em relação ao \textbf{Python}, que \emph{ainda}
+  não tem a mesma quantidade de pacotes.
+\item
+  No geral, uma linguagem de programação tem um software de apoio com o
+  objetivo de agilizar o processo. É o chamado ``Ambiente de
+  Desenvolvimento Integrado'', muitas vezes referido pela sigla
+  IDE\footnote{Do inglês \emph{Integrated Development Environment}}. Uma
+  das grandes qualidades do \textbf{R} é o \textbf{RStudio}. Não há em
+  linguagens similares nenhum IDE que chegue ao nível de praticidade,
+  apoio e interatividade que o \textbf{RStudio} proporciona. Você
+  consegue inclusive escrever arquivos em \texttt{.PDF}, \texttt{.tex} e
+  \texttt{.html} nele!
+\item
+  Apesar dos pesares \textbf{R} é extremamente consistente entre as suas
+  versões ao longo do tempo. Um código que roda na versão 3 de
+  \textbf{R} (lançada em 2013) muito provavelmente rodará na versão
+  4.0.0 (a ser lançada em abril de 2020). Há via de regra uma transição
+  ``lenta, gradual e segura'' entre as versões, ao contrário do que foi
+  do Python 2 para o 3.
+\end{itemize}
+
+\begin{itemize}
+\tightlist
+\item
+  O \textbf{RStudio} tem uma conexão \textbf{git} direta, o que permite
+  à você trabalhar remotamente.
+\end{itemize}
+
+Obviamente \textbf{R} não é perfeito, então podemos dizer que o
+\textbf{R} tem algumas desvantagens:
+
+\begin{itemize}
+\item
+  Existem linguagens mais rápidas para certas coisas, como é o caso do
+  Python. No entanto, em niveis mais avançados, há a possibilidade de
+  você integrar o \textbf{R} com linguagens mais rápidas como
+  \texttt{Fortran}, \texttt{C} e o \texttt{C++}
+\item
+  A comunidade do \textbf{R} tem uma tendência a ser muito mais focada
+  no resultado em relação à forma. Com prazos apertados, muitas vezes se
+  faz um código feio e confuso que não tem muito padrão. Apesar de que
+  \emph{``Código feio também roda''}, a falta de um padrão universal em
+  meio a toda a comunidade do \textbf{R} sobre como seria a forma de
+  escrita ideal, faz com que os códigos possam não ser tão claros assim
+  para outras pessoas.
+\end{itemize}
+
+\hypertarget{onde-eu-comeuxe7o}{%
+\subsection{Onde eu começo?}\label{onde-eu-comeuxe7o}}
+
+A esta altura, se as seções anteriores não foram puladas, você deve
+estar pensando ``ok, você me venceu. Irei programar e usar \textbf{R},
+só me diz o que eu tenho que fazer! E por favor para de blábláblá!''
+
+Assim sendo, precisamos agora de duas coisas. Primeiro, você deve
+installar o \textbf{R}, \textbf{RStudio} e, se você usa Windows, o
+\textbf{Rtools}.
+
+Vale dar uma olhada no manual em inglês do
+\href{https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu}{DataCamp}
+que é bem explicado para o \textbf{R} e o \textbf{RStudio}. As partes
+abaixo (bem como as imagens), foram tiradas de lá:
+
+\hypertarget{instalauxe7uxf5es}{%
+\subsection{Instalações}\label{instalauxe7uxf5es}}
+
+\hypertarget{instalando-o-r}{%
+\subsubsection{\texorpdfstring{Instalando o
+\textbf{R}}{Instalando o R}}\label{instalando-o-r}}
+
+Vá em \url{https://cran.r-project.org/} e siga o procedimento da imagem
+abaixo:
+
+\includegraphics{gif_intro_download_R.webp}
+
+A versão da tela é a 3.6.3, mas pode baixar qualquer uma que aparecer.
+Depois siga os procedimentos abaixo para a instalação:
+
+\includegraphics{gif_intro_install_R.webp}
+
+\hypertarget{instalando-o-rstudio}{%
+\subsubsection{\texorpdfstring{Instalando o
+\textbf{RStudio}}{Instalando o RStudio}}\label{instalando-o-rstudio}}
+
+Baixe o \textbf{RStudio} na página deste link:
+\url{https://rstudio.com/products/rstudio/download/\#download}
+
+\includegraphics{gif_intro_download_RStudio.webp}
+
+Depois de baixado, apenas vá clicando \texttt{NEXT} tal qual no exemplo
+do R e o serviço estará feito.
+
+\hypertarget{instalando-o-rtools}{%
+\subsubsection{\texorpdfstring{Instalando o
+\textbf{Rtools}}{Instalando o Rtools}}\label{instalando-o-rtools}}
+
+\textbf{Importante: Se por algum motivo você não conseguir instalar o
+Rtools, não tem problema para os exercicios que iremos fazer neste
+momento. Porém algumas funcionalidades de certos pacotes do R pressupõe
+o Rtools.}
+
+Se você usa Windows, para algumas das funcionalidades do \textbf{R} e do
+\textbf{RStudio} será necessário \textbf{Rtools}. Se você não tem baixe
+o Java neste link \url{https://www.java.com/pt_BR/download/} e o
+instale.
+
+Depois disso, clique no link a seguir
+\url{https://cran.r-project.org/bin/windows/Rtools/} e baixe e instale a
+versão recomendada.
+
+\hypertarget{sua-primeira-vez-no-r}{%
+\section{\texorpdfstring{Sua primeira vez no
+\textbf{R}!}{Sua primeira vez no R!}}\label{sua-primeira-vez-no-r}}
+
+\emph{Ou melhor dizendo}: no \textbf{RStudio}! Se você abrir o programa
+que vem escrito apenas \textbf{R}, você não irá se sentir muito
+convidado. Por outro lado, como já dissemos antes, o \textbf{RStudio}
+por ser um IDE foi feito para ser intuitivo, simples e interativo.
+
+Com o \textbf{RStudio} ligado, se você apertar
+\texttt{ctrl\ +\ shift\ +\ n} irá abrir um novo \texttt{R\ Script},
+chamado ``Untitled1'' (ou 2 se já havia um Untitled1 aberto). O
+\texttt{R\ Script} é o arquivo que serve para escrevermos e salvarmos o
+nosso código. No caso do \textbf{R}, todos os arquivos com o sufixo
+\texttt{.R} no final são um \texttt{R\ Script}.
+
+Vamos explicar agora três conceitos básicos da programação, que valem
+para o \textbf{R}: valor, variável e função. Leia o quadro abaixo com os
+comentários (No \textbf{R} os comentários do código vêm após um
+\texttt{\#}.):
+
+Se você não usar \texttt{\textless{}-} na programação, a conta será
+feita, o valor estabelecido não será associado à nenhum objeto, e deste
+modo não poderá ser recuperado depois, lhe obrigando a fazer todas as
+contas no futuro.
+
+\textbf{R} é em sua base uma linguagem orientada ao objeto
+(\href{https://pt.wikipedia.org/wiki/Orienta\%C3\%A7\%C3\%A3o_a_objetos}{Clique
+aqui} para ler mais.). O uso de outros pacotes tal qual \texttt{purrr},
+que permite que você use dentro do \textbf{R} um formato de linguagem
+funcional. Desse modo \textbf{R} se torna uma linguagem multiparadigma.
+Para baixar um pacote, devemos usar a função
+\texttt{install.packages()}, e para carrega-lo depois, devemos usar a
+função \texttt{library()}.
+
+Neste curso não iremos usar o \emph{pipe}, \texttt{\%\textgreater{}\%},
+mas explicita-lo ajuda a entender como a escrita orientada ao objeto
+funciona. No modo Orientado ao objeto, nós temos do lado direito a
+seguinte estrutura \texttt{função\_2(função\_1(objeto))}, enquanto no
+modo funcional nós temos
+\texttt{objeto\ \%\textgreater{}\%\ função\_1\ \%\textgreater{}\%\ função\_2}.
+Desse modo, podemos perceber que no caso do modo Orientado ao uma
+\texttt{função()} sempre irá atuar sobre o objeto que esta entre o seu
+parênteses. Assim sendo, num mesmo comando do script podemos escrever
+multiplas funções. \textbf{\emph{Mudar isso}}.
+
+Se vamos escrever tudo na mesma linha ou em linhas diferentes fica a
+cargo da comodidade e praticidade. Poupar linhas faz o seu código ficar
+mais direto ao ponto, o que sem dúvidas é bom. Por outro lado, uma linha
+de comando muito longa, especialmente com o código orientado ao objeto,
+pode se tornar confusa demais. Além disso, muitas vezes podemos querer
+no futuro o \texttt{novo\_objeto} e o \texttt{novo\_objeto\_2}.
+
+Uma interrogação \texttt{?} acessa os documentos de help, baixados no
+seu computador. Ao digitarmos duas interrogações, \texttt{??}, o
+\emph{RStudio} procura via internet os documentos presentes no CRAN.
+
+Até agora falamos muitas vezes sobre os \emph{pacotes}, então vamos
+agora deixar claro o que é um pacote. O \textbf{R} e o \textbf{RStudio}
+que você baixou e instalou na sua casa, vem com uma serie de funções. Os
+pacotes nos dá funções, e também base de dados em alguns casos,
+adicionais criadas por outros usuários de \textbf{R}. Criar uma função
+nos permite realizar uma cadeia de comandos de uma vez, como podemos ver
+no quadro abaixo. Além disso, vamos ver como realizar as operações
+matemáticas básicas no \textbf{R}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{)}
+\NormalTok{d <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\OperatorTok{-}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{b <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(((((a}\OperatorTok{+}\NormalTok{d)}\OperatorTok{*}\DecValTok{4}\NormalTok{)}\OperatorTok{^}\NormalTok{(}\DecValTok{2}\NormalTok{))}\OperatorTok{-}\DecValTok{2}\NormalTok{)}\OperatorTok{/}\DecValTok{3}\NormalTok{)}
+
+\CommentTok{# + é o comando da soma }
+\CommentTok{# - é o comando da subtração }
+\CommentTok{# * é o comando da multiplicação}
+\CommentTok{# / é o comando da divisão}
+\CommentTok{# ^ é o comando da exponencial. Para raizes a n°, faça ^(1/n).}
+\CommentTok{## Detalhe: solve() é o mesmo que ^(-1)}
+
+\CommentTok{# Podemos escrever uma função que tome a e d como insumos e devolva b.}
+
+\CommentTok{#Estabelecendo uma função}
+\NormalTok{soma_doida <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(objeto_}\DecValTok{1}\NormalTok{,objeto_}\DecValTok{2}\NormalTok{)\{ }\CommentTok{#function estabelece que soma_doida() será uma função. Colocar x,y estabelece que ela precisa de dois insumos para funcionar. Já "\{" estabelece o inicio de tudo que está dentro de uma função.}
+\NormalTok{ temp_b <-}\StringTok{ }\NormalTok{objeto_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{objeto_}\DecValTok{2}
+\NormalTok{ temp_b <-}\StringTok{ }\NormalTok{temp_b}\OperatorTok{+}\DecValTok{4}
+\NormalTok{ temp_b <-}\StringTok{ }\NormalTok{temp_b}\OperatorTok{^}\DecValTok{2}
+\NormalTok{ temp_b <-}\StringTok{ }\NormalTok{temp_b}\DecValTok{-2}
+\NormalTok{ temp_b <-}\StringTok{ }\NormalTok{temp_b}\OperatorTok{/}\DecValTok{3}
+\NormalTok{ final_b <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(temp_b)}
+ \KeywordTok{return}\NormalTok{(final_b) }\CommentTok{# return() explicita qual objeto deve ser retornado. Por via de regra, não coloque nada mais de uma função depois de return()}
+\NormalTok{   \} }\CommentTok{# "\}" estabelece que a função terminou }
+
+\NormalTok{b <-}\StringTok{ }\KeywordTok{soma_doida}\NormalTok{(a,b) }\CommentTok{# Deste modo, dizemos que "a" é o "objeto_1" e "b" é o "objeto_2". Ou seja: A ORDEM IMPORTA!}
+\end{Highlighting}
+\end{Shaded}
+
+Podemos numa função escrever de forma mais passo a passo ao mesmo tempo
+que deixamos o seu código mais fluido. Temos também que mesmo que não
+seja o caso de \texttt{soma\_doida}, você poderia deixar claro em uma
+parte do código que você esta fazendo uma
+\texttt{decomposicao\_leontief} por exemplo. Além disso, fazer suas
+próprias funções tem ao menos
+\href{https://r4ds.had.co.nz/iteration.html\#introduction-14}{três
+vantagens} em relação a duplicar seu código muitas vezes:
+
+\begin{itemize}
+\item
+  É mais fácil ver qual é a intenção do nosso código, uma vez que seu
+  foco será atraído pelo que é diferente e não pelo que permanece igual.
+\item
+  É mais fácil realizar mudanças no seu código. Imagine que você está
+  ampliando o número de anos de um determinado artigo que você fez
+  antes, com uma função você precisa mexer em menos lugares ao invés de
+  ter que lembrar de todos os lugares em que você tem que fazer
+  mudanças.
+\item
+  Você tem menos problemas para resolver, uma vez que cada linha do
+  código é usada em mais lugares: se você consertou em um lugar,
+  consertou em todos.
+\end{itemize}
+
+\hypertarget{tipo-de-objetos.}{%
+\section{Tipo de objetos.}\label{tipo-de-objetos.}}
+
+Existem diferentes tipos (\texttt{types}) de objetos no \texttt{R}. Uma
+função básica (como \texttt{sum} ou \texttt{+}) é do tipo
+\texttt{builtin}, enquanto a nossa função \texttt{soma\_doida} será do
+tipo \texttt{closure}. Porém o que nos interessa neste momento é tratar
+dos tipos dos objetos que irão guardar dados e resultados. Podemos
+descobrir o tipo de um objeto ao usarmos a função \texttt{typeof}.
+Abaixo vamos descobrir rapidamente os quatro principais:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#character: texto}
+\NormalTok{a <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"sss"}\NormalTok{, }\StringTok{"ddd"}\NormalTok{, }\StringTok{"ccc"}\NormalTok{, }\StringTok{"ddd"}\NormalTok{) }\CommentTok{#precisamos de colocar ""}
+\KeywordTok{typeof}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "character"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# double: números reais}
+\NormalTok{d <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{)}
+\KeywordTok{typeof}\NormalTok{(d)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "double"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# integer: números inteiros que são acompanhados por L no final}
+\NormalTok{e <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\NormalTok{1L,1L, 2L, 3L) }
+\KeywordTok{typeof}\NormalTok{(e)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "integer"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# logical: valores lógicos, verdadeiro ou falso.}
+\NormalTok{b <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OtherTok{TRUE}\NormalTok{, }\OtherTok{FALSE}\NormalTok{, T, F) }\CommentTok{# Podemos escrever TRUE ou FALSE apenas como T ou F.}
+\KeywordTok{typeof}\NormalTok{(b)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "logical"
+\end{verbatim}
+
+Não trataremos aqui de outros dois tipos \texttt{complex} (para números
+complexos) and \texttt{raw} (para valores binários).
+
+\hypertarget{estrutura-buxe1sica-dos-dados-no-r}{%
+\section{\texorpdfstring{Estrutura básica dos dados no
+\textbf{R}}{Estrutura básica dos dados no R}}\label{estrutura-buxe1sica-dos-dados-no-r}}
+
+A estrutura básica de estruturar os dados no \textbf{R} são os vetores,
+que podem ser subdivididos em duas categorias: Vetores Atómicos e
+Listas. Vetores Atómicos obrigam que todos os seus elementos sejam de
+mesmo tipo, enquanto uma lista permite que eles possam variar. Para
+criar um vetor atómico usamos \texttt{c()}, enquanto para criarmos uma
+lista usamos \texttt{list()}. Além disso, ao contrário dos vetores
+atómicos, uma lista pode ser \emph{recursiva}, ou seja podemos ter
+listas de listas que estão contidas em uma lista (e assim por diante).
+
+Existem 3 propriedades fundamentais que tanto listas quanto vetores
+atómicos possuem:
+
+\begin{itemize}
+\item
+  Tipo: o que ele é e pode ser descoberto a partir de \texttt{typeof()},
+  como podemos ver.
+\item
+  Comprimento: a sua quantidade de elementos \texttt{length()}
+\item
+  Atributos: metadados adicionais arbitrarios \texttt{attributes()}
+\end{itemize}
+
+\hypertarget{vetores-atuxf3micos}{%
+\subsection{Vetores Atómicos}\label{vetores-atuxf3micos}}
+
+Algumas funcionalidades que podemos fazer com vetores:
+
+É relevante dizer que nem toda coerção é possível (ou desejável). Se
+tentarmos coergir um vetor \texttt{character} que contenha letras num
+vetor \texttt{double}, teremos como resultado valores \texttt{NA}s
+(missing values). Desse modo, devemos tomar cuidado ao trasnformarmos um
+tipo de dado em outro. Por consequência, devemos também ficar atento ao
+tipo de dados que estaremos combinando com \texttt{c()}. Isso porque
+\texttt{c()} sempre irá obrigar os valores a serem de um mesmo tipo.
+
+\hypertarget{listas}{%
+\subsection{Listas}\label{listas}}
+
+Ao contrario dos vetores atómicos, as listas não forçam que seus
+elementos sejam do mesmo tipo. Além disso, uma lista pode ser recursiva
+indefinidamente. Vejamos o que isso quer dizer:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lista_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{"aaaa"}\NormalTok{, }\DecValTok{2}\NormalTok{, }\StringTok{"ssss"}\NormalTok{, 1L, }\OtherTok{TRUE}\NormalTok{)}
+\NormalTok{vetor_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"aaaa"}\NormalTok{, }\DecValTok{2}\NormalTok{, }\StringTok{"ssss"}\NormalTok{, 1L, }\OtherTok{TRUE}\NormalTok{)}
+\NormalTok{lista_}\DecValTok{1}\NormalTok{[}\DecValTok{4}\NormalTok{] }\CommentTok{# TRUE continua como lógico.}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [[1]]
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vetor_}\DecValTok{1}\NormalTok{[[}\DecValTok{4}\NormalTok{]] }\CommentTok{# TRUE se tornou character.}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "1"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{unlist}\NormalTok{(lista_}\DecValTok{1}\NormalTok{) }\CommentTok{# Você pode tornar uma lista em um vetor atómico a partir da função unlist.}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "aaaa" "2"    "ssss" "1"    "TRUE"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Da mesma forma, você pode usar as.list() para transformar um objeto numa lista.}
+
+\CommentTok{#Recursividade}
+\NormalTok{lista_}\DecValTok{2}\NormalTok{ <-}\KeywordTok{list}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\KeywordTok{list}\NormalTok{()))), }\KeywordTok{list}\NormalTok{())}
+
+\KeywordTok{str}\NormalTok{(lista_}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## List of 2
+##  $ :List of 1
+##   ..$ :List of 1
+##   .. ..$ :List of 1
+##   .. .. ..$ : list()
+##  $ : list()
+\end{verbatim}
+
+\textbf{Importante:} A depender da situação é necessário usar
+\texttt{{[}{]}} ou \texttt{{[}{[}{]}{]}} para acessar elementos de uma
+lista. Não trataremos disso aqui, mas saiba que com
+\texttt{{[}{[}{]}{]}} você conseguirá acessar apenas um elemento da
+lista por vez, mas quase sempre funcionará. Enquanto com \texttt{{[}{]}}
+você conseguirá acessar multiplos elementos da lista, porém nem sempre
+irá funcionar (especialmente com elementos como matrizes e dataframes).
+Via de regra, vale usar \texttt{{[}{[}{]}{]}} como o padrão.
+
+\hypertarget{dataframes-e-matrizes}{%
+\section{Dataframes e matrizes}\label{dataframes-e-matrizes}}
+
+A maioria dos dados em \textbf{R} estão por sua vez salvos em tabelas da
+classe \texttt{data.frame}. Tabelas também podem ser da classe
+\texttt{matrix}. A diferença entre ambas é que \texttt{data.frame} pode
+conter vetores de diferentes tipos, enquanto \texttt{matrix} não. Pense
+em \texttt{data.frame} como uma lista de vetores e \texttt{matrix} como
+um vetor atómico que foi dividido em multiplas colunas. Vale notar que
+cada coluna de um \texttt{data.frame} é um vetor atómico, logo, os seus
+elementos tem que ser do mesmo tipo. Podemos criar ambos objetos usando
+as matrizes \texttt{data.frame()} e \texttt{matrix()}
+
+Cada uma das duas nos serve à um propósito. Quando estamos organizando e
+selecionando a base de dados a classe \texttt{data.frame} nos serve
+muito melhor, pois de modo geral iremos precisar de valores
+\texttt{character} ou \texttt{logical} no processo. Agora, durante
+algumas operações, \texttt{matrix} é mais conveniente, pois garante a
+uniformidade dos dados. Além disso, temos mais alguns comandos para
+ambas:
+
+Repare que data.frame() gerou automaticamente um nome para as colunas e
+linhas, enquanto matrix() não. Também podemos alocar os nomes usando
+\texttt{rownames(tabela)\textless{}-\ vetor\_com\_nomes}. O vetor com os
+nomes precisa ter o comprimento do tamanho do número de linhas (para o
+caso de \texttt{rownames()\textless{}-}) ou de colunas (para o caso de
+\texttt{colnames()\textless{}-}).
+
+Assim como na notação de algebra linear, para encontrar um elemento
+fazemos \texttt{tabela{[}linha,\ coluna{]}}.
+
+Agora que você aprendeu o básico do básico de \textbf{R}, podemos então
+ir para a parte mais voltada para matriz insumo produto!
+
+\hypertarget{relembrando-algebra-linear-buxe1sica.}{%
+\section{Relembrando algebra linear
+básica.}\label{relembrando-algebra-linear-buxe1sica.}}
+
+Vamos relembrar agora alguns conceitos de algebra linear. O primeiro é a
+multiplicação de matrizes.
+
+\end{document}

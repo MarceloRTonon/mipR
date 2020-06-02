@@ -1,0 +1,237 @@
+---
+title: "Lendo dados"
+author: "Marcelo Tonon"
+date: "02/05/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE, include = TRUE)
+```
+
+# Introdução e Objetivo
+
+Feitas a introdução de R, iremos neste capítulo do curso apresentar as diferentes formas possíveis em que se pode ler uma base de dados a partir do R. Vamos também apresentar algumas funções e como automatizar o seu código usando loops.
+
+# 1. A Função paste e paste0
+
+Se você deseja escrever uma frase no R a partir objetos, você pode usar a função `paste` ou a função `paste0`. Veja abaixo quando usamos a isso junto as funções `Sys.Date()` e `Sys.Time()`. que retornam, respectivamente, a data atual e o hórario atual. `paste` e `paste0` fazem no R o que `concatenar` faz no Excel.
+
+```{r}
+x <- "A data de hoje: "
+data <- Sys.Date()
+paste(x, data, sep = " ")
+hora <- format(Sys.time(), "%X")
+paste0("A hora é ", hora)
+```
+
+Repare que quando usamos `paste()` precisamos especificar qual será o separador entre os objetos concatenados com `sep = `. No caso de `paste(x, data, sep = " ")`, o separador é um dois pontos seguindo de um espaço, `": "`, como indicado entre as aspas. Importante dizer que o separador deve ser sempre um character. Assim sendo, uma função como `paste(x, data, sep = 2)` retornaria um erro.
+
+No caso de `paste0()`, não há separador entre os objetos. Assim sendo, não há necessidade de estabelecer qual é o separador como `sep = ""`. Podemos pensar em `paste0()` como um subconjunto de `paste()`.
+
+Aqui vale notar uma questão relevante, e de certo modo auto evidente, para as funções `Sys.time()` e `Sys.date`: ambas retornam valores diferentes quando executadas em diferentes momentos. Vamos ver as implicações então, quando criaremos o objeto `hora.1` e a função `hora()`:
+
+```{r}
+
+hora1 <-  paste0("A hora é: ", Sys.time())
+
+# Pedindo para o R esperar 2 segundos.
+Sys.sleep(2)
+
+
+hora <- function() paste0("A hora é: ", Sys.time())
+
+# Testando se o resultado de hora.1 e de hora.2() é a mesma coisa.
+hora1 == hora()
+```
+
+Você pode perceber que quando perguntamos ao ``R`` se `hora.1()` e `hora.2()` são a mesma coisa, usando `==`, ele nos retorna `FALSE`. Isso porque, sempre que chamamos `hora.1` o sistema irá retornar o en
+
+Você pode perceber que quando perguntamos ao ``R`` se `hora1` e `hora()` são a mesma coisa, usando `==`, ele nos retorna `FALSE`. Isso porque, sempre que chamarmos `hora.1` no sistema, este irá retornar um mesmo valor, que foi gravado pela função `Sys.time()` no momento em que `hora1` foi definido. Por outro lado, a função `hora()` irá sempre retornar um valor novo toda vez que foi executada. Desse modo, ao usar funções ou objetos que tenham como insumo  funções como `paste` e `paste0`, temos que ter em mente se o valor do objeto é definido ou dinâmico.
+
+#  Automatizando o seu código
+
+
+Nesta seção, eu vou explicar nesta parte o que é um loop, porquê não fazer as repetições manualmente, vou contextualizar como ele funciona e então apresentar como fazer um loop no R e algumas nuances sobre ele. Assim sendo, se você entende bem porque automatizar seu código é necessário e a lógica de um loop, você pode ir direto para a parte 
+
+## O que é um Loop
+
+## Por que não fazer repetições manualmente?
+
+Podemos dizer que há dois motivos pricipais para você automatizar o seu código. Praticidade e Erros.
+
+### Praticidade
+
+Uma das grandes vantagens de se programar é a automação do processo. Assim, suponha que você os produtos da multiplicação de `umObjeto` qualquer pelos valores de 1 a 3. Assim sendo, você pode fazer:
+
+```{r}
+umObjeto <- 15
+resultados <- list()
+
+
+resultados[[1]] <- umObjeto * 1
+resultados[[2]] <- umObjeto * 2
+resultados[[3]] <- umObjeto * 3
+```
+
+No caso de três valores, pode não **parecer** tão problemático assim. Porém, mesmo com poucos valores, se você tiver que fazer muitas operações, o número de operações crescerá aritméticamente. E 3 valores é um caso pequeno de repetições. As contas nacionais do IBGE podem ser usadas desde o ano 2000. A WIOD vai ano a ano de 2000 a 2014. Imagine fazer manualmente para cada ano? Isso porque não consideramos país nem setor. Assim, para cada objeto numa decomposição ou cálculo, você está adicionando um múltiplo.
+
+Para ilustrar isso, vamos supor que você irá fazer uma análise de decomposição estrutural. Nesta decomposição, você irá usar a série de matrizes do GIC (Passoni e Freitas, 2018) de 2000 a 2015. Temos ai 16 anos. Nisso, você irá usar a agregação setorial proposta por Kupfer (2005), com 5 grupos. Aí, vamos supor que você também quer desagregar a demanda final por componente, que são 6, se você não separar o Investimento da Administração Pública da Formação Bruta de Capital Fixo pois aí seriam 7. Assim, só para montar as equações a serem  decompostas, o número de repetições que você terá que fazer será:
+
+$$Repetições \ = Anos  \ * \ Setores \ * \ DF$$
+
+No nosso caso seria então 16 Anos vezes 5 grupos de Setores vezes 6 componentes da demanda final: um total de 400 repetições! Isso sem entrar na decomposição em si a ser feita que pode adicionar mais multiplos^[Em alguns casos o número de repetições se torna fatorial inclusive!]. Imagine o tempo que isso levará pra escrever. Imagine se pudessemos escrever apenas uma vez?
+
+### Erros
+
+A exceção de quem acredita na _infalibilidade papal_, o trecho abaixo é algo com que todos se identificam:
+
+> "Todo mundo erra sempre, todo mundo vai errar."\
+ _REVELAÇÂO, Grupo (2006)_
+
+Com isso em mente, vamos supor então que você pense numa solução _"esperta"_ para os seus problemas de repetição: o bom e velho `ctrl c` e `ctrl v`. Afinal, os anos de prática no ensino fundamental e médio, ~~e na graduação~~, por que não usa-lo agora com as repetições?
+
+<br>
+<center>
+![](leitura_de_dados/bilbo.jpg)
+</center>
+
+<br>
+O problema do `ctrl c` e `ctrl v` neste caso é a possibilidade de errar no inicio ou no meio do caminho. O primeiro caso é: imagine que você escreveu seu código, e usou `ctrl c` e `ctrl v` para fazer as repetições. Porém descobriu mais a frente que você descobriu que a conta que você estava fazendo estava errada, que por exemplo você esqueceu de diagonalizar um vetor coluna. Assim sendo, você terá que ajustar isso manualmente em cada uma das repetições. Não parece muito bom né? Assim, você teria que ter certeza de todos as suas operações estariam corretas.
+
+Porém, há um outro problema que pode aparecer ao longo do caminho: os erros de digitação. Ao contrário de um texto comum, em que um erro de digital ***pode*** ser mortal, na programação ele ***é*** fatal. E o pior, é extremamente fácil deixar passar um ou outro erro de digitação. Sem contar em confusão. Se você sem querer escrever `listaY[[2]]` ao invés de `listaY[[3]]`, o código provavelmente rodará sem retornar nenhum erro ou warning, porém seus resultados estarão errados. Assim, usar o `ctrl c` e `ctrl v` para repetição é uma estrategia extremamente desaconselhável. E escrever isso na mão é ***PIOR AINDA***.
+
+Assim sendo, mesmo quando não estamos numa situação de fazer algo como 400 repetições, escrever corridamente o código não é uma boa opção.
+
+
+
+## Entendendo um Loop
+
+Imagine que você quer repetir para 15 anos os seguintes comandos:
+
+```{r}
+
+I_Pub <- list()
+G <- list()
+Y <- list()
+t_ <- list()
+tY <- list()
+S <- list()
+
+ano <- 1
+
+I_Pub[[ano]] <- 1.03 *(1.02* ano)
+G[[ano]] <- 4 * (1.10 * ano)
+Y[[ano]] <- 12 * (1.09 * ano)
+t_[[ano]] <- 0.28 + (0.005 * ano)
+tY[[ano]] <- t_[[ano]] * Y[[ano]]
+S[[ano]] <- tY[[ano]] - G[[ano]] - I_Pub[[ano]]
+```
+
+Assim, se mudarmos o valor de `ano` de `1` para `2` podemos repetir inteiramente a parte final do código para o ano seguinte:
+
+```{r}
+ano <- 2
+
+I_Pub[[ano]] <- 1.03 *(1.02* ano)
+G[[ano]] <- 4 * (1.10 * ano)
+Y[[ano]] <- 12 * (1.09 * ano)
+t_[[ano]] <- 0.28 + (0.005 * ano)
+tY[[ano]] <- t_[[ano]] * Y[[ano]]
+S[[ano]] <- tY[[ano]] - G[[ano]] - I_Pub[[ano]]
+```
+
+E poderiamos fazer assim por diante. Quando falamos em automatizar o seu código falamos em dar de uma vez ao computador um conjunto de informações que darão a ele a capacidade de reproduzir um código diversas vezes para cada elemente deste conjunto. No exemplo acima o Loop vai rodar o seu código do inicio ao fim para cada valor do objeto `ano` que você determinar.
+
+## Usando Loops para automatizar
+
+Feitas as explicações da lógica por de trás de um loop, vamos usar agora o `for`. Para obter os resultados de 15 anos do exemplo passado, basta fazer simplesmente `for`:
+
+```{r}
+for(ano in 1:15) {
+ I_Pub[[ano]] <- 1.03 *(1.02* ano)
+G[[ano]] <- 4 * (1.10 * ano)
+Y[[ano]] <- 12 * (1.09 * ano)
+t_[[ano]] <- 0.28 + (0.005 * ano)
+tY[[ano]] <- t_[[ano]] * Y[[ano]]
+S[[ano]] <- tY[[ano]] - G[[ano]] - I_Pub[[ano]] 
+}
+```
+
+A utilidade de Loops é extremamente alta. Assim, podemos usa-lo da seguinte maneira:
+
+```{r}
+for(i in 1:10) {
+  print(c(10,20, 30) * i)
+  Sys.sleep(1)
+    print(Sys.time())
+  }
+```
+
+Quando se trata de um `for` que irá ocupar mais de uma linha, ou com uma linha grande, o conteúdo a ser repetido no loop deve ser colocado entre as chaves `{}`. Quando se tratar de uma equação curta e de uma única linha, pode-se escrever na mesma linha após o parentêses. Veja abaixo:
+
+```{r}
+s_Y <- list()
+
+for(ano in 1:15) s_Y[[ano]] <- S[[ano]]/Y[[ano]]
+```
+
+
+## Nuances ao usar Loop no R
+
+### Flexibilidade
+
+### Performance e purrr
+
+Pelas caracteristicas das linguagens como o R, estes têm sua performance penalizada ao usar loopings. Por conta disso, o mais comum é a partir de um certo momento, abandonar o uso do loop em detrimento da programação funcional, no caso do R permitido pelo pacote `purrr`. Aqui não irei explicar isso, só quero deixar claro que o `for` não é a linha de chegada quando se trata de automatizar os seus códigos. Iremos tratar disso com mais calma mais a frente. Em duas oportunidades.
+
+Na próxima seção iremos explicar como tratar de loops dentro de loops, com um foco especial para as listas!
+
+# Listas e sua recursividade aplicadas ao Loop
+
+Na apostila anterior nós falamos sobre as listas e a sua recursividade. Agora, vamos mostrar aqui, como isso é útil para nós quando tratamos de Loops.
+
+Vamos supor que queremos montar a estrutura dos dados tal qual expusemos antes: 16 anos, 5 grupos de setores, 6 componentes da demanda final. Como podemos fazer isso? Primeiramente devemos decidir qual será a organização da nossa lista. Qual variável deve vir primeiro? Ano, setor ou componente da demanda final? Vamos seguir no exemplo em que a lista mais geral será aquela do ano, seguida pelo setor e por fim o componente da demanda final, de modo que nossa listaX será igual à  `listaX[[ano]][[setor]][[df]]`.
+
+Pense nisso como se essa organização, fosse uma pasta na sua área de trabalho. Suponha que uma pasta `dados`, e a partir de então, você vai ter várias pastas com anos diferentes `dados/2000`, `dados/2001`... Então, ao clicar na primeira, você terá pastas referentes aos grupos setoriais `dados/2000/ind_inovativa`, `dados/2000/commodities`... Dentro dela, você terá então diferentes pastas para cada componente da demanda final `dados/2000/ind_inovativa/consumo_G`, `dados/2000/ind_inovativa/Consumo_Familias` e etc... Então, nessa pasta é que estará o dado, ou conjunto de dados, com os quais iremos trabalhar. Ter bem definido como vamos estruturar os dados é fundamental para projetos mais complexos. 
+
+Assim, vamos mostrar como é simples fazer essa estruturação via `for`.
+
+
+```{r}
+dadosOrg <- list()
+
+for(anos in 1:16){
+  dadosOrg[[anos]] <- list()
+  
+  for(sect in 1:5){
+    dadosOrg[[anos]][[sect]] <- list()
+    
+    for(df in 1:6){
+      dadosOrg[[anos]][[sect]][[df]] <- anos* sect * df
+    }
+  }
+}
+```
+
+Como dizemos anteriormente: não há limite para a recursividade das listas. Você poderia adicionar mais subcategorias e não teria problema algum. Além disso, você pode alocar qualquer tipo de objeto dentro de uma lista: matrizes, data.frames, vetores, funções, characteres, outra lista...
+
+Se você quiser no loop mais interno adicionar vários elementos, você pode criar uma lista e alocar nela multiplos objetos.
+
+```{r}
+for(anos in 1:16){
+  for(sect in 1:5){
+    for(df in 1:6){
+      dadosOrg[[anos]][[sect]][[df]] <- list()
+        dadosOrg[[anos]][[sect]][[df]][[1]] <- anos + 1999
+        dadosOrg[[anos]][[sect]][[df]][[2]] <- sect
+        dadosOrg[[anos]][[sect]][[df]][[3]] <- df
+      
+    }
+  }
+}
+```
+
+Ou seja, não há limite para o que você quiser fazer.
+
+Apenas um aviso que você deve se atentar: cuidado ao lidar com fors muito recursivos, pois é fácil se perder dentro deles, especialmente sobre o que deve 
