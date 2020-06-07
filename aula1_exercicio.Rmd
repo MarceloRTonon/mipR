@@ -1,0 +1,250 @@
+---
+title: "Exercicios Aula 1"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "04/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+```
+
+
+Os exercicios aqui são voltados para a assimilação e solidificação dos conceitos que foram passados no material direcionado. É importante faze-los para que o aprendizado seja efetivo. 
+
+## Pacotes necessários para o exercicio.
+
+Antes de começar a ler o restante do exercicio, confira se você tem instalado os seguintes pacotes.
+
+```{r}
+library(purrr)
+library(matlib)
+#Não havendo, use:
+#install.packages("purrr")
+#install.packages("matlib")
+```
+
+## ***The SeViration:*** Enfrentando os seus erros.
+
+Talvez você fique com dúvidas e dificuldades. É normal. Especialmente quando você está aprendendo uma coisa nova. Assim, tente seguir o roteiro abaixo para resolver suas questões:
+
+1. É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma virgula, parentêses, aspas... 
+
+2. Dedique um tempo tentando elaborar esse erro ou dúvida. Organizar a sua dúvida na sua cabeça, muitas vezes já resolve o problema por si só.
+
+3. Se tratando de uma dúvida referente a um objeto natural do R, ou de seus pacotes, use e abuse do `Help`. A documentação do R tenta ser a mais explicativa e direta ao ponto o possível. Não se preocupe, parte dos exercicios sempre será ler o que o próprio R tem a dizer sobre o assunto.
+
+4. Persistidas os erros e as dificuldades, tente jogar no Google o problema. De modo geral, se você pesquisar "R" juntamente com a descrição do problema muito provavelmente aparecerá alguém pedindo ajuda sobre o tema.^[Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto [1.6](https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more) do *R for Data Science*.]
+
+***IMPORTANTE***: Será sempre perguntado na sala de aula se alguém pesquisou na internet para resolver seus problemas e queremos saber como cada um se saiu. Assim, pedimos que você 
+
+5. Se você não conseguir se resolver por meio do Google ou em outros canais da internet, aí então peça ajuda a um amigo. 
+
+# Exercicios
+
+## 0. Abrindo coisas no RStudio.
+
+Vamos antes de entrarmos na programação do R propriamente dita, vamos garantir que você consegue mexer minimamente no RStudio. 
+
+Com o RStudio aberto tente:
+
+#### Q.0.1 Crie um novo projeto
+#### Q.0.2 Crie um RScript
+#### Q.0.3 Configure o visual do RStudio para a sua preferência
+#### Q.0.4 Acesse o `R Help` com o mouse.
+
+### Respostas
+
+Apenas nesta seção iremos apresentar as respostas. Para as outras não tem.
+
+R.0.1: Se você ainda não o fez, crie um Projeto^[ Vá na barra superior e clique em `File` e depois em `New Project`. Uma nova janela abrirá. Com isso clique em `New Directory`, para que o seu usuário crie uma nova pasta. Dê o nome que você quiser para ele, mas se sugere que você consiga lembrar depois ao que ele está se referindo.].
+
+R.0.2: Agora crie um RScript^[Vá na barra superior e clique em `File` e depois em `New File` e por fim em `R Script` Ou você pode usar o atalho pelo teclado `Ctrl Shift N`.]
+
+R.0.3: Também gaste um tempo vendo as possibilidades de configurar o RStudio^[Na barra superior clique em `Tools` e depois em `Global Options`. Tenha cuidado ao mexer nisso.], em especial a parte visual.^[Na barra superior clique em `Tools`, depois em `Global Options` e por fim `Appearence`.]. Configure a cor, fonte e tamanho do texto do jeito que você preferir. 
+
+R.0.4: Vá em `Help` na barra superior e depois em `R Help`.
+
+## 1. Se introduzindo ao help: Pedindo ajuda sem sair do R
+
+Tem dois caminhas principais para acessar a documentação do R via o `Help` no RStudio, e elas passam pela aba do Help no canto inferior direito da tela:
+
+
+ 1. Abrindo a aba do Help e então pesquisando: Como antes você pode ir na barra superior do programa clicar em `Help` e depois `R Help`. Você vai ver que na parte direita inferior, aba foi mudada para `Help`^[Nada impede que você abra ela diretamente ou use o atalho de teclado `Ctrl + 3`]. No espaço de busca, você pode colocar o nome do que você está em dúvida.
+
+ 2. Atuando pelo console.
+ 
+ É essa segunda forma nos interessar mais, pela sua praticidade. Vamos usar o help agora na função `c()`. Assim sendo, nós podemos usar a função `help()` para abrir a documentação dela. Veja abaixo.
+ 
+```{r}
+help(c)
+```
+ 
+Leia o documento. Repare que você não irá entender tudo que está escrito ali. Isso é normal, e para entender seria necessário um aprendizado muito mais aprofundado não só do R em si, mas de programação. Porém vamos a parte que interessa. Nessa documentação (*R Documentation*), nos é útil logo de cara as seguintes informações:
+
+ * ***c {base}*** : Informa o nome da função e o pacote a qual pertence. Neste caso, está indicado que `c` é a função e pertence o `base-R`, ou seja, já vem com o próprio R.
+ * ***"Combine Values into a Vector or List"*** : Expressa brevemente numa frase o que o é aquele objeto. Neste caso, é uma função que Combina os valores em um vetor atómico ou uma Lista.
+ * ***Description***: Auto-evidente. Descreve ali o que ocorre quando esse comando é usado.
+ * ***Usage***: Mostra como esse comando é usado no R. Ou seja, como você deve usa-lo propriamente. Neste caso, ele apresentou dois modelos, o genérico e o "configurável": 
+```{r, eval = FALSE}
+## S3 Generic function ("Genérico")
+c(...)
+
+## Default S3 method: ("Configurável")
+c(..., recursive = FALSE, use.names = TRUE)
+```
+* Nisso temos que:
+    + Os três pontinhos indicam que não há limite para o número de valores sobre as quais `c()` atuará. Ou seja, você pode fazer `c(1,2,3)` ou `c(1:1000)`. Não há um limite pela linguagem nessa questão.
+    + Se você aplicar o modelo "Configurável" da forma como está escrito na Documentação, você terá o mesmo resultado que se aplicar o "Genérico", uma vez que as configurações de `c()` expressas ali são as *Default*, de modo que *neste caso* a Genérica e Configurável são a mesma coisa. Quando um argumento aparece com um `=` seguido de um valor, neste caso `TRUE` ou  `FALSE`, está indicado que aquele argumento já tem um valor Default configurado previamente.
+    + Assim não há impossibilidade de se mudar as configurações expressas ali se assim o for desejado. Apenas que isso deve ser expressado na função.
+* ***Arguments:*** Explica quais são os argumentos da função e o que cada um deles diz respeito.
+* ***Value:*** qual é o valor retornado pelo comando.
+* ***Details:*** Entra em maiores detalhes sobre o tópico. Pode ou não ser útil. Neste caso, explica, não só, a ordem de prioridade na coerção tipos de dados por exemplo.
+* ***See Also:*** Coloca outros tópicos correlatos que podem ser utéis ao leitor. Às vezes você vai na documentação de uma função achando que ela poderia ser configurada de uma certa maneira, porém ela não pode.  O que está indicado no *See Also* pode te ajudar a entender porque ela não fazer o que você quer, mas também pode ser lá que você vai encontrar que pode te ajudar.
+* ***Examples:*** Mostra as diversas formas como aquele comando pode ser utilizado.
+
+Assim, muitas vezes a própria documentação do R tem em si tudo o que você precisa para tirar suas dúvidas sobre um determinado comando. A função `help()` funciona com todos os comandos do `R-base` e os pacotes que você tiver carregado na seção. Nem sempre será automático, porém algumas vezes
+
+Agora, como já foi dito no material da aula, existe uma outra forma de você acessar a Documentação do R por meio do Console, usando `?`. Veja:
+```{r}
+?sum
+```
+
+Nós dá o mesmo resultado que `help()` só que escrevendo menos. Além de `?` temos também sua versão em par `?`, veja se você consegue identificar a diferença entre ambos apenas lendo a Descrição na documentação em cada um deles:
+```{r, eval = FALSE}
+help(?)
+# Repare que por ser um símbolo você precisa transforma-los em character
+help('?')
+help("??")
+```
+
+Veja que é *no geral* se pode transformar algo em `character` usando tanto o `'` quanto `"`. Vai variando ao longo do tempo.
+
+Com o tempo você irá aprender a ir direto na parte que te interessa ao ler a documentação. Ao longo desta atividade, será indicado várias vezes usar o `?`, mesmo em funções que você já sabe o que significa. Isso porque sempre pode haver um detalhe para você aprender, mas principalmente para você treinar a leitura desse tipo de texto, aí quando você encontrar uma função desconhecida, você já está acostumado ao R Documentation.
+
+
+#### Q.1.1 Tente usar `?` ao inves de `help()` para acessar a própria documentação de `?`.
+
+
+## 2. Operações Básicas
+
+#### Q.2.1 Confira se você sabe realizar as operações básicas no R sem problemas. Teste também se você consegue elevar um valor.
+#### Q.2.2 Elas estão na mesma documentação, acessa-a a partir da função `help`. Teste se você consegue também por meio de `?`. Se você não conseguir releia a parte 2.
+
+## 3. Estrutura de Dados
+
+#### Q.3.1 Qual é a estrutura básica para se estruturar dados no R?
+#### Q.3.2 Quais são as três propriedades fundamentais de um vetor?
+#### Q.3.3 Quais são os principais tipos de dados? Qual é a ordem de coerção deles?
+#### Q.3.4 Qual é a principal diferença entre um vetor atómico e uma lista?
+#### Q.3.5 Quais funções você usaria para criar cada um vetor atómico e uma lista?
+#### Q.3.6 Qual é a diferença entre usar `[]` ou `[[]]` para subpartir uma lista?
+
+**Desafio:** Dê `??vec_depth` no console e acesse a pagina do Help. Com qual conceito você acredita que `depth` está associado?
+
+Rode o código abaixo para te ajudar a entender.
+
+```{r, eval = FALSE}
+library(purrr)
+
+x <- list(
+  list(),
+  list(list()),
+  list(list(list(1)))
+)
+
+x[[1]]
+x[[3]][[1]][[1]]
+vec_depth(x)
+
+vec_depth(c())
+
+vec_depth(c(1))
+```
+
+
+#### Q.3.7 Quais são a diferença entre uma matrix e um data.frame?
+#### Q.3.8 Explique o que é recursividade. Qual estrutura de dados que você viu a pussuí no R?
+
+
+## 4. Funções
+
+**DESAFIO 1:** Antes de começar essa parte, tente acessar a documentação referente à `function` a partir do console.  Não conseguindo de primeira, tente, com o que te foi explicado na seção 2, deduzir uma forma com a qual você irá conseguir.[^Dica]
+
+[^Dica]: Lembre como você fez para acessar a Documentação de `?` e as operações básicas.
+
+
+### Treine a leitura do `help` com as seguintes funções (muitas têm a mesma documentação, mas essas são funções essênciais para se entender):
+
+```{r}
+c, list, unlist, as.list
+
+data.frame, matrix
+
+as.data.frame, as.matrix
+
+is.atomic, is.matrix, is.data.frame, is.list
+
+length, ncol, nrow, dim, str, head
+
+cbind, rbind, cbind.data.frame, rbind.data.frame
+
+colSums, rowSums
+
+type.of 
+
+is.character, is.numeric, is.double, is.integer, is.logical
+
+max, min, prod, sum
+
+paste, paste0, print, cat
+
+(, [[, [, $
+  
+rm, save, load
+
+NULL, NA
+```
+
+
+Agora veja no exemplo abaixo a função `conta.1`, `conta.2` e `conta.3`:
+```{r}
+conta.1 <- function(x, y){
+  x+(3*y)
+}
+
+conta.2 <- function(x,y){
+  x^(3*y)
+}
+
+conta.3 <- function(x,y,w){
+  x*y/w
+}
+
+conta.4 <- function(x,y,w){
+  conta.1(x,y)^(3*(x*w/y))
+}
+```
+
+#### Q.4.1  Qual o motivo de `conta.1(2)` retornar um erro? E no caso de `conta.1(2,3,4)`?
+#### Q.4.2 Dado o quadro acima, como você poderia reescrever a função `conta.4`?
+
+## 5. Álgebra Linear
+
+Novamente, leia a documentação das seguintes funções:
+
+```{r}
+diag, solve, det, cofactor
+
+seq
+
+%*%
+  
+all.equal  
+
+# Do pacote matlib
+
+showEqn
+```
+
+Por fim, não deixe de fazer você mesmo no R o passo a passo da Introdução a Algebra Linear.

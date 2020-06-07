@@ -131,7 +131,7 @@ Com o **RStudio** ligado, se você apertar ``ctrl + shift + n`` irá abrir um no
 
 Vamos explicar agora três conceitos básicos da programação, que valem para o **R**: valor, variável e função. Leia o quadro abaixo com os comentários (No **R** os comentários do código vêm após um `#`.):
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 2 # 2 é um valor
 a <- 3 # "a" é um variável 3 é um valor. "<-" associa um objeto à um valor ou operação.
 
@@ -144,7 +144,7 @@ Se você não usar `<-` na programação, a conta será feita, o valor estabelec
 
 **R** é em sua base uma linguagem multiparadigma . Ou seja, você pode usar ela tanto como [orientada à objetos](https://pt.wikipedia.org/wiki/Orienta%C3%A7%C3%A3o_a_objetos), quanto no [modo funcional](https://pt.wikipedia.org/wiki/Programa%C3%A7%C3%A3o_funcional), com o uso de  pacotes tal qual o `purrr`. Desse modo, para usar o pacote `purrr` no **R** por exemplo,  devemos instala-lo, usando a função `install.packages()`, e depois carrega-lo, com a função `library()`. O código no **R** pode ser escrito de duas formas, veja abaixo:
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 install.packages("purrr")
 library(purrr)
 
@@ -159,7 +159,7 @@ a <- 1:4 %>% c() %>% sum
 
 O pacote `magrittr`, que estabelece o *pipe*, é automaticamente carregado por todos os pacotes que compõem  o `tidyverse`, que são pacotes que facilitam muito a sua vida. Neste curso não iremos usar o *pipe*, `%>%`, mas explicita-lo ajuda a entender como a escrita tradicional (*nested*) do R funciona. Nesta forma, nós temos do lado direito a seguinte estrutura `função_2(função_1(objeto))`, enquanto no modo *pipe* nós temos `objeto %>% função_1 %>% função_2`. Desse modo, podemos perceber que no caso do modo *nested* uma `função()` sempre irá atuar sobre o objeto que esta entre o seu parênteses. Assim sendo, num mesmo comando do script podemos escrever multiplas funções.
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 
 objeto <- 1:4
 novo_objeto <- sum(objeto)
@@ -267,7 +267,7 @@ Existem 3 propriedades fundamentais que tanto listas quanto vetores atómicos po
 
 Algumas funcionalidades que podemos fazer com vetores:
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 vetor_exemplo <- c(5,3, 1:5, 3, 4:6)
 
 vetor_exemplo[2] #retorna apenas o segundo valor do vetor_exemplo
@@ -334,7 +334,7 @@ str(lista_2)
 
 A maioria dos dados em **R** estão por sua vez salvos em tabelas da classe `data.frame`. Tabelas também podem ser da classe `matrix`. A diferença entre ambas é que `data.frame` pode conter vetores de diferentes tipos, enquanto `matrix` não. Pense em `data.frame` como uma lista de vetores e `matrix` como um vetor atómico que foi dividido em multiplas colunas. Vale notar que cada coluna de um `data.frame` é um vetor atómico, logo, os seus elementos tem que ser do mesmo tipo. Podemos criar ambos objetos usando as matrizes `data.frame()` e `matrix()`
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 # criando uma matriz com 8 linhas e 3 colunas, a partir de um vetor double de 1:24.
 
 matrix_a <- matrix(data = c(1:24), nrow = 8, ncol = 3)
@@ -357,7 +357,7 @@ as.data.frame(matrix_a)
 
 Cada uma das duas nos serve à um propósito. Quando estamos organizando e selecionando a base de dados a classe `data.frame` nos serve muito melhor, pois de modo geral iremos precisar de valores `character` ou `logical` no processo. Agora, durante algumas operações, `matrix` é mais conveniente, pois garante a uniformidade dos dados. Além disso, temos mais alguns comandos para ambas:
 
-```{r eval= FALSE, include = FALSE}
+```{r eval= FALSE}
 # Mostra apenas as primeiras linhas de uma tabela
 
 head(df_a) #ou head(matrix_a)
@@ -375,7 +375,7 @@ Repare que data.frame() gerou automaticamente um nome para as colunas e linhas, 
 
 Assim como na notação de algebra linear, para encontrar um elemento fazemos `tabela[linha, coluna]`.
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 # Para retornar os elementos da linha 1 de df_a:
 df_a[1,]
 # Para retornar os elementos da coluna 1 de df_a:

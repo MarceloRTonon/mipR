@@ -457,9 +457,34 @@ summary {
 <p><em>Ou melhor dizendo</em>: no <strong>RStudio</strong>! Se você abrir o programa que vem escrito apenas <strong>R</strong>, você não irá se sentir muito convidado. Por outro lado, como já dissemos antes, o <strong>RStudio</strong> por ser um IDE foi feito para ser intuitivo, simples e interativo.</p>
 <p>Com o <strong>RStudio</strong> ligado, se você apertar <code>ctrl + shift + n</code> irá abrir um novo <code>R Script</code>, chamado “Untitled1” (ou 2 se já havia um Untitled1 aberto). O <code>R Script</code> é o arquivo que serve para escrevermos e salvarmos o nosso código. No caso do <strong>R</strong>, todos os arquivos com o sufixo <code>.R</code> no final são um <code>R Script</code>.</p>
 <p>Vamos explicar agora três conceitos básicos da programação, que valem para o <strong>R</strong>: valor, variável e função. Leia o quadro abaixo com os comentários (No <strong>R</strong> os comentários do código vêm após um <code>#</code>.):</p>
+<pre class="r"><code>2 # 2 é um valor
+a &lt;- 3 # &quot;a&quot; é um variável 3 é um valor. &quot;&lt;-&quot; associa um objeto à um valor ou operação.
+
+b &lt;- 4
+d &lt;- c(a,b, 5) #&quot;d&quot; é uma variável. c() é uma função que combina elementos num mesmo vetor.
+ sum(d) # sum() é uma função que retorna a soma de todos os valores de uma variável</code></pre>
 <p>Se você não usar <code>&lt;-</code> na programação, a conta será feita, o valor estabelecido não será associado à nenhum objeto, e deste modo não poderá ser recuperado depois, lhe obrigando a fazer todas as contas no futuro.</p>
 <p><strong>R</strong> é em sua base uma linguagem multiparadigma . Ou seja, você pode usar ela tanto como <a href="https://pt.wikipedia.org/wiki/Orienta%C3%A7%C3%A3o_a_objetos">orientada à objetos</a>, quanto no <a href="https://pt.wikipedia.org/wiki/Programa%C3%A7%C3%A3o_funcional">modo funcional</a>, com o uso de pacotes tal qual o <code>purrr</code>. Desse modo, para usar o pacote <code>purrr</code> no <strong>R</strong> por exemplo, devemos instala-lo, usando a função <code>install.packages()</code>, e depois carrega-lo, com a função <code>library()</code>. O código no <strong>R</strong> pode ser escrito de duas formas, veja abaixo:</p>
+<pre class="r"><code>install.packages(&quot;purrr&quot;)
+library(purrr)
+
+#&quot;Nested function call&quot; (usando o R básico):
+a &lt;-  sum(c(1:4)) 
+
+#Pipe (usando o R com magrittr)
+a &lt;- 1:4 %&gt;% c() %&gt;% sum
+
+#Perceba, que podemos escrever 1,2,3,4 como 1:4</code></pre>
 <p>O pacote <code>magrittr</code>, que estabelece o <em>pipe</em>, é automaticamente carregado por todos os pacotes que compõem o <code>tidyverse</code>, que são pacotes que facilitam muito a sua vida. Neste curso não iremos usar o <em>pipe</em>, <code>%&gt;%</code>, mas explicita-lo ajuda a entender como a escrita tradicional (<em>nested</em>) do R funciona. Nesta forma, nós temos do lado direito a seguinte estrutura <code>função_2(função_1(objeto))</code>, enquanto no modo <em>pipe</em> nós temos <code>objeto %&gt;% função_1 %&gt;% função_2</code>. Desse modo, podemos perceber que no caso do modo <em>nested</em> uma <code>função()</code> sempre irá atuar sobre o objeto que esta entre o seu parênteses. Assim sendo, num mesmo comando do script podemos escrever multiplas funções.</p>
+<pre class="r"><code>objeto &lt;- 1:4
+novo_objeto &lt;- sum(objeto)
+novo_objeto_2 &lt;- solve(novo_objeto)
+
+# Podemos reescrever tudo isso como:
+objeto &lt;- solve(sum(1:4))
+
+# Descubra para o que serve a função solve() digitando ?solve no console.
+?solve</code></pre>
 <p>Se vamos escrever tudo na mesma linha ou em linhas diferentes fica a cargo da comodidade e praticidade. Poupar linhas faz o seu código ficar mais direto ao ponto, o que sem dúvidas é bom. Por outro lado, uma linha de comando muito longa, especialmente com o código escrito do modo <em>nested</em>, pode se tornar confusa demais. Além disso, muitas vezes podemos querer no futuro o <code>novo_objeto</code> e o <code>novo_objeto_2</code>.</p>
 <p>Uma interrogação <code>?</code> acessa os documentos de help, baixados no seu computador. Ao digitarmos duas interrogações, <code>??</code>, o <em>RStudio</em> procura via internet os documentos presentes no CRAN.</p>
 <p>Até agora falamos muitas vezes sobre os <em>pacotes</em>, então vamos agora deixar claro o que é um pacote. O <strong>R</strong> e o <strong>RStudio</strong> que você baixou e instalou na sua casa, vem com uma serie de funções. Os pacotes nos dá funções, e também base de dados em alguns casos, adicionais criadas por outros usuários de <strong>R</strong>. Criar uma função nos permite realizar uma cadeia de comandos de uma vez, como podemos ver no quadro abaixo. Além disso, vamos ver como realizar as operações matemáticas básicas no <strong>R</strong>:</p>
@@ -530,6 +555,39 @@ typeof(b)</code></pre>
 <div id="vetores-atómicos" class="section level2">
 <h2>Vetores Atómicos</h2>
 <p>Algumas funcionalidades que podemos fazer com vetores:</p>
+<pre class="r"><code>vetor_exemplo &lt;- c(5,3, 1:5, 3, 4:6)
+
+vetor_exemplo[2] #retorna apenas o segundo valor do vetor_exemplo
+
+vetor_exemplo[3:5] # retorna apenas os valores 3,4 e 5.
+
+vetor_exemplo[c(1,3)] # retorna apenas os valores 1 e 3 apenas
+
+vetor_exemplo[-c(1,3)] # retorna todos os valores menos 1 e 3.
+
+str(vetor_exemplo) # retorna as informações básicas sobre o objeto 
+
+
+length(vetor_exemplo) # retorna a quantidade de elementos do vetor atómico
+
+
+names(vetor_exemplo) &lt;- letters[1:11] # names(vetor)&lt;- associa os objetos a direita de &quot;&lt;-&quot; aos nomes de cada elemento do vetor
+
+names(vetor_exemplo) # retorna os nomes dos elementos do vetor 
+
+attributes(vetor_exemplo) # retorna todos os metadados do objeto, neste caso os nomes apenas.
+
+str(vetor_exemplo) # veja como str() mudou agora.
+
+
+#Podemos testar se um vetor é de um certo tipo especifico
+
+is.character(vetor_exemplo) #confere se o vetor é do tipo character
+
+is.double(vetor_exemplo) #confere se o vetor é do tipo double
+# o mesmo vale para is.integer e is.logical.
+
+as.character(vetor_exemplo) # transforma o vetor em tipo character.</code></pre>
 <p>É relevante dizer que nem toda coerção é possível (ou desejável). Se tentarmos coergir um vetor <code>character</code> que contenha letras num vetor <code>double</code>, teremos como resultado valores <code>NA</code>s (missing values). Desse modo, devemos tomar cuidado ao trasnformarmos um tipo de dado em outro. Por consequência, devemos também ficar atento ao tipo de dados que estaremos combinando com <code>c()</code>. Isso porque <code>c()</code> sempre irá obrigar os valores a serem de um mesmo tipo.</p>
 </div>
 <div id="listas" class="section level2">
@@ -562,9 +620,46 @@ str(lista_2)</code></pre>
 <div id="dataframes-e-matrizes" class="section level1">
 <h1>Dataframes e matrizes</h1>
 <p>A maioria dos dados em <strong>R</strong> estão por sua vez salvos em tabelas da classe <code>data.frame</code>. Tabelas também podem ser da classe <code>matrix</code>. A diferença entre ambas é que <code>data.frame</code> pode conter vetores de diferentes tipos, enquanto <code>matrix</code> não. Pense em <code>data.frame</code> como uma lista de vetores e <code>matrix</code> como um vetor atómico que foi dividido em multiplas colunas. Vale notar que cada coluna de um <code>data.frame</code> é um vetor atómico, logo, os seus elementos tem que ser do mesmo tipo. Podemos criar ambos objetos usando as matrizes <code>data.frame()</code> e <code>matrix()</code></p>
+<pre class="r"><code># criando uma matriz com 8 linhas e 3 colunas, a partir de um vetor double de 1:24.
+
+matrix_a &lt;- matrix(data = c(1:24), nrow = 8, ncol = 3)
+
+# criando um data.frame com 8 linhas e 4 colunas, sendo uma delas character.
+df_a &lt;- data.frame( letters[1:8], c(1:8), c(9:16), c(17:24))
+
+# Podemos obter informações sobre ambas a partir dos seguintes comandos:
+
+ncol(matrix_a) # Número de colunas da matrix_a
+nrow(matrix_a) # Número de linha da matrix_a
+
+#Podemos trasnformar uma df em uma matriz e vice e versa usando as.matrix e as.data.frame:
+
+as.matrix(df_a) # irá coagir todos os elementos em character.
+
+as.data.frame(matrix_a)</code></pre>
 <p>Cada uma das duas nos serve à um propósito. Quando estamos organizando e selecionando a base de dados a classe <code>data.frame</code> nos serve muito melhor, pois de modo geral iremos precisar de valores <code>character</code> ou <code>logical</code> no processo. Agora, durante algumas operações, <code>matrix</code> é mais conveniente, pois garante a uniformidade dos dados. Além disso, temos mais alguns comandos para ambas:</p>
+<pre class="r"><code># Mostra apenas as primeiras linhas de uma tabela
+
+head(df_a) #ou head(matrix_a)
+str(df_a)
+#Retorna o nome das colunas da tabela
+colnames(df_a)
+colnames(matrix_a)
+#Retorna o nome das linhas da tabela
+rownames(df_a)
+rownames(matrix_a)</code></pre>
 <p>Repare que data.frame() gerou automaticamente um nome para as colunas e linhas, enquanto matrix() não. Também podemos alocar os nomes usando <code>rownames(tabela)&lt;- vetor_com_nomes</code>. O vetor com os nomes precisa ter o comprimento do tamanho do número de linhas (para o caso de <code>rownames()&lt;-</code>) ou de colunas (para o caso de <code>colnames()&lt;-</code>).</p>
 <p>Assim como na notação de algebra linear, para encontrar um elemento fazemos <code>tabela[linha, coluna]</code>.</p>
+<pre class="r"><code># Para retornar os elementos da linha 1 de df_a:
+df_a[1,]
+# Para retornar os elementos da coluna 1 de df_a:
+df_a[,1]
+# Para retornar os elementos de df_a menos a coluna 1:
+df_a[,-1]
+# Retornar os elementos das colunas 1,2 e 3
+df_a[,1:3]
+# Retornar os elementos das linhas 1,3,5
+df_a[c(1,3,5),]</code></pre>
 </div>
 <div class="footnotes">
 <hr />
