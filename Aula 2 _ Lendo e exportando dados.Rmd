@@ -1,0 +1,35 @@
+---
+title: "Aula 2 - Leitura e Exportação de Dados"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "07/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 0. Objetivo da Aula
+
+O foco desta aula é apresentar as diferentes funções responsáveis pela leitura dos dados. Para além disso, iremos discutir os desafios especificos associados a leitura de dados de Matriz Insumo Produto.
+
+Outros materiais que tratam disso, e foram em partes usados neste material, são:
+
+ - As subseções [5.9-11](https://rstudio-education.github.io/hopr/r-objects.html#loading) e [o apêndice B](https://rstudio-education.github.io/hopr/dataio.html) do **Hands-on Programming with R** do Hadley Wickham;
+ - O [post](https://felipegalvao.com.br/blog/2015/11/16/r-basico-importacao-de-dados-para-o-r/) do blog Felipe Galvão sobre a importação de dados para o R (em português);
+ - A [aula sobre leitura e exportação de dados em csv](https://swcarpentry.github.io/r-novice-inflammation/11-supp-read-write-csv/index.html) do curso *Programming with R* do The Carpentries. Importante notar que após a atualização `4.0.0` do R (que aconteceu em abril de 2020), o argumento `stringAsFactors` deixou de ter como valor padrão `TRUE` e passou a ter o valor `FALSE`. Por conta disso, uma seção dessa aula está desatualizada. 
+
+## 1. Os objetos .Rdata
+
+Quem fez os exercicios indicados para aula 1 completamente, se deparou com as funções `save` e `load`.^[Se você ainda não fez, dê `?load` e `?save`] Essas são as funções principais para salvar objetos no formato ideal do R, o `.Rdata`. Esse formato comprime o espaço exigido do disco rígido com bastante eficiência. Além disso, o `R` lê com mais velocidade arquivos que já estão no próprio formato. 
+
+Uma vantagem do `.Rdata` é que ele te permite salvar vários objetos de uma só vez. Existe uma variação da função `save` inclusive que diz para salvar todos os objetos presentes no seu `Global Environment`: `save.image`. Veja abaixo, o exemplo baseado na `R documentation` em relação ao `save`:
+
+```{r}
+x <- c(1:20)
+y <- list(a = 1, b = TRUE, c = "oops")
+save(x, y, file = "xy.RData") #cria um arquivo "xy.Rdata" no diretorio de trabalho atual
+save.image() # cria um arquivo chamado ".Rdata" no diretorio de trabalho atual.
+unlink("xy.RData") #apaga o arquivo "xy.Rdata"
+```
+
