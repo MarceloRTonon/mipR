@@ -370,19 +370,58 @@ summary {
 </div>
 
 
+<div id="pacotes-necessários-para-essa-aula" class="section level2">
+<h2>Pacotes necessários para essa aula</h2>
+<pre class="r"><code># readr e readxl já vem no RStudio.
+library(readr, readxl)
+# Usaremos rapidamente o pacote tibble quando lidando com o readr, então:
+#install.packages(&quot;tibble&quot;)
+library(tibble)</code></pre>
+</div>
 <div id="objetivo-da-aula" class="section level2">
 <h2>0. Objetivo da Aula</h2>
-<p>O foco desta aula é apresentar as diferentes funções responsáveis pela leitura dos dados. Para além disso, iremos discutir os desafios especificos associados a leitura de dados de Matriz Insumo Produto.</p>
+<p>O foco desta aula é apresentar as diferentes funções responsáveis pela leitura dos dados e também a sua exportação de dados. Repare que neste caso específico quando falamos aqui de exportação de dados estamos nos referindo a salvar arquivos no Disco Rígido Local que contenham os dados produzidos por nós no R. Existem outras formas de exportar dados, como produzir tabelas para <em>LaTeX</em><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> e Word<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> e dar <code>Commit</code> e <code>Push</code> via <code>Git</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
+<p>Para além disso, iremos discutir os desafios especificos associados a leitura de dados de Matriz Insumo Produto.</p>
 <p>Outros materiais que tratam disso, e foram em partes usados neste material, são:</p>
 <ul>
 <li>As subseções <a href="https://rstudio-education.github.io/hopr/r-objects.html#loading">5.9-11</a> e <a href="https://rstudio-education.github.io/hopr/dataio.html">o apêndice B</a> do <strong>Hands-on Programming with R</strong> do Hadley Wickham;</li>
+<li>Esse <a href="http://www.botanicaamazonica.wiki.br/labotam/doku.php?id=bot89:precurso:4matrizes:inicio">post</a> do site do Grupo de Pesquisa Ecologia e Evolução de Plantas Amazônicas do Instituto Nacional de Pesquisas da Amazônia. Ele foi feito como um précurso de uma disciplina ministrada pelos professores Alberto Vicentini e Ricardo Perdiz. De todos os materiais em Português conferidos, este <strong>se destacou</strong>. Quem quiser ver mais materiais desse pré curso pode <a href="http://www.botanicaamazonica.wiki.br/labotam/doku.php?id=disciplinas:bot89:tutorial">conferir aqui</a>;</li>
 <li>O <a href="https://felipegalvao.com.br/blog/2015/11/16/r-basico-importacao-de-dados-para-o-r/">post</a> do blog Felipe Galvão sobre a importação de dados para o R (em português);</li>
 <li>A <a href="https://swcarpentry.github.io/r-novice-inflammation/11-supp-read-write-csv/index.html">aula sobre leitura e exportação de dados em csv</a> do curso <em>Programming with R</em> do The Carpentries. Importante notar que após a atualização <code>4.0.0</code> do R (que aconteceu em abril de 2020), o argumento <code>stringAsFactors</code> deixou de ter como valor padrão <code>TRUE</code> e passou a ter o valor <code>FALSE</code>. Por conta disso, uma seção dessa aula está desatualizada.</li>
 </ul>
+<p>O porém levantado sobre a aula do curso <em>Programming with</em> é relevante de modo geral. Muitos dos materiais que podem ser encontrados na internet foram produzidos antes de se anunciar a mudança do argumento <code>stringAsFactors</code> na versão <code>4.0.0</code>, logo deve-se permanecer atento quanto a essa questão. Aqui trataremos já na versão atualizada.</p>
 </div>
-<div id="os-objetos-.rdata" class="section level2">
-<h2>1. Os objetos .Rdata</h2>
-<p>Quem fez os exercicios indicados para aula 1 completamente, se deparou com as funções <code>save</code> e <code>load</code>.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Essas são as funções principais para salvar objetos no formato ideal do R, o <code>.Rdata</code>. Esse formato comprime o espaço exigido do disco rígido com bastante eficiência. Além disso, o <code>R</code> lê com mais velocidade arquivos que já estão no próprio formato.</p>
+<div id="o-onde" class="section level2">
+<h2>. O onde</h2>
+<p>Para importar e exportar dados precisamos delimitar <em>onde</em> isso será feito no seu disco rígido. De modo geral, é de bom tom que você coloque os seus dados na pasta do seu projeto. Se for 1 ou 2 arquivos a serem lidos, não precisa criar uma pasta <code>data/</code> não. Se for mais, talvez valha a pena. O mesmo vale para os arquivos exportados.</p>
+<p><em>Boas Prátiacs:</em> Exceto que seja o seu objetivo, nunca salve um objeto modificado com o mesmo nome e tipo que o arquivo importado indicado no seu RScript. Se você quer consertar o arquivo original, vale você indicar isso no seu código principal, e deixar tudo relacionado a isso num RScript em separado do resto, de modo que quando alguém for pegar o seu código principal do inicio ao fim, não terá problemas por conta de estar faltando um dado a ser importado.</p>
+<p>De todo modo, o R apenas irá ler arquivos que ele encontre no diretorio (pasta/folder) indicado por você. É nisso que entra o conceito de Diretório de Trabalho (<em>working directory</em>, ou wd). Sempre que você for ler um arquivo que está fora do seu <code>wd</code>, você terá que indicar todo o caminho até o arquivo, é o que é chamado de <em>absolute path</em>. Quando for o caso do arquivo estár no <code>wd</code>, basta que você use o nome do arquivo, precedido se for o caso, de pastas que estejam dentro dele. Há um terceiro caso ainda, como vamos ver no exemplo abaixo:</p>
+<pre class="r"><code># Absolute path
+ &quot;C:/Users/mtono/Documents/R_Projetos/didatica_mip/mipR/arquivo.Rdata&quot;
+
+#Absolute path a partir do default directory
+&quot;~/R_Projetos/didatica_mip/mipR/arquivo.Rdata&quot;
+
+# Relative path
+&quot;arquivo.Rdata&quot;</code></pre>
+<p>Perceba que em todos esses casos estamos falando do mesmo arquivo <code>arquivo.Rdata</code>. Este arquivo está na pasta <code>mipR</code>, que é o wd atual. O RStudio tem um diretorio padrão (<em>default directory</em>) que usa de wd quando não está com um projeto carregado. No caso acima esse diretorio é <code>R_Projetos/</code>. Assim, temos a seguinte regra para lidar com a localização de um arquivo ou pasta:</p>
+<ul>
+<li><p>Se o que você for usar estiver dentro do wd, use o <em>Relative Path</em>.</p></li>
+<li><p>Se estiver fora do wd, porém <strong>dentro</strong> do <em>default directory</em> do RStudio, use o <em>Absolute Path a partir do default directory</em>.</p></li>
+<li><p>Se estiver <strong>fora</strong> do wd e do <em>default directory</em> use o <em>Absolute Path</em>.</p></li>
+</ul>
+<div id="mudando-o-wd" class="section level3">
+<h3>Mudando o wd</h3>
+<p>Existe um modo de mudar o working directory (wd). É pela função <code>setwd(dir)</code>, sendo <code>dir</code> um <em>path</em> que segue as regras expostas acima. Por outro lado, se você deseja saber qual é o wd atual, use <code>getwd()</code>.</p>
+<p><strong>Importante</strong>: Evite mudar o wd. Só evite. Dá mais trabalho e confusão do que beneficio.</p>
+<p><strong>Importante 2</strong>: Se for mudar o wd, antes disso rode <code>wdOriginal &lt;- getwd()</code>. Assim você pode depois voltar para o diretorio original apenas fazendo <code>setwd(wdOriginal)</code>.</p>
+<p>Dê preferência por <em>absolute path</em> sempre que possível.</p>
+<p>Por fim, vale dizer que você pode criar uma pasta a partir do R, pela função <code>dir.create</code>. Isso é excelente para você criar pelo próprio script uma pasta para guardar os dados/tabelas/gráficos gerados ao longo do R. Por outro lado, você pode conferir se um diretorio existe usando a função <code>dir.exists</code>, que retorna <code>TRUE</code> ou <code>FALSE</code>.</p>
+</div>
+</div>
+<div id="os-arquivos-.rdata" class="section level2">
+<h2>. Os arquivos .Rdata</h2>
+<p>Quem fez os exercicios indicados para aula 1 completamente, se deparou com as funções <code>save</code> e <code>load</code>.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Essas são as funções principais para salvar objetos no formato ideal do R, o <code>.Rdata</code>. Esse formato comprime o espaço exigido do disco rígido com bastante eficiência. Além disso, o <code>R</code> lê com mais velocidade arquivos que já estão no próprio formato.</p>
 <p>Uma vantagem do <code>.Rdata</code> é que ele te permite salvar vários objetos de uma só vez. Existe uma variação da função <code>save</code> inclusive que diz para salvar todos os objetos presentes no seu <code>Global Environment</code>: <code>save.image</code>. Veja abaixo, o exemplo baseado no vindo da <code>R documentation</code> da função <code>save</code>:</p>
 <pre class="r"><code>x &lt;- c(1:20)
 y &lt;- list(a = 1, b = TRUE, c = &quot;oops&quot;)
@@ -390,14 +429,136 @@ save(x, y, file = &quot;xy.RData&quot;) #cria um arquivo &quot;xy.Rdata&quot; no
 save.image() # cria um arquivo chamado &quot;.Rdata&quot; no diretorio de trabalho atual.
 unlink(&quot;xy.RData&quot;) #apaga o arquivo &quot;xy.Rdata&quot;</code></pre>
 <p>Você pode entender a função <code>save.image</code> como derivada da função <code>save</code>. Veja abaixo, com a função <code>save.image_2</code>:</p>
-<pre class="r"><code>save.image_2 &lt;- save(list = ls(all.names = TRUE), file = &quot;.RData&quot;, envir = .GlobalEnv)</code></pre>
-<p>O argumento <code>envir</code> no caso da função <code>save</code> diz respeito de qual Environment são os objetos a serem salvos. Não trataremos aqui de explicar em detalhes o que é o <code>Environment</code> e como fazer melhor uso deles, se você quiser saber mais, veja o capítulo <a href="https://rstudio-education.github.io/hopr/environments.html">8</a> do <em>Hands-On Programming with R</em> ou o capítulo <a href="https://adv-r.hadley.nz/environments.html">7</a> do <em>Advanced R</em><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Para nossos propósitos basta que você entenda que o <code>Environment</code> é onde o R guarda os seus dados enquanto você está usando o R. Assim, basta você entender que o <code>.GlobalEnv</code> é o <code>Environment</code> padrão e geral que você usa no R.</p>
+<pre class="r"><code>save.image2 &lt;- function(x){
+  save(list = ls(all.names = TRUE), file = &quot;.RData&quot;, envir = .GlobalEnv)
+}</code></pre>
+<p>O argumento <code>envir</code> no caso da função <code>save</code> diz respeito de qual Environment são os objetos a serem salvos. Não trataremos aqui de explicar em detalhes o que é o <code>Environment</code> e como fazer melhor uso deles, se você quiser saber mais, veja o capítulo <a href="https://rstudio-education.github.io/hopr/environments.html">8</a> do <em>Hands-On Programming with R</em> ou o capítulo <a href="https://adv-r.hadley.nz/environments.html">7</a> do <em>Advanced R</em><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>. Para nossos propósitos basta que você entenda que o <code>Environment</code> é onde o R guarda os seus dados enquanto você está usando o R. Assim, basta você entender que o <code>.GlobalEnv</code> é o <code>Environment</code> padrão e geral que você usa no R. Isso tudo para dizer que algumas vezes, que a principio parecerão aleatórias, você precisará expressar que <code>envir = .GlobalEnv</code>. Além disso, é uma Boa Prática usar a função <code>rm(x)</code> para remover o objeto <code>x</code> do seu <code>Environment</code>, quando este não for mais ser usado. Arquivos pesados e inutéis no seu <code>Environment</code> serão um fardo para o seu computador.</p>
+<p>Por outro lado, para carregar objetos a partir da função <code>load</code>. Uma questão especifica das funções <code>save</code> e <code>load</code> é que elas carregam não só os valores dos dados e a função, mas também o nome de objetos a serem associados a eles. Vamos ver o exemplo abaixo:</p>
+<pre class="r"><code># Vetor Atómico Lógico
+z &lt;- c(TRUE, FALSE, TRUE, FALSE)
+# Salvando z e save.image2 em &quot;z2.Rdata&quot;
+save(z, save.image2, file = &quot;z2.Rdata&quot;)
+# Removendo z e save.image2 do Environment.
+rm(z, save.image2)
+#Carregando &quot;z2.Rdata&quot;
+load(&quot;z2.Rdata&quot;)</code></pre>
+<p>Repare que ao dar <code>rm(z, save.image2)</code>, ambos os objetos somem do <code>Global Environment</code> no seu canto superior esquerdo. Porém quando usamos a função <code>load</code>, estes já são automáticamente adicionados. Isso ocorre pois <code>.Rdata</code> estoca não só os valores como os nomes.</p>
+</div>
+<div id="rds" class="section level2">
+<h2>rds</h2>
+<p>Além de <code>.Rdata</code> também existe um outro tipo de arquivo próprio ao R, o <code>.rds</code>. O arquivo <code>.rds</code> é menos comum de ser visto pelo usuário na ponta, sendo mais usado pelo <code>R</code> internamente. O <code>.rds</code> tem duas caracteristicas principais:</p>
+<ul>
+<li>Só salva 1 objeto por vez;</li>
+<li>Só salva o conteúdo do objeto, não o seu nome.</li>
+</ul>
+<p>Assim, suponha que façamos:</p>
+<pre class="r"><code># usamos a função saveRDS para salvar um arquivo referente a z
+saveRDS(z, file = &quot;z.rds&quot;)
+
+rm(z)
+
+# usamos a função readRDS para ler o arquivo &quot;z.rds&quot;
+readRDS(&quot;z.rds&quot;)</code></pre>
+<p>Repare que ao usarmos <code>readRDS(&quot;z.rds&quot;)</code> o objeto é impresso no console ao invés de ser gravado no <code>Environment</code>. Assim, para salvar precisamos fazer:</p>
+<pre class="r"><code>z &lt;- readRDS(&quot;z.rds&quot;)</code></pre>
+<p>O arquivo <code>.rds</code> não salva o nome para o objeto ser associado. Você precisa dar um a ele. Apesar de isso parecer inutil, esse tipo de arquivo pode ser extremamente util para metadata e arquivos que servem como condição durante poucas vezes ao longo do projeto e assim não precisam ocupar o seu <code>Environment</code>.</p>
+</div>
+<div id="csv-e-csv2" class="section level2">
+<h2>csv e csv2</h2>
+<p>A forma mais tradicional de você ver uma base de dados sendo disponibilizada é pelo formato <code>csv</code> <em>comma separated values</em>, ou valores separados pela virgula. Neste caso, cada coluna seria separada por <code>,</code> e os decimais por <code>.</code>, seguindo o padrão dos países de lingua inglesa. Vamos usar uma base de dados interna do R <code>iris</code>.</p>
+<pre class="r"><code>#Criando uma pasta de dados chamada
+dir.create(&quot;aula2&quot;)
+
+#Tirando a 1a coluna de iris
+
+exemplo_iris &lt;- iris[,-1]
+
+# Escrevendo um arquivo em csv:
+
+write.csv(exemplo_iris, file = &quot;aula2/exemplo_iris.csv&quot;)
+
+rm(exemplo_iris)</code></pre>
+<p>Para ler essa mesma base de dados faça:</p>
+<pre class="r"><code>exemplo_iris2 &lt;- read.csv(&quot;aula2/exemplo_iris.csv&quot;)</code></pre>
+<p>Se criarmos novamente <code>exemplo_iris</code>, veremos que há uma diferença entre <code>exemplo_iris</code> e <code>exemplo_iris2</code> no número de colunas, com <code>exemplo_iris2</code> tendo 5 e não 4 como originalmente. Isso se dá pelo fato de que na configuração padrão de <code>write.csv()</code> temos o argumento que <code>row.names = TRUE</code>, ou seja: o arquivo irá ter na primeira coluna uma linha contendo os <code>rownames</code> das bases originais. Assim, basta fazermos então:</p>
+<pre class="r"><code>exemplo_iris2 &lt;- read.csv(&quot;aula2/exemplo_iris.csv&quot;, row.names= 1)</code></pre>
+<p>Especificando no argumento <code>row.names</code> que os nomes das linhas se encontram na linha 1. Para entender essas e outras questões, é valido dar uma passada na Documentação do R da função <code>read.csv</code> e <code>write.csv</code>.</p>
+<p>O arquivo <code>exemplo_iris.csv</code> está de acordo com os padrões de lingua inglesa. Por outro lado, há um padrão muito comum em países cuja lingua oficial não é o Inglês. Nesse padrão temos que os decimais são separados por <code>,</code> de modo que não há como separar então as colunas por virgulas. Assim, se separa as colunas por <code>;</code>.</p>
+<p>No R, quando se usa essa variação, usa-se o 2 no final para indicar que <code>dec = &quot;,&quot;, sep = &quot;;&quot;</code>. Assim, temos já uma função <code>read.csv2</code> e <code>write.csv2</code> para esse caso e não precisamos configurar <code>read.csv</code> e <code>write.csv</code>. Veja abaixo:</p>
+<pre class="r"><code>write.csv2(exemplo_iris, file = &quot;aula2/exemplo_iris_br.csv&quot;)
+
+exemplo_iris_br &lt;- read.csv2(&quot;aula2/exemplo_iris_br.csv&quot;, row.names = 1)</code></pre>
+<p>De modo geral, as mesmas questões que você encontrará usando <code>read.csv</code> você encontrará usando <code>read.csv2</code>. Apenas uma aqui vale a pena ser mencionada: quando o <code>colnames</code> ou <code>rownames</code> tem <code>,</code> ou <code>;</code> dentro delas isso pode dar problemas, em especial <code>;</code> no caso de <code>read.csv2</code> e <code>,</code> no caso de <code>read.csv</code>. Por conta disso, evite usar esse formato de arquivo em situações que isso pode ocorrer. Ou, use nomes sem <code>,</code> ou <code>;</code> ao usar esse formato.</p>
+<p>As funções <code>read.csv</code> e <code>read.csv2</code> usam o <em>base-R</em> para ler esses arquivos. Há no entanto uma variante mais rápida aquelas do pacote <code>readr</code>. Ele é consideravelmente mais rápido do que o <em>base-R</em>, porém você pode encontrar desafios na hora de usa-lo. O primeiro dele é que ele será um <code>tibble</code>, não um <code>data.frame</code> comum. Assim, como <code>tibble</code> você não conseguirá atribuir <code>row.names</code> a eles, de modo que você terá como produto um objeto com 5 colunas e não 4.</p>
+<pre class="r"><code>exemplo_iris &lt;- read_csv(&quot;aula2/exemplo_iris.csv&quot;)
+
+# A linha abaixo retorna erro pois exemplo_iris é tibble
+rownames(exemplo_iris) &lt;- exemplo_iris[,1]
+
+# Para mudar isso, basta fazer:
+exemplo_iris &lt;- as.data.frame(exemplo_iris)
+
+rownames(exemplo_iris) &lt;- exemplo_iris[,1]
+
+exemplo_iris &lt;- exemplo_iris[,-1]</code></pre>
+<p>Existe uma forma mais direta de fazermos isso tudo, e é usando o pacote <code>tibble</code>.</p>
+<pre class="r"><code>library(tibble)
+exemplo_iris_br &lt;- read_csv2(&quot;aula2/exemplo_iris_br.csv&quot;)
+exemplo_iris_br &lt;- column_to_rownames(exemplo_iris_br, &quot;X1&quot;)</code></pre>
+<p>Há ainda uma forma mais eficiente ainda de importar dados, que é pelo pacote <code>data.table</code>. Se torna extremamente necessário quando os dados são imensos. Porém, o aprendizado para isso é um tanto quanto demorado e mais complicado. Assim sendo, vamos deixar para outra ocasião.</p>
+</div>
+<div id="excel" class="section level2">
+<h2>Excel</h2>
+<p>Não adianta fingir que não: boa parte dos dados de Matriz Insumo Produto que você irá encontrar estão em algum formato proveniente do Excel. E também não adianta fingir que isso não te irritará profundamente, porque irá.</p>
+<p>Dados MIP no Excel dificultam sua vida da seguinte forma:</p>
+<ol style="list-style-type: decimal">
+<li>Muitas vezes os dados começam de 3 a 5 linhas abaixo, com as primeiras linhas bagunçando tudo;</li>
+<li>Há muitas vezes uma linha vazia entre os nomes das colunas e a primeira linha de dados;</li>
+<li>Também muitas vezes aparece uma coluna ou, especialmente, uma linha vazia entre os dados de cada setor e a soma total deles;</li>
+<li>Os dados referentes a demanda intermediaria e demanda final estão por via de regra na mesma aba (<em>sheet</em>) e então serão carregadas juntas num mesmo objeto;</li>
+<li>Os nomes da colunas muitas vezes fica bagunçado pois muitas vezes as linhas deles estão mesclados com as de cima em alguma situação;</li>
+</ol>
+<p>O item 4 é uma questão de comodidade pura, há de se admitir. O item 3 pode ou não atrapalhar. O item 1 por si só seria algo facilmente resolvido, Agora… os itens 2 e 5 te dão uma bela dor de cabeça no inicio e no geral te exigem uma bela de uma atenção sempre que você pega uma base nova. Por isso, essa seção iremos dividir por partes.</p>
+<div id="baixando-a-matriz" class="section level3">
+<h3>Baixando a matriz</h3>
+<p>E iremos usar as matrizes do IBGE de 2015. <a href="ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls">Clique aqui para baixa-las</a>. E coloque na pasta <code>aula2</code>. No geral, tem formas de se baixar diretamente pelo console, porém no site do IBGE isso sempre dá erro.</p>
+</div>
+<div id="abrindo-o-arquivo" class="section level3">
+<h3>Abrindo o arquivo</h3>
+<p>Antes que você pense outra coisa, estamos aqui falando do arquivo do excel mesmo. Abra o arquivo com o Excel mesmo. Vamos examinar esse arquivo. A primeira coisa que vemos na aba 1 é:</p>
+<ul>
+<li>A linha 1 tem apenas uma célula. Isso por si só faria o R se confundir por conta da primeira linha ter apenas uma coluna.</li>
+<li>Os nomes das colunas estão divididos em duas linhas (3 e 4), sendo que algumas delas estão mescladas.</li>
+<li>Há uma linha em branco entre os nomes das colunas e os valores.</li>
+<li>Os dados referentes a “Oferta de bens e serviços” e a “Produção de atividades” estão juntos. O que os diferencia está na linha 3, de modo que a principio, um data.frame na mesma estrutura que os dados atuais não poderá ser feito se você quiser separar os dois.</li>
+<li>Há uma linha em branco entre a soma total dos produtos e os valores desagregados.</li>
+</ul>
+<p>Repare que na primeira aba já demos de cara com os 5 pontos que levantamos inicialmente. Baixar esses dados não é desse modo assim tão trivial.</p>
+</div>
+<div id="first-things-first-decidindo-a-organização-dos-dados-no-r." class="section level3">
+<h3>First things first: Decidindo a organização dos dados no R.</h3>
+<p>Você então precisa decidir o que vai querer fazer com os dados ao passar do formato de excel para o R.</p>
+<ol style="list-style-type: decimal">
+<li>Os dados da “Oferta de bens e serviços” ficarão juntos com o da produção?</li>
+<li>Você faz questão dos nomes da colunas e linhas originais do arquivo?</li>
+<li>Você quer todos os dados?</li>
+<li>Quer os dados da soma total?</li>
+</ol>
+<p>Vamos aprofundar agora na primeira questão. Não como você fazer essa separação para o R dos dados como foi feito no Excel. Não tem como colocar mais de 1 nome num vetor. Há duas soluções que se pode recorrer:</p>
+<ol style="list-style-type: lower-alpha">
+<li>Separar os dois tipos de dados em duas sublistas;</li>
+<li>Modificar os nomes das colunas originais e nesse caso colocar <code>OFE.</code> e <code>PRO.</code> como prefixo de todas as variáveis.</li>
+</ol>
+</div>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Se você ainda não fez, dê <code>?load</code> e <code>?save</code><a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Sugiro você esperar estar num nível mais avançado para se aventurar neste conceito.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>Ver pacote <code>tabulizer</code><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Veja esse <a href="https://sejdemyr.github.io/r-tutorials/basics/tables-in-r/">guia</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Existe o livro online <a href="Happy%20Git%20and%20GitHub%20for%20the%20useR"><em>Happy Git and GitHub for the useR</em></a> ou o <a href="https://beatrizmilz.github.io/RLadies-Git-RStudio-2019/#1">material em português da Beatriz Milz em um evento da <code>#Rladies</code></a><a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Se você ainda não fez, dê <code>?load</code> e <code>?save</code><a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p>Sugiro você esperar estar num nível mais avançado para se aventurar em profundidade neste conceito.<a href="#fnref5" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 
