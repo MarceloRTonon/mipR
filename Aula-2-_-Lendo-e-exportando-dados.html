@@ -383,17 +383,21 @@ summary {
 <div id="os-objetos-.rdata" class="section level2">
 <h2>1. Os objetos .Rdata</h2>
 <p>Quem fez os exercicios indicados para aula 1 completamente, se deparou com as funções <code>save</code> e <code>load</code>.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Essas são as funções principais para salvar objetos no formato ideal do R, o <code>.Rdata</code>. Esse formato comprime o espaço exigido do disco rígido com bastante eficiência. Além disso, o <code>R</code> lê com mais velocidade arquivos que já estão no próprio formato.</p>
-<p>Uma vantagem do <code>.Rdata</code> é que ele te permite salvar vários objetos de uma só vez. Existe uma variação da função <code>save</code> inclusive que diz para salvar todos os objetos presentes no seu <code>Global Environment</code>: <code>save.image</code>. Veja abaixo, o exemplo baseado na <code>R documentation</code> em relação ao <code>save</code>:</p>
+<p>Uma vantagem do <code>.Rdata</code> é que ele te permite salvar vários objetos de uma só vez. Existe uma variação da função <code>save</code> inclusive que diz para salvar todos os objetos presentes no seu <code>Global Environment</code>: <code>save.image</code>. Veja abaixo, o exemplo baseado no vindo da <code>R documentation</code> da função <code>save</code>:</p>
 <pre class="r"><code>x &lt;- c(1:20)
 y &lt;- list(a = 1, b = TRUE, c = &quot;oops&quot;)
-save(x, y, file = &quot;xy.RData&quot;) 
+save(x, y, file = &quot;xy.RData&quot;) #cria um arquivo &quot;xy.Rdata&quot; no diretorio de trabalho atual
 save.image() # cria um arquivo chamado &quot;.Rdata&quot; no diretorio de trabalho atual.
-unlink(&quot;xy.RData&quot;)</code></pre>
+unlink(&quot;xy.RData&quot;) #apaga o arquivo &quot;xy.Rdata&quot;</code></pre>
+<p>Você pode entender a função <code>save.image</code> como derivada da função <code>save</code>. Veja abaixo, com a função <code>save.image_2</code>:</p>
+<pre class="r"><code>save.image_2 &lt;- save(list = ls(all.names = TRUE), file = &quot;.RData&quot;, envir = .GlobalEnv)</code></pre>
+<p>O argumento <code>envir</code> no caso da função <code>save</code> diz respeito de qual Environment são os objetos a serem salvos. Não trataremos aqui de explicar em detalhes o que é o <code>Environment</code> e como fazer melhor uso deles, se você quiser saber mais, veja o capítulo <a href="https://rstudio-education.github.io/hopr/environments.html">8</a> do <em>Hands-On Programming with R</em> ou o capítulo <a href="https://adv-r.hadley.nz/environments.html">7</a> do <em>Advanced R</em><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Para nossos propósitos basta que você entenda que o <code>Environment</code> é onde o R guarda os seus dados enquanto você está usando o R. Assim, basta você entender que o <code>.GlobalEnv</code> é o <code>Environment</code> padrão e geral que você usa no R.</p>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>Se você ainda não fez, dê <code>?load</code> e <code>?save</code><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Sugiro você esperar estar num nível mais avançado para se aventurar neste conceito.<a href="#fnref2" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

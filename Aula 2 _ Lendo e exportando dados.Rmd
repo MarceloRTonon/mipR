@@ -19,11 +19,11 @@ Outros materiais que tratam disso, e foram em partes usados neste material, são
  - O [post](https://felipegalvao.com.br/blog/2015/11/16/r-basico-importacao-de-dados-para-o-r/) do blog Felipe Galvão sobre a importação de dados para o R (em português);
  - A [aula sobre leitura e exportação de dados em csv](https://swcarpentry.github.io/r-novice-inflammation/11-supp-read-write-csv/index.html) do curso *Programming with R* do The Carpentries. Importante notar que após a atualização `4.0.0` do R (que aconteceu em abril de 2020), o argumento `stringAsFactors` deixou de ter como valor padrão `TRUE` e passou a ter o valor `FALSE`. Por conta disso, uma seção dessa aula está desatualizada. 
 
-## 1. Os objetos .Rdata
+## 1. Os arquivos .Rdata
 
 Quem fez os exercicios indicados para aula 1 completamente, se deparou com as funções `save` e `load`.^[Se você ainda não fez, dê `?load` e `?save`] Essas são as funções principais para salvar objetos no formato ideal do R, o `.Rdata`. Esse formato comprime o espaço exigido do disco rígido com bastante eficiência. Além disso, o `R` lê com mais velocidade arquivos que já estão no próprio formato. 
 
-Uma vantagem do `.Rdata` é que ele te permite salvar vários objetos de uma só vez. Existe uma variação da função `save` inclusive que diz para salvar todos os objetos presentes no seu `Global Environment`: `save.image`. Veja abaixo, o exemplo baseado na `R documentation` em relação ao `save`:
+Uma vantagem do `.Rdata` é que ele te permite salvar vários objetos de uma só vez. Existe uma variação da função `save` inclusive que diz para salvar todos os objetos presentes no seu `Global Environment`: `save.image`. Veja abaixo, o exemplo baseado no vindo da `R documentation` da função `save`:
 
 ```{r}
 x <- c(1:20)
@@ -33,3 +33,37 @@ save.image() # cria um arquivo chamado ".Rdata" no diretorio de trabalho atual.
 unlink("xy.RData") #apaga o arquivo "xy.Rdata"
 ```
 
+Você pode entender a função `save.image` como derivada da função `save`. Veja abaixo, com a função `save.image_2`:
+
+```{r}
+save.image2 <- function(x){
+  save(list = ls(all.names = TRUE), file = ".RData", envir = .GlobalEnv)
+}
+```
+
+O argumento `envir` no caso da função `save` diz respeito de qual Environment são os objetos a serem salvos. Não trataremos aqui de explicar em detalhes o que é o `Environment` e como fazer melhor uso deles, se você quiser saber mais, veja o capítulo [8](https://rstudio-education.github.io/hopr/environments.html) do *Hands-On Programming with R* ou o capítulo [7](https://adv-r.hadley.nz/environments.html) do *Advanced R*^[Sugiro você esperar estar num nível mais avançado para se aventurar em profundidade neste conceito.]. Para nossos propósitos basta que você entenda que o `Environment` é onde o R guarda os seus dados enquanto você está usando o R. Assim, basta você entender que o `.GlobalEnv` é o `Environment` padrão e geral que você usa no R. Isso tudo para dizer que algumas vezes, que a principio parecerão aleatórias, você precisará expressar que `envir = .GlobalEnv`. Além disso, é uma Boa Prática usar a função `rm(x)` para remover o objeto `x` do seu `Environment`, quando este não for mais ser usado. Arquivos pesados e inutéis no seu `Environment` serão um fardo para o seu computador.
+
+Por outro lado, para carregar objetos a partir da função `load`. Uma questão especifica das funções `save` e `load` é que elas carregam não só os valores dos dados e a função, mas também o nome de objetos a serem associados a eles. Vamos ver o exemplo abaixo:
+
+```{r}
+# Vetor Atómico Lógico
+z <- c(TRUE, FALSE, TRUE, FALSE)
+# Salvando z e save.image2 em "z2.Rdata"
+save(z, save.image2, file = "z2.Rdata")
+# Removendo z e save.image2 do Environment.
+rm(z, save.image2)
+#Carregando "z2.Rdata"
+load("z2.Rdata")
+```
+
+Repare que ao dar `rm(z, save.image2)`, ambos os objetos somem do `Global Environment` no seu canto superior esquerdo. Porém quando usamos a função `load`, estes já são automáticamente adicionados. Isso ocorre pois `.Rdata` estoca não só os valores como os nomes.
+
+## RDS
+
+Além de `.Rdata` também existe um outro tipo de arquivo próprio ao R, o `.RDS`. Esse, é muito mais 
+
+## csv
+
+## Excel
+
+Por outro lado, podemos carregar os arquivos a partir de `.csv`
