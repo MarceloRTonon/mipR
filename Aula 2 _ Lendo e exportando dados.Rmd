@@ -52,7 +52,6 @@ De todo modo, o R apenas irá ler arquivos que ele encontre no diretorio (pasta/
 
 # Relative path
 "arquivo.Rdata"
-
 ```
 
 Perceba que em todos esses casos estamos falando do mesmo arquivo `arquivo.Rdata`. Este arquivo está na pasta `mipR`, que é o wd atual. O RStudio tem um diretorio padrão (*default directory*) que usa de wd quando não está com um projeto carregado. No caso acima esse diretorio é `R_Projetos/`. Assim, temos a seguinte regra para lidar com a localização de um arquivo ou pasta:
@@ -81,7 +80,7 @@ Quem fez os exercicios indicados para aula 1 completamente, se deparou com as fu
 
 Uma vantagem do `.Rdata` é que ele te permite salvar vários objetos de uma só vez. Existe uma variação da função `save` inclusive que diz para salvar todos os objetos presentes no seu `Global Environment`: `save.image`. Veja abaixo, o exemplo baseado no vindo da `R documentation` da função `save`:
 
-```{r}
+```{r, eval = FALSE}
 x <- c(1:20)
 y <- list(a = 1, b = TRUE, c = "oops")
 save(x, y, file = "xy.RData") #cria um arquivo "xy.Rdata" no diretorio de trabalho atual
@@ -91,7 +90,7 @@ unlink("xy.RData") #apaga o arquivo "xy.Rdata"
 
 Você pode entender a função `save.image` como derivada da função `save`. Veja abaixo, com a função `save.image_2`:
 
-```{r}
+```{r, eval = FALSE}
 save.image2 <- function(x){
   save(list = ls(all.names = TRUE), file = ".RData", envir = .GlobalEnv)
 }
@@ -101,7 +100,7 @@ O argumento `envir` no caso da função `save` diz respeito de qual Environment 
 
 Por outro lado, para carregar objetos a partir da função `load`. Uma questão especifica das funções `save` e `load` é que elas carregam não só os valores dos dados e a função, mas também o nome de objetos a serem associados a eles. Vamos ver o exemplo abaixo:
 
-```{r}
+```{r, eval = FALSE}
 # Vetor Atómico Lógico
 z <- c(TRUE, FALSE, TRUE, FALSE)
 # Salvando z e save.image2 em "z2.Rdata"
@@ -121,7 +120,9 @@ Além de `.Rdata` também existe um outro tipo de arquivo próprio ao R, o `.rds
  - Só salva 1 objeto por vez;
  - Só salva o conteúdo do objeto, não o seu nome.
  
+ 
  Assim, suponha que façamos:
+ 
  
 ```{r, eval= FALSE}
 
@@ -146,7 +147,7 @@ O arquivo `.rds` não salva o nome para o objeto ser associado. Você precisa da
 
 A forma mais tradicional de você ver uma base de dados sendo disponibilizada é pelo formato `csv` *comma separated values*, ou valores separados pela virgula. Neste caso, cada coluna seria separada por `,` e os decimais por `.`, seguindo o padrão dos países de lingua inglesa. Vamos usar uma base de dados interna do R `iris`.
 
-```{r}
+```{r, eval = FALSE}
 #Criando uma pasta de dados chamada
 dir.create("aula2")
 
@@ -163,13 +164,13 @@ rm(exemplo_iris)
 
 Para ler essa mesma base de dados faça:
 
-```{r}
+```{r, eval = FALSE}
 exemplo_iris2 <- read.csv("aula2/exemplo_iris.csv")
 ```
 
 Se criarmos novamente `exemplo_iris`, veremos que há uma diferença entre `exemplo_iris` e `exemplo_iris2` no número de colunas, com `exemplo_iris2` tendo 5 e não 4 como originalmente. Isso se dá pelo fato de que na configuração padrão de `write.csv()` temos o argumento que `row.names = TRUE`, ou seja: o arquivo irá ter na primeira coluna uma linha contendo os `rownames` das bases originais. Assim, basta fazermos então:
 
-```{r}
+```{r, eval = FALSE}
 exemplo_iris2 <- read.csv("aula2/exemplo_iris.csv", row.names= 1)
 ```
 
@@ -179,7 +180,7 @@ O arquivo `exemplo_iris.csv` está de acordo com os padrões de lingua inglesa. 
 
 No R, quando se usa essa variação, usa-se o 2 no final para indicar que `dec = ",", sep = ";"`. Assim, temos já uma função `read.csv2` e `write.csv2` para esse caso e não precisamos configurar `read.csv` e `write.csv`. Veja abaixo:
 
-```{r}
+```{r, eval = FALSE}
 write.csv2(exemplo_iris, file = "aula2/exemplo_iris_br.csv")
 
 exemplo_iris_br <- read.csv2("aula2/exemplo_iris_br.csv", row.names = 1)
@@ -206,7 +207,7 @@ exemplo_iris <- exemplo_iris[,-1]
 
 Existe uma forma mais direta de fazermos isso tudo, e é usando o pacote `tibble`.
 
-```{r}
+```{r, eval = FALSE}
 library(tibble)
 exemplo_iris_br <- read_csv2("aula2/exemplo_iris_br.csv")
 exemplo_iris_br <- column_to_rownames(exemplo_iris_br, "X1")
@@ -239,7 +240,8 @@ Antes que você pense outra coisa, estamos aqui falando do arquivo do excel mesm
 - A linha 1 tem apenas uma célula. Isso por si só faria o R se confundir por conta da primeira linha ter apenas uma coluna.
 - Os nomes das colunas estão divididos em duas linhas (3 e 4), sendo que algumas delas estão mescladas.
 - Há uma linha em branco entre os nomes das colunas e os valores.
-- Os dados referentes a "Oferta de bens e serviços" e a "Produção de atividades" estão juntos. O que os diferencia está na linha 3, de modo que a principio, um data.frame na mesma estrutura que os dados atuais não poderá ser feito se você quiser separar os dois. 
+- Os dados referentes a "Oferta de bens e serviços", "Produção de atividades"  estão juntos. O que os diferencia está na linha 3, de modo que a principio, um data.frame na mesma estrutura que os dados atuais não poderá ser feito se você quiser separar os dois. 
+- Temos também a coluna final com "Importação de bens e serviços".
 - Há uma linha em branco entre a soma total dos produtos e os valores desagregados.
 
 Repare que na primeira aba já demos de cara com os 5 pontos que levantamos inicialmente. Baixar esses dados não é desse modo assim tão trivial.
@@ -248,22 +250,86 @@ Repare que na primeira aba já demos de cara com os 5 pontos que levantamos inic
 
 Você então precisa decidir o que vai querer fazer com os dados ao passar do formato de excel para o R. 
 
-1. Os dados da "Oferta de bens e serviços" ficarão juntos com o da produção? 
+1. Os dados da "Oferta de bens e serviços", "Produção de Bens" e "Importações..." ficarão tods juntos? 
 2. Você faz questão dos nomes da colunas e linhas originais do arquivo?
 3. Você quer todos os dados?
-4. Quer os dados da soma total?
+
 
 Vamos aprofundar agora na primeira questão. Não como você fazer essa separação para o R dos dados como foi feito no Excel. Não tem como colocar mais de 1 nome num vetor. Há duas soluções que se pode recorrer:
 
  a.  Separar os dois tipos de dados em duas sublistas;
  b.  Modificar os nomes das colunas originais e nesse caso colocar `OFE.` e `PRO.` como prefixo de todas as variáveis. 
 
-Eu prefiro a solução **a** à solução **b**, uma vez que a primeira permite você manter os nomes originais (menos trabalho), e te permite uma forma mais organizada da base de dados em listas e sublistas. Assim iremos criar o objeto `aba1` que será uma lista e duas sublistas.
+Eu prefiro a solução **a** à solução **b**, uma vez que a primeira permite você manter os nomes originais (menos trabalho), e te permite uma forma mais organizada da base de dados em listas e sublistas. Além disso, como lidariamos com importações? Que não está em nenhum dos dois grupos? Assim iremos criar o objeto `aba1` que será uma lista e duas sublistas.
 
-```{r}
-aba1 <- list("OfertaDeBensServicos"= list(), "ProduçãoDeAtividades" = list())
+```{r, eval = FALSE}
+aba1 <- list("OfertaDeBensServicos"= list(), "ProducaoDeAtividades" = list(), "Importacoes" = list())
 ```
 
-Assim, se quisermos acessar uma base de dados ou outra, basta fazermos `aba1$OfertaDeBensServicos` ou `aba1$ProduçãoDeAtividades`. Você tem assim uma forma de diferenciar e acessar ambas ao mesmo tempo.^[Neste caso, colocamos o nome por extenso, porém você pode escrever uma sigla se você não for esquecer do que se trata.]
+Assim, se quisermos acessar uma base de dados ou outra, basta fazermos `aba1$OfertaDeBensServicos`, `aba1$ProduçãoDeAtividades` ou `aba1$Importações`. Você tem assim uma forma de diferenciar e acessar ambas ao mesmo tempo.^[Neste caso, colocamos o nome por extenso, porém você pode escrever uma sigla se você não for esquecer do que se trata.]
 
-###
+### Lidando com Colnames
+
+Como já foi dito, algumas das células dos colnames tem as linhas mescladas no arquivo original. É o caso das colunas `A`, `B` e `BX`. Da coluna `C` até a coluna `BW` os nomes das colunas estão na linha 4. Quando duas linhas do excel estão mescladas, o Excel entende que o conteúdo delas pertence a de cima. Assim, vamos usar a função `read_excel` do pacote `readxl` para carregar três partes em separado:
+
+```{r, eval = FALSE}
+library(readxl)
+#dois primeiros nomes
+col_1parte <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",
+                         range = "A3:B3", col_names = FALSE)
+#nomes na linha 4
+col_2parte <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",                      range = "C4:BW4", col_names = FALSE)
+# nome da importação
+col_3parte <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",
+                         range = "BX3", col_names = FALSE)
+
+?read_excel
+```
+
+Os avisos de `New names:` apesar de chatos, são normais mesmo. Quando formos ensinar as aulas com repetição, vamos ensinar um método para você silencia-lo.  
+Olhe a documentação do R aberto pelo `?read_excel`, em especial sobre as definições dos argumentos  `range`, `sheet`, `skip`, `na`, `col_names`. Também perceba, que ele retorna um tibble e não um dataframe como indicado na parte **Value**.
+
+Assim, agora vamos unir todos os `colnames`:
+
+```{r, eval= FALSE}
+col_total <- as.character(c(col_1parte, col_2parte, col_3parte))
+```
+
+Temos assim todos os colnames que iremos usar na próxima seção.
+
+### Importando os dados
+
+Se você deu uma olhada na definição dos argumentos `range` e `skip` na documentação da função `read_excel`, você verá que enquanto `range` você vai determinar os limites da planilha que você quer importar, `skip` vai apenas determinar quantas linhas você irá pular.
+
+```{r, eval = FALSE}
+
+library(readxl)
+
+aba1_inteira <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",
+                           range = "A6:BX134", col_names = col_total )
+
+aba1_inteira2 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",
+                           skip = 5, col_names = col_total )
+
+nrow(aba1_inteira)
+nrow(aba1_inteira2)
+```
+
+Uma das vantangens do método `range` em relação ao `skip` é que nele você não fica refém de acontecer coisas como em `aba1_inteira2` que as últimas linhas só existem por conta da Fonte. Assim, dê preferência à usar o argumento `range` ao invés de `skip`.
+
+### Preenchendo a lista aba1
+
+Vamos agora preencher a lista `aba1` com as suas 3 sublistas. Vamos neste caso usar `aba1_inteira` para preencher:
+
+```{r, eval = FALSE}
+# tirando a penultima linha de NA
+aba1_inteira <- aba1_inteira[-(nrow(aba1_inteira)-1),]
+
+aba1$OfertaDeBensServicos <- aba1_inteira[, c(1:2, 3:7)]
+
+aba1$ProducaoDeAtividades <- aba1_inteira[, c(1:2, 8:(ncol(aba1_inteira)-1))]
+
+aba1$Importacoes <- aba1_inteira[, c(1:2, ncol(aba1_inteira))]
+```
+
+O que fizemos em `aba1_inteira[, c(1:2, 3:7)]` foi a partir da função `c()` criar um vetor que indica os números das colunas de `aba1_inteira` que queremos alocar para a sublista `aba1$OfertaDeBensServicos`. A vantagem de usar `c()` dentro de um `objeto[]` é que podemos indicar números distantes um do outro. como é o caso em `aba1$ProducaoDeAtividades` e `aba1$Importacoes`. Se tentassemos fazer isso sem usar `c()` teriamos que usar uma sequência initerrupta de numeros naturais. Isso é uma das nuances do *subsetting*, que é tema da próxima lição.

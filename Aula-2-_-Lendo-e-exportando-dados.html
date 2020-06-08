@@ -530,7 +530,8 @@ exemplo_iris_br &lt;- column_to_rownames(exemplo_iris_br, &quot;X1&quot;)</code>
 <li>A linha 1 tem apenas uma célula. Isso por si só faria o R se confundir por conta da primeira linha ter apenas uma coluna.</li>
 <li>Os nomes das colunas estão divididos em duas linhas (3 e 4), sendo que algumas delas estão mescladas.</li>
 <li>Há uma linha em branco entre os nomes das colunas e os valores.</li>
-<li>Os dados referentes a “Oferta de bens e serviços” e a “Produção de atividades” estão juntos. O que os diferencia está na linha 3, de modo que a principio, um data.frame na mesma estrutura que os dados atuais não poderá ser feito se você quiser separar os dois.</li>
+<li>Os dados referentes a “Oferta de bens e serviços”, “Produção de atividades” estão juntos. O que os diferencia está na linha 3, de modo que a principio, um data.frame na mesma estrutura que os dados atuais não poderá ser feito se você quiser separar os dois.</li>
+<li>Temos também a coluna final com “Importação de bens e serviços”.</li>
 <li>Há uma linha em branco entre a soma total dos produtos e os valores desagregados.</li>
 </ul>
 <p>Repare que na primeira aba já demos de cara com os 5 pontos que levantamos inicialmente. Baixar esses dados não é desse modo assim tão trivial.</p>
@@ -539,16 +540,66 @@ exemplo_iris_br &lt;- column_to_rownames(exemplo_iris_br, &quot;X1&quot;)</code>
 <h3>First things first: Decidindo a organização dos dados no R.</h3>
 <p>Você então precisa decidir o que vai querer fazer com os dados ao passar do formato de excel para o R.</p>
 <ol style="list-style-type: decimal">
-<li>Os dados da “Oferta de bens e serviços” ficarão juntos com o da produção?</li>
+<li>Os dados da “Oferta de bens e serviços”, “Produção de Bens” e “Importações…” ficarão tods juntos?</li>
 <li>Você faz questão dos nomes da colunas e linhas originais do arquivo?</li>
 <li>Você quer todos os dados?</li>
-<li>Quer os dados da soma total?</li>
 </ol>
 <p>Vamos aprofundar agora na primeira questão. Não como você fazer essa separação para o R dos dados como foi feito no Excel. Não tem como colocar mais de 1 nome num vetor. Há duas soluções que se pode recorrer:</p>
 <ol style="list-style-type: lower-alpha">
 <li>Separar os dois tipos de dados em duas sublistas;</li>
 <li>Modificar os nomes das colunas originais e nesse caso colocar <code>OFE.</code> e <code>PRO.</code> como prefixo de todas as variáveis.</li>
 </ol>
+<p>Eu prefiro a solução <strong>a</strong> à solução <strong>b</strong>, uma vez que a primeira permite você manter os nomes originais (menos trabalho), e te permite uma forma mais organizada da base de dados em listas e sublistas. Além disso, como lidariamos com importações? Que não está em nenhum dos dois grupos? Assim iremos criar o objeto <code>aba1</code> que será uma lista e duas sublistas.</p>
+<pre class="r"><code>aba1 &lt;- list(&quot;OfertaDeBensServicos&quot;= list(), &quot;ProducaoDeAtividades&quot; = list(), &quot;Importacoes&quot; = list())</code></pre>
+<p>Assim, se quisermos acessar uma base de dados ou outra, basta fazermos <code>aba1$OfertaDeBensServicos</code>, <code>aba1$ProduçãoDeAtividades</code> ou <code>aba1$Importações</code>. Você tem assim uma forma de diferenciar e acessar ambas ao mesmo tempo.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></p>
+</div>
+<div id="lidando-com-colnames" class="section level3">
+<h3>Lidando com Colnames</h3>
+<p>Como já foi dito, algumas das células dos colnames tem as linhas mescladas no arquivo original. É o caso das colunas <code>A</code>, <code>B</code> e <code>BX</code>. Da coluna <code>C</code> até a coluna <code>BW</code> os nomes das colunas estão na linha 4. Quando duas linhas do excel estão mescladas, o Excel entende que o conteúdo delas pertence a de cima. Assim, vamos usar a função <code>read_excel</code> do pacote <code>readxl</code> para carregar três partes em separado:</p>
+<pre class="r"><code>library(readxl)
+#dois primeiros nomes
+col_1parte &lt;- read_excel(&quot;aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;,
+                         range = &quot;A3:B3&quot;, col_names = FALSE)
+#nomes na linha 4
+col_2parte &lt;- read_excel(&quot;aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;,                      range = &quot;C4:BW4&quot;, col_names = FALSE)
+# nome da importação
+col_3parte &lt;- read_excel(&quot;aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;,
+                         range = &quot;BX3&quot;, col_names = FALSE)
+
+?read_excel</code></pre>
+<p>Os avisos de <code>New names:</code> apesar de chatos, são normais mesmo. Quando formos ensinar as aulas com repetição, vamos ensinar um método para você silencia-lo.<br />
+Olhe a documentação do R aberto pelo <code>?read_excel</code>, em especial sobre as definições dos argumentos <code>range</code>, <code>sheet</code>, <code>skip</code>, <code>na</code>, <code>col_names</code>. Também perceba, que ele retorna um tibble e não um dataframe como indicado na parte <strong>Value</strong>.</p>
+<p>Assim, agora vamos unir todos os <code>colnames</code>:</p>
+<pre class="r"><code>col_total &lt;- as.character(c(col_1parte, col_2parte, col_3parte))</code></pre>
+<p>Temos assim todos os colnames que iremos usar na próxima seção.</p>
+</div>
+<div id="importando-os-dados" class="section level3">
+<h3>Importando os dados</h3>
+<p>Se você deu uma olhada na definição dos argumentos <code>range</code> e <code>skip</code> na documentação da função <code>read_excel</code>, você verá que enquanto <code>range</code> você vai determinar os limites da planilha que você quer importar, <code>skip</code> vai apenas determinar quantas linhas você irá pular.</p>
+<pre class="r"><code>library(readxl)
+
+aba1_inteira &lt;- read_excel(&quot;aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;,
+                           range = &quot;A6:BX134&quot;, col_names = col_total )
+
+aba1_inteira2 &lt;- read_excel(&quot;aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;,
+                           skip = 5, col_names = col_total )
+
+nrow(aba1_inteira)
+nrow(aba1_inteira2)</code></pre>
+<p>Uma das vantangens do método <code>range</code> em relação ao <code>skip</code> é que nele você não fica refém de acontecer coisas como em <code>aba1_inteira2</code> que as últimas linhas só existem por conta da Fonte. Assim, dê preferência à usar o argumento <code>range</code> ao invés de <code>skip</code>.</p>
+</div>
+<div id="preenchendo-a-lista-aba1" class="section level3">
+<h3>Preenchendo a lista aba1</h3>
+<p>Vamos agora preencher a lista <code>aba1</code> com as suas 3 sublistas. Vamos neste caso usar <code>aba1_inteira</code> para preencher:</p>
+<pre class="r"><code># tirando a penultima linha de NA
+aba1_inteira &lt;- aba1_inteira[-(nrow(aba1_inteira)-1),]
+
+aba1$OfertaDeBensServicos &lt;- aba1_inteira[, c(1:2, 3:7)]
+
+aba1$ProducaoDeAtividades &lt;- aba1_inteira[, c(1:2, 8:(ncol(aba1_inteira)-1))]
+
+aba1$Importacoes &lt;- aba1_inteira[, c(1:2, ncol(aba1_inteira))]</code></pre>
+<p>O que fizemos em <code>aba1_inteira[, c(1:2, 3:7)]</code> foi a partir da função <code>c()</code> criar um vetor que indica os números das colunas de <code>aba1_inteira</code> que queremos alocar para a sublista <code>aba1$OfertaDeBensServicos</code>. A vantagem de usar <code>c()</code> dentro de um <code>objeto[]</code> é que podemos indicar números distantes um do outro. como é o caso em <code>aba1$ProducaoDeAtividades</code> e <code>aba1$Importacoes</code>. Se tentassemos fazer isso sem usar <code>c()</code> teriamos que usar uma sequência initerrupta de numeros naturais. Isso é uma das nuances do <em>subsetting</em>, que é tema da próxima lição.</p>
 </div>
 </div>
 <div class="footnotes">
@@ -559,6 +610,7 @@ exemplo_iris_br &lt;- column_to_rownames(exemplo_iris_br, &quot;X1&quot;)</code>
 <li id="fn3"><p>Existe o livro online <a href="Happy%20Git%20and%20GitHub%20for%20the%20useR"><em>Happy Git and GitHub for the useR</em></a> ou o <a href="https://beatrizmilz.github.io/RLadies-Git-RStudio-2019/#1">material em português da Beatriz Milz em um evento da <code>#Rladies</code></a><a href="#fnref3" class="footnote-back">↩</a></p></li>
 <li id="fn4"><p>Se você ainda não fez, dê <code>?load</code> e <code>?save</code><a href="#fnref4" class="footnote-back">↩</a></p></li>
 <li id="fn5"><p>Sugiro você esperar estar num nível mais avançado para se aventurar em profundidade neste conceito.<a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p>Neste caso, colocamos o nome por extenso, porém você pode escrever uma sigla se você não for esquecer do que se trata.<a href="#fnref6" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 
