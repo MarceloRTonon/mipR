@@ -39,6 +39,17 @@ Alguns pacotes interessantes para tratamento de matrizes e sistemas lineares:
 
 ## Introdução álgebra linear com R {.tabset}
 
+### Pacotes necessários
+
+Para rodar os códigos abaixo você irá precisar de alguns pacotes instalados. Se o pacote não estiver presente instale-os usando a função `install.packages()`, com o nome do pacote entre `""`.
+
+```{r}
+library(UsingR)
+library(matlib)
+library(vembedr)
+```
+
+
 ### Principais conceitos 
 
 1. **Notação matricial**
