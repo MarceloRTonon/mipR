@@ -101,17 +101,17 @@ Vale dar uma olhada no manual em inglês do [DataCamp](https://www.datacamp.com/
 
 Vá em https://cran.r-project.org/ e siga o procedimento da imagem abaixo:
 
-![](gif_intro_download_R.webp)
+![](gifs_aula 0&1/gif_intro_download_R.webp)
 
 A versão da tela é a 3.6.3, mas pode baixar qualquer uma que aparecer. Depois siga os procedimentos abaixo para a instalação:
 
-![](gif_intro_install_R.webp)
+![](gifs_aula 0&1/gif_intro_install_R.webp)
 
 ### Instalando o **RStudio**
 
 Baixe o **RStudio** na página deste link: https://rstudio.com/products/rstudio/download/#download  
 
-![](gif_intro_download_RStudio.webp)
+![](gifs_aula 0&1/gif_intro_download_RStudio.webp)
 
 Depois de baixado, apenas vá clicando `NEXT` tal qual no exemplo do R e o serviço estará feito. 
 
