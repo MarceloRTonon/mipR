@@ -1,0 +1,152 @@
+---
+title: "Vocabulário"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "11/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Aqui está uma lista de funções, e comandos, de referência para que se estude a documentação do R. Ao contrario dos outros, esse material não está sendo feito pressupondo que será lido e feito pelos alunos da monitoria. Ele tem um caráter ***opcional***, e muitas coisas que estão aqui estão em outros lugares. Só que aqui terá ***mais*** coisa do que em cada seção. Isso daqui é muito baseado no capítulo [*Vocabulary* da primeira edição do Advanced R](http://adv-r.had.co.nz/Vocabulary.html) que parte de uma premissa similar.
+
+Entender os conceitos básicos é fundamental para que você consiga entender a lógica por de trás da programação. Ter um vocabulario extenso de comandos por outro lado te permite ter ferramentas diversificadas que podem te poupar tempo e trabalho. Algumas das funções listadas estao presentes na mesma documentação, mas foram escritas para apresentar os dados.
+
+Importante lembrar que algumas coisas precisam estar entre aspas `""` para ativar o comando do help.
+
+### O básico
+
+#### Help
+
+```{r help, eval=FALSE}
+?, ??, help
+```
+
+
+#### Tipo de dados
+
+```{r datatype,eval=FALSE}
+#character
+character, as.character, is.character
+
+#double
+double, as.double, is.double
+
+#integer
+integer, as.integer, is.integer
+
+#logical
+logical, as.logical, is.logical
+
+#numeric
+numeric, as.numeric, is.numeric
+```
+
+Leia a documentação de `numeric` para não se confundir como boa parte dos usuários de R o fazem.
+
+Valores que aparecem quando lidamos com lógica e numéricos:
+
+```{r, eval = FALSE}
+TRUE, FALSE, 
+
+NA, is.na, complete.cases
+
+NULL, is.null
+
+NaN, is.nan
+
+Inf, is.infinite, is.finite
+```
+
+
+Tipos raros de dados, em especial para o nosso caso.
+
+```{r, eval= FALSE}
+# Os tipos raros de dados
+
+#complex
+complex, as.complex, is.complex
+
+#raw
+raw, as.raw, is.raw
+```
+
+#### Estrutura de Dados
+
+```{r, eval=FALSE}
+vector, as.vector, is.vector
+
+is.atomic, is.recursive
+
+#Vetores Atómicos
+c
+
+## Matrizes
+matrix, as.matrix, is.matrix
+
+## Arrays
+array, as.array, is.array
+
+# Vetores Recursivos
+
+## Listas
+list, is.list, as.list, unlist
+
+## Data.frame
+data.frame, as.data.frame, is.data.frame
+```
+
+
+Informações sobre atributos
+```{r, eval = FALSE}
+str
+
+names, colnames, rownames
+
+attr
+
+dim, length, ncol, nrow
+```
+
+
+#### Operadores básicos e *assignment*
+
+Nunca use `=` para criar uma variável. Pode dar n problemas.
+
+```{r, eval = FALSE}
+
+#assignment
+<-, assign, get, <<-, =
+
+#operadores relevantes
+%in%, match
+$, [, [[, head, tail, subset
+with
+```
+
+#### Matemática Básica
+
+```{r, eval= FALSE}
+*, +, -, /, ^, %%, %/%
+abs, sign
+acos, asin, atan, atan2
+sin, cos, tan
+ceiling, floor, round, trunc, signif
+exp, log, log10, log2, sqrt
+
+max, min, prod, sum
+cummax, cummin, cumprod, cumsum, diff
+pmax, pmin
+range
+mean, median, cor, sd, var
+rle
+```
+
+
+
+#### Data e Tempo
+
+```{r, eval=FALSE}
+date, Sys.Date, Sys.time, Sys.timezone
+```

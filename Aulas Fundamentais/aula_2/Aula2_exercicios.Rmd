@@ -1,0 +1,118 @@
+---
+title: "Aula 2 - Treinando a Leitura de Dados"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "11/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Essa lista de exercicios é para treinar as suas habilidades na leitura de dados. Repare que a sessão *The SeViration* está aqui, o porquê disso é o fato de ser uma importante lembrança do método de aprendizado.
+
+Nós também iremos aproveitar e praticar também tudo que você aprendeu anteriormente também!
+
+## Pacotes necessários para o exercicio.
+
+Antes de começar a ler o restante do exercicio, confira se você tem instalado os seguintes pacotes.
+
+```{r}
+library(purrr)
+library(tibble)
+library(readxl)
+#Não havendo, use:
+#install.packages("purrr")
+#install.packages("tibble")
+```
+
+
+## ***The SeViration:*** Enfrentando os seus erros.
+
+Talvez você fique com dúvidas e dificuldades. É normal. Especialmente quando você está aprendendo uma coisa nova. Assim, tente seguir o roteiro abaixo para resolver suas questões:
+
+1. É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma virgula, parentêses, aspas... 
+
+2. Dedique um tempo tentando elaborar esse erro ou dúvida. Organizar a sua dúvida na sua cabeça, muitas vezes já resolve o problema por si só.
+
+3. Se tratando de uma dúvida referente a um objeto natural do R, ou de seus pacotes, use e abuse do `Help`. A documentação do R tenta ser a mais explicativa e direta ao ponto o possível. Não se preocupe, parte dos exercicios sempre será ler o que o próprio R tem a dizer sobre o assunto.
+
+4. Persistidas os erros e as dificuldades, tente jogar no Google o problema. De modo geral, se você pesquisar "R" juntamente com a descrição do problema muito provavelmente aparecerá alguém pedindo ajuda sobre o tema.^[Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto [1.6](https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more) do *R for Data Science*.]
+
+***IMPORTANTE***: Será sempre perguntado na sala de aula se alguém pesquisou na internet para resolver seus problemas e queremos saber como cada um se saiu. Assim, pedimos que você 
+
+5. Se você não conseguir se resolver por meio do Google ou em outros canais da internet, aí então peça ajuda a um amigo. 
+
+Se você ainda não dominou bem o passo **3** dessa lista confira se você fez bem a lição 
+
+# Exercicios
+
+## 1. Lendo os dados em Excel
+
+Assim como na aula, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE_2015**
+
+#### Q.1.1 Crie um tibble `dfQ1.1` com os dados da matriz de coeficientes técnicos intersetoriais (aba 14 de IBGE_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas
+```{r, eval=FALSE, include=F}
+library(readxl)
+colnames_dfQ1.1 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", 
+                                 sheet = "14", range = "A4:BQ4", col_names = FALSE)
+colnames_dfQ1.1[1:2] <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", 
+                                 sheet = "14", range = "A3:B3", col_names = FALSE)
+
+dfQ1.1 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", 
+                                 sheet = "14", range = "A6:BQ72", col_names = unlist(colnames_dfQ1.1))
+```
+
+#### Q.1.2 Crie um tibble `dfq1.2` com a matriz de Leontief (aba 15 de IBGE_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas
+
+```{r, eval=FALSE, include=F}
+dfQ1.2 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",                               sheet = "15", range = "A6:BQ72", col_names = unlist(colnames_dfQ1.1))
+```
+
+**Atenção:** Abaixo estamos abstraindo os carácteres `\n` dos nomes das primeiras duas colunas de `dfQ1.1` e `dfQ1.2`. Na questão 
+
+#### Q.1.3 Crie um tibble `cod67` contendo apenas os dados da coluna `"Código da atividade nível 67"` da matriz `dfQ1.1`. Crie também um tibble `des67` contendo apenas os dados da coluna `"Descrição da atividade nível 67"` da matriz `dfQ1.1`; Mantenha os colnames de ambas.
+
+**Dica:** A função `is_tibble` confere se um objeto é `tibble` ou não tal qual `is.logical` confere se o dado é lógico.
+
+```{r, eval= F, include=F}
+cod67 <- dfQ1.1[,1]
+is_tibble(cod67)
+
+des67 <- dfQ1.1[,2]
+is_tibble(des67)
+```
+
+##### D.1.1 - ***Desafio:*** Rode `is.tibble()` ao invés de `is_tibble` em `cod67`. O que retornou? Procure saber sobre o pacote `lifecycle` com `??`.
+
+
+#### Q.1.5 Usando a função `as.data.frame`, crie `dfQ1.5` a partir de `dfQ1.1`, de modo que:
+ - `dfQ1.5` seja um data.frame e não um tibble.
+ - `dfQ1.5` tenha row.names com a Descrição de atividades.
+ - `dfQ1.5` seja uma matriz quadrada (67 x 67), apenas com os dados númericos
+
+**Dica:** Ao contrario do que foi exposto na Aula 2, há um modo em que não é necessário uma nova linha apenas para mudar os `row.names` de `dfQ1.5`. Veja a documentação de `as.data.frame` para ver como.
+
+```{r, eval = FALSE, include= FALSE}
+dfQ1.5 <- as.data.frame(dfQ1.1[,-c(1:2)], row.names = dfQ1.1[,2])
+```
+
+#### Q.1.6 Usando a função `column_to_rownames`, crie um data.frame `dfQ1.6` a partir de `dfQ1.2` que siga as mesma 
+**Dica 1:** O argumento `var =` precisa estar explicito na função `column_to_rownames`. Ou seja, `var = "name_of_the_column"`, precisa estar escrito. Se você não escrever `var =`, a função irá pensar que esse segundo argumento é uma base de dados. Se precisar, veja como ela é usada nos exemplos da documentação.
+**Dica 2:** Usando a função `colnames()` você não tem que escrever o nome da coluna. Veja abaixo:
+
+```{r, include = TRUE, eval= FALSE}
+colnames(dfQ1.1[,5])
+colnames(dfQ1.1)[4:6]
+colnames(dfQ1.1)[1]
+```
+
+
+```{r, eval=FALSE, include= FALSE}
+library(tibble)
+dfQ1.2 <-  column_to_rownames(dfQ1.2[,-1], var = colnames(dfQ1.2[,2]))
+```
+
+#### D.1.2 - **Desafio:** Crie uma função `tb_to_df` que:
+
+ - Transforme um tibble em um `data.frame`, 
