@@ -147,6 +147,7 @@ identical(dfQ1.7, dfQ1.6)
 
 #### D.1.4 - **Desafio:** O que explica a diferença entre os valores obtidos em D.1.3 pelas funções `all.equal` e `identical`?
 
+
 ## Treinando manipulação de matrizes.
 
 Nas análises de Matriz Insumo Produto, um dos primeiros indicadores que você irá encontrar é o encadeamento para trás e para frente de determinado setor. Seja $i$ um vetor unitario, se calcula os encadeamentos para trás e para frente de cada setor das seguintes maneiras $i'[I-A]^{-1}$ (para trás) e $[I-A]^{-1}i$ (para frente).
@@ -211,5 +212,19 @@ which.min(dfQ2.2)
 which.max.para.tras <- function(x){
   which.max(colSums(x))
 }
+```
+
+## Exportando dados em csv
+
+#### Q.3.1 Crie um data.frame `dfQ3.1` de duas colunas com os valores de `dfQ2.1` e `dfQ2.2`.
+
+```{r, eval = F, include = F}
+dfQ3.1 <- data.frame(dfQ2.1, dfQ2.2)
+```
+
+#### Q.3.2 Nomeie as colunas de `dfQ3.1` de `Para Frente` e `Para trás`.
+
+```{r, eval = F, include=F}
+colnames(dfQ3.1) <- c("Para Frente", "Para trás")
 ```
 
