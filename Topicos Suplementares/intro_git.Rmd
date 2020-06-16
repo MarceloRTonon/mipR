@@ -1,0 +1,39 @@
+---
+title: "Introdução ao Git e ao Github"
+author: "Marcelo Tonon"
+date: "04/05/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+No mundo atual, é prática comum, é recomendada, que você tenha um backup na nuvem do seu projeto atual. Parece obvio, mas muita gente acaba sendo displicente em relação a manter um backup online do seu trabalho. Assim, a melhor forma de lidar com isso, é deixar o processo de backup o mais cômodo possível. E após alguma prática, o uso do Git/Github irá te proporcionar exatamente isso!
+
+Além disso usar o Git ideal para quem mexe com códigos, uma vez que ele te permite realizar controles de alteração. Isso para projetos muito longos e/ou que você irá trabalhar em equipe. Foi pensando nisso que o Git foi concebido, por ninguém menos que Linus Torvalds, o criador do Linux!
+
+O aproveitamento do Git é muito fortalecido quando usado com o Github, por se tratar do site mais popular e abrangente a oferecer o serviço Git. Assim, aqui irei usar as duas coisas juntas, porém há outras opções. Neste guia eu vou me basear muito no [capítulo escrito pelo Hadley Wickham](http://r-pkgs.had.co.nz/git.html).
+
+# Instalando o Git!
+
+Se você nunca usou e instalou o Git, a primeira coisa a fazer é instalar o Git no seu computador. Isso irá variar de sistema para sistema. Veja como fazer abaixo:
+
+
+ - Windows: http://git-scm.com/download/win
+ - OS X: http://git-scm.com/download/mac
+ - Debian/Ubuntu: ```sudo apt-get install git-core```
+ - Outras distros do Linux: http://git-scm.com/download/linux
+
+
+
+
+
+
+
+# Git e Github
+
+Aqui iremos
+
+# Instalando o Git
+

@@ -1,0 +1,505 @@
+---
+title: "Guia de Boas Práticas no R para Matrizeiros"
+author: "Marcelo Tonon"
+date: "10/04/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE, include = TRUE)
+```
+
+## 1. O porquê deste guia
+
+Ou escrito de outra forma: ***Por que você não deve sair escrevendo tudo de qualquer jeito?*** São dois motivos para além de uma melhor perfomance do seu computador: reprodução de resultados e leitura. Se preocupar com a reprodutibilidade dos resultados possibilita tanto para você ou para uma outra pessoa quando checarem se os seus resultados finais batem. Já a preocupação com a leitura facilita a vida não só das outras pessoas, mas também do seu futuro eu. Muitas vezes esquecemos que programar é nada 
+
+Muitas vezes essas duas coisas são um tanto quanto deixadas de lado pelos usuários do R, que são muito voltados para os resultados. Desse modo, muitas vezes é levado ao extremo o mantra de que *"feito é melhor do que perfeito"*. Obviamente, que quando os prazos apertam e não sabemos muito bem o que fazer, *todos nós* fazemos da forma como podemos e é isso aí. Porém, a adoção das boas práticas, apesar de ser um peso a mais na noite em que o prazo acaba é fundamental para um projeto mais extenso.
+
+### 1.1. Reprodução de Resultados
+
+Exceto se acreditarmos na infalibilidade papal, podemos dizer que já aconteceu com todas as pessoas que criaram alguma coisa chegar num resultado final obviamente equivocado. Um raciocinio lógico, uma conta de matemática ou um trabalho quantitativo. Na realidade, a regra é que para cada acerto, vários erros ocorreram antes. Como já dizia a música: *todo mundo erra sempre / todo mundo vai errar*. 
+
+Dessa forma, do mesmo modo que em questões mais complexas é mais seguro racionar não apenas mentalmente, mas sim registrando também explicitamente todo o seu processo em um local externo ao qual você pode retornar depois. O registro de cada passo permite que não nos percamos no meio do caminho: "Já fiz tal ponderação?", "Conferi se é assim mesmo?". É a mesma coisa com a programação. Por isso, o ideal é que seu código esteja estruturado de forma a permitir que você ou qualquer outra pessoa chegue naqueles resultados sem precisar de nada além dos recursos iniciais que você tinha a disposição no ínicio.
+
+Além disso, quando o seu resultado final se mostrar muito estranho, ou você for conferi-lo lá na frente, você tem condições de retornar do inicio, e conferir passo a passo o que aconteceu.
+
+### 1.2. Leitura
+
+Escrever códigos de programação não é só uma forma de realizar as suas tarefas, mas também é uma forma de texto, bem como um relatório ou uma nota técnica. Assim sendo, ela deve ser inteligível para você e para quem quer que vá ler o seu código. Muitas vezes dizemos a nós mesmos que isso é bobagem, afinal *"quem irá ler os meus códigos?"*, *"é apenas um trabalho interno"* ou *"o conteúdo importa mais do que a forma!"*. Muitas vezes, isso tudo é verdade. Porém, existem ganhos para o próprio programador quando ele presta atenção a escrita. Ao tentar explicar o que estamos fazendo, muitas vezes percebemos uma saída para um problema que estamos enfrentando. Além disso, um código bem organizado facilita a encontrar um bug. Ou mesmo no futuro, quando queremos reaproveitar uma parte do código que fizemos lá atrás. Você não terá no futuro a mesma intimidade com o que você está trabalhando agora. E melhor, explicar e escrever o seu código é uma boa forma de você  ganhar **mais** intimidade ainda com seu objeto de trabalho, bem como solidifica-la.
+
+### 1.3. Performance{#intro_performance}
+
+O **R** é uma linguagem muito prática e intuítiva, fazendo parte do que se chama de "linguagem interpretada". Porém, o preço que se paga é que ela não está entra as mais rápidas. Não que seja uma tartaruga, mas é menos rápida do que outras linguagens, as ditas "compiladas", que são menos práticas, como o caso de `Fortran` ou `C++`. Vale notar, que várias funções básicas (primitivas) do R não foram escritas no `R` e sim em `C`, justamente para dar ao R uma velocidade comparável. Além disso, alguns pacotes também foram escritos em `C` ou `C++` para garantir uma maior velocidade. 
+
+Se a base do R foi boa parte feita em `C` e vários outros pacotes também, o que deixa o **R** lento? Para além de funções e operações muito complexas que acabam se somando e **Loops**. Sim, usar `for` no **R** é extremamente ineficiente. Assim sendo, aqui vamos tentar mostrar alternativas. De toda forma, um principio básico de um bom código no R, e talvez em toda programação, em termos de perfomance é **não fazer de forma complicada aquilo que pode ser feito de forma simples**. Isso requer mais prática do que usualmente pensamos. 
+
+## 2. O espírito da coisa
+
+Agora que explicamos o porquê de se adotar boas práticas, vamos aqui deixar uma questão clara: Este Guia é para ajudar você. Não para ser uma pedra no seu sapato. Desse modo, a exceção de alguns sacrilégios, não é um pecado absoluto se desviar aqui e ali das boas práticas quando se está começando ou sem tempo. As boas práticas devem ***te ajudar*** e não ***te complicar***. Ou seja: está com um prazo apertado e o jeito que está indicando aqui não está funcionando por algum motivo, mas você sabe que de uma outra forma irá porém é menos elegante. Só faça o que tem que ser feito e fim de papo. O que você pode fazer depois quando tiver mais tempo e mais calma, é retornar ao problema que te travou e tentar aprender a sua solução. Esse aprendizado, além de melhorar seu código, vai fazer você resolver problemas parecidos de forma mais rápida no futuro.
+
+Ninguém aprendeu tudo de uma vez. O próprio aprendizado da programação é, em grande parte, prático. Assim sendo, uma estrategia interessante para assimilar as boas práticas é, quando tiver tempo, se dispor a **reescrever** seus antigos códigos buscando adotar algumas das boas práticas. E assim, quando você for escrever seus códigos novos você já estará habituado com mais boas práticas.
+
+Entenda: boas práticas deve ser algo muito menos impositivo do que imaginamos. Assim como temos estilos de escrita diferentes num texto, podemos ter um estilo de escrever código diferente. O que vale é não tentar fugir do *Espírito da Coisa*. Até porque existe algo que precisamos deixar bem claro: não existe, até o momento, um estilo de boas práticas que se impôs em relação a todos os outros. Então neste Guia iremos pegar aquilo que pensamos ser o melhor de todos os Guias mais consolidados.
+
+## 3. Organizando o seu projeto
+
+Vamos entrar antes de tudo no que tange a organização do seu projeto. Digo, na organização do seus códigos e dados. Aqui depende do escopo e escala do seu projeto. Se o seu projeto tiver dimensões modestas, não há tanta necessidade de você compartimentalizar em varias pastas as coisas do seu projeto. Porém, se você vai usar várias bases de dados, em que cada uma está dividida  em um arquivo de excel para cada ano, talvez seja interessante você criar pastas diferentes para a sua base de dados original. 
+
+Além disso, se você vai gravar diferentes arquivos `.Rdata` ao longo do seu projeto (falaremos mais disso a frente), vale você também fazer uma pasta especifica para os dados intermediários e finais. Assim, sendo no que tange aos dados é fazer, dentro da area de trabalho do projeto, uma pasta escrito `data/` e dentro dela fazer `data/raw_data`, `data/specific_data`, `data/final_data`.
+
+Se a sua base de dados não estiver na pasta do seu projeto, defina no seu código uma variável para o caminho destes dados, de modo a facilitar o reaproveitamento deste código por você ou outra pessoa.
+
+Eu também tenho uma preferência por fazer multiplos scripts `.R` menores do que apenas um grandão. Facilita a minha organização. Além disso, falarei mais disso a frente, eu posso usar e abusar do `source()` no inicio dos meus códigos ao invés de ter que salvar tudo que eu quero usar e carregar no inicio deste. Por uma questão de gosto pessoal, eu também coloca uma pasta chamada `scripts/` na pasta do meu projeto. Ter multiplos scripts também facilita saber onde você fez cada coisa, de modo que um código `1-load_data.R` já indica que lá é o primeiro script e o que ele fará. **Se você for escrever vários códigos em cadeia que dependem um do outro, sempre enumere-os da forma como exposto aqui.** Não nomeie seus códigos como `codigo.R`, `codigoprojeto.R`, `aaa.R`, `trem.R` ou `coisa.R`. Deixe minimamente claro o que esse código faz ou cria.
+
+Por fim, se necessário, eu tendo a criar pastas para arquivos gerados no R como gráficos no `ggplot2` e tabelas no `xtable`. Assim sendo, tem-se uma pasta `tex_tables/` para arquivos `.tex` que incluam tabelas e outra `ggplot2_graphics/` para gráficos feitos no `ggplot2`.
+
+
+## 4. "Pré" Código 1: Cabeçalho
+
+A parte importante de todo código é que no inicio dele tenhamos um cabeçalho inicial contendo ao menos três informações relevantes sobre ele: quem, onde e porque ele foi escrito. Outras informações como o local, ou sua filiação institucional, bem como o projeto em que esse código foi usado e o nome desse arquivo podem ser escritos, mesmo que não seja tão usual assim. O que é bom estar escrito é o seu e-mail. Além disso, coloque na sua primeira linha o título dele. Vale, para os diferentes objetivos do seu código e do seu projeto, você tentar manter do início ao fim um padrão. No meu caso, eu prefiro escrever os meus códigos em inglês, dado que muitas vezes o cecidilha e alguns acentos se desconfiguram ao longo do código. Além disso, me sinto mais confortável pensando que o código poderá ser lido por mais pessoas.
+
+```{r}
+# 1 - Load data ---------------------------------------------------
+
+# Informations ----
+
+# filename: 1-load_data.R
+# Project: mipR
+
+# Author: Marcelo Tonon
+# Date: 16/04/2020 (dd/mm/yyyy)
+# Instituional Affiliation: PhD student at UFRJ
+# email: marcelo.tonon@ppge.ie.ufrj.br
+
+#
+
+# Porpuse of the code: ----
+
+# In this code we are going to load the database XXXXXX, YYYYYY and ZZZZZZ. It does not depend on any previous code being runned.
+
+```
+
+No exemplo acima, por se tratar de uma leitura do códigoo, o propósito do código é bastante curto e direto ao ponto. Porém, em alguns casos vale falar de cada objetivo com mais detalhes. O leitor pode ter reparado que algumas linhas foram escritas usando `# Comentário ----`, isso porque ao colocarmos quatro ou mais `=`, ``-` ou `#`  no fim de um comentário, criamos uma seção dentro do código. A priori não existe regra que determine a preferência de `-` ou `=`, (`#` deixa o código poluído), mas tente manter um padrão estético, se começou com `====`, não mude para `----` sem nenhum motivo aparente. Eu prefiro usar `-`. Para criar uma seção quando estiver editando um código no RStudio, aperte `Ctrl + Shift + R` e para visualizar todas as seções aperte `Ctrl + Shift + O` presentes no código.
+
+## 5. "Pré" Código 2: Libraries e funções gerais
+
+Logo após detalhar as informações básicas no seu cabeçalho, você deve então carregar todos os pacotes que você irá usar ao longo do seu código. Assim você permite que o leitor confira logo de cara se ele terá condições de rodar o seu código ou se precisa antes instalar algum pacote. Separe isso, como uma seção no seu código:
+
+```{r}
+# Used Libraries ----------------------------------------------------
+
+library(dplyr)
+library(purrr)
+library(readr)
+library(readxl)
+library(tictoc)
+```
+
+## 6. Código 1: Nomeando coisas
+
+> "There are only two hard things in Computer Science: cache invalidation and **naming things**."
+>
+> Phil Karlton
+
+Nomear coisas não é tão fácil quanto pode parecer a primeira vista. Se você der nomes pequenos demais, você pode deixar muito pouco obvio o que é cada objeto. Fazer nomes grandes demais por outro lado é pouco eficiente. Além disso, a depender de como você nomear seus objetos, a leitura do seu código será um martirio para você e quem mais for usa-lo. No entanto, existe mais de um padrão para se escrever no R.
+
+```{r}
+lowerCamel    <- "mostFavorite"
+period.sep    <- "second.place"
+underscore_sep <- "my_personal_favorite"
+alllowercase  <- "notsopopular"
+OTHER_style   <- "VERY_uncommon"
+UpperCamel    <- "TheOneWhoNoOneUses"
+```
+
+Como já dito, não há uma convenção única de boas práticas no R, e isso é especialmente verdade quando se trata de nomear as coisas. Obviamente que ninguém quer um objeto nomeado `IdONt_CARE.about_aNyThInG`, mas qual desses estilos é o usado muda de usuário para usuário. Porém o importante é manter alguma consistência no seu código e projeto. Essa parte talvez seja a que demande mais criativida e disciplina, ao mesmo tempo, de tudo que se refere as boas práticas. Criatividade porque bons nomes devem ser concisos e dotados de significados e disciplina para manter a consistência de estilo ao longo do projeto. Isso é bastante difícil, especialmente em projetos longos. Um pouco de sutileza sobre quando quebrar a consistência é também bem vinda.
+
+Além de nomes concisos e significativos, busque sempre manter o padrão de que  substantivos nomeiam objetos referentes a dados e verbos nomeiam funções. Isso é de modo geral a regra maxima. Outro ponto é tentar usar padrões de nomeações distintos para coisas diferentes. No geral, eu nomeio funções pelo estilo `period.sep`, enquanto vetores eu tendo a usar `underscore_sep`. Porém, isso vai de gosto e várias discussões, muitas vezes sem nenhum sentido, na internet são feitas sobre qual é o melhor estilo. O importante é ter um padrão e que esse padrão não seja horroroso.
+
+Além disso, existe uma série de nomes que você não deve usar pois já são relegados a outros objetos na própria base do R (ou pacotes que você for usar). Eles são também muito
+
+Porém, há um desafio extra ao nomear vetores que são as convenções próprias da área de matriz insumo produto. Quando vemos $[I-A]^{-1}$ num paper que usa matriz Insumo Produto, sabemos que estamos diante da Inversa de Leontief. Da mesma forma, quando lemos $A$ sabemos que se refere a matriz de coeficiente técnicos intersetoriais. Assim sendo, vale quebra a consistência de estilo para tentar ser similar as convenções próprias da nossa área. Para exemplificar o meu ponto, imagine que você enquanto matrizeiro estivesse lendo um código um comando que fosse referente a $A = A_n + A_m$ e se deparasse com:
+
+```{r}
+a = aN + aM # lowerCamel
+a = a.n + a.m #period.sep
+a = a_n + a_m #underscore_sep
+a = an + am #alllowercase
+A = A_n + A_m #OTHER_style
+A = AN + AM # UpperCamel
+```
+
+Acredito que todos à exceção de `OTHER_style` causariam um estranhamento em que fosse ler o código. Assim sendo, apesar de ser um pouco pretensioso, sugiro a seguinte forma para nomear vetores e matrizes no `R`, quando se tratar de coisas referentes a MIP:
+
+ - Para nomear vetor/matriz $a_x^b$ escreva como `a_x_b`. Seja ***Case Sensitive***, ou seja, se for $A_x^B$ escreva `A_x_B`.
+ 
+ - No caso de uma ampla base de dados que não seja referente à nada com uma notação matemática consolidada (e que você não usou nenhuma simples no seu artigo também), tente usar algum nome simples a partir de `lowerCamel` ou `underscore_sep`. Qualquer que seja a sua escolha, seja consistente com ela. 
+ 
+ - Use `period.sep` para funções.
+ 
+ - Use listas para objetos que se repetem. Isso será discutido mais a frente, porém prefira usar listas para ter `A_n`, com todos os anos (e outras subcategorias) dentro, do que ter um objeto separado para cada ano. Assim sendo, ao invés de ficar com a sua área de trabalha cheia de `A_n_2000`, `A_n_2001`..., você terá `A_n` apenas, podendo acessar cada ano usando apenas `A_n[[1]]` ou `A_n$2000`. Se você for trabalhar com apenas um ano, pode ser interessante talvez você fazer uma lista `A`, com `A$n` e `A$m`. 
+ 
+ - Evite: `nomes_muito_longos`. Prefira: `seja_conciso`. Usar listas ajuda nisso. Leia o próximo item.
+ 
+ - Nomes muito longos podem ser justificados se eles forem usados poucas vezes. Se você for usar um objeto apenas uma vez, pode ser interessante colocar um nome que deixe muito claro o que ele é, dado que ele terá uma aparição tão curta que dificilmente se lembrará ao que `defmatcell` se refere, já no caso de `deflatator_matrix_bycell` sim. Por outro lado, se você usar um objeto recorrentemente, não é necessário usar uma versão por extensa do seu nome, desde que fique claro do que ele se trata quando ela for definido e o nome faça um referência mínima.
+ 
+ 
+## 7. Código 2: Noções básicas de estilo.
+ 
+ Além de nomear coisas vale atentar para algumas noções básicas de estilo. Pense nisso como você justificando a borda do seu texto. Não muda o conteúdo, porém ajuda a você a ao leitor do seu código.
+ 
+### 7.1 Espaçamento
+
+ - **Dê** um espaço entre os operadores, tal como `+`,`-`,` =` e etc. Ou seja não faça: `a+b` e sim `a + b`.
+ 
+ 
+ - **Dê um espaço depois** da virgula, mas **nunca antes** (tal qual em português). Ou seja `funcao.qualquer(a, b, c)` e não `funcao.qualquer(a,b,c)` e nem `funcao.qualquer(a ,b, c)` .
+
+ - **Não dê** espaço no interior de parenteses e colchetes, nem antes nem depois, exceto se tiver uma virgula. Faça assim `c(a)` e *não* `c( a )`. No caso de um dataframe onde se selecionará uma linha  se coloca o espaço entre a virgula e `]`: `df[1, ]`.
+ 
+ - **Dê** um espaçamento antes do parenteses, *exceto* se for uma função: `if (x == FALSE) funcao.qualquer(x)`.
+ 
+ - **Não dê** espaço nem antes nem depois de `:`, `::` e `:::`.
+
+ - **Não dê** espaço nem antes nem depois de `$`.
+ 
+ - **É valido** dar espaçamentos extras, sem desrespeitar o que foi dito aqui, se isso for alinhar os simbolos de `<-` e `=`. Veja o exemplo abaixo:
+ 
+ ```{r}
+ example_1 <- list(
+              A   = A_n + A_m,
+              A_n = A_n,
+              A_m = A_m
+ )
+ ```
+ 
+### 7.2 Chaves
+ 
+Um dos segredos das boas práticas é evitar usar as chaves, `{` e `}`. O código tende a ficar confuso quando se usa muitas chaves, em especial quando elas vão se acumulando. Assim, ao longo deste guia vamos tentar apresentar alternativas para tanto. No entanto, nem sempre é possível abrir mão das chaves. Assim, quando for usar chaves no `{ }` tenha em mente que a abertura da chave, `{`, **nunca deve** estar no início de uma linha, enquanto o fechamento da chave, `}`, **deve estar**, **exceto em um caso**: quando você for usar `if` e `else`. Veja abaixo:
+
+```{r}
+
+# Example for {} #1
+if (example_1$A - A_m ==A_n) {
+   Leontief <- solve(diag(nrow(A_n)) - A_n)
+}
+
+# Example for {} #2
+
+for (i in 1:seq_along(list_A_n)) {
+   list_B[[i]] <- solve(diag(nrow(A_n[[i]])) - A_n[[i]])
+}
+
+# Example for {} #3
+example_3 <- matrix( rep(0, 4), nrow = 2)
+
+
+if ( det(example_3) != 0){
+   print("The matrix has an inverse")
+} else {
+   print(" The matrix has no inverse")
+}
+```
+
+- Para evitar usar chaves a função `ifelse` é bastante prática. Ao invés escrever:
+
+```{r}
+if (a + b == c){
+   d <- c
+} else {
+   d <- NULL
+}
+```
+
+Pode-se simplesmente escrever:
+
+```{r}
+d <- ifelse(a+b ==c, c, NULL)
+```
+
+
+- Se tratando de um código curto de uma linha apenas, as chaves são precendiveis, basta escrever na mesma linha:
+
+```{r}
+# Conditions
+if (2+2 ==4) print("2+2 = 4")
+
+# Functions
+x2 <- function(x) 2*x
+
+# Loops
+filename <- list()
+for(j in 1:3) filename[[j]] <- paste0("data_", j, ".csv")
+```
+
+### 7.3 Comprimento da Linha{#comp73}
+
+Não escreva linhas infinitamente longas. Ao se tratar de comentários até vai, porém você deve tomar cuidado para o seu código não se tonar incompreensível. Procure deixar suas linhas com menos de 80 caractéres. É uma quantidade que te permite ve em quaisquer fonte e tamanho razoaveis. Se você perceber que esta recorrentemente ultrapassando este limite, veja como um indicativo de que talvez seja uma boa você diminuir os nomes ou criar uma função.
+
+## 8. Código 3: Atribuição
+
+Não use `=` quando você pode usar `<-`. O uso de `=` como forma de atribuição de nomes à objetos é ***tolerado*** pelo R. Desse modo, apesar de raros, alguns erros ocorrem por conta de atribuir um nome a um objeto usando `=`. 
+
+Então, pense na situação em que nas atribuições de nomes aos objetos, você usou `=` e o seu código está retornando um erro. Você então vai conferir todas as funções que usou, tomando uma boa quantidade do seu tempo para descobrir no fim das contas que isso tudo ocorreu por que você usou `=` quando não podia.
+
+Assim sendo, deixe o uso de `=` para quando ele é indispensável: especificando parâmetros usados nas funções e como símbolo de operação lógica (com `==` para "igual à" e `!=` para "diferente de"). Além de tudo, você deixa mais claro o que é atribuição e o que é uso de objetos.
+
+Você pode no entanto argumentar que estudou o quando e porque `=` dará problemas como forma de atribuição e então usará `=` como o padrão e `<-` como exceção. Isso no entanto gerará um problema de consistência de estilo. Além do mais, para que ficar variando se você pode simplesmente usar `<-` sempre?
+
+O motivo pelo qual `<-` é o operador de atribuição correto no R ao invés de `=`, é a própria lógica por de trás da Ciência da Computação. Apesar de mais intuitivo para os iniciantes, `=` não representa o que de fato ocorre. O operador `=` passa a ideia que o `nome_de_objeto` é igual ao `objeto`, quando na realidade o que ocorre é outra coisa: estamos atribuindo o `objeto` à um `nome_de_objeto`, e por isso o uso de `<-` é melhor^[Devo ao Antônio Landim essa síntese do porque `<-` é melhor do que `=` em termos representativos. Dado que ele resumiu isso em um [tweet](https://twitter.com/a_gabreu/status/1253655660077645826?ref_src=twsrc%5Etfw) apenas.].
+
+Se você quiser entender mais sobre como funciona a atribuição de nomes a objetos, leia o [Capitulo 1 da Segunda Edição do Advanced R](https://adv-r.hadley.nz/names-values.html).
+
+
+## 9. Código 4: #Comentários
+
+Um código sem comentários deixa o leitor refém de um conhecimento prévio sobre o assunto e/ou de ficar um longo período tentando entender o que o código faz e o que cada objeto é. Porém um código comentado ***demais*** pode ficar muito carregado e poluído. Existe uma sutileza nisso tudo, que nem sempre é fácil de pôr em prática. Vou listar alguns pontos que acho seguros de serem seguidos:
+
+- Sempre comente o porquê de você estar fazendo isso. Ou seja, o porquê deste código estar fazendo isso.
+
+- Objetos com nomes que não são tão obvios assim para o leitor, como por exemplo `M_1`, devem ser comentados.
+
+- Objetos com nomes obvios para o leitor, `A_n` não precisam ser comentados.
+
+- Sempre comente explicando as funções que você criar. **Sempre.**
+
+- A exceção das seções do cabeçalho, é bom comentar explicando o que a seção faz.
+
+- Se você estiver com dificuldades para elaborar como fazer o código para determinada ação, escreva um comentário dizendo o que você quer fazer. Isso ajudará a você procurar no Google uma solução.
+
+- Deixar claro quais paramêtros vão para onde. (Ver a seção 10)
+
+## 10. purrr 1: pipe %>%
+
+Falamos quando falamos dos comprimento das linhas [(7.3)](#comp73) falamos brevemente sobre a questão da dificuldade de se ler linhas muito longas. Vale aqui falar sobre um outro problema: a forma de leitura. Na sintaxe do R é muito fácil fazermos várias e várias funções na hora de definirmos um objeto.
+
+```{r}
+# Long_Method
+obj2 <- funcao1(obj1)
+obj2 <- funcao2(obj2)
+obj2 <- funcao3(obj2)
+
+# Short_Method
+
+obj2 <- funcao3(funcao2(funcao3(obj1)))
+```
+
+O primeiro método (`Long_Method`) é indiscutivelmente menos prático do que o segundo (`Short_Method`). No entanto, o método mais curto não é tão fácil assim de ser escrito, uma vez que estamos acostumados a ler da esquerda para a direita, enquanto o correto neste caso é ler da direita para a esquerda. Na realidade, é de dentro para fora, o que faz criar ainda confusão na hora de ler e escrever. No exemplo acima, as três funções usaram apenas um parâmetro. Vamos ver como fica:
+
+```{r}
+# Long_Method
+obj2 <- funcao1(obj1, par1 = "a")
+obj2 <- funcao2(obj2, par2 = TRUE, par2_b = names(obj1)[c(2,3,6)])
+obj2 <- funcao3(obj2, par3 = c(1,2,5))
+
+# Short_Method
+
+obj2 <- funcao3(funcao2(funcao3(obj1, par1 = "a"), par2 = TRUE, par2_b = names(obj1)[c(2,3,6)]),
+                par3 = c(1,2,5))
+
+```
+
+Podemos ver como a coisa fica muito mais confusa. Podemos reescrever o segundo método quebrando a linha:
+
+```{r}
+obj2 <- funcao3(funcao2(funcao1(obj1, par1= "a"), # parameters funcao1
+                        par2 = TRUE, par2_b = names(obj1)[c(2,3,6)]), #parameters funcao2
+                par3 = c(1,2,5)) # parameters funcao3
+```
+
+Dessa forma, você consegue indiscultivelmente deixar mais fácil para entender o que se trata disso. Especialmente se você comentar de qual função é o parâmetro. Porém, e se existisse uma forma mais fácil ainda? É aí que entra o operador `%>%`, o famoso e tão querido *pipe*. Para usa-lo basta carregar o pacote `purrr`. Vamos ver como ele funciona, voltando ao básico:
+
+```{r}
+library(purrr)
+
+# Short Method
+obj2 <- funcao3(funcao2(funcao1(obj1)))
+
+
+# pipe
+obj2 <- obj1 %>% funcao1 %>% funcao2 %>% funcao3
+```
+
+Pelo método *pipe* nós conseguimos o mesmo resultado que antes só que agora podemos ler da esquerda para a direita. Vamos ver como fica quando as funções têm multiplos argumentos:
+
+```{r}
+# Short Method
+obj2 <- funcao3(funcao2(funcao3(obj1, par1 = "a"), par2 = TRUE, par2_b = names(obj1)[c(2,3,6)]),
+                par3 = c(1,2,5))
+
+# pipe
+obj2 <- obj1 %>% funca1(par1 = "a") %>% funcao2(par2 = TRUE, par2_b = names(obj1)[c(2,3,6)]) %>%
+   funcao3(par3 = c(1,2,5))
+```
+
+Podemos também quebrando as linhas após `%>%`:
+
+```{r}
+# Short Method
+
+obj2 <- funcao3(funcao2(funcao1(obj1, par1= "a"), # parameters funcao1
+                        par2 = TRUE, par2_b = names(obj1)[c(2,3,6)]), #parameters funcao2
+                par3 = c(1,2,5)) # parameters funcao3
+
+
+# pipe
+obj2 <- obj1 %>% funca1(par1 = "a") %>%
+   funcao2(par2 = TRUE, par2_b = names(obj1)[c(2,3,6)]) %>%
+   funcao3(par3 = c(1,2,5))
+```
+
+Repare como nem precisamos comentar de qual função os parametros de cada linha diz respeito, uma vez que ao usar `%>%` o nome da função e os seus parâmetros ficam perto um dos outros. Assim sendo, podemos economizar nos `#` além de deixar o código mais claro. Tudo isso graças ao `purrr`, que se tornou um pacote essencial.
+
+## 11. purrr 2: Loops e a familia map
+
+Como dito anteriormente [(1.3)](#intro_performance), o R não é exatamente uma linguagem rápida com Loops.   Assim sendo, no pacote `purrr`, temos a familia `map` de funções que atua de forma distinta de um Loop porém, entrega, quase sempre os mesmos resultados. Em termos mais amplos estamos falando aqui de Programação Funcional, e vale muito você ler os capítulos referentes a isso nos dois livros de R da Hadley Wickham,  [um mais introdutório e te deixando num nível intermediario](https://r4ds.had.co.nz/iteration.html) e [o outro sendo que vai te dar uma maior compreensão de como funciona a programação funcional](https://adv-r.hadley.nz/functionals.html). A parte de funcional exige uma pequena quantidade a mais esforço no inicio do que realizar tudo via `for`, porém os seus ganhos em termos de praticidade e clareza são incomparáveis. Sem contar na perfomance. 
+
+### 11.1 tictoc: Medindo a performance
+
+Para medir o diferencial de performance entre `map` e o `loop`, vamos usar aqui o pacote `tictoc` que mede o tempo demorado entre os comando `tic()` e `toc()`, veja abaixo como ele funciona:
+
+```{r}
+library(tictoc)
+
+tic()
+aaa <- sum(1:30)
+toc()
+```
+Vamos então agora apresentar o que é a familia map e como ela pode ser usada para substituir loops. Porém antes disso gostaria de deixar claro a necessidade de ler a parte que fala sobre quando não usar `map` (11.)
+
+### 11.2 map vs for
+
+Vamos imaginar agora que queremos fazer usar o comando `sum` em cada um dos os elementos de uma lista qualquer. Teriamos então que fazendo um `loop` usar o seguinte código: 
+
+```{r}
+tic()
+list_1 <- list(c(1:10), c(10:20), c(20:30))
+list_2 <- list()
+for(i in seq_along(list_1)){
+   list_2[[i]] <- sum(list_1[[i]])
+}
+toc()
+```
+
+
+```{r}
+tic()
+list_2 <- map(list_1, sum)
+toc()
+```
+
+
+Compare o tempo para ver o quanto ambos demoram. Esse diferencial irá aumentar de forma exponencial de acordo com a complexidade da tarefa a ser executada e do tamanho dos dados utilizados. Para facilitar o entendimento do funcionamento da função `map`, vamos ver como nós a [definiriamos com um loop](https://adv-r.hadley.nz/functionals.html#map):
+
+```{r}
+simple_map <- function(x, f, ...) {
+  out <- vector("list", length(x))
+  for (i in seq_along(x)) {
+    out[[i]] <- f(x[[i]], ...)
+  }
+  out
+}
+```
+
+Testando o seu desempenho podemos ver que `map` é a que detem melhor performance:
+
+```{r}
+tic()
+list_2 <- simple_map(list_1, sum)
+toc()
+```
+
+Uma coisa sobre `map`, ele sempre pega uma lista na entrada e devolve uma lista como produto. Existem 23 variações de map, que alteram a relação entre o objeto de entrada e o de saída. Dica: baixe o [*cheatsheet* do `purrr`](https://github.com/rstudio/cheatsheets/raw/master/purrr.pdf) que lá explica bem o que você precisa. 
+
+### 11.3 Dicas ao usar map
+
+A seguir eu irei explicar apenas algumas coisas, de modo que não posso deixar de frisar como é interessante que você leia os dois capítulos de funcional que eu indiquei no inicio da seção. Na seção 12 eu irei explicar algumas formas de lidar com listas recursivas a partir de map.
+
+ - Para usar duas listas como insumo, use map2, tal qual: `map2(list1, list2, function)`.
+ 
+ - Você pode fazer uma função anônima para usar no `map`, para criar uma inversa de Leontief a partir da matriz de coeficientes técnicos intersetoriais poderiamos fazer: `map(list_A_n, function(x) solve(diag(nrow(x)) - x))`.
+ 
+ - **IMPORTANTE:** Se sua função anônima está muito longa, é sinal de que você deveria lhe dar um nome.
+ 
+ - Em `function(x)` você pode colocar `x` ou qualquer outra letra, desde que ela seja usada na função anônima.
+ 
+ - Para escrever uma função anônima você pode usar `~` ao invés de `function(x)` em `map` ou `function(x,y)` em `map2`, no entanto isso exige que você use `.x` e `.y`. É muito importante o ponto final antes de `x` e `y`, pois senão retornará erro. Veja o exemplo abaixo:
+ 
+```{r}
+# With "function(x)" and function(x,y)
+nrow_col <- map(list1, function(x) c(nrow(x), ncol(x)))
+AX_n     <- map2(A_n, grossOutput, function(x, y) x %*% y)
+
+# With ~ (and using .x and .y):
+
+nrow_col <- map(list1, ~ c(nrow(.x), ncol(.x)))
+AX_n     <- map2(A_n, grossOutput, ~ .x %*% .y)
+```
+
+Isso ocorre porque os parâmetros padrões da familia `map` para as listas são nomeados `.x` e `.y`, de modo que `~` diz que você está usando `function(.x)` e `function(.x,.y)`. A depender da função a ser usada no `map`, isso pode ser útil. 
+ 
+ - Ao usar ´ você pode tornar o R uma linguagem  não sintática (*non-syntatic language*) o que pode te ser muito útil na hora de escrever uma função da familia `map`, em especial as da linha `map2`. Veja abaixo o que é a forma não sintatica:
+ 
+```{r}
+# Syntatic language:
+
+b <- 2 + 2
+c <- 3 * 3
+
+# Non-Syntatic language:
+
+b <- `+`(2 + 2)
+c <- `*`(3 * 3)
+```
+ 
+Veja agora um exemplo interessante como isso pode ser mais prático:
+
+```{r}
+# Syntatic language
+
+## With function(x,y)
+AX_m <- map2(A_m, X, function(x, y) x %*% y)
+
+## With ~
+AX_m <- map2(A_m, X, ~ .x %*% .y)
+
+# Non-Syntatic language
+
+AX_m <- map2(A_m, X, `%*%`)
+```
+
+ ***Lembrando*** que para ativar a forma de linguagem não sintática do R se usa a crase, **`**.
+ 
+ - `map` para uma lista de argumento da função. `map2` uma listas de argumento da função. E para além disso? `pmap`, que no entanto funciona de forma um pouco diferente de `map` e `map2`. Ao invés de anunciar três ou mais listas em separado, você irá apresentar uma lista apenas, que por sua vez irá conter as listas a ser usadas por `pmap`:
+ 
+```{r}
+pmap(list(list_a, list_b, list_c), function(x,y,z) x*(y %*% t(z)))
+```
+ 
+ 
+### 11.4 Quando não usar map
+ 
+Até agora vimos como podemos substituir um *loop* complicado pela função map em inúmeras situações. No entanto, algumas situação ainda talvez seja melhor usar um *loop* a `map`. Este é o caso de interações que dependem dos valores no índice anterior. 
+
+```{r}
+for(i in 3:seq_along(list_3)){
+   list_3[[i]] <- list_3[[i-1]]*list_3[[i]]*1.05
+}
+```
+
+Neste caso porém, vale usar outra função do `purrr` chamada `accumulate`:
+
+```{r}
+list_4 <- accumulate(list_3, ~ .x*.y*1.05)
+```
+
+O `purrr` é de fato um pacote canivete suiço. Quando você pensa que não, eis uma outra forma de você substituir um *loop* por um funcional. De todo modo, se você não conseguir pensa numa forma de atuar sem ser num *loop*, não tenha medo de usa-lo. Só tente ao menos uma vez pensar numa forma de usar isso com programação funcional e com o tempo a transição ocorrerá naturalmente.
+
+Na seção 13, vamos discutir como fazer decomposições estruturais usando programação funcional.
+
+### 12 purrr 3: Listas recursivas com programação funcional
+
+Imagine que você tem uma base de dados de matrizes insumo produtos para n anos. E então pense que você quer decompor em cada ano a sua matriz em 5 partes. Você poderia fazer 5 listas diferentes para cada parte da matriz decomposta... **Ou...**
+
+### 13 Decomposições estruturais com programação funcional
+
