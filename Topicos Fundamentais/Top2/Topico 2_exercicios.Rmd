@@ -216,7 +216,7 @@ which.max.para.tras <- function(x){
 }
 ```
 
-## Exportando dados em csv
+## Exportando dados em csv e excel.
 
 #### Q.3.1 Crie um data.frame `dfQ3.1` de duas colunas com os valores de `dfQ2.1` e `dfQ2.2`.
 
@@ -230,22 +230,66 @@ dfQ3.1 <- data.frame(dfQ2.1, dfQ2.2)
 colnames(dfQ3.1) <- c("Para Frente", "Para trás")
 ```
 
-#### Q.3.3 Nomeie as linhas de `dfQ3.1` com `cod67`.
+#### Q.3.3 Confira o comprimento de `cod67` a partir da função length nas  situações a seguir, e veja se você entende o porquê. (Tem relação com o Tópico 1)
 
-```{r, eval = F, include = F}
-rownames(dfQ3.1) <- cod67
+```{r, eval = F, include = TRUE}
+cod67
+
+cod67[,1]
+
+cod67[1:67,1]
+
+cod67[[1]]
+
+unlist(cod67)
 ```
 
-#### Q.3.4 Exporte ``dfQ3.1` no formato csv separado por **virgulas** e decimal com `.`. Chame o arquivo de `dfQ31.csv`
+```{r, eval = FALSE, include = FALSE}
+library(purrr)
+cod67 %>% length
+
+cod67[,1] %>% length
+
+cod67[1:67,1] %>% length
+
+cod67[[1]] %>% length
+
+unlist(cod67) %>% length
+```
+
+
+#### Q.3.4 Nomeie as linhas de `dfQ3.1` com `cod67`.
+
+
+```{r, eval = F, include = F}
+rownames(dfQ3.1) <- unlist(cod67)
+
+#ou
+
+rownames(dfQ3.1) <- cod67[[1]]
+```
+
+#### Q.3.5 Exporte ``dfQ3.1` no formato csv separado por **virgulas** e decimal com `.`. Chame o arquivo de `dfQ31.csv`
 
 ```{r, eval = FALSE, include = FALSE}
 write.csv(dfQ3.1, file = "dfQ31.csv")
 ```
 
-#### Q.3.5 Exporte ``dfQ3.1` novamente só que agora no formato csv separado por **ponto e virgula** e decimal por **virgulas**. Chame o arquivo de `dfQ31b.csv`
+#### Q.3.6 Exporte ``dfQ3.1` novamente só que agora no formato csv separado por **ponto e virgula** e decimal por **virgulas**. Chame o arquivo de `dfQ31b.csv`
 
 ```{r, eval=F, include=F}
 write.csv2(dfQ3.1, file = "dfQ31b.csv")
 ```
 
-#### D.3.1 - **Desafio:** usando a função `write.xlsx` do pacote `openxlsx`, crie um arquivo 
+#### D.3.1 - **Desafio:** usando a função `write.xlsx` do pacote `openxlsx`, crie um arquivo `dfQ31.xlsx`. Garanta que os nomes da linhas serão gravados (o default é `rowNames = FALSE`).
+
+```{r, eval= FALSE, include = FALSE}
+library(openxlsx)
+write.xlsx(dfQ3.1, file = "dfQ31.xlsx", rowNames = TRUE)
+```
+
+#### Q.3.7 Apague os arquivos `dfQ31.csv` e `dfQ31b.csv`. Se você tiver feito `D.3.1`, apague `dfQ31.xlsx` também.
+
+```{r, eval = FALSE, include= F}
+unlink(c("dfQ31.csv", "dfQ31b.csv", "dfQ31.xlsx"))
+```

@@ -92,12 +92,12 @@ git checkout -b <branch_name>
 ## Comandos git para deletar branchs
 
  - Deletar o branch localmente
-```{bash}
+```{bash, eval = FALSE}
 git branch -d localbranchname
 ```
 
  - Deletar o branch remotamente
-```{bash}
+```{bash, eval = FALSE}
 git push origin --delete remoteBranchName
 ```
  

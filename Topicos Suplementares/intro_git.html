@@ -407,9 +407,34 @@ summary {
 </ul>
 <pre class="bash"><code>git commit -a -m &quot;including everything in the staging area and then commiting&quot;</code></pre>
 </div>
-<div id="comandos-git-para-push" class="section level2">
-<h2>Comandos git para push</h2>
+<div id="comandos-git-para-dar-push-nas-modificações" class="section level2">
+<h2>Comandos git para dar push nas modificações</h2>
 <pre class="bash"><code>git push &lt;remote&gt; &lt;branch&gt;</code></pre>
+<p>Para dar <code>push</code> via o terminal, você deve dizer qual é o destino <code>&lt;remote&gt;</code>, e qual ramificação <code>&lt;branch&gt;</code>, você deseja dar o push.</p>
+<p>Assim, se você quer dar o push para origem na ramificação mestre (<code>master</code>), basta:</p>
+<pre class="bash"><code>git push origin master</code></pre>
+</div>
+<div id="comandos-para-dar-commit-e-push-tudo-junto" class="section level2">
+<h2>Comandos para dar commit e push tudo junto</h2>
+<pre class="bash"><code>git commit -a -m &quot;Mensagem do commit&quot;
+
+git push origin master</code></pre>
+</div>
+<div id="comandos-git-para-criar-branchs" class="section level2">
+<h2>Comandos git para criar branchs</h2>
+<pre class="bash"><code>git checkout -b &lt;branch_name&gt;</code></pre>
+</div>
+<div id="comandos-git-para-deletar-branchs" class="section level2">
+<h2>Comandos git para deletar branchs</h2>
+<ul>
+<li>Deletar o branch localmente</li>
+</ul>
+<pre class="bash"><code>git branch -d localbranchname</code></pre>
+<ul>
+<li>Deletar o branch remotamente</li>
+</ul>
+<pre class="bash"><code>git push origin --delete remoteBranchName</code></pre>
+<p>Muito provavelmente o <code>remoteBranchName</code> e o <code>localbranchname</code> serão iguais.</p>
 </div>
 </div>
 
