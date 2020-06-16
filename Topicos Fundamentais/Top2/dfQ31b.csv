@@ -1,0 +1,135 @@
+"";"dfQ2.1";"dfQ2.2"
+"0191
+Agricultura, inclusive o apoio à agricultura e a pós-colheita";1,72373264707074;3,43316148469492
+"0192
+Pecuária, inclusive o apoio à pecuária";1,79503442789633;1,63533963338263
+"0280
+Produção florestal; pesca e aquicultura";1,36357528688516;1,34147322945313
+"0580
+Extração de carvão mineral e de minerais não metálicos";1,82707739338831;1,23024293425967
+"0680
+Extração de petróleo e gás, inclusive as atividades de apoio";1,70605949868086;2,56117269537048
+"0791
+Extração de minério de ferro, inclusive beneficiamentos e a aglomeração";1,78530953647857;1,15251142337462
+"0792
+Extração de minerais metálicos não ferrosos, inclusive beneficiamentos";2,05071351061392;1,2003936094059
+"1091
+Abate e produtos de carne, inclusive os produtos do laticínio e da pesca";2,51071234019235;1,44240905744463
+"1092
+Fabricação e refino de açúcar";2,40878341146004;1,24337504391371
+"1093
+Outros produtos alimentares";2,35550384440635;1,79543545872777
+"1100
+Fabricação de bebidas";2,22029110225815;1,33866786386318
+"1200
+Fabricação de produtos do fumo";2,17720776596513;1,05139178048015
+"1300
+Fabricação de produtos têxteis";2,02360070829879;1,73482141333147
+"1400
+Confecção de artefatos do vestuário e acessórios";1,86140104291108;1,13248375942223
+"1500
+Fabricação de calçados e de artefatos de couro";2,09795945291925;1,17084528979365
+"1600
+Fabricação de produtos da madeira";1,95571186712426;1,32616529555449
+"1700
+Fabricação de celulose, papel e produtos de papel";2,02716651142922;1,82023426682605
+"1800
+Impressão e reprodução de gravações";1,82671777070916;1,34176929161868
+"1991
+Refino de petróleo e coquerias";2,48361171457275;5,02223694387512
+"1992
+Fabricação de biocombustíveis";2,37938039626626;1,30639817367442
+"2091
+Fabricação de químicos orgânicos e inorgânicos, resinas e elastômeros";2,01469773986826;3,30418790091119
+"2092
+Fabricação de defensivos, desinfestantes, tintas e químicos diversos";1,9968494899892;2,03196573088272
+"2093
+Fabricação de produtos de limpeza, cosméticos/perfumaria e higiene pessoal";2,18563822901166;1,16131076550337
+"2100
+Fabricação de produtos farmoquímicos e farmacêuticos";1,76559544233706;1,12574212748447
+"2200
+Fabricação de produtos de borracha e de material plástico";2,02350779340329;2,16658372206969
+"2300
+Fabricação de produtos de minerais não metálicos";2,11291558943486;1,54451475264098
+"2491
+Produção de ferro gusa/ferroligas, siderurgia e tubos de aço sem costura";2,14785393974646;1,92489825720407
+"2492
+Metalurgia de metais não ferosos e a fundição de metais";2,12835229707909;1,62589906740262
+"2500
+Fabricação de produtos de metal, exceto máquinas e equipamentos";1,97180299043717;1,85763285170998
+"2600
+Fabricação de equipamentos de informática, produtos eletrônicos e ópticos";1,68374207625113;1,24678168936283
+"2700
+Fabricação de máquinas e equipamentos elétricos";2,0685446645682;1,43714088399076
+"2800
+Fabricação de máquinas e equipamentos mecânicos";1,8752516947376;1,54334936773772
+"2991
+Fabricação de automóveis, caminhões e ônibus, exceto peças";2,17999551076755;1,0805573055832
+"2992
+Fabricação de peças e acessórios para veículos automotores";2,0756809156713;1,52147749834644
+"3000
+Fabricação de outros equipamentos de transporte, exceto veículos automotores";1,91987058403144;1,2149909819895
+"3180
+Fabricação de móveis e de produtos de indústrias diversas";1,81676615448245;1,17186917546198
+"3300
+Manutenção, reparação e instalação de máquinas e equipamentos";1,74884118812742;2,0045648259923
+"3500
+Energia elétrica, gás natural e outras utilidades";2,08573977760266;3,65654396628957
+"3680
+Água, esgoto e gestão de resíduos";1,576350096884;1,41616153884853
+"4180
+Construção";1,79915345808078;1,64842901682944
+"4580
+Comércio por atacado e varejo";1,53872484841656;6,96209692302823
+"4900
+Transporte terrestre";1,98995215137888;4,2534243537685
+"5000
+Transporte aquaviário";1,72193461220109;1,23662941072623
+"5100
+Transporte aéreo";1,85854187172201;1,26106213546913
+"5280
+Armazenamento, atividades auxiliares dos transportes e correio";1,59002328500147;2,2708167369425
+"5500
+Alojamento";1,69611554092381;1,12644972367305
+"5600
+Alimentação";1,828323592736;1,2939452163855
+"5800
+Edição e edição integrada à impressão";1,73285298200707;1,10724813110552
+"5980
+Atividades de televisão, rádio, cinema e  gravação/edição de som e imagem";1,72459530780108;1,99583902637188
+"6100
+Telecomunicações";1,81454871707845;1,81746001805617
+"6280
+Desenvolvimento de sistemas e outros serviços de informação";1,37586928846649;1,67282504061679
+"6480
+Intermediação financeira, seguros e previdência complementar";1,48590982886713;3,9065907231455
+"6800
+Atividades imobiliárias";1,10928110875891;1,80803356632322
+"6980
+Atividades jurídicas, contábeis, consultoria e sedes de empresas";1,42403945339038;3,31920023862219
+"7180
+Serviços de arquitetura, engenharia, testes/análises técnicas e P & D";1,43869234983622;1,65087479849866
+"7380
+Outras atividades profissionais, científicas e técnicas";1,99104950968526;2,17440085771605
+"7700
+Aluguéis não imobiliários e gestão de ativos de propriedade intelectual";1,41952597318872;1,5775489855095
+"7880
+Outras atividades administrativas e serviços complementares";1,38888728403894;2,54186370165605
+"8000
+Atividades de vigilância, segurança e investigação";1,22146343795276;1,38932012633685
+"8400
+Administração pública, defesa e seguridade social";1,40777928953297;1,32470056880046
+"8591
+Educação pública";1,24213877190471;1,02780446130643
+"8592
+Educação privada";1,39372747483975;1,15422039606064
+"8691
+Saúde pública";1,46459694412413;1,00301088391932
+"8692
+Saúde privada";1,5255613200012;1,10705111696633
+"9080
+Atividades artísticas, criativas e de espetáculos";1,59260928835454;1,18360219253701
+"9480
+Organizações associativas e outros serviços pessoais";1,66369828775309;1,26599297374991
+"9700
+Serviços domésticos";1;1
