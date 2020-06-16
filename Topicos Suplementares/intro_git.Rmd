@@ -58,9 +58,32 @@ git commit -m "commiting all staging area"
 git commit -a -m "including everything in the staging area and then commiting"
 ```
 
-## Comandos git para push
+## Comandos git para dar push
 
+ 
 ```{bash, eval = FALSE}
 git push <remote> <branch>
 ```
+
+Para dar `push` via o terminal, você deve dizer qual é o destino `<remote>`, e qual ramificação `<branch>`, você deseja dar o push.
+
+Assim, se você quer dar o push para origem na ramificação mestre (`master`), basta:
+
+```{bash, eval = FALSE}
+git push origin master
+```
+
+## Comandos para dar commit e push tudo junto
+
+```{bash, eval = FALSE}
+git commit -a -m "Mensagem do commit"
+
+git push origin master
+```
+
+
+## Comandos git para renomear branchs
+
+Suponha que você tem um ramo chamado `nome_velho`. Você 
+
 
