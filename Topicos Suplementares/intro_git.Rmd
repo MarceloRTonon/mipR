@@ -58,7 +58,7 @@ git commit -m "commiting all staging area"
 git commit -a -m "including everything in the staging area and then commiting"
 ```
 
-## Comandos git para dar push
+## Comandos git para dar push nas modificações
 
  
 ```{bash, eval = FALSE}
@@ -82,8 +82,25 @@ git push origin master
 ```
 
 
-## Comandos git para renomear branchs
-
-Suponha que você tem um ramo chamado `nome_velho`. Você 
+## Comandos git para criar branchs
 
 
+```{bash, eval = FALSE}
+git checkout -b <branch_name>
+```
+
+## Comandos git para deletar branchs
+
+ - Deletar o branch localmente
+```{bash}
+git branch -d localbranchname
+```
+
+ - Deletar o branch remotamente
+```{bash}
+git push origin --delete remoteBranchName
+```
+ 
+ Muito provavelmente o `remoteBranchName` e o `localbranchname` serão iguais.
+ 
+ 
