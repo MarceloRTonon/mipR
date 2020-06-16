@@ -37,3 +37,30 @@ Aqui iremos
 
 # Instalando o Git
 
+# Comando Git via terminal
+
+## Comandos Git para commit
+
+- Para adicionar novos arquivos para a *"staging area"*.
+```{bash, eval = FALSE}
+git add -A
+```
+
+- Para dar commit em tudo que está na *"staging area"*
+
+```{bash, eval = FALSE}
+git commit -m "commiting all staging area"
+```
+
+- Para adicionar tudo à *"staging area"* e dar commit
+
+```{bash, eval = FALSE}
+git commit -a -m "including everything in the staging area and then commiting"
+```
+
+## Comandos git para push
+
+```{bash, eval = FALSE}
+git push <remote> <branch>
+```
+

@@ -377,10 +377,10 @@ summary {
 <h1>Instalando o Git!</h1>
 <p>Se você nunca usou e instalou o Git, a primeira coisa a fazer é instalar o Git no seu computador. Isso irá variar de sistema para sistema. Veja como fazer abaixo:</p>
 <ul>
-<li>Windows: <a href="http://git-scm.com/download/win" class="uri">http://git-scm.com/download/win</a>.</li>
-<li>OS X: <a href="http://git-scm.com/download/mac" class="uri">http://git-scm.com/download/mac</a>.</li>
-<li>Debian/Ubuntu: sudo apt-get install git-core.</li>
-<li>Other Linux distros: <a href="http://git-scm.com/download/linux" class="uri">http://git-scm.com/download/linux</a>.</li>
+<li>Windows: <a href="http://git-scm.com/download/win" class="uri">http://git-scm.com/download/win</a></li>
+<li>OS X: <a href="http://git-scm.com/download/mac" class="uri">http://git-scm.com/download/mac</a></li>
+<li>Debian/Ubuntu: <code>sudo apt-get install git-core</code></li>
+<li>Outras distros do Linux: <a href="http://git-scm.com/download/linux" class="uri">http://git-scm.com/download/linux</a></li>
 </ul>
 </div>
 <div id="git-e-github" class="section level1">
@@ -389,6 +389,28 @@ summary {
 </div>
 <div id="instalando-o-git-1" class="section level1">
 <h1>Instalando o Git</h1>
+</div>
+<div id="comando-git-via-terminal" class="section level1">
+<h1>Comando Git via terminal</h1>
+<div id="comandos-git-para-commit" class="section level2">
+<h2>Comandos Git para commit</h2>
+<ul>
+<li>Para adicionar novos arquivos para a <em>“staging area”</em>.</li>
+</ul>
+<pre class="bash"><code>git add -A</code></pre>
+<ul>
+<li>Para dar commit em tudo que está na <em>“staging area”</em></li>
+</ul>
+<pre class="bash"><code>git commit -m &quot;commiting all staging area&quot;</code></pre>
+<ul>
+<li>Para adicionar tudo à <em>“staging area”</em> e dar commit</li>
+</ul>
+<pre class="bash"><code>git commit -a -m &quot;including everything in the staging area and then commiting&quot;</code></pre>
+</div>
+<div id="comandos-git-para-push" class="section level2">
+<h2>Comandos git para push</h2>
+<pre class="bash"><code>git push &lt;remote&gt; &lt;branch&gt;</code></pre>
+</div>
 </div>
 
 
