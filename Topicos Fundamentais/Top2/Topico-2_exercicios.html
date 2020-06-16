@@ -371,6 +371,7 @@ summary {
 
 
 <p>Essa lista de exercicios é para treinar as suas habilidades na leitura de dados. Repare que a sessão <em>The SeViration</em> está aqui, o porquê disso é o fato de ser uma importante lembrança do método de aprendizado.</p>
+<p>Vamos manter um</p>
 <p>Nós também iremos aproveitar e praticar também tudo que você aprendeu anteriormente também!</p>
 <div id="pacotes-necessários-para-o-exercicio." class="section level2">
 <h2>Pacotes necessários para o exercicio.</h2>
@@ -401,7 +402,7 @@ library(readxl)
 <h1>Exercicios</h1>
 <div id="lendo-os-dados-em-excel" class="section level2">
 <h2>1. Lendo os dados em Excel</h2>
-<p>Assim como na aula, vamos usar as matrizes do IBGE de 2015. <a href="ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls">Clique aqui para baixa-las se você não o fez</a>. Iremos nos referir a esse arquivo como <strong>IBGE_2015</strong></p>
+<p>Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. <a href="ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls">Clique aqui para baixa-las se você não o fez</a>. Iremos nos referir a esse arquivo como <strong>IBGE_2015</strong></p>
 <div id="q.1.1-crie-um-tibble-dfq1.1-com-os-dados-da-matriz-de-coeficientes-técnicos-intersetoriais-aba-14-de-ibge_2015-e-também-as-duas-colunas-com-o-código-e-a-descrição-das-atividades.-nomeie-também-as-colunas" class="section level4">
 <h4>Q.1.1 Crie um tibble <code>dfQ1.1</code> com os dados da matriz de coeficientes técnicos intersetoriais (aba 14 de IBGE_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas</h4>
 </div>
@@ -432,11 +433,53 @@ library(readxl)
 colnames(dfQ1.1)[4:6]
 colnames(dfQ1.1)[1]</code></pre>
 </div>
-<div id="d.1.2---desafio-crie-uma-função-tb_to_df-que" class="section level4">
-<h4>D.1.2 - <strong>Desafio:</strong> Crie uma função <code>tb_to_df</code> que:</h4>
+<div id="d.1.2---desafio-crie-uma-função-tb_to_dfdata-column-rownames-que" class="section level4">
+<h4>D.1.2 - <strong>Desafio:</strong> Crie uma função <code>tb_to_df(data, column, RowNames)</code> que:</h4>
 <ul>
-<li>Crie</li>
+<li>Transforme um tibble em um <code>data.frame</code></li>
+<li>O primeiro argumento <code>data</code> é referente ao objeto original</li>
+<li>O segundo argumento <code>column</code> diz respeito à um vetor com o número das colunas que (não) vão estar lá. Se nada for colocado lá, vai o objeto inteiro.</li>
+<li>O terceiro argumento <code>RowNames</code> indica qual das colunas se tornará o rownames. Se nada for indicado, não serão adicionados <code>RowNames</code>.</li>
 </ul>
+</div>
+<div id="q.1.7-faça-uma-inversa-de-leontief-a-partir-de-dfq1.5.-nomeie-a-dfq1.7-e-faça-coerce-a-em-um-data.frame." class="section level4">
+<h4>Q.1.7 Faça uma inversa de Leontief a partir de <code>dfQ1.5</code>. Nomeie-a <code>dfQ1.7</code> e faça coerce-a em um <code>data.frame</code>.</h4>
+</div>
+<div id="d.1.3-como-nos-desafios-na-lista-de-exercicios-2-da-aula-1-compare-os-dados-de-dfq1.6-com-dfq1.7." class="section level4">
+<h4>D.1.3 Como nos desafios na lista de exercicios 2 da aula 1, compare os dados de <code>dfQ1.6</code> com <code>dfQ1.7</code>.</h4>
+<p><strong>Dica:</strong> Mude a configuração do argumento <code>check.attributes</code> de uma das .</p>
+</div>
+<div id="d.1.4---desafio-o-que-explica-a-diferença-entre-os-valores-obtidos-em-d.1.3-pelas-funções-all.equal-e-identical" class="section level4">
+<h4>D.1.4 - <strong>Desafio:</strong> O que explica a diferença entre os valores obtidos em D.1.3 pelas funções <code>all.equal</code> e <code>identical</code>?</h4>
+</div>
+</div>
+<div id="treinando-manipulação-de-matrizes." class="section level2">
+<h2>Treinando manipulação de matrizes.</h2>
+<p>Nas análises de Matriz Insumo Produto, um dos primeiros indicadores que você irá encontrar é o encadeamento para trás e para frente de determinado setor. Seja <span class="math inline">\(i\)</span> um vetor unitario, se calcula os encadeamentos para trás e para frente de cada setor das seguintes maneiras <span class="math inline">\(i&#39;[I-A]^{-1}\)</span> (para trás) e <span class="math inline">\([I-A]^{-1}i\)</span> (para frente).</p>
+<p>A função <code>rep</code> te permite criar um vetor repetindo um valor (ou conjunto de valores) uma quantidade de vezes:</p>
+<pre class="r"><code>rep(0, 3)
+rep(c(1:3), 2)</code></pre>
+<div id="q.2.1-usando-a-função-rep-crie-um-vetor-unitario-chamado-i_67-com-de-comprimento-67-e-estime-os-encadeamentos-para-trás-de-dfq1.6.-chame-os-de-dfq2.1" class="section level4">
+<h4>Q.2.1 Usando a função <code>rep</code> crie um vetor unitario chamado <code>i_67</code>, com de comprimento 67 e estime os encadeamentos para trás de <code>dfQ1.6</code>. Chame-os de <code>dfQ2.1</code></h4>
+<p><strong>Dica:</strong> Você precisa mudar duas coisas em <code>i_67 %*% dfQ2.1</code> para obter o que precisa. Uma delas envolve álgebra linear (veja a formula), a outra envolve estrutura de dados (confira a documentação de <code>%*%</code>).</p>
+</div>
+<div id="q.2.2-usando-i_67-estime-os-encadeamentos-para-frente-de-dfq1.6.-chame-os-de-dfq2.2" class="section level4">
+<h4>Q.2.2 Usando <code>i_67</code> estime os encadeamentos para frente de <code>dfQ1.6</code>. Chame-os de <code>dfQ2.2</code>:</h4>
+</div>
+<div id="q.2.3-investigue-colsums-e-rowsums-e-refaça-dfq2.1-e-dfq2.2-usando-essas-funções." class="section level4">
+<h4>Q.2.3 Investigue <code>colSums</code> e <code>rowSums</code> e refaça <code>dfQ2.1</code> e <code>dfQ2.2</code> usando essas funções.</h4>
+</div>
+<div id="q.2.4-para-além-da-comodidade-você-consegue-dizer-qual-é-a-vantagem-de-usar-as-funções-colsums-e-rowsums-em-relação-ao-método-com-vetor-unitário" class="section level4">
+<h4>Q.2.4 Para além da comodidade, você consegue dizer qual é a vantagem de usar as funções <code>colSums</code> e <code>rowSums</code> em relação ao método com vetor unitário?</h4>
+</div>
+<div id="q.2.5-use-a-função-max-e-min-em-dfq2.1-e-dfq2.2." class="section level4">
+<h4>Q.2.5 Use a função <code>max</code> e <code>min</code> em <code>dfQ2.1</code> e <code>dfQ2.2</code>.</h4>
+</div>
+<div id="q.2.6-use-which.max-e-which.min-em-dfq2.1-e-dfq2.2.-qual-é-a-diferença" class="section level4">
+<h4>Q.2.6 Use <code>which.max</code> e <code>which.min</code> em <code>dfQ2.1</code> e <code>dfQ2.2</code>. Qual é a diferença?</h4>
+</div>
+<div id="q.2.7-usando-colsums-e-which.max-crie-uma-função-which.max.para.tras-que-tendo-como-insumo-uma-inversa-de-leontief-retorne-qual-é-o-setor-com-maior-encadeamento-para-trás." class="section level4">
+<h4>Q.2.7 Usando <code>colSums</code> e <code>which.max</code> crie uma função <code>which.max.para.tras</code> que tendo como insumo uma Inversa de Leontief retorne qual é o setor com maior encadeamento para trás.</h4>
 </div>
 </div>
 </div>

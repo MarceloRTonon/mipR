@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Essa lista de exercicios é para treinar as suas habilidades na leitura de dados. Repare que a sessão *The SeViration* está aqui, o porquê disso é o fato de ser uma importante lembrança do método de aprendizado.
 
+Vamos manter um 
+
 Nós também iremos aproveitar e praticar também tudo que você aprendeu anteriormente também!
 
 ## Pacotes necessários para o exercicio.
@@ -49,7 +51,7 @@ Se você ainda não dominou bem o passo **3** dessa lista confira se você fez b
 
 ## 1. Lendo os dados em Excel
 
-Assim como na aula, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE_2015**
+Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE_2015**
 
 #### Q.1.1 Crie um tibble `dfQ1.1` com os dados da matriz de coeficientes técnicos intersetoriais (aba 14 de IBGE_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas
 ```{r, eval=FALSE, include=F}
@@ -128,7 +130,7 @@ tb_to_df <- function(data, column, RowNames = NULL){
 
 #### Q.1.7 Faça uma inversa de Leontief a partir de `dfQ1.5`. Nomeie-a `dfQ1.7` e faça coerce-a em um `data.frame`.
 
-```{r}
+```{r, eval = FALSE, include = FALSE}
 dfQ1.7 <- solve(diag(nrow(dfQ1.5))- dfQ1.5) %>% as.data.frame()
 
 ```
