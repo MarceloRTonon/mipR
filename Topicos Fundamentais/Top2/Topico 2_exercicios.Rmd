@@ -23,9 +23,11 @@ Antes de começar a ler o restante do exercicio, confira se você tem instalado 
 library(purrr)
 library(tibble)
 library(readxl)
+library(openxlsx)
 #Não havendo, use:
 #install.packages("purrr")
 #install.packages("tibble")
+#install.packages("openxlsx")
 ```
 
 
@@ -228,3 +230,22 @@ dfQ3.1 <- data.frame(dfQ2.1, dfQ2.2)
 colnames(dfQ3.1) <- c("Para Frente", "Para trás")
 ```
 
+#### Q.3.3 Nomeie as linhas de `dfQ3.1` com `cod67`.
+
+```{r, eval = F, include = F}
+rownames(dfQ3.1) <- cod67
+```
+
+#### Q.3.4 Exporte ``dfQ3.1` no formato csv separado por **virgulas** e decimal com `.`. Chame o arquivo de `dfQ31.csv`
+
+```{r, eval = FALSE, include = FALSE}
+write.csv(dfQ3.1, file = "dfQ31.csv")
+```
+
+#### Q.3.5 Exporte ``dfQ3.1` novamente só que agora no formato csv separado por **ponto e virgula** e decimal por **virgulas**. Chame o arquivo de `dfQ31b.csv`
+
+```{r, eval=F, include=F}
+write.csv2(dfQ3.1, file = "dfQ31b.csv")
+```
+
+#### D.3.1 - **Desafio:** usando a função `write.xlsx` do pacote `openxlsx`, crie um arquivo 
