@@ -1,0 +1,27 @@
+---
+title: "Tópico 3 - Subsetting pelo tidyverse"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "17/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Tidyverse
+
+O Tidyverse é uma familia de pacotes que fortalece bastante a analise e manipulalção de dados no R, especialmente para bases de dados retangulares e mais ainda para bases *tidy*. Vale notar, que este não é o caso de Matrizes Insumo Produto (que no geral são bases de dados quadradas), porém além de várias funcionalidades uteis como um todo, além do maravilhoso pacote *purrr* que veremos em outra ocasião.
+
+Dada a natureza do *Tidyverse*, será mais usada nessa parte o operador *pipe* `%>%`, ao invés da escrita *nested*. Relembrando o uso dele abaixo:
+
+```{r, eval = FALSE}
+#Modo Nested
+objeto2 <- funcao3(funcao2(funcao1(objeto1)))
+
+
+#Modo Pipe
+objeto2 <- objeto1 %>% funcao1() %>% funcao2() %>% funcao3()
+```
+
+Ou seja, ao invés de uma escrita que vai de dentro (`objeto1`) para fora (`funcao3`) como no modo *nested*, você tem uma escrita da esquerda (`objeto1`) para a direita (`funcao3`).
