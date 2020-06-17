@@ -1,7 +1,7 @@
 ---
-title: "Aula 2 - Treinando a Leitura de Dados"
+title: "Exercícios - Tópico 2"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "11/06/2020"
+date: "16/06/2020"
 output: html_document
 ---
 
@@ -11,12 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Essa lista de exercicios é para treinar as suas habilidades na leitura de dados. Repare que a sessão *The SeViration* está aqui, o porquê disso é o fato de ser uma importante lembrança do método de aprendizado.
 
-
 Nós também iremos aproveitar e praticar também tudo que você aprendeu anteriormente também!
 
-## Pacotes necessários para o exercicio.
+## Pacotes necessários para o exercício.
 
-Antes de começar a ler o restante do exercicio, confira se você tem instalado os seguintes pacotes.
+Antes de começar a ler o restante do exercício, confira se você tem instalado os seguintes pacotes.
 
 ```{r}
 library(purrr)
@@ -40,15 +39,15 @@ Talvez você fique com dúvidas e dificuldades. É normal. Especialmente quando 
 
 3. Se tratando de uma dúvida referente a um objeto natural do R, ou de seus pacotes, use e abuse do `Help`. A documentação do R tenta ser a mais explicativa e direta ao ponto o possível. Não se preocupe, parte dos exercicios sempre será ler o que o próprio R tem a dizer sobre o assunto.
 
-4. Persistidas os erros e as dificuldades, tente jogar no Google o problema. De modo geral, se você pesquisar "R" juntamente com a descrição do problema muito provavelmente aparecerá alguém pedindo ajuda sobre o tema.^[Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto [1.6](https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more) do *R for Data Science*.]
+4. Persistindo os erros e as dificuldades, tente jogar no Google o problema. De modo geral, se você pesquisar "R" juntamente com a descrição do problema muito provavelmente aparecerá alguém pedindo ajuda sobre o tema.^[Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto [1.6](https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more) do *R for Data Science*.]
 
 ***IMPORTANTE***: Será sempre perguntado na sala de aula se alguém pesquisou na internet para resolver seus problemas e queremos saber como cada um se saiu. Assim, pedimos que você 
 
 5. Se você não conseguir se resolver por meio do Google ou em outros canais da internet, aí então peça ajuda a um amigo. 
 
-Se você ainda não dominou bem o passo **3** dessa lista confira se você fez bem a lição 
+Se você ainda não dominou bem o passo **3** dessa lista confira se você fez bem a lição. 
 
-# Exercicios
+# Exercícios
 
 ## 1. Lendo os dados em Excel
 
@@ -116,7 +115,7 @@ library(tibble)
 dfQ1.6 <-  column_to_rownames(dfQ1.2[,-1], var = colnames(dfQ1.2[,2]))
 ```
 
-#### D.1.2 - **Desafio:** Crie uma função `tb_to_df(data, column, RowNames)` que:
+##### D.1.2 - **Desafio:** Crie uma função `tb_to_df(data, column, RowNames)` que:
 
  - Transforme um tibble em um `data.frame`
  - O primeiro argumento `data` é referente ao objeto original
@@ -129,14 +128,14 @@ tb_to_df <- function(data, column, RowNames = NULL){
 }
 ```
 
-#### Q.1.7 Faça uma inversa de Leontief a partir de `dfQ1.5`. Nomeie-a `dfQ1.7` e faça coerce-a em um `data.frame`.
+#### Q.1.7 Faça uma inversa de Leontief a partir de `dfQ1.5`. Nomeie-a `dfQ1.7` e coerce-a em um `data.frame`.
 
 ```{r, eval = FALSE, include = FALSE}
 dfQ1.7 <- solve(diag(nrow(dfQ1.5))- dfQ1.5) %>% as.data.frame()
 
 ```
 
-#### D.1.3 Como nos desafios na lista de exercicios 2 da aula 1, compare os dados de `dfQ1.6` com `dfQ1.7`.
+##### D.1.3 Como nos desafios na lista de exercicios 2 da aula 1, compare os dados de `dfQ1.6` com `dfQ1.7`.
 
 **Dica:** Mude a configuração do argumento `check.attributes` de uma das .
 
@@ -146,7 +145,7 @@ all.equal(dfQ1.7, dfQ1.6, check.attributes = FALSE, tolerance = 0)
 identical(dfQ1.7, dfQ1.6)
 ```
 
-#### D.1.4 - **Desafio:** O que explica a diferença entre os valores obtidos em D.1.3 pelas funções `all.equal` e `identical`?
+##### D.1.4 - **Desafio:** O que explica a diferença entre os valores obtidos em D.1.3 pelas funções `all.equal` e `identical`?
 
 
 ## Treinando manipulação de matrizes.
@@ -280,7 +279,7 @@ write.csv(dfQ3.1, file = "dfQ31.csv")
 write.csv2(dfQ3.1, file = "dfQ31b.csv")
 ```
 
-#### D.3.1 - **Desafio:** usando a função `write.xlsx` do pacote `openxlsx`, crie um arquivo `dfQ31.xlsx`. Garanta que os nomes da linhas serão gravados (o default é `rowNames = FALSE`).
+#
 
 ```{r, eval= FALSE, include = FALSE}
 library(openxlsx)
