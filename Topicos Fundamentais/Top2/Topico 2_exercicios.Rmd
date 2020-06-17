@@ -11,7 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Essa lista de exercicios é para treinar as suas habilidades na leitura de dados. Repare que a sessão *The SeViration* está aqui, o porquê disso é o fato de ser uma importante lembrança do método de aprendizado.
 
-Vamos manter um 
 
 Nós também iremos aproveitar e praticar também tudo que você aprendeu anteriormente também!
 
