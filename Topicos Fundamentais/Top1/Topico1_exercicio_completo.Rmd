@@ -515,9 +515,7 @@ row.diag <- function(x) diag(nrow(x))
 
 ## 8. Modelo de Leontief.
 
-#### Q.8.1
-
-Seja $A$ a matriz de coeficientes técnicos intersetorias.
+#### Q.8.1 Seja $A$ a matriz de coeficientes técnicos intersetorias.
 
 \begin{equation*}
 A = \begin{pmatrix}

@@ -9,11 +9,52 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Tidyverse
 
-O Tidyverse é uma familia de pacotes que fortalece bastante a analise e manipulalção de dados no R, especialmente para bases de dados retangulares e mais ainda para bases *tidy*. Vale notar, que este não é o caso de Matrizes Insumo Produto (que no geral são bases de dados quadradas), porém além de várias funcionalidades uteis como um todo, além do maravilhoso pacote *purrr* que veremos em outra ocasião.
+## Instalando o Tidyverse
 
-Dada a natureza do *Tidyverse*, será mais usada nessa parte o operador *pipe* `%>%`, ao invés da escrita *nested*. Relembrando o uso dele abaixo:
+Como iremos tratar de muitos pacotes dentro do *tidyverse*, vale baixar a familia de pacote como um todo. Por ser muito grande, pode demorar um tempo, então sugiro que se vocês ainda não estiverem instalado eles, que o façam logo se vocês ainda não tiverem a familia instalada. Se você tiver que instala-lo, você pode esperar isso enquanto:
+
+  1. Ir no banheiro ou lavar ao menos parte da louça enquanto escuto o Podcast do IE;
+  2. Ler o resto do Tópico, enquanto espera o R instalar o tidyverse.
+
+```{r, eval = FALSE}
+install.packages("tidyverse")
+```
+
+A vantagem de assinalar o `tidyverse` é que o R irá baixar e instalar todos os pacotes do tidyverse. Ao usar `library(tidyverse)`, todos os pacotes do *"nucleo duro"* do `tidyverse` são carregados. Repare que se você instalou o `tidyverse` inteiro, ele irá carregar o `dplyr` e o`tidyr`^[O inverso não seria verdadeiro por outro lado. A instalação do `dplyr` não garante a instalação do resto da do resto dos pacotes.].
+
+
+```{r, eval = FALSE}
+#Carregando o tidyverse inteiro
+#library(tidyverse)
+
+#Carregando só os pacotes que iremos precisar.
+library(dplyr)
+library(tidyr)
+```
+
+
+A familia de pacotes do `tidyverse` fortalece bastante a análise e manipulação de dados no R, especialmente para bases de dados retangulares e mais ainda para bases *tidy*. Vale notar, que este não é o caso de Matrizes Insumo Produto (que no geral são bases de dados quadradas), porém além de várias funcionalidades uteis como um todo, além do maravilhoso pacote *purrr* que veremos no Tópico sobre automatizar as tarefas.
+
+Os pacotes do núcleo duro do *tidyverse* são:
+
+- ***tibble***: Já falamos, brevemente, desse pacote no Tópico 2. Um `tibble` é como um `data.frame` só que, na propria definição do site do [`tidyverse`](https://tibble.tidyverse.org/), mais preguiçoso e ranzinza. Ele não facilita sua vida como o `data.frame` o faz. Por exemplo, ele não muda nem o nome nem o tipo das variáveis e irão reclamar mais. Importante notar que antes um `tibble` e um `data.frame` eram mais diferentes do que são hoje^[Até agora (Junho de 2020) nem o [site](https://tibble.tidyverse.org/) nem a documentação do `tibble` no R foram atualizadas nesse sentido.], pois a função `data.frame` por default convertia `strings` em `factor`, o que mudou na atualização 4.0.0 do R.^[Veja mais na documentação de `data.frame`, em especial no argumento de `stringAsFactors`.] A principio, o `tibble` não será mais abordado aqui no curso, (pelo fato de que teremos um ) assim que desejar se aprofundar mais nele pode conferir o capitulo 10 do [*R for Data Science*](https://r4ds.had.co.nz/tibbles.html) e [neste artigo](https://tibble.tidyverse.org/articles/tibble.html).
+
+- ***readr***: No tópico 2, também já falamos sobre o pacote `readr`, e como ele é muito mais rápido que o `base` R para importar uma base de dados. É importante considerar apenas que ele importa a base como um `tibble` e não um `data.frame`.
+
+- ***dplyr***:  https://dplyr.tidyverse.org/
+
+- ***tidyr***: https://tidyr.tidyverse.org/
+
+- ***purrr***:
+
+- ***stringr***:
+
+- ***ggplot2***:
+
+- ***forcats***:
+
+Dada a natureza do *Tidyverse*, será mais usada nessa parte o operador *pipe* `%>%`, ao invés da escrita *nested*. Sempre que você carregar algum dos Relembrando o uso dele abaixo:
 
 ```{r, eval = FALSE}
 #Modo Nested
@@ -24,4 +65,91 @@ objeto2 <- funcao3(funcao2(funcao1(objeto1)))
 objeto2 <- objeto1 %>% funcao1() %>% funcao2() %>% funcao3()
 ```
 
-Ou seja, ao invés de uma escrita que vai de dentro (`objeto1`) para fora (`funcao3`) como no modo *nested*, você tem uma escrita da esquerda (`objeto1`) para a direita (`funcao3`).
+Ou seja, ao invés de uma escrita que vai de dentro (`objeto1`) para fora (`funcao3`) como no modo *nested*, você tem uma escrita da esquerda (`objeto1`) para a direita (`funcao3`). Veja alguns exemplos abaixo:
+
+```{r, eval = FALSE}
+# mtcars é uma base de dados interna do R usada para dar exemplos. 
+
+#calcular a media de cada coluna usando colMeans
+
+#modo nested
+means_mtcars <- colMeans(mtcars)
+
+# modo pipe %>%
+means_mtcars <- mtcars %>% colMeans
+
+#modo_nested
+colMeans(mtcars)[5]
+
+# modo pipe %>%
+mtcars %>% colMeans %>% .[5]
+
+# Há também o operador %$%, dentro do pacote magrittr também do tidyverse
+library(magrittr)
+mtcars %>% colnames() %>% .[5]
+mtcars %$% drat %>% mean()
+
+# Repare que ao usar %$% não é necessario usar "" para ser referir ao nome das colunas! 
+```
+
+Quanto mais longo a linha de comando, melhor será aplicar o modo *pipe* em detrimento do *nested*. Além disso, repare que `%$%` equivale as duas chaves `mtcars[["drat"]]`.
+
+## Subsetting com o Tidyverse
+
+### Extraindo colunas a partir dos seus nomes
+
+Existe duas funções para você retirar colunas a partir dos seus nomes, `select` e `pull`. O `select` irá manter a estrutura de dados, enquanto `pull` irá alocar todos os dados selecionados  num vetor atómico. Veja os exemplos abaixo:
+
+```{r, eval = FALSE}
+# Selecionando apenas a coluna 5
+
+selExemplo1 <- select(mtcars, 5)
+pullExemplo1 <- pull(mtcars, 5)
+
+# Selecionando as colunas 1,3,7
+
+selExemplo2 <- mtcars %>% select(c(1,3,7))
+pullExemplo2 <- mtcars %>% pull(c(1,3,7))
+# Excluindo as colunas 1,3,7
+
+selExemplo3 <- mtcars %>% select( -c(1, 3, 7))
+pullExemplo3 <- mtcars %>% pull(-c(1, 3, 7))
+
+# Selecionando a primeira coluna pelo nome:
+
+selExemplo4 <- mtcars %>% select(mpg)
+pullExemplo4 <- mtcars %>% pull(mpg)
+
+# Excluindo a primeira coluna pelo nome:
+
+selExemplo5 <- mtcars %>% select(-mpg)
+pullExemplo5 <- mtcars %>% pull(-mpg)
+```
+
+Os exemplos acima fazem de forma bastante similar aquilo que o base R também faz. Porém, existem os `select_helpers` que são muito uteis para usar na função `select` em especifico. Veja alguns abaixo:
+
+```{r,eval = FALSE}
+# starts_with
+selExemplo6 <- mtcars %>% select( starts_with("m"))
+
+# ends_with
+selExemplo7 <- mtcars %>% select(ends_with("t"))
+
+# contains
+selExemplo8 <- mtcars %>% select(contains("s"))
+
+# matches (ignora se é maiusculo ou minusculo)
+selExemplo9 <- mtcars %>% select(matches("MPG"))
+```
+
+Existem outros elementos 
+
+
+## Fontes:
+
+Pacotes do tidyverse: https://www.tidyverse.org/packages/
+
+R for Data Science: https://r4ds.had.co.nz/
+
+
+
