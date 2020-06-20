@@ -442,7 +442,6 @@ mtcars %$% drat %&gt;% mean()
 <h3>Extraindo colunas a partir dos seus nomes</h3>
 <p>Existe duas funções para você retirar colunas a partir dos seus nomes, <code>select</code> e <code>pull</code>. O <code>select</code> irá manter a estrutura de dados, enquanto <code>pull</code> irá alocar todos os dados selecionados num vetor atómico. Veja os exemplos abaixo:</p>
 <pre class="r"><code># Selecionando apenas a coluna 5
-
 selExemplo1 &lt;- select(mtcars, 5)
 pullExemplo1 &lt;- pull(mtcars, 5)
 
@@ -485,40 +484,583 @@ selExemplo9 &lt;- mtcars %&gt;% select(matches(&quot;MPG&quot;))</code></pre>
 <h4>filter</h4>
 <p>A função <code>filter</code> irá filtrar as linhas a partir de uma condição. Que fique claro, quando falarmos abaixo em <em>filtrar</em> determinadas linhas, é que apenas essas linhas serão selecionadas. Você pode usar e abusar das comparações lógicas ( <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>). Veja os exemplos abaixo para usar <code>filter</code> com apenas uma condição e repare que a ordem dos argumentos não importa:</p>
 <pre class="r"><code># Filtrando as linhas cuja os valores da coluna Plant seja iguais a &quot;Qn1&quot;.
-CO2 %&gt;% filter(Plant == &quot;Qn1&quot;)
-CO2 %&gt;% filter(&quot;Qn1&quot; == Plant)
+CO2 %&gt;% filter(Plant == &quot;Qn1&quot;)</code></pre>
+<pre><code>##   Plant   Type  Treatment conc uptake
+## 1   Qn1 Quebec nonchilled   95   16.0
+## 2   Qn1 Quebec nonchilled  175   30.4
+## 3   Qn1 Quebec nonchilled  250   34.8
+## 4   Qn1 Quebec nonchilled  350   37.2
+## 5   Qn1 Quebec nonchilled  500   35.3
+## 6   Qn1 Quebec nonchilled  675   39.2
+## 7   Qn1 Quebec nonchilled 1000   39.7</code></pre>
+<pre class="r"><code>#CO2 %&gt;% filter(&quot;Qn1&quot; == Plant)
 
 
 # Filtrando as linhas cuja os valores da coluna Plant seja iguais a &quot;Qn1&quot; e &quot;Mn1&quot;.
 
-CO2 %&gt;% filter(Plant == c(&quot;Qn1&quot;, &quot;Mn1&quot;))
-CO2 %&gt;% filter(c(&quot;Qn1&quot;, &quot;Mn1&quot;) == Plant)
+#CO2 %&gt;% filter(Plant == c(&quot;Qn1&quot;, &quot;Mn1&quot;))
+CO2 %&gt;% filter(c(&quot;Qn1&quot;, &quot;Mn1&quot;) == Plant)</code></pre>
+<pre><code>##   Plant        Type  Treatment conc uptake
+## 1   Qn1      Quebec nonchilled   95   16.0
+## 2   Qn1      Quebec nonchilled  250   34.8
+## 3   Qn1      Quebec nonchilled  500   35.3
+## 4   Qn1      Quebec nonchilled 1000   39.7
+## 5   Mn1 Mississippi nonchilled  175   19.2
+## 6   Mn1 Mississippi nonchilled  350   30.0
+## 7   Mn1 Mississippi nonchilled  675   32.4</code></pre>
+<pre class="r"><code># Usando filter em sequência:
+# Pt1: Filtrando as linhas cuja os valores da coluna Plant seja diferente de &quot;Qn1&quot;.
+# Pt2: Filtrando depois os valores da coluna Treatment sejam iguais à &quot;chilled&quot;.
 
-# Filtrando as linhas cuja os valores da coluna Plant seja diferente de &quot;Qn1&quot;. 
-CO2 %&gt;% filter(Plant != &quot;Qn1&quot;)
-CO2 %&gt;% filter(&quot;Qn1&quot; != Plant)
+#CO2 %&gt;% filter(&quot;Qn1&quot; != Plant) %&gt;% filter(Treatment == &quot;chilled&quot;)
+CO2 %&gt;% filter(Plant != &quot;Qn1&quot;) %&gt;% filter(&quot;chilled&quot; == Treatment)</code></pre>
+<pre><code>##    Plant        Type Treatment conc uptake
+## 1    Qc1      Quebec   chilled   95   14.2
+## 2    Qc1      Quebec   chilled  175   24.1
+## 3    Qc1      Quebec   chilled  250   30.3
+## 4    Qc1      Quebec   chilled  350   34.6
+## 5    Qc1      Quebec   chilled  500   32.5
+## 6    Qc1      Quebec   chilled  675   35.4
+## 7    Qc1      Quebec   chilled 1000   38.7
+## 8    Qc2      Quebec   chilled   95    9.3
+## 9    Qc2      Quebec   chilled  175   27.3
+## 10   Qc2      Quebec   chilled  250   35.0
+## 11   Qc2      Quebec   chilled  350   38.8
+## 12   Qc2      Quebec   chilled  500   38.6
+## 13   Qc2      Quebec   chilled  675   37.5
+## 14   Qc2      Quebec   chilled 1000   42.4
+## 15   Qc3      Quebec   chilled   95   15.1
+## 16   Qc3      Quebec   chilled  175   21.0
+## 17   Qc3      Quebec   chilled  250   38.1
+## 18   Qc3      Quebec   chilled  350   34.0
+## 19   Qc3      Quebec   chilled  500   38.9
+## 20   Qc3      Quebec   chilled  675   39.6
+## 21   Qc3      Quebec   chilled 1000   41.4
+## 22   Mc1 Mississippi   chilled   95   10.5
+## 23   Mc1 Mississippi   chilled  175   14.9
+## 24   Mc1 Mississippi   chilled  250   18.1
+## 25   Mc1 Mississippi   chilled  350   18.9
+## 26   Mc1 Mississippi   chilled  500   19.5
+## 27   Mc1 Mississippi   chilled  675   22.2
+## 28   Mc1 Mississippi   chilled 1000   21.9
+## 29   Mc2 Mississippi   chilled   95    7.7
+## 30   Mc2 Mississippi   chilled  175   11.4
+## 31   Mc2 Mississippi   chilled  250   12.3
+## 32   Mc2 Mississippi   chilled  350   13.0
+## 33   Mc2 Mississippi   chilled  500   12.5
+## 34   Mc2 Mississippi   chilled  675   13.7
+## 35   Mc2 Mississippi   chilled 1000   14.4
+## 36   Mc3 Mississippi   chilled   95   10.6
+## 37   Mc3 Mississippi   chilled  175   18.0
+## 38   Mc3 Mississippi   chilled  250   17.9
+## 39   Mc3 Mississippi   chilled  350   17.9
+## 40   Mc3 Mississippi   chilled  500   17.9
+## 41   Mc3 Mississippi   chilled  675   18.9
+## 42   Mc3 Mississippi   chilled 1000   19.9</code></pre>
+<pre class="r"><code># Filtrando as linhas que o valor de `conc` seja maior que 250.
 
-# Filtrando as linhas que o valor de `conc` seja maior que 250.
+#CO2 %&gt;% filter(conc &gt; 250)
+CO2 %&gt;% filter(250 &lt; 250)</code></pre>
+<pre><code>## [1] Plant     Type      Treatment conc      uptake   
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<pre class="r"><code># Filtrando as linhas que o valor de `uptake` seja menor ou igual a 10
 
-CO2 %&gt;% filter(conc &gt; 250)
-CO2 %&gt;% filter(250 &lt; 250)
+#CO2 %&gt;% filter(10 &gt;= uptake)
+CO2 %&gt;% filter(uptake &lt;= 10)</code></pre>
+<pre><code>##   Plant        Type Treatment conc uptake
+## 1   Qc2      Quebec   chilled   95    9.3
+## 2   Mc2 Mississippi   chilled   95    7.7</code></pre>
+<p>Repare que a ordem que você escreve os elementos a serem comparados não alteram o funcionamento da função. Você pode então Você pode deixa o uso de <code>filter</code> muito mais complexo. Veja abaixo um exemplo com as funções <code>mean</code>, <code>median</code> e moda<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>:</p>
+<pre class="r"><code>CO2 %&gt;% filter(conc &gt; mean(conc))</code></pre>
+<pre><code>##    Plant        Type  Treatment conc uptake
+## 1    Qn1      Quebec nonchilled  500   35.3
+## 2    Qn1      Quebec nonchilled  675   39.2
+## 3    Qn1      Quebec nonchilled 1000   39.7
+## 4    Qn2      Quebec nonchilled  500   40.6
+## 5    Qn2      Quebec nonchilled  675   41.4
+## 6    Qn2      Quebec nonchilled 1000   44.3
+## 7    Qn3      Quebec nonchilled  500   42.9
+## 8    Qn3      Quebec nonchilled  675   43.9
+## 9    Qn3      Quebec nonchilled 1000   45.5
+## 10   Qc1      Quebec    chilled  500   32.5
+## 11   Qc1      Quebec    chilled  675   35.4
+## 12   Qc1      Quebec    chilled 1000   38.7
+## 13   Qc2      Quebec    chilled  500   38.6
+## 14   Qc2      Quebec    chilled  675   37.5
+## 15   Qc2      Quebec    chilled 1000   42.4
+## 16   Qc3      Quebec    chilled  500   38.9
+## 17   Qc3      Quebec    chilled  675   39.6
+## 18   Qc3      Quebec    chilled 1000   41.4
+## 19   Mn1 Mississippi nonchilled  500   30.9
+## 20   Mn1 Mississippi nonchilled  675   32.4
+## 21   Mn1 Mississippi nonchilled 1000   35.5
+## 22   Mn2 Mississippi nonchilled  500   32.4
+## 23   Mn2 Mississippi nonchilled  675   31.1
+## 24   Mn2 Mississippi nonchilled 1000   31.5
+## 25   Mn3 Mississippi nonchilled  500   28.5
+## 26   Mn3 Mississippi nonchilled  675   28.1
+## 27   Mn3 Mississippi nonchilled 1000   27.8
+## 28   Mc1 Mississippi    chilled  500   19.5
+## 29   Mc1 Mississippi    chilled  675   22.2
+## 30   Mc1 Mississippi    chilled 1000   21.9
+## 31   Mc2 Mississippi    chilled  500   12.5
+## 32   Mc2 Mississippi    chilled  675   13.7
+## 33   Mc2 Mississippi    chilled 1000   14.4
+## 34   Mc3 Mississippi    chilled  500   17.9
+## 35   Mc3 Mississippi    chilled  675   18.9
+## 36   Mc3 Mississippi    chilled 1000   19.9</code></pre>
+<pre class="r"><code>CO2 %&gt;% filter(uptake &lt;= median(uptake))</code></pre>
+<pre><code>##    Plant        Type  Treatment conc uptake
+## 1    Qn1      Quebec nonchilled   95   16.0
+## 2    Qn2      Quebec nonchilled   95   13.6
+## 3    Qn2      Quebec nonchilled  175   27.3
+## 4    Qn3      Quebec nonchilled   95   16.2
+## 5    Qc1      Quebec    chilled   95   14.2
+## 6    Qc1      Quebec    chilled  175   24.1
+## 7    Qc2      Quebec    chilled   95    9.3
+## 8    Qc2      Quebec    chilled  175   27.3
+## 9    Qc3      Quebec    chilled   95   15.1
+## 10   Qc3      Quebec    chilled  175   21.0
+## 11   Mn1 Mississippi nonchilled   95   10.6
+## 12   Mn1 Mississippi nonchilled  175   19.2
+## 13   Mn1 Mississippi nonchilled  250   26.2
+## 14   Mn2 Mississippi nonchilled   95   12.0
+## 15   Mn2 Mississippi nonchilled  175   22.0
+## 16   Mn3 Mississippi nonchilled   95   11.3
+## 17   Mn3 Mississippi nonchilled  175   19.4
+## 18   Mn3 Mississippi nonchilled  250   25.8
+## 19   Mn3 Mississippi nonchilled  350   27.9
+## 20   Mn3 Mississippi nonchilled  675   28.1
+## 21   Mn3 Mississippi nonchilled 1000   27.8
+## 22   Mc1 Mississippi    chilled   95   10.5
+## 23   Mc1 Mississippi    chilled  175   14.9
+## 24   Mc1 Mississippi    chilled  250   18.1
+## 25   Mc1 Mississippi    chilled  350   18.9
+## 26   Mc1 Mississippi    chilled  500   19.5
+## 27   Mc1 Mississippi    chilled  675   22.2
+## 28   Mc1 Mississippi    chilled 1000   21.9
+## 29   Mc2 Mississippi    chilled   95    7.7
+## 30   Mc2 Mississippi    chilled  175   11.4
+## 31   Mc2 Mississippi    chilled  250   12.3
+## 32   Mc2 Mississippi    chilled  350   13.0
+## 33   Mc2 Mississippi    chilled  500   12.5
+## 34   Mc2 Mississippi    chilled  675   13.7
+## 35   Mc2 Mississippi    chilled 1000   14.4
+## 36   Mc3 Mississippi    chilled   95   10.6
+## 37   Mc3 Mississippi    chilled  175   18.0
+## 38   Mc3 Mississippi    chilled  250   17.9
+## 39   Mc3 Mississippi    chilled  350   17.9
+## 40   Mc3 Mississippi    chilled  500   17.9
+## 41   Mc3 Mississippi    chilled  675   18.9
+## 42   Mc3 Mississippi    chilled 1000   19.9</code></pre>
+<pre class="r"><code># Criando a função moda:
+moda &lt;-  function(v) {
+   uniqv &lt;- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
 
-# Filtrando as linhas que o valor de `uptake` seja menor ou igual a 10
+CO2 %&gt;% filter(conc == moda(conc))</code></pre>
+<pre><code>##    Plant        Type  Treatment conc uptake
+## 1    Qn1      Quebec nonchilled   95   16.0
+## 2    Qn2      Quebec nonchilled   95   13.6
+## 3    Qn3      Quebec nonchilled   95   16.2
+## 4    Qc1      Quebec    chilled   95   14.2
+## 5    Qc2      Quebec    chilled   95    9.3
+## 6    Qc3      Quebec    chilled   95   15.1
+## 7    Mn1 Mississippi nonchilled   95   10.6
+## 8    Mn2 Mississippi nonchilled   95   12.0
+## 9    Mn3 Mississippi nonchilled   95   11.3
+## 10   Mc1 Mississippi    chilled   95   10.5
+## 11   Mc2 Mississippi    chilled   95    7.7
+## 12   Mc3 Mississippi    chilled   95   10.6</code></pre>
+<p>Podemos colocar mais de uma condição em <code>filter</code> para não ter que fazer uma sequência. Veja abaixo:</p>
+<pre class="r"><code>#Ao invés de:
+#CO2 %&gt;% filter(conc == moda(conc)) %&gt;% filter(uptake &lt;= median(uptake))
 
-CO2 %&gt;% filter(uptake &lt;= 10)
-CO2 %&gt;% filter(10 &gt;= uptake)</code></pre>
-<p>Repare que a ordem que você escreve os elementos a serem comparados não alteram a</p>
+#Você pode fazer:
+
+CO2 %&gt;% filter(conc ==moda(conc), uptake &lt;= median(uptake))</code></pre>
+<pre><code>##    Plant        Type  Treatment conc uptake
+## 1    Qn1      Quebec nonchilled   95   16.0
+## 2    Qn2      Quebec nonchilled   95   13.6
+## 3    Qn3      Quebec nonchilled   95   16.2
+## 4    Qc1      Quebec    chilled   95   14.2
+## 5    Qc2      Quebec    chilled   95    9.3
+## 6    Qc3      Quebec    chilled   95   15.1
+## 7    Mn1 Mississippi nonchilled   95   10.6
+## 8    Mn2 Mississippi nonchilled   95   12.0
+## 9    Mn3 Mississippi nonchilled   95   11.3
+## 10   Mc1 Mississippi    chilled   95   10.5
+## 11   Mc2 Mississippi    chilled   95    7.7
+## 12   Mc3 Mississippi    chilled   95   10.6</code></pre>
+<p>No caso acima foram selecionadas as linhas que ao mesmo tempo eram iguais à moda da coluna <code>conc</code> e eram menores que a mediana de <code>uptake</code>. Poderiamos ir além e colocar um terceiro elemento:</p>
+<pre class="r"><code>CO2 %&gt;% filter(conc ==moda(conc), uptake &lt;= median(uptake), Treatment == &quot;chilled&quot;)</code></pre>
+<pre><code>##   Plant        Type Treatment conc uptake
+## 1   Qc1      Quebec   chilled   95   14.2
+## 2   Qc2      Quebec   chilled   95    9.3
+## 3   Qc3      Quebec   chilled   95   15.1
+## 4   Mc1 Mississippi   chilled   95   10.5
+## 5   Mc2 Mississippi   chilled   95    7.7
+## 6   Mc3 Mississippi   chilled   95   10.6</code></pre>
+<p>Já tratamos do uso da função <code>filter</code> com as comparações lógicas, agora vamos falar dela com os <strong><em>operadores lógicos</em></strong>. O poder de filter aumenta e muito quando usamos eles, veja só:</p>
+<pre class="r"><code>### Os operadores básicos: Seja A e B dois conjuntos.
+
+# O operador A&amp;B: interseção de A e B(ou)
+# Repare que é o mesmo que: 
+#CO2 %&gt;% filter(conc ==moda(conc), uptake &lt;= median(uptake))
+
+CO2 %&gt;% filter(conc ==moda(conc) &amp; uptake &lt;= median(uptake))</code></pre>
+<pre><code>##    Plant        Type  Treatment conc uptake
+## 1    Qn1      Quebec nonchilled   95   16.0
+## 2    Qn2      Quebec nonchilled   95   13.6
+## 3    Qn3      Quebec nonchilled   95   16.2
+## 4    Qc1      Quebec    chilled   95   14.2
+## 5    Qc2      Quebec    chilled   95    9.3
+## 6    Qc3      Quebec    chilled   95   15.1
+## 7    Mn1 Mississippi nonchilled   95   10.6
+## 8    Mn2 Mississippi nonchilled   95   12.0
+## 9    Mn3 Mississippi nonchilled   95   11.3
+## 10   Mc1 Mississippi    chilled   95   10.5
+## 11   Mc2 Mississippi    chilled   95    7.7
+## 12   Mc3 Mississippi    chilled   95   10.6</code></pre>
+<pre class="r"><code># O operador A|B: união de A e B (A e B)
+
+CO2 %&gt;% filter(conc == moda(conc) | uptake &lt;= median(uptake))</code></pre>
+<pre><code>##    Plant        Type  Treatment conc uptake
+## 1    Qn1      Quebec nonchilled   95   16.0
+## 2    Qn2      Quebec nonchilled   95   13.6
+## 3    Qn2      Quebec nonchilled  175   27.3
+## 4    Qn3      Quebec nonchilled   95   16.2
+## 5    Qc1      Quebec    chilled   95   14.2
+## 6    Qc1      Quebec    chilled  175   24.1
+## 7    Qc2      Quebec    chilled   95    9.3
+## 8    Qc2      Quebec    chilled  175   27.3
+## 9    Qc3      Quebec    chilled   95   15.1
+## 10   Qc3      Quebec    chilled  175   21.0
+## 11   Mn1 Mississippi nonchilled   95   10.6
+## 12   Mn1 Mississippi nonchilled  175   19.2
+## 13   Mn1 Mississippi nonchilled  250   26.2
+## 14   Mn2 Mississippi nonchilled   95   12.0
+## 15   Mn2 Mississippi nonchilled  175   22.0
+## 16   Mn3 Mississippi nonchilled   95   11.3
+## 17   Mn3 Mississippi nonchilled  175   19.4
+## 18   Mn3 Mississippi nonchilled  250   25.8
+## 19   Mn3 Mississippi nonchilled  350   27.9
+## 20   Mn3 Mississippi nonchilled  675   28.1
+## 21   Mn3 Mississippi nonchilled 1000   27.8
+## 22   Mc1 Mississippi    chilled   95   10.5
+## 23   Mc1 Mississippi    chilled  175   14.9
+## 24   Mc1 Mississippi    chilled  250   18.1
+## 25   Mc1 Mississippi    chilled  350   18.9
+## 26   Mc1 Mississippi    chilled  500   19.5
+## 27   Mc1 Mississippi    chilled  675   22.2
+## 28   Mc1 Mississippi    chilled 1000   21.9
+## 29   Mc2 Mississippi    chilled   95    7.7
+## 30   Mc2 Mississippi    chilled  175   11.4
+## 31   Mc2 Mississippi    chilled  250   12.3
+## 32   Mc2 Mississippi    chilled  350   13.0
+## 33   Mc2 Mississippi    chilled  500   12.5
+## 34   Mc2 Mississippi    chilled  675   13.7
+## 35   Mc2 Mississippi    chilled 1000   14.4
+## 36   Mc3 Mississippi    chilled   95   10.6
+## 37   Mc3 Mississippi    chilled  175   18.0
+## 38   Mc3 Mississippi    chilled  250   17.9
+## 39   Mc3 Mississippi    chilled  350   17.9
+## 40   Mc3 Mississippi    chilled  500   17.9
+## 41   Mc3 Mississippi    chilled  675   18.9
+## 42   Mc3 Mississippi    chilled 1000   19.9</code></pre>
+<pre class="r"><code># A função xor(A,B): todos elementos de A e B fora da interseção. 
+#xor(A,B) = A|B - A&amp;B. A chamada Diferença Simétrica.
+
+CO2 %&gt;% filter(xor(conc == moda(conc), uptake &lt;= median(uptake)))</code></pre>
+<pre><code>##    Plant        Type  Treatment conc uptake
+## 1    Qn2      Quebec nonchilled  175   27.3
+## 2    Qc1      Quebec    chilled  175   24.1
+## 3    Qc2      Quebec    chilled  175   27.3
+## 4    Qc3      Quebec    chilled  175   21.0
+## 5    Mn1 Mississippi nonchilled  175   19.2
+## 6    Mn1 Mississippi nonchilled  250   26.2
+## 7    Mn2 Mississippi nonchilled  175   22.0
+## 8    Mn3 Mississippi nonchilled  175   19.4
+## 9    Mn3 Mississippi nonchilled  250   25.8
+## 10   Mn3 Mississippi nonchilled  350   27.9
+## 11   Mn3 Mississippi nonchilled  675   28.1
+## 12   Mn3 Mississippi nonchilled 1000   27.8
+## 13   Mc1 Mississippi    chilled  175   14.9
+## 14   Mc1 Mississippi    chilled  250   18.1
+## 15   Mc1 Mississippi    chilled  350   18.9
+## 16   Mc1 Mississippi    chilled  500   19.5
+## 17   Mc1 Mississippi    chilled  675   22.2
+## 18   Mc1 Mississippi    chilled 1000   21.9
+## 19   Mc2 Mississippi    chilled  175   11.4
+## 20   Mc2 Mississippi    chilled  250   12.3
+## 21   Mc2 Mississippi    chilled  350   13.0
+## 22   Mc2 Mississippi    chilled  500   12.5
+## 23   Mc2 Mississippi    chilled  675   13.7
+## 24   Mc2 Mississippi    chilled 1000   14.4
+## 25   Mc3 Mississippi    chilled  175   18.0
+## 26   Mc3 Mississippi    chilled  250   17.9
+## 27   Mc3 Mississippi    chilled  350   17.9
+## 28   Mc3 Mississippi    chilled  500   17.9
+## 29   Mc3 Mississippi    chilled  675   18.9
+## 30   Mc3 Mississippi    chilled 1000   19.9</code></pre>
+<pre class="r"><code>### Combinações entre eles:
+
+## Exclusão de um dos elementos
+
+# A &amp; !B: Excluí de A tudo que é de B. Ou seja, A menos a interseção de A e B.
+
+CO2 %&gt;% filter(conc == moda(conc) &amp; !uptake &lt;= median(uptake))</code></pre>
+<pre><code>## [1] Plant     Type      Treatment conc      uptake   
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<pre class="r"><code># !A &amp; B: Exclui de B tudo que é de A. Ou seja, B menos a interseção de A e B.
+
+CO2 %&gt;% filter(!conc == moda(conc) &amp; uptake &lt;= median(uptake))</code></pre>
+<pre><code>##    Plant        Type  Treatment conc uptake
+## 1    Qn2      Quebec nonchilled  175   27.3
+## 2    Qc1      Quebec    chilled  175   24.1
+## 3    Qc2      Quebec    chilled  175   27.3
+## 4    Qc3      Quebec    chilled  175   21.0
+## 5    Mn1 Mississippi nonchilled  175   19.2
+## 6    Mn1 Mississippi nonchilled  250   26.2
+## 7    Mn2 Mississippi nonchilled  175   22.0
+## 8    Mn3 Mississippi nonchilled  175   19.4
+## 9    Mn3 Mississippi nonchilled  250   25.8
+## 10   Mn3 Mississippi nonchilled  350   27.9
+## 11   Mn3 Mississippi nonchilled  675   28.1
+## 12   Mn3 Mississippi nonchilled 1000   27.8
+## 13   Mc1 Mississippi    chilled  175   14.9
+## 14   Mc1 Mississippi    chilled  250   18.1
+## 15   Mc1 Mississippi    chilled  350   18.9
+## 16   Mc1 Mississippi    chilled  500   19.5
+## 17   Mc1 Mississippi    chilled  675   22.2
+## 18   Mc1 Mississippi    chilled 1000   21.9
+## 19   Mc2 Mississippi    chilled  175   11.4
+## 20   Mc2 Mississippi    chilled  250   12.3
+## 21   Mc2 Mississippi    chilled  350   13.0
+## 22   Mc2 Mississippi    chilled  500   12.5
+## 23   Mc2 Mississippi    chilled  675   13.7
+## 24   Mc2 Mississippi    chilled 1000   14.4
+## 25   Mc3 Mississippi    chilled  175   18.0
+## 26   Mc3 Mississippi    chilled  250   17.9
+## 27   Mc3 Mississippi    chilled  350   17.9
+## 28   Mc3 Mississippi    chilled  500   17.9
+## 29   Mc3 Mississippi    chilled  675   18.9
+## 30   Mc3 Mississippi    chilled 1000   19.9</code></pre>
+<p>Perceba que <code>filter</code>, como toda função do subsetting, faz nada mais que selecionar as linhas que retornam <code>TRUE</code> às condições que ele impõe. Por isso, as comporações e operações lógicas são instrumentos tão poderosos para a seleção <code>filter</code>.</p>
+<p>Existem mais três funções que podem ser usados para aumentar a força de <code>filter</code>: <code>is.na()</code>, <code>between()</code> e <code>near</code>. A função <code>is.na()</code> confere se um valor é <code>NA</code>. Assim podemos usa-la para selecionar (ou excluir), linhas que possuam valores <code>NA</code>.</p>
+<pre class="r"><code># Checando se valores são NA.
+is.na(1)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>is.na(NA)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code># Checando se valores de um vetor são NA ou não.
+is.na(c(1,2,NA))</code></pre>
+<pre><code>## [1] FALSE FALSE  TRUE</code></pre>
+<pre class="r"><code># Checando quais linhas tem NA da coluna Ozone da base de dados Ozone.
+airquality$Ozone %&gt;% is.na()</code></pre>
+<pre><code>##   [1] FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE
+##  [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [25]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [37]  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE
+##  [49] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [61]  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
+##  [73] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE
+##  [85] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [97] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE
+## [109] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE
+## [121] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [133] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [145] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE</code></pre>
+<pre class="r"><code># filtrando as linhas que tem NA
+airquality %&gt;% filter(is.na(Ozone))</code></pre>
+<pre><code>##    Ozone Solar.R Wind Temp Month Day
+## 1     NA      NA 14.3   56     5   5
+## 2     NA     194  8.6   69     5  10
+## 3     NA      66 16.6   57     5  25
+## 4     NA     266 14.9   58     5  26
+## 5     NA      NA  8.0   57     5  27
+## 6     NA     286  8.6   78     6   1
+## 7     NA     287  9.7   74     6   2
+## 8     NA     242 16.1   67     6   3
+## 9     NA     186  9.2   84     6   4
+## 10    NA     220  8.6   85     6   5
+## 11    NA     264 14.3   79     6   6
+## 12    NA     273  6.9   87     6   8
+## 13    NA     259 10.9   93     6  11
+## 14    NA     250  9.2   92     6  12
+## 15    NA     332 13.8   80     6  14
+## 16    NA     322 11.5   79     6  15
+## 17    NA     150  6.3   77     6  21
+## 18    NA      59  1.7   76     6  22
+## 19    NA      91  4.6   76     6  23
+## 20    NA     250  6.3   76     6  24
+## 21    NA     135  8.0   75     6  25
+## 22    NA     127  8.0   78     6  26
+## 23    NA      47 10.3   73     6  27
+## 24    NA      98 11.5   80     6  28
+## 25    NA      31 14.9   77     6  29
+## 26    NA     138  8.0   83     6  30
+## 27    NA     101 10.9   84     7   4
+## 28    NA     139  8.6   82     7  11
+## 29    NA     291 14.9   91     7  14
+## 30    NA     258  9.7   81     7  22
+## 31    NA     295 11.5   82     7  23
+## 32    NA     222  8.6   92     8  10
+## 33    NA     137 11.5   86     8  11
+## 34    NA      64 11.5   79     8  15
+## 35    NA     255 12.6   75     8  23
+## 36    NA     153  5.7   88     8  27
+## 37    NA     145 13.2   77     9  27</code></pre>
+<pre class="r"><code># filtrando as linhas que não tem NA (pegando as primeiras 20 linhas)
+airquality %&gt;% filter(!is.na(Ozone)) %&gt;% .[1:20,]</code></pre>
+<pre><code>##    Ozone Solar.R Wind Temp Month Day
+## 1     41     190  7.4   67     5   1
+## 2     36     118  8.0   72     5   2
+## 3     12     149 12.6   74     5   3
+## 4     18     313 11.5   62     5   4
+## 5     28      NA 14.9   66     5   6
+## 6     23     299  8.6   65     5   7
+## 7     19      99 13.8   59     5   8
+## 8      8      19 20.1   61     5   9
+## 9      7      NA  6.9   74     5  11
+## 10    16     256  9.7   69     5  12
+## 11    11     290  9.2   66     5  13
+## 12    14     274 10.9   68     5  14
+## 13    18      65 13.2   58     5  15
+## 14    14     334 11.5   64     5  16
+## 15    34     307 12.0   66     5  17
+## 16     6      78 18.4   57     5  18
+## 17    30     322 11.5   68     5  19
+## 18    11      44  9.7   62     5  20
+## 19     1       8  9.7   59     5  21
+## 20    11     320 16.6   73     5  22</code></pre>
+<p>Já a função <code>between</code> serve para você filtrar linhas que contém elementos númericos entre dois valores.</p>
+<pre class="r"><code>x &lt;- 1:7
+# Testando quais elementos de x estão entre 3 e 5. (3 e 5 estão inclusos.)
+dplyr::between(x, 3,5)</code></pre>
+<pre><code>## [1] FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE</code></pre>
+<pre class="r"><code>#Filtrando os elementos de CO2 que estão entre 100 e 200.
+CO2 %&gt;% filter(between(conc, 100, 200))</code></pre>
+<pre><code>##    Plant        Type  Treatment conc uptake
+## 1    Qn1      Quebec nonchilled  175   30.4
+## 2    Qn2      Quebec nonchilled  175   27.3
+## 3    Qn3      Quebec nonchilled  175   32.4
+## 4    Qc1      Quebec    chilled  175   24.1
+## 5    Qc2      Quebec    chilled  175   27.3
+## 6    Qc3      Quebec    chilled  175   21.0
+## 7    Mn1 Mississippi nonchilled  175   19.2
+## 8    Mn2 Mississippi nonchilled  175   22.0
+## 9    Mn3 Mississippi nonchilled  175   19.4
+## 10   Mc1 Mississippi    chilled  175   14.9
+## 11   Mc2 Mississippi    chilled  175   11.4
+## 12   Mc3 Mississippi    chilled  175   18.0</code></pre>
+<p>A função <code>near</code> funciona como <code>==</code> só que com uma margem de tolerância dada pelo argumento <code>tol</code>. Importante notar que <code>tol</code> já tem um valor <code>default</code> que é <code>.Machine$double.eps^0.5</code>. Vejamos abaixo:</p>
+<pre class="r"><code>x &lt;- c(1,2,3)
+y &lt;- c(1.4, 3, 3)
+
+#Testando quais valores de x e y estão próximos pela tolerância default:
+near(x,y)</code></pre>
+<pre><code>## [1] FALSE FALSE  TRUE</code></pre>
+<pre class="r"><code># Vendo o valor default de tolerância:
+.Machine$double.eps^0.5</code></pre>
+<pre><code>## [1] 1.490116e-08</code></pre>
+<pre class="r"><code># Testando se x e y estão próximos por uma tolerância de 0.5:
+near(x,y,0.5)</code></pre>
+<pre><code>## [1]  TRUE FALSE  TRUE</code></pre>
+<pre class="r"><code># Filtrando as linhas com valores de uptake próximos de 40 pela tolerância default:
+CO2 %&gt;% filter(near(uptake, 40))</code></pre>
+<pre><code>## [1] Plant     Type      Treatment conc      uptake   
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<pre class="r"><code># Filtrando as linhas com valores de uptake próximos de 40 pela tolerância de 1:
+CO2 %&gt;% filter(near(uptake, 40, tol = 1))</code></pre>
+<pre><code>##   Plant   Type  Treatment conc uptake
+## 1   Qn1 Quebec nonchilled  675   39.2
+## 2   Qn1 Quebec nonchilled 1000   39.7
+## 3   Qn2 Quebec nonchilled  500   40.6
+## 4   Qn3 Quebec nonchilled  250   40.3
+## 5   Qc3 Quebec    chilled  675   39.6</code></pre>
+<div id="decidindo-se-farei-variações-de-filter" class="section level5">
+<h5>(decidindo se farei) Variações de filter</h5>
+<p>Existem três variações de <code>filter</code>: <code>filter_all</code>, <code>filter_if</code> e <code>filter_at</code>. Iremos explicar aqui as duas primeiras variações, pois a terceira é complexa demais para esse estágio. De todo modo, <code>filter_all</code> e <code>filter_if</code> são filtram uma base de dados aplicando um predicando a todas as variáveis. Esses predicados devem ser expostos com <code>all.vars()</code> ou <code>any_vars()</code>.</p>
+<pre class="r"><code>#filtrando as linhas de airquality que algum dos seus valores for NA
+# você deve usar o . para se referir as variáveis.
+# Ex1: airquality %&gt;% filter_all(any_vars(is.na()))
+# Ex1 acima iria retornar um erro.
+airquality %&gt;% filter_all(any_vars(is.na(.))) %&gt;% head()</code></pre>
+<pre><code>##   Ozone Solar.R Wind Temp Month Day
+## 1    NA      NA 14.3   56     5   5
+## 2    28      NA 14.9   66     5   6
+## 3    NA     194  8.6   69     5  10
+## 4     7      NA  6.9   74     5  11
+## 5    NA      66 16.6   57     5  25
+## 6    NA     266 14.9   58     5  26</code></pre>
+<pre class="r"><code>#filtrando as linhas de airquality que TODOS os seus valores forem NA
+airquality %&gt;% filter_all(all_vars(is.na(.)))</code></pre>
+<pre><code>## [1] Ozone   Solar.R Wind    Temp    Month   Day    
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+</div>
+</div>
+<div id="removendo-duplicatas-com-distinc" class="section level4">
+<h4>Removendo duplicatas com distinc</h4>
+<p>A função distinct remove linhas duplicadas dos seus data.frames. Veja o exemplo abaixo:</p>
+<pre class="r"><code>ex_df &lt;- data.frame(&quot;A&quot;=c(1,0,1,1,-0), &quot;B&quot; = c(0,1,0,1, 1) )
+ex_df</code></pre>
+<pre><code>##   A B
+## 1 1 0
+## 2 0 1
+## 3 1 0
+## 4 1 1
+## 5 0 1</code></pre>
+<pre class="r"><code># As linhas 1 e 3 são iguais e a 2 e 5 também. Usemos distinct para remover as duplicatas
+ex_df %&gt;% distinct()</code></pre>
+<pre><code>##   A B
+## 1 1 0
+## 2 0 1
+## 3 1 1</code></pre>
+</div>
+<div id="reordenando-as-linhas-com-arrange" class="section level4">
+<h4>Reordenando as linhas com arrange</h4>
+<p>A função <code>arrange</code> serve para reordenar as linhas de acordo com uma coluna.</p>
+<pre class="r"><code># Forma crescente (menores primeiro)
+iris %&gt;% arrange(Sepal.Length) %&gt;% head()</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          4.3         3.0          1.1         0.1  setosa
+## 2          4.4         2.9          1.4         0.2  setosa
+## 3          4.4         3.0          1.3         0.2  setosa
+## 4          4.4         3.2          1.3         0.2  setosa
+## 5          4.5         2.3          1.3         0.3  setosa
+## 6          4.6         3.1          1.5         0.2  setosa</code></pre>
+<pre class="r"><code># Forma decrescente (maiores primeiro )
+iris %&gt;% arrange(desc(Sepal.Length)) %&gt;% head()</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+## 1          7.9         3.8          6.4         2.0 virginica
+## 2          7.7         3.8          6.7         2.2 virginica
+## 3          7.7         2.6          6.9         2.3 virginica
+## 4          7.7         2.8          6.7         2.0 virginica
+## 5          7.7         3.0          6.1         2.3 virginica
+## 6          7.6         3.0          6.6         2.1 virginica</code></pre>
+<p>Também é possível fazer isso em vetores <code>character</code>:</p>
+<pre class="r"><code>iris %&gt;% arrange(Species) %&gt;% head()</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
 </div>
 </div>
 </div>
 <div id="arrumando-os-dados." class="section level2">
 <h2>Arrumando os dados.</h2>
-<p><code>Titanic</code> para treinar isso.</p>
+<p>Como vocês puderam ver no Tópico 2, nem todos os dados vem como gostariamos que eles viessem. Existem problemas, que emergem quando as variáveis surgem.</p>
 </div>
 <div id="fontes" class="section level2">
 <h2>Fontes:</h2>
 <p>Pacotes do tidyverse: <a href="https://www.tidyverse.org/packages/" class="uri">https://www.tidyverse.org/packages/</a></p>
 <p>R for Data Science: <a href="https://r4ds.had.co.nz/" class="uri">https://r4ds.had.co.nz/</a></p>
+<p>Código para função moda: <a href="https://www.tutorialspoint.com/r/r_mean_median_mode.htm" class="uri">https://www.tutorialspoint.com/r/r_mean_median_mode.htm</a></p>
 </div>
 <div class="footnotes">
 <hr />
@@ -526,6 +1068,7 @@ CO2 %&gt;% filter(10 &gt;= uptake)</code></pre>
 <li id="fn1"><p>O inverso não seria verdadeiro por outro lado. A instalação do <code>dplyr</code> não garante a instalação do resto da do resto dos pacotes.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 <li id="fn2"><p>Até agora (Junho de 2020) nem o <a href="https://tibble.tidyverse.org/">site</a> nem a documentação do <code>tibble</code> no R foram atualizadas nesse sentido.<a href="#fnref2" class="footnote-back">↩</a></p></li>
 <li id="fn3"><p>Veja mais na documentação de <code>data.frame</code>, em especial no argumento de <code>stringAsFactors</code>.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Feita a partir deste código: <a href="https://www.tutorialspoint.com/r/r_mean_median_mode.htm" class="uri">https://www.tutorialspoint.com/r/r_mean_median_mode.htm</a><a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

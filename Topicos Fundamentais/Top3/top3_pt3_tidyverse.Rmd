@@ -102,7 +102,6 @@ Existe duas funções para você retirar colunas a partir dos seus nomes, `selec
 
 ```{r, eval = FALSE}
 # Selecionando apenas a coluna 5
-
 selExemplo1 <- select(mtcars, 5)
 pullExemplo1 <- pull(mtcars, 5)
 
@@ -128,7 +127,7 @@ pullExemplo5 <- mtcars %>% pull(-mpg)
 
 Os exemplos acima fazem de forma bastante similar aquilo que o base R também faz. Porém, existem os `select_helpers` que são muito uteis para usar na função `select` em especifico. Veja alguns abaixo:
 
-```{r,eval = FALSE}
+```{r}
 # starts_with
 selExemplo6 <- mtcars %>% select( starts_with("m"))
 
@@ -152,44 +151,213 @@ No que tange o subsetting via as linhas, temos três funções relevantes: `filt
 
 A função `filter` irá filtrar as linhas a partir de uma condição. Que fique claro, quando falarmos abaixo em *filtrar* determinadas linhas, é que apenas essas linhas serão selecionadas. Você pode usar e abusar das comparações lógicas ( `==`, `!=`,  `>`, `>=`, `<`, `<=`). Veja os exemplos abaixo para usar `filter` com apenas uma condição e repare que a ordem dos argumentos não importa:
 
-```{r, eval = FALSE}
+```{r}
 
 
 # Filtrando as linhas cuja os valores da coluna Plant seja iguais a "Qn1".
 CO2 %>% filter(Plant == "Qn1")
-CO2 %>% filter("Qn1" == Plant)
+#CO2 %>% filter("Qn1" == Plant)
 
 
 # Filtrando as linhas cuja os valores da coluna Plant seja iguais a "Qn1" e "Mn1".
 
-CO2 %>% filter(Plant == c("Qn1", "Mn1"))
+#CO2 %>% filter(Plant == c("Qn1", "Mn1"))
 CO2 %>% filter(c("Qn1", "Mn1") == Plant)
 
-# Filtrando as linhas cuja os valores da coluna Plant seja diferente de "Qn1". 
-CO2 %>% filter(Plant != "Qn1")
-CO2 %>% filter("Qn1" != Plant)
+# Usando filter em sequência:
+# Pt1: Filtrando as linhas cuja os valores da coluna Plant seja diferente de "Qn1".
+# Pt2: Filtrando depois os valores da coluna Treatment sejam iguais à "chilled".
+
+#CO2 %>% filter("Qn1" != Plant) %>% filter(Treatment == "chilled")
+CO2 %>% filter(Plant != "Qn1") %>% filter("chilled" == Treatment)
 
 # Filtrando as linhas que o valor de `conc` seja maior que 250.
 
-CO2 %>% filter(conc > 250)
+#CO2 %>% filter(conc > 250)
 CO2 %>% filter(250 < 250)
 
 # Filtrando as linhas que o valor de `uptake` seja menor ou igual a 10
 
+#CO2 %>% filter(10 >= uptake)
 CO2 %>% filter(uptake <= 10)
-CO2 %>% filter(10 >= uptake)
 ```
 
-Repare que a ordem que você escreve os elementos a serem comparados não alteram a 
+Repare que a ordem que você escreve os elementos a serem comparados não alteram o funcionamento da função. Você pode então Você pode deixa o uso de `filter` muito mais complexo. Veja abaixo um exemplo com as funções `mean`, `median` e moda^[Feita a partir deste código: https://www.tutorialspoint.com/r/r_mean_median_mode.htm]:
+
+```{r}
+CO2 %>% filter(conc > mean(conc))
+
+CO2 %>% filter(uptake <= median(uptake))
+
+# Criando a função moda:
+moda <-  function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+CO2 %>% filter(conc == moda(conc))
+```
+
+Podemos colocar mais de uma condição em `filter` para não ter que fazer uma sequência. Veja abaixo:
+
+```{r}
+#Ao invés de:
+#CO2 %>% filter(conc == moda(conc)) %>% filter(uptake <= median(uptake))
+
+#Você pode fazer:
+
+CO2 %>% filter(conc ==moda(conc), uptake <= median(uptake))
+```
+
+No caso acima foram selecionadas as linhas que ao mesmo tempo eram iguais à moda da coluna `conc` e eram menores que a  mediana de `uptake`. Poderiamos ir além e colocar um terceiro elemento:
+
+```{r}
+CO2 %>% filter(conc ==moda(conc), uptake <= median(uptake), Treatment == "chilled")
+```
+
+
+Já tratamos do uso da função `filter` com as comparações lógicas, agora vamos falar dela com os ***operadores lógicos***. O poder de filter aumenta e muito quando usamos eles, veja só:
+
+```{r}
+### Os operadores básicos: Seja A e B dois conjuntos.
+
+# O operador A&B: interseção de A e B(ou)
+# Repare que é o mesmo que: 
+#CO2 %>% filter(conc ==moda(conc), uptake <= median(uptake))
+
+CO2 %>% filter(conc ==moda(conc) & uptake <= median(uptake))
+
+# O operador A|B: união de A e B (A e B)
+
+CO2 %>% filter(conc == moda(conc) | uptake <= median(uptake))
+
+# A função xor(A,B): todos elementos de A e B fora da interseção. 
+#xor(A,B) = A|B - A&B. A chamada Diferença Simétrica.
+
+CO2 %>% filter(xor(conc == moda(conc), uptake <= median(uptake)))
+
+### Combinações entre eles:
+
+## Exclusão de um dos elementos
+
+# A & !B: Excluí de A tudo que é de B. Ou seja, A menos a interseção de A e B.
+
+CO2 %>% filter(conc == moda(conc) & !uptake <= median(uptake))
+
+# !A & B: Exclui de B tudo que é de A. Ou seja, B menos a interseção de A e B.
+
+CO2 %>% filter(!conc == moda(conc) & uptake <= median(uptake))
+```
+
+Perceba que `filter`, como toda função do subsetting, faz nada mais que selecionar as linhas que retornam `TRUE` às condições que ele impõe. Por isso, as comporações e operações lógicas são instrumentos tão poderosos para a seleção `filter`.
+
+Existem mais três funções que podem ser usados para aumentar a força de `filter`: `is.na()`, `between()` e `near`. A função `is.na()` confere se um valor é `NA`. Assim podemos usa-la para selecionar (ou excluir), linhas que possuam valores `NA`.
+
+```{r}
+
+# Checando se valores são NA.
+is.na(1)
+is.na(NA)
+
+# Checando se valores de um vetor são NA ou não.
+is.na(c(1,2,NA))
+
+# Checando quais linhas tem NA da coluna Ozone da base de dados Ozone.
+airquality$Ozone %>% is.na()
+
+# filtrando as linhas que tem NA
+airquality %>% filter(is.na(Ozone))
+
+# filtrando as linhas que não tem NA (pegando as primeiras 20 linhas)
+airquality %>% filter(!is.na(Ozone)) %>% .[1:20,]
+```
+
+Já a função `between` serve para você filtrar linhas que contém elementos númericos entre dois valores.
+
+```{r}
+
+x <- 1:7
+# Testando quais elementos de x estão entre 3 e 5. (3 e 5 estão inclusos.)
+dplyr::between(x, 3,5)
+
+#Filtrando os elementos de CO2 que estão entre 100 e 200.
+CO2 %>% filter(between(conc, 100, 200))
+```
+
+A função `near` funciona como `==` só que com uma margem de tolerância dada pelo argumento `tol`. Importante notar que `tol` já tem um valor `default` que é `.Machine$double.eps^0.5`. Vejamos abaixo:
+
+```{r}
+x <- c(1,2,3)
+y <- c(1.4, 3, 3)
+
+#Testando quais valores de x e y estão próximos pela tolerância default:
+near(x,y)
+
+# Vendo o valor default de tolerância:
+.Machine$double.eps^0.5
+
+# Testando se x e y estão próximos por uma tolerância de 0.5:
+near(x,y,0.5)
+
+# Filtrando as linhas com valores de uptake próximos de 40 pela tolerância default:
+CO2 %>% filter(near(uptake, 40))
+
+# Filtrando as linhas com valores de uptake próximos de 40 pela tolerância de 1:
+CO2 %>% filter(near(uptake, 40, tol = 1))
+ 
+```
+
+##### (decidindo se farei) Variações de filter 
+
+Existem três variações de `filter`: `filter_all`, `filter_if` e `filter_at`. Iremos explicar aqui as duas primeiras variações, pois a terceira é complexa demais para esse estágio. De todo modo, `filter_all` e `filter_if` são filtram uma base de dados aplicando um predicando a todas as variáveis. Esses predicados devem ser expostos com `all.vars()` ou `any_vars()`.
+
+```{r}
+#filtrando as linhas de airquality que algum dos seus valores for NA
+# você deve usar o . para se referir as variáveis.
+# Ex1: airquality %>% filter_all(any_vars(is.na()))
+# Ex1 acima iria retornar um erro.
+airquality %>% filter_all(any_vars(is.na(.))) %>% head()
+
+#filtrando as linhas de airquality que TODOS os seus valores forem NA
+airquality %>% filter_all(all_vars(is.na(.)))
+
+```
 
 
 
+#### Removendo duplicatas com distinc
 
+A função distinct remove linhas duplicadas dos seus data.frames. Veja o exemplo abaixo:
+
+```{r}
+ex_df <- data.frame("A"=c(1,0,1,1,-0), "B" = c(0,1,0,1, 1) )
+ex_df
+# As linhas 1 e 3 são iguais e a 2 e 5 também. Usemos distinct para remover as duplicatas
+ex_df %>% distinct()
+
+```
+
+#### Reordenando as linhas com arrange
+
+A função `arrange` serve para reordenar as linhas de acordo com uma coluna. 
+
+```{r}
+# Forma crescente (menores primeiro)
+iris %>% arrange(Sepal.Length) %>% head()
+
+# Forma decrescente (maiores primeiro )
+iris %>% arrange(desc(Sepal.Length)) %>% head()
+```
+
+Também é possível fazer isso em vetores `character`:
+
+```{r}
+iris %>% arrange(Species) %>% head()
+```
 
 ## Arrumando os dados.
 
-`Titanic` para treinar isso. 
-
+Como vocês puderam ver no Tópico 2, nem todos os dados vem como gostariamos que eles viessem. Existem problemas, que emergem quando as variáveis surgem. 
 
 
 
@@ -200,5 +368,5 @@ Pacotes do tidyverse: https://www.tidyverse.org/packages/
 
 R for Data Science: https://r4ds.had.co.nz/
 
-
+Código para função moda: https://www.tutorialspoint.com/r/r_mean_median_mode.htm
 
