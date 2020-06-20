@@ -24,7 +24,7 @@ install.packages("tidyverse")
 A vantagem de assinalar o `tidyverse` é que o R irá baixar e instalar todos os pacotes do tidyverse. Ao usar `library(tidyverse)`, todos os pacotes do *"nucleo duro"* do `tidyverse` são carregados. Repare que se você instalou o `tidyverse` inteiro, ele irá carregar o `dplyr` e o`tidyr`^[O inverso não seria verdadeiro por outro lado. A instalação do `dplyr` não garante a instalação do resto da do resto dos pacotes.].
 
 
-```{r, eval = FALSE}
+```{r}
 #Carregando o tidyverse inteiro
 #library(tidyverse)
 
@@ -150,15 +150,37 @@ No que tange o subsetting via as linhas, temos três funções relevantes: `filt
 
 #### filter
 
-A função `filter` irá filtrar as linhas a partir de uma condição. Desse modo, vamos usar a base de dados `CO2`^[Para mais informações sobre quaisquer base de dados, use o `help`, como `?CO2` nesse caso.] para exemplificar o caso.
+A função `filter` irá filtrar as linhas a partir de uma condição. Que fique claro, quando falarmos abaixo em *filtrar* determinadas linhas, é que apenas essas linhas serão selecionadas. Você pode usar e abusar das comparações lógicas ( `==`, `!=`,  `>`, `>=`, `<`, `<=`). Veja os exemplos abaixo para usar `filter` com apenas uma condição e repare que a ordem dos argumentos não importa:
 
-```{r}
-#CO2 %>% head()
+```{r, eval = FALSE}
 
-CO2 %>% as_tibble() %>% str()
+
+# Filtrando as linhas cuja os valores da coluna Plant seja iguais a "Qn1".
+CO2 %>% filter(Plant == "Qn1")
+CO2 %>% filter("Qn1" == Plant)
+
+
+# Filtrando as linhas cuja os valores da coluna Plant seja iguais a "Qn1" e "Mn1".
+
+CO2 %>% filter(Plant == c("Qn1", "Mn1"))
+CO2 %>% filter(c("Qn1", "Mn1") == Plant)
+
+# Filtrando as linhas cuja os valores da coluna Plant seja diferente de "Qn1". 
+CO2 %>% filter(Plant != "Qn1")
+CO2 %>% filter("Qn1" != Plant)
+
+# Filtrando as linhas que o valor de `conc` seja maior que 250.
+
+CO2 %>% filter(conc > 250)
+CO2 %>% filter(250 < 250)
+
+# Filtrando as linhas que o valor de `uptake` seja menor ou igual a 10
+
+CO2 %>% filter(uptake <= 10)
+CO2 %>% filter(10 >= uptake)
 ```
 
-
+Repare que a ordem que você escreve os elementos a serem comparados não alteram a 
 
 
 
@@ -166,7 +188,7 @@ CO2 %>% as_tibble() %>% str()
 
 ## Arrumando os dados.
 
-`Titanic`^[Registro de mortos e sobreviventes do Titanic. Se ficou interessado dê `?Titanic` para saber mais.] para treinar isso. 
+`Titanic` para treinar isso. 
 
 
 
