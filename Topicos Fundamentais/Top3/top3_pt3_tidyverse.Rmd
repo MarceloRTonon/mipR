@@ -355,11 +355,134 @@ Também é possível fazer isso em vetores `character`:
 iris %>% arrange(Species) %>% head()
 ```
 
-## Arrumando os dados.
+## Arrumando dados.
 
-Como vocês puderam ver no Tópico 2, nem todos os dados vem como gostariamos que eles viessem. Existem problemas, que emergem quando as variáveis surgem. 
+Como vocês puderam ver no Tópico 2, nem todos os dados vem como gostariamos que eles viessem. Vamos aqui tratar apenas de alguns casos mais simples.
 
+### Juntar colunas
 
+Veja o `data.frame` abaixo:
+
+```{r}
+df_ex <- data.frame("A" = c(1:6), "B" = 20*c(6:1))
+```
+
+Agora considere as duas variáveis `"D"` e `"E"` abaixo que seriam mais duas colunas para `df_ex`:
+
+```{r}
+D <- c("BRA", "BRA", "ARG", "ARG", "URU", "URU")
+
+E <- rep(c(1,2), 3)
+
+df_ex <- data.frame(df_ex, "D"= D, "E" = E)
+```
+
+Suponha, então queremos fazer uma coluna `"DE"`, que seria um vetor tal qual `c("BRA1", "BRA2", "ARG1", ...)` o que poderiamos fazer? Há dois modos. O primeiro, mais longo, seria concatenar os vetores `"D"` e `"E"` usando a função `paste0` e realizar um subsetting de `df_ex` para criar esse vetor:
+
+```{r}
+# Primeiro modo.
+
+#Concatenando D e E 
+DE <- paste0(D, E)
+
+# Trocando D e E por DE
+df_ex <- df_ex[,-c(4,5)] %>% data.frame(., DE)
+```
+
+No entanto, pelo pacote `dplyr` nós podemos fazer isso num passo apenas.
+
+```{r}
+df_ex <- data.frame(df_ex[1:2], "D"=D, "E"= E)
+
+df_ex <- df_ex %>% tidyr::unite("DE", D:E, sep = "")
+```
+
+O argumento `sep= ""` foi colocado ali acima pois o valor *default* do separador é `_`.
+
+### Separar colunas
+
+Maioria das vezes, você irá querer muito mais separar colunas do que junta-las. Para tanto, basta usar a função `separate` do `tidyr`
+
+```{r}
+df_ex %>% separate("DE", into = c("D", "E"), sep = 3)
+```
+
+### Mudar comprimento de um vetor
+
+Suponha que ocorreu uma corrida e havia 6 participantes inscritos. Desses 6, só alguns apareceram, e apenas esses tiveram o seu tempo em minutos anotado. Desse modo temos os dois `data.frames` abaixo:
+
+```{r}
+df_inscritos <- data.frame("Nomes"= c("Maria", "João", "Silvia", "Arthur", "Gustavo", "Alexandre"), "Idade" = c(15,16,13, 20, 12, 18))
+
+df_km <- data.frame("Nomes" = c( "João", "Silvia", "Arthur", "Alexandre"), "Tempo_min" = c(121, 100, 102, 110))
+```
+
+Agora suponha que queremos criar um `data.frame` que tenha todos os inscritos e mostre o tempo daqueles que participaram efetivamente. Podemos fazer isso usando o grupo de funções `join`, mais especificamente a função `left_join`:
+
+```{r}
+df_inscritos %>% left_join(df_km)
+```
+A função `left_join(x,y)` aloca todas as linhas de x, e todas as colunas de x e y. Assim sendo, no caso acima ela retornou todas as linhas de `df_inscritos` e alocou as linhas de `df_km` de acordo. Assim, as linhas de `df_inscritos` que não estavam presentes em `df_km` foram preservadas.  Veja o que ocorre se trocarmos a ordem dos argumentas na função:
+
+```{r}
+df_km %>% left_join(df_inscritos)
+```
+
+No caso acima, as linhas de `df_km` foram preservadas, mas as linhas de `df_inscritos` que não estavam presentes em `df_km` foram excluídas. 
+A função `right_join` inverte a ordem dos argumentos, de modo que:
+
+```{r, eval = FALSE}
+#NÃO RODE
+left_join(x,y) = right_join(y,x)
+```
+
+Agora suponha que no dia da competição apareceu mais uma pessoa para correr que não estava inscrita de tal modo que:
+
+```{r}
+corredor_extra <- data.frame("Nomes" = c("Juliano"), "Tempo_min" = 92)
+
+df_km2 <- rbind.data.frame(df_km, corredor_extra)
+```
+
+Agora, vamos supor que se quer todas as informações possiveis juntas, mesmo incluindo quem não estava inscrito. Para tanto podemos usar a função `full_join`, que irá manter as linhas dos dois dataframes. Veja abaixo:
+
+```{r}
+df_km2 %>% full_join(df_inscritos)
+```
+
+Agora suponha que você tem apenas `df_inscritos` e `df_km2` (ou seja, não tem `df_km`). E que você não sabe a priori quem foi o "penetra". Assim, suponhamos que você quer duas coisas:
+
+- Uma lista apenas com os inscritos que foram participar
+- Desconsiderar a idade dos corredores e apenas saber o seu tempo.
+
+Para conseguir essas duas coisas num único comando, basta usar a função `semi_join`:
+
+```{r}
+df_km2 %>% semi_join(df_inscritos)
+```
+
+A função `semi_join(x,y)` retorna todas as linhas de x que tiverem em y, porém descarta as colunas de y.
+
+Agora, suponha que apenas provido de `df_km2` e `df_inscritos`, você quer saber quem foi o penetra na corrida. Basta você então usar a função `anti_join`:
+
+```{r}
+df_km2 %>% anti_join(df_inscritos)
+```
+
+Vamos supor mais uma situação: houve uma partida de futebol no dia seguinte, com a seguinte lista de jogadores:
+
+```{r}
+df_futebol <- data.frame("Time" = rep(c(1,2), 6), "Jogador" = c("João", "José", "Ana", "Joana", "Gustavo", "Maria", "Silvia", "Jonas", "Henrique", "Bruno", "Julia", "Jade"))
+```
+
+Agora suponha que se quer saber quais dos corredores inscritos foram jogar bolar no dia seguinte. Para tanto, podemos usar a função `inner_join`. No entanto há um problema. De modo geral, as funções do grupo `join` funcionam usando  colunas nos dois `data.frames` que tem o mesmo nome. No entanto, `df_futebol` não têm a variável `Nomes`, e sim `Jogadores`. Assim, temos que usar o argumento `by`, de modo que:
+
+```{r}
+# Daria Erro
+#df_futebol %>% inner_join(df_inscritos)
+
+df_futebol %>% inner_join(df_inscritos, by = c( "Jogador" = "Nomes"))
+```
 
 
 ## Fontes:
