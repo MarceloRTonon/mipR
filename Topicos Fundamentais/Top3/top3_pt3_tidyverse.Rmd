@@ -52,7 +52,7 @@ Os pacotes do núcleo duro do *tidyverse* são:
 
 - ***ggplot2***:
 
-- ***forcats***:
+- ***forcats***: Este pacote é útil para lidar com `factors` (*forcats* é um anagrama de *factors*), que é uma `classe` de vetores que servem para dar categorias à um `data.frame`. `factors` já foram mais comuns no R do que são hoje, em especial após a expansão do *Tidyverse* e da versão 4.0.0 da linguagem. Um ensino detalhado sobre `factors` e como manipula-los está fora do escopo deste curso. Para quem tiver interesse, vale acessar o capitulo [15 do R for Data Science](https://r4ds.had.co.nz/factors.html) para aprender sobre o *forcats*. Para usar *factors* com um maior enfoque no base-R, vale a leitura da subseção [5.5.2](https://rstudio-education.github.io/hopr/r-objects.html#factors) do *Hands-on Programming with R*, e das subseções [3.4](https://adv-r.hadley.nz/vectors-chap.html#s3-atomic-vectors) e [4.2.1](https://adv-r.hadley.nz/subsetting.html#atomic-vectors-1) do *Advanced R*. 
 
 Dada a natureza do *Tidyverse*, será mais usada nessa parte o operador *pipe* `%>%`, ao invés da escrita *nested*. Sempre que você carregar algum dos Relembrando o uso dele abaixo:
 
@@ -150,7 +150,27 @@ No que tange o subsetting via as linhas, temos três funções relevantes: `filt
 
 #### filter
 
-A função `filter` irá filtrar as linhas a partir de uma condição.
+A função `filter` irá filtrar as linhas a partir de uma condição. Desse modo, vamos usar a base de dados `CO2`^[Para mais informações sobre quaisquer base de dados, use o `help`, como `?CO2` nesse caso.] para exemplificar o caso.
+
+```{r}
+#CO2 %>% head()
+
+CO2 %>% as_tibble() %>% str()
+```
+
+
+
+
+
+
+
+## Arrumando os dados.
+
+`Titanic`^[Registro de mortos e sobreviventes do Titanic. Se ficou interessado dê `?Titanic` para saber mais.] para treinar isso. 
+
+
+
+
 
 ## Fontes:
 
