@@ -142,8 +142,13 @@ selExemplo8 <- mtcars %>% select(contains("s"))
 selExemplo9 <- mtcars %>% select(matches("MPG"))
 ```
 
-Existem outros elementos 
+Existem outros elementos que fazem parte dos `select_helpers` se você quiser saber mais.
 
+### Linhas
+
+No que tange o subsetting via as linhas, temos três funções relevantes: filter, distinct e arrange.
+
+A função filter irá te 
 
 ## Fontes:
 
