@@ -146,9 +146,11 @@ Existem outros elementos que fazem parte dos `select_helpers` se você quiser sa
 
 ### Linhas
 
-No que tange o subsetting via as linhas, temos três funções relevantes: filter, distinct e arrange.
+No que tange o subsetting via as linhas, temos três funções relevantes: `filter`, `distinct` e `arrange`.
 
-A função filter irá te 
+#### filter
+
+A função `filter` irá filtrar as linhas a partir de uma condição.
 
 ## Fontes:
 
