@@ -19,7 +19,6 @@ Podemos citar outras referências que foram usadas na criação deste material:
  - Para a parte de condicionais e escolhas foram usadas as subseções [9.2](https://rstudio-education.github.io/hopr/programs.html#if-statements) do *Hans-On Programming with R* e a subseção [5.2](https://adv-r.hadley.nz/control-flow.html#choices) do **Advanced R** do Hadley Wickham.
  
 
-
 ## 3.1 - Operações Lógicas
 
 Para você realizar operações que os resultados são respostas lógicas, existem algumas opções a serem usadas. Veja abaixo exemplos dos chamados *Relational Operators*:
@@ -138,7 +137,7 @@ No caso acima os dois casos tem um retorno pois tem o else (....)
 
 ### 3.2.3 - A função ifelse
 
-Existe a função ifelse que pode ser mais prática do que escrever o `if` `else` como foi feito. Mais importante ainda, o `ifelse` funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente.  
+Existe a função ifelse que pode ser mais prática do que escrever o `if` `else` como foi feito. Mais importante ainda, o `ifelse` funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente.  No Tópico 4 falaremos mais sobre funções vetoriais.
 
 
 ```{r, eval=FALSE}
@@ -147,8 +146,20 @@ ifelse(condição, resultado se verdadeiro, resultado caso contrário)
 
 ```
 
-```{r, eval = FALSE}
-Fazer igual eu fiz em if e else, com o exemplo dos objetos a e b. E depois fazer um caso com ifelse(TRUE, "cond val", "cond inval")
+```{r}
+a <-2
+ifelse(a ==2, "Condição válida", "Condição inválida")
+
+b <-3
+ifelse(b ==2, "Condição válida", "Condição inválida")
+
+```
+
+```{r}
+
+ifelse(TRUE, "Condição válida", "Condição inválida")
+
+ifelse(FALSE, "Condição válida", "Condição inválida")
 ```
 
 

@@ -374,8 +374,8 @@ summary {
 <p>Neste tópico iremos apresentar situações em que você necessite realizar operações lógicas para tomar decisões ou realizar tarefas especificas de acordo com determinadas condições. Essas operações podem ser importantes para avaliar resultados obtidos e automatizar ações condicionais aos resultados. Englobam-se aqui as operações lógicas e as condicionais (usando as funções <code>if</code>, <code>else</code> e <code>ifelse</code>).</p>
 <p>Podemos citar outras referências que foram usadas na criação deste material:</p>
 <ul>
-<li>A subseção <a href="https://rstudio-education.github.io/hopr/modify.html#logical-subsetting">7.0.2</a> do <strong>Hands-on Programming with R</strong> do Wadley Wickham para a parte de <em>Operações Lógicas</em>.</li>
-<li>Para a parte de condicionais e escolhas foram usadas as subseções <a href="https://rstudio-education.github.io/hopr/programs.html#if-statements">9.2</a> do <em>Hans-On Programming with R</em> e a subseção <a href="https://adv-r.hadley.nz/control-flow.html#choices">5.2</a> do <strong>Advanced-R</strong>.</li>
+<li>A subseção <a href="https://rstudio-education.github.io/hopr/modify.html#logical-subsetting">7.0.2</a> do <strong>Hands-on Programming with R</strong> do Hadley Wickham para a parte de <em>Operações Lógicas</em>.</li>
+<li>Para a parte de condicionais e escolhas foram usadas as subseções <a href="https://rstudio-education.github.io/hopr/programs.html#if-statements">9.2</a> do <em>Hans-On Programming with R</em> e a subseção <a href="https://adv-r.hadley.nz/control-flow.html#choices">5.2</a> do <strong>Advanced R</strong> do Hadley Wickham.</li>
 </ul>
 </div>
 <div id="operações-lógicas" class="section level2">
@@ -391,7 +391,7 @@ c(1:3) &gt;= c(3:1)</code></pre>
 4&lt;5</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code># Menor ou igual
-#&lt;=
+# &lt;=
 # Igual à
 # ==
 # Diferente de
@@ -399,26 +399,6 @@ c(1:3) &gt;= c(3:1)</code></pre>
 # Tem &quot;match&quot; ## Dar muitos exemplos pra %in%, colocar exemplo com data.frame
  2 %in% c(1:3)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<p>#Talvez seja interessante colocar essa parte depois de ifelse. Pois fica mais claro (e mais aplicado) o que quer dizer. Boolean</p>
-<p>@<span class="citation">@Citar</span> uma página que explique teoria de conjuntos.</p>
-<p>Veja abaixo alguns exemplos dos chamados <em>Logical Operators</em></p>
-<pre class="r"><code># O eval= FALSE é temporário
-#Fazer aqui o que eu fiz com os operadores lógicos.
-
-#Usar não só vetores, mas também valores lógicos per se:
-
-
-TRUE &amp; FALSE
-TRUE &amp; TRUE
-FALSE &amp; FALSE
-
-&amp;&amp;
-|
-||
-xor(c(1:3), (2:4))
-!
-any
-all</code></pre>
 </div>
 <div id="escolhas-e-condições-if-statements" class="section level2">
 <h2>3.2 - Escolhas e Condições (If Statements)</h2>
@@ -445,7 +425,7 @@ b==2</code></pre>
 <pre class="r"><code>if(b == 2){
  &quot;Condição válida&quot;
 }</code></pre>
-<p>Quando usamos <code>a == 2</code> como Condição, <code>if</code> nos retorna o valor <code>&quot;Condição válida&quot;</code> expresso entre as chaves <code>{}</code>. No entanto quando usamos <code>b == 2</code>, como condição, não obtemos nenhum valor de retorno. Isso ocorre por dois motivos:</p>
+<p>Quando usamos <code>a == 2</code> como condição, <code>if</code> nos retorna o valor <code>&quot;Condição válida&quot;</code> expresso entre as chaves <code>{}</code>. No entanto quando usamos <code>b == 2</code>, como condição, não obtemos nenhum valor de retorno. Isso ocorre por dois motivos:</p>
 <ul>
 <li><p>O valor de <code>a==2</code> é <code>TRUE</code>, enquanto de <code>b ==2</code> é <code>FALSE</code>. Assim sendo, apenas no caso de <code>a==2</code> é que temos que a Condição como verdadeira, de modo que o que vale entre as chaves será retornado.</p></li>
 <li><p>Não estabelecemos nada para retornar no caso da condição ser falsa. Por tanto, no caso de <code>b==2</code>, <code>if</code> não retornará nada.</p></li>
@@ -458,13 +438,10 @@ b==2</code></pre>
 <pre class="r"><code>if(FALSE){
   &quot;Condição válida&quot;
 }</code></pre>
-<pre class="r"><code># eval == FALSE temporario
-#dar exemplos com condições que sejam funções, por exemplo: is.character(), &gt;=, is.data.frame(), %in%.
-
-#Usar exemplos de ifs com duas condições usando &amp;, &amp;&amp;, | e ||</code></pre>
 </div>
 <div id="if-e-else" class="section level3">
 <h3>3.2.2 - if e else</h3>
+<p>Caso seu objetivo não dependa apenas da validade do condição estabelecida ser <code>TRUE</code>, mas de fazer outra determinanda operação caso o resultado lógico da sua condição ser <code>FALSE</code>.</p>
 <pre class="r"><code>if (condição){
   
   Execute esta operação caso a condição seja verdadeira
@@ -492,7 +469,7 @@ if(b == 2){
 </div>
 <div id="a-função-ifelse" class="section level3">
 <h3>3.2.3 - A função ifelse</h3>
-<p><strong>ESCREVER ALGO COMO:</strong> Existe a função ifelse que pode ser mais prática do que escrever o ifelse como foi feito.</p>
+<p>Existe a função ifelse que pode ser mais prática do que escrever o <code>if</code> <code>else</code> como foi feito. Mais importante ainda, o <code>ifelse</code> funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente. No Tópico 4 falaremos mais sobre funções vetoriais.</p>
 <pre class="r"><code>ifelse(condição, resultado se verdadeiro, resultado caso contrário)</code></pre>
 <pre class="r"><code>Fazer igual eu fiz em if e else, com o exemplo dos objetos a e b. E depois fazer um caso com ifelse(TRUE, &quot;cond val&quot;, &quot;cond inval&quot;)</code></pre>
 <p>Vamos rapidamente relembrar algumas funções que já usamos e que são da estrutura de condições, por exemplo: <code>is.character</code>, <code>is.matrix</code>.</p>
@@ -505,10 +482,33 @@ is.character2(a)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code>is.character2(b)</code></pre>
 <pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code># eval == FALSE temporario
+#dar exemplos com condições que sejam funções, por exemplo: is.character(), &gt;=, is.data.frame(), %in%.
+
+#Usar exemplos de ifs com duas condições usando &amp;, &amp;&amp;, | e ||</code></pre>
 </div>
-<div id="section" class="section level3">
-<h3></h3>
 </div>
+<div id="operações-em-conjuntos-booleans" class="section level2">
+<h2>3.3 - Operações em Conjuntos (Booleans)</h2>
+<p>@<span class="citation">@Citar</span> uma página que explique teoria de conjuntos.</p>
+<p>Veja abaixo alguns exemplos dos chamados <em>Logical Operators</em></p>
+<pre class="r"><code># O eval= FALSE é temporário
+#Fazer aqui o que eu fiz com os operadores lógicos.
+
+#Usar não só vetores, mas também valores lógicos per se:
+
+
+TRUE &amp; FALSE
+TRUE &amp; TRUE
+FALSE &amp; FALSE
+
+&amp;&amp;
+|
+||
+xor(c(1:3), (2:4))
+!
+any
+all</code></pre>
 </div>
 <div id="fontes" class="section level2">
 <h2>Fontes:</h2>
