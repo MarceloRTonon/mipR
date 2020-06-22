@@ -1,5 +1,5 @@
 ---
-title: "Tópico 3 - Condicionantes e Limpeza de Dados"
+title: "Tópico 3 - Condicionantes e Manipulação de Dados"
 author: "Marcelo Tonon e Felipe Cornelio"
 date: "21/06/2020"
 output: html_document
@@ -8,6 +8,8 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+Neste
 
 ## 3.1 - Operações Lógicas
 
@@ -200,7 +202,7 @@ is.character2(b)
 
 ```
 
-
+###
 
 
 ## Fontes:
