@@ -1,0 +1,108 @@
+---
+title: "Tópico 3 - Condicionantes e Limpeza de Dados"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "21/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 3.1 - Operações Lógicas
+
+Para você realizar operações que os resultados são responstas lógicas, diversas operações podem ser realizadas. Você pode perguntar se um valor é maior que outro... se são diferentes
+
+
+>
+>=
+<
+<=
+==
+!=
+%in%
+
+Boolean
+
+&
+|
+xor
+!
+any
+all
+
+## 3.2 - Escolhas e Condições (If Statements)
+
+Imagine que você queira fazer determinada operação somente no caso de certa condições são atendidas? Ou fazer uma sequência de operações de acordo com o resultado de etapas anteriores? Nessas situações, o uso das função `if`, `else` e `ifelse` podem ser úteis.
+
+![](Imagem/ifelse.jpg)
+
+### 3.2.1 - If
+
+```{r, eval = FALSE}
+
+if (condição) {
+  
+  Execute esta operação caso a condição seja verdadeira
+
+}
+
+
+```
+
+### 3.2.2 - If e else
+
+```{r, eval=FALSE}
+
+if (condição) {
+  
+  Execute esta operação caso a condição seja verdadeira
+
+} else {
+  
+  Caso contrário, faça esta outra operação
+        
+}
+
+
+```
+
+
+### 3.2.3 - Ifelse
+
+```{r, eval=FALSE}
+
+ifelse(condição, resultado se verdadeiro, resultado caso contrário)
+
+```
+
+Vamos rapidamente relembrar algumas funções que já usamos e que são da estrutura de condições, por exemplo: `is.character`, `is.matrix`.
+
+Vamos primeiro criar 3 objetos de diferentes tipos: um vetor atômico `character`, um vetor atômico `double` e uma matriz `double`:
+
+```{r, eval=T}
+a <- c("a", "b", "c")
+b <- c(1, 2, 3)
+c <- matrix(1:9, 3, 3)
+```
+
+```{r, eval=T}
+is.character2 <- function(x){ifelse(typeof(x) == 'character', TRUE, FALSE)}
+is.character2(a)
+is.character2(b)
+
+```
+
+
+### 3.2.4 - Switch
+
+Caso seja necessário realizar uam sequência de questões do tipo if-else, pode ser interessanter o uso da função `switch` para "encurtar" o seu código.
+
+## Fontes:
+
+Hands-on Programming with R: https://rstudio-education.github.io/hopr/
+
+R for Data Science: https://r4ds.had.co.nz/
+
+Advanced-R: https://adv-r.hadley.nz/
+
