@@ -1,0 +1,36 @@
+---
+title: "Formas de Escrita no R: Sintaxes e Boas Práticas"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "21/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Sintaxes
+
+Neste tópico vamos apresentar algumas formas de sintaxe no R e discutir boas práticas de escrita do código.
+
+No que tange as diferentes sintaxes, na maior parte do tempo, o modo *pipe* e o modo *nested* te servirão bem. Relembrando aqui ambos os modos:
+
+```{r, eval = FALSE}
+# Modo Nested
+
+f5(f4(f3(f2(f1(x)))))
+
+# Modo Pipe
+library(magrittr)
+x %>% f1 %>% f2 %>% f3 %>% f4 %>% f5
+```
+
+O modo *pipe*,  te permite escrever de forma diferente o *R*, indo da esquerda para a direita, como estamos acostumados a ler no mundo ocidental. Numa das seções deste tópico, entraremos a fundo no pacote *magrittr* e o que você pode alterar no seu código com ele.
+
+Existe no entanto, outras sintaxes que veremos aqui também. Outras duas formas de sintaxe que vamos entrar aqui é o modo formula (usando o til `~`) e o modo prefixo (usando a crase "`" ).
+
+Outra questão de sintaxe que vamos discutir aqui é a escrita de funções curtas.
+
+## Fontes:
+
+https://www.datacamp.com/community/tutorials/r-formula-tutorial

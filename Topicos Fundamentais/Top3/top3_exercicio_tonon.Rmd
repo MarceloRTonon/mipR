@@ -1,0 +1,293 @@
+---
+title: "Tópico 3 - Exercicio"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "21/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = FALSE, eval = FALSE)
+```
+
+
+## Pacotes necessários para esse exercício.
+
+```{r, eval = FALSE, include = TRUE}
+library(tidyverse)
+library(magrittr)
+library(readxl)
+```
+
+## ***The SeViration:*** Enfrentando os seus erros.
+
+Talvez você fique com dúvidas e dificuldades. É normal. Especialmente quando você está aprendendo uma coisa nova. Assim, tente seguir o roteiro abaixo para resolver suas questões:
+
+1. É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma virgula, parentêses, aspas... 
+
+2. Dedique um tempo tentando elaborar esse erro ou dúvida. Organizar a sua dúvida na sua cabeça, muitas vezes já resolve o problema por si só.
+
+3. Se tratando de uma dúvida referente a um objeto natural do R, ou de seus pacotes, use e abuse do `Help`. A documentação do R tenta ser a mais explicativa e direta ao ponto o possível. Não se preocupe, parte dos exercicios sempre será ler o que o próprio R tem a dizer sobre o assunto.
+
+4. Persistidas os erros e as dificuldades, tente jogar no Google o problema. De modo geral, se você pesquisar "R" juntamente com a descrição do problema muito provavelmente aparecerá alguém pedindo ajuda sobre o tema.^[Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto [1.6](https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more) do *R for Data Science*.]
+
+***IMPORTANTE***: Será sempre perguntado na sala de aula se alguém pesquisou na internet para resolver seus problemas e queremos saber como cada um se saiu. Assim, pedimos que você 
+
+5. Se você não conseguir se resolver por meio do Google ou em outros canais da internet, aí então peça ajuda a um amigo. 
+
+
+## Acessando guias de pacotes: a função `vignette`
+
+Tal qual as funções tem um guia especifico, `R Documentation`, alguns pacotes do R possuem um guia mais longo, `vignette`. Vignettes servem para apresentar o pacote e os problemas para os quais eles foram feitos para resolver.  É importante notar que alguns pacotes tem mais mais de uma vignette. E para complicar um pouco mais, a função `vignette("nome_de_pacote")` não irá te fazer acessa alguma `vignette` de um pacotes. Por exemplo, se você fizer `vignette("dplyr")` você acessará uma documentação deste tipo na aba Help do RStudio. Por outro lado se você fizer `vignette("purrr")` o R te retornará um aviso dizendo que não foi encontrada vignette alguma.
+
+Há no entanto uma solução para isso. Se você fizer simplesmente `vignette()`, o pacote lhe retornará a lista de todas as vignettes por pacote. Veja abaixo:
+
+```{r, eval = FALSE, include = TRUE}
+# 1. Acessa uma vignette que está relacionada à string dplyr.
+vignette("dplyr")
+
+# 2. Lista todas as vignettes de cada pacote já instalado
+vignette()
+
+# 2.b A mesma coisa que "2.", só que com o argumento "all = TRUE" explicito.
+vignette(all = TRUE)
+
+# 3. Lista todas as vignettes de cada pacote CARREGADO
+#Suponha que não tem nenhum pacote carregado.
+library(dplyr)
+vignette(all = FALSE)
+
+# 4. Lista as vignettes de um pacote especifico
+vignette(package = "dplyr")
+
+# 5. Acessa uma outra vignette de dplyr
+vignette("programming")
+
+# 6. Acessa uma vignette de tidyr
+vignette("tidy-data")
+```
+
+Quando você acessa a lista de vignettes disponíveis você irá ver que cada vignette tem na sua descrição escrito `(source, html)` ou `(source, pdf)`. No caso de estar escrito `html`, a função `vignette(nome_vignette)` irá abrir a documentação na aba do Help normalmente, para quando estiver escrito `pdf`, será aberto um arquivo de pdf.
+
+Se você quer acessar essa documentação de um pacote que você ainda não instalou você pode ir na página do pacote no repositorio [CRAN do R](https://cran.r-project.org/web/packages/available_packages_by_name.html) e acessar a vignette, se esta existir. Nas páginas dos pacotes também se encontram os arquivos README e os manuais de referência, estes contendo, além de outras coisas, a R Documentation de todas as funções do pacote.
+
+## Exercicios
+
+
+### 1. Lendo a NIOT 2016 para a Italia (WIOD) pela primeira vez
+
+Vamos agora usar a base de dados NIOT para praticar o que foi passado nos últimos tópicos. As NIOT (em inglês National Input Output Tables) estão disponíveis no [site da WIOD](http://www.wiod.org/). Para acessar a página de download das NIOT', clique na aba `Release 2016` opção `Input-Output Tables` e numa coluna na parte direita da tela escrito `Related Tables` clique na opção `National Tables`([Clique aqui](http://www.wiod.org/database/niots16) para acessar a página). Lá terá a opção `Italy NIOT` para baixar, ou [clique aqui](http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx).
+
+Porém vamos agora mostrar uma outra forma de baixar, os dados sem precisar sair do Rstudio. (E sem gravar no disco rígido esse arquivo, usando apenas um arquivo temporário)
+
+```{r, eval = FALSE, include = TRUE}
+library(readxl)
+#Criando um arquivo temporário
+arq_temp <- tempfile(fileext = ".xlsx")
+#Baixando o arquivo
+# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
+download.file(url = "http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx", destfile = arq_temp, mode = "wb")
+
+# Importando a NIOT para o R:
+niotITA <- read_xlsx(arq_temp, sheet = 2)
+
+# Excluindo arq_temp
+unlink(arq_temp)
+```
+
+Existem vantagens e desvantagens de você baixar as coisas diretamente do seu terminal. Uma desvantagem é que pode ser mais lento baixar pelo R do que pelo brownser. Além disso, se sua conexão for instável, pode dar tudo errado no meio do caminho. Além disso nem sempre dá certo o download pelo R. Por outro lado, você ter até o download no seu código aumenta bastante a reprodutibilidade dele, fazendo que com que não seja necessário nada além do código para baixar ele. A sugestão dada é na primeira vez, baixar o arquivo manualmente, e então ver como você pode tratar o(s) arquivo(s) e então buscar automatizar no código o download.
+
+Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter problemas. Rode o código acima para seguir no exercicio a seguir.
+
+#### Q.1.0 Vizualize `niotITA`. Qual é o problema com os valores?
+
+#### Q.1.1 Crie um arquivo `Q11niotITA.Rdata` com os dados da `niotITA`
+
+```{r}
+save(niotITA, file = "Q11niotITA.Rdata")
+```
+
+#### Q.1.2 Qual é a `class` e `type` de `niotITA`?
+
+```{r}
+typeof(niotITA)
+class(niotITA)
+```
+
+
+#### Q.1.3 Usando o pacote `dplyr`, crie um objeto `ItaQ1.3` que exclui de `niotITA` as linhas que possuem NA.
+
+```{r}
+ItaQ1.3 <- niotITA %>% dplyr::filter((!is.na(Year)))
+# Usando filter_all
+ItaQ1.3 <- niotITA %>% dplyr::filter_all(any_vars(!is.na(.)))
+```
+
+#### Q.1.4 Usando o pacote `tidyr`, crie um objeto `ItaQ1.4` que exclui de `niotITA` as linhas que possuem NA.
+
+```{r}
+ItaQ1.4 <- niotITA %>% tidyr::drop_na()
+```
+
+#### Q.1.5 Confira se `ItaQ1.4` e `ItaQ1.3` são iguais.
+
+```{r}
+identical(ItaQ1.3, ItaQ1.4)
+```
+
+#### Q.1.6 Crie um data.frame `vecQ1.6` com a linha de `niotITA` que possui  `NA`.
+```{r}
+vecQ1.6 <- niotITA %>% filter(is.na(Year))
+
+vecQ1.6 <- niotITA %>% filter_all(any_vars(is.na(.)))
+```
+
+#### Q.1.7 Crie um **vetor atômico** `vecQ1.7`, de tal modo que os valores de `vecQ1.6` que contém `NA` fiquem com os nomes das suas respectivas colunas. 
+
+*Dica 1:* Crie `vecQ1.7` como cópia de `vecQ1.6` (`vecQ1.7 <- vecQ1.6`) para iniciar a resolução. Porém, fique atento, pois tem não uma, mas duas pegadinhas.
+
+```{r}
+vecQ1.7 <- vecQ1.6 %>% c()
+vecQ1.7[1:4] <- names(vecQ1.7)[1:4]
+```
+
+
+#### D.1.1 **DESAFIO COMPLICADO:** Crie, **a partir de `vecQ1.6`**, um vetor atómico `vecD1.1` que fique igual à `vecQ1.6`. **PORÉM**, o faça sem escrever arbitrariamente o índice das colunas. Ou seja, não escreva número algum para além dos usados nos nomes dos objetos.
+
+```{r}
+vecD1.1 <- vecQ1.6 %>% c()
+valores_na <- is.na(vecD1.1)
+vecD1.1[valores_na] <- vecD1.1 %>% names() %>% .[valores_na]
+```
+
+#### Q.1.8 Coloque `vecQ1.7` como os `colnames` de `ItaQ1.4`.
+
+```{r}
+colnames(ItaQ1.4) <- vecQ1.7
+```
+
+#### D.1.2 Confira o tipo de dados presentes da 5a coluna de ItaQ1.3. `list` não é a resposta que você quer.
+
+```{r}
+ItaQ1.3 %>% .[[5]] %>% is.character()
+```
+
+#### Q.1.9 Converta em `double` todas as colunas de `ItaQ1.3` que são pássiveis de serem convertidas. Faça isso com apenas um comando. Nomeie de `ItaQ1.9`
+
+```{r}
+ItaQ1.9 <- ItaQ1.3 %>% type_convert()
+
+typeof(ItaQ1.9[[4]])
+typeof(ItaQ1.9[[5]])
+```
+
+### 2. Separando as varíaves de demanda final.
+
+Vamos agora separar as varíaveis de demanda final da tabela `ItaQ1.3` do restante delas.
+
+
+
+#### Q.2.1 Crie um objeto `ItaQ2.1` a partir de `ItaQ1.9` em que  as linhas da coluna `Origin` que tem os valores `"TOT"` são excluidas. Você consegue fazer tanto pelo Base R quanto pelo tidyverse?
+
+```{r}
+ItaQ2.1 <- ItaQ1.9[ItaQ1.9$Origin != "TOT",]
+ItaQ2.1 <- ItaQ1.9 %>% filter(Origin != "TOT")
+```
+
+#### Q.2.2 Crie o objeto `CodeQ2.2` a partir da coluna `Code` de `ItaQ2.1` de modo que esta não tenha nenhum valor repetido. Pense no máximo de formas possíveis que você consegue fazer isso.
+
+```{r}
+CodeQ2.2 <- ItaQ2.1 %>% select(Code) %>% distinct() 
+
+CodeQ2.2 <- ItaQ2.1[, "Code"] %>% distinct()
+
+CodeQ2.2 <- ItaQ2.1["Code"] %>% distinct()
+
+# Dará errado pois distinct quer pelo menos um vagão (tibble ou df) e não o que tem dentro do vagão (dados em vetores atômicos)
+CodeQ2.2 <- ItaQ2.1$Code %>% distinct()
+CodeQ2.2 <- ItaQ2.1[["Code"]] %>% distinct()
+CodeQ2.2 <- ItaQ2.1 %$% Code %>% distinct()
+```
+
+Repare que esses codes são os mesmos que os nomes das colunas de `ItaQ2.1`. E que a Demanda Final está apenas nas colunas.
+
+#### Q.2.3 Crie um vetor atômico `vecQ2.3`que inclua os nomes das quatro primeiras colunas de `ItaQ2.1` e todos os valores de Code.
+
+```{r}
+vecQ2.3 <- c(colnames(ItaQ2.1)[1:4], CodeQ2.2$Code)
+```
+
+#### Q.2.4 Crie uma base de dados `ItaQ2.4` selecionando os dados de `ItaQ1.9` que são da demanda intersetorial (ou seja, não são da demanda final). **Não use nenhum número arbitrário**. De quantas formas você consegue fazer isso? Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.
+
+```{r}
+ItaQ2.4 <- ItaQ1.9 %>% select(vecQ2.3)
+
+ItaQ2.4 <- ItaQ1.9[, vecQ2.3]
+```
+
+#### Q.2.5 Crie uma base de dados `ItaQ2.5` selecionando as colunas de `ItaQ1.9` que são da demadna final (ou seja, não são da demanda intersetorial). **Não use nenhum número arbitrário**. Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.
+
+```{r}
+ItaQ2.5 <- ItaQ1.9 %>% select(-CodeQ2.2$Code)
+```
+
+#### Q.2.7 Quantas são as colunas da demanda final? Calcule pela de `ItaQ1.9` diferença em relação à `ItaQ2.4`. Nomeie o valor de `Q2.7`
+
+```{r}
+Q2.7 <- ncol(ItaQ1.9) - ncol(ItaQ2.4)
+```
+
+#### D.2.1 Provido do número de colunas de `ItaQ1.9` e do valor `Q2.7`, crie um objeto chamado `ItaD2.1` que seja igual à `ItaQ2.4`. *Não use nenhum número arbitrário*.
+
+```{r}
+ItaD2.1 <- ItaQ1.9[,1:(ncol(ItaQ1.9)-Q2.7)]
+
+identical(ItaD2.1, ItaQ2.4)
+```
+
+### 3. Treinando subsetting de linhas
+
+Nas questões a seguir, exceto se indicado, a tabela `ItaQ1.9` será a base de dados a ser manipulada.
+
+#### Q.3.1 Crie um objeto `ItaQ3.1`, que contenha apenas os valores `"Imports"` do ano de 2000. De quais formas você consegue fazer isso?
+
+
+```{r}
+ItaQ3.1 <- ItaQ1.9 %>% filter(Year == 2000, Origin == "Imports")
+
+ItaQ3.1 <- ItaQ1.9 %>% filter(Year == 2000 & Origin == "Imports")
+
+ItaQ3.1 <- ItaQ1.9[ItaQ1.9$Year == 2000 & ItaQ1.9$Origin == "Imports",]
+```
+
+#### Q.3.2 Crie um objeto `ItaQ3.2`, contendo os valores `"Domestic"` do setor `B` para os anos entre 2000 e 2005.
+
+```{r}
+ItaQ3.2 <- ItaQ1.9 %>% filter(Origin == "Domestic",
+                              Year == 2000:2005, Code == "B")
+
+ItaQ3.2 <- ItaQ1.9 %>% filter(Origin == "Domestic", between(Year, 2000, 2005), Code == "B")
+
+ItaQ3.2 <- ItaQ1.9 %>% filter(Origin == "Domestic" & between(Year, 2000, 2005) & Code == "B")
+
+ItaQ3.2 <- ItaQ1.9[ItaQ1.9$Origin == "Domestic" & ItaQ1.9$Year == 2000:2005 & ItaQ3.2$Code == "B",]
+```
+
+#### Q.3.3 Crie `ItaQ3.3` de modo que tenha apenas os valores para o ano 2000 e que os valores  do *Gross Output* (código `GO`) sejam maiores ou iguais a média.
+
+```{r}
+ItaQ3.3 <- ItaQ1.9 %>% filter(GO >= mean(GO), Year == 2000)
+```
+
+#### Q.3.4 Crie `ItaQ3.4` com os valores do coluna `GO` pertos de `20000` com uma tolerância de `15000`.
+
+```{r}
+ItaQ3.4 <- ItaQ1.9 %>% filter(near(GO, 20000, tol= 15000))
+```
+
+#### Q.3.5 Some os valores de todas as linhas da base filtrada com as seguintes caracteristicas:  `Origin = Domestic`; `Year = 2000`. Chame o objeto de `vecQ3.5`
+
+```{r}
+vecQ3.5 <- ItaQ1.9 %>% filter(Origin == "Domestic", Year == 2000) %>%
+  .[,-c(1:4)] %>% rowSums()
+```
+

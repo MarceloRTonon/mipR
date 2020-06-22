@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-## Instalando o Tidyverse
+## O tidyverse: Instalação e Introdução
 
 Como iremos tratar de muitos pacotes dentro do *tidyverse*, vale baixar a familia de pacote como um todo. Por ser muito grande, pode demorar um tempo, então sugiro que se vocês ainda não estiverem instalado eles, que o façam logo se vocês ainda não tiverem a familia instalada. Se você tiver que instala-lo, você pode esperar isso enquanto:
 
@@ -31,6 +31,7 @@ A vantagem de assinalar o `tidyverse` é que o R irá baixar e instalar todos os
 #Carregando só os pacotes que iremos precisar.
 library(dplyr)
 library(tidyr)
+library(magrittr)
 ```
 
 
@@ -42,19 +43,20 @@ Os pacotes do núcleo duro do *tidyverse* são:
 
 - ***readr***: No tópico 2, também já falamos sobre o pacote `readr`, e como ele é muito mais rápido que o `base` R para importar uma base de dados. É importante considerar apenas que ele importa a base como um `tibble` e não um `data.frame`.
 
-- ***dplyr***:  https://dplyr.tidyverse.org/
+- ***dplyr***: O pacote `dplyr` é **O** pacote para manipular os dados. Ele irá te ajudar a lidar com problemas comuns na hora de manipular a base de dados. Uma parte das suas utilidades será apresentada no Tópico 3^[A mais relacionada com `subsetting`]. Os capítulos [5](https://r4ds.had.co.nz/transform.html) e [13](https://r4ds.had.co.nz/relational-data.html) do *R for Data Science* introduzem uma boa parte das funções que `dplyr` oferece.
 
-- ***tidyr***: https://tidyr.tidyverse.org/
+- ***tidyr***: O pacote `tidyr` é por sua vez focado em deixar uma base de dados mais bem comportada, especificamente no modo `tidy`. Assim, o `tidyr` é muito voltado para base de dados retangulares. Algumas poucas funções do `tidyr` serão apresentadas no Tópico 3, em especial as mais úteis para Matriz Insumo Produto. Para uma visão (bem) mais abrangente do `tidyr` olhe o capítulo [12](https://r4ds.had.co.nz/tidy-data.html) do *R for Data Science*
 
-- ***purrr***:
+- ***purrr***: O pacote `purrr` traz consigo um poderoso ferramental para lidar com automação de tarefas e com estruturas de dados muito recursivas (listas). Sua abordagem radicalmente funcional te dá uma grande vantagem frente ao loop tradicional do base R. Uma parte deste pacote será abordado no Tópico 4, sendo também abordado no capítulo [21](https://r4ds.had.co.nz/iteration.html) do *R for Data Science* e no [9](https://adv-r.hadley.nz/functionals.html) do *Advanced R*.
 
-- ***stringr***:
+- ***stringr***: Esse pacote lida com dados que na realidade são textos, as chamadas `string`. Assim sendo, é uma ferramenta muito poderosa, que para além de questões óbvias, serve de apoio para o `subsetting` e a automação de determinadas tarefas. O pacote `stringr` e suas aplicações será discutido no Tópico 5. As funcionalidades do pacote são explicadas no capítulo
+[14](https://r4ds.had.co.nz/strings.html) do *R for Data Science*.
 
-- ***ggplot2***:
+- ***ggplot2***: A ferramente mais poderosa de construção de gráficos do R. É o que se tem para falar do `ggplot2`. Ele será introduzido no Tópico 6. Uma abordagem mais ampla de todo o seu poder pode ser vista no livro [*ggplot2: Elegant Graphics for Data Analysis*](https://ggplot2-book.org/) feito pelo Hadley Wickham.
 
 - ***forcats***: Este pacote é útil para lidar com `factors` (*forcats* é um anagrama de *factors*), que é uma `classe` de vetores que servem para dar categorias à um `data.frame`. `factors` já foram mais comuns no R do que são hoje, em especial após a expansão do *Tidyverse* e da versão 4.0.0 da linguagem. Um ensino detalhado sobre `factors` e como manipula-los está fora do escopo deste curso. Para quem tiver interesse, vale acessar o capitulo [15 do R for Data Science](https://r4ds.had.co.nz/factors.html) para aprender sobre o *forcats*. Para usar *factors* com um maior enfoque no base-R, vale a leitura da subseção [5.5.2](https://rstudio-education.github.io/hopr/r-objects.html#factors) do *Hands-on Programming with R*, e das subseções [3.4](https://adv-r.hadley.nz/vectors-chap.html#s3-atomic-vectors) e [4.2.1](https://adv-r.hadley.nz/subsetting.html#atomic-vectors-1) do *Advanced R*. 
 
-Dada a natureza do *Tidyverse*, será mais usada nessa parte o operador *pipe* `%>%`, ao invés da escrita *nested*. Sempre que você carregar algum dos Relembrando o uso dele abaixo:
+Dada a natureza do *Tidyverse*, será mais usada nessa parte o operador *pipe* `%>%`, ao invés da escrita *nested*. Sempre que você carregar algum dos pacotes Relembrando o uso dele abaixo:
 
 ```{r, eval = FALSE}
 #Modo Nested
@@ -85,14 +87,13 @@ colMeans(mtcars)[5]
 mtcars %>% colMeans %>% .[5]
 
 # Há também o operador %$%, dentro do pacote magrittr também do tidyverse
-library(magrittr)
 mtcars %>% colnames() %>% .[5]
-mtcars %$% drat %>% mean()
+mtcars %$% mean(drat) 
 
 # Repare que ao usar %$% não é necessario usar "" para ser referir ao nome das colunas! 
 ```
 
-Quanto mais longo a linha de comando, melhor será aplicar o modo *pipe* em detrimento do *nested*. Além disso, repare que `%$%` equivale as duas chaves `mtcars[["drat"]]`.
+Quanto mais longo a linha de comando, melhor será aplicar o modo *pipe* em detrimento do *nested*. O modo *pipe* que usamos foi desenvolvido no pacote `magrittr`, sendo que o operador *pipe forward* `%>%` estará disponível para uso sempre que você carregar um pacote do `tidyverse`. Isso não é o caso do operador *exposition pipe*, que é necessário que você carregue explicitamente o pacote `magrittr`, pois este não é um dos pacotes do "núcleo" do *Tidyverse*. Existem outros dois operadores dentro do pacote `magrittr`^[E ficam disponíveis apenas se você carregar o `magrittr` explicitamente.] que são o *tee pipe* `%T>%` e o *compound assignment pipe* `%<>%`, mas que não serão discutidos aqui^[Para mais informações sobre o `magrittr` veja https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html].
 
 ## Subsetting com o Tidyverse
 
@@ -145,7 +146,7 @@ Existem outros elementos que fazem parte dos `select_helpers` se você quiser sa
 
 ### Linhas
 
-No que tange o subsetting via as linhas, temos três funções relevantes: `filter`, `distinct` e `arrange`.
+No que tange o subsetting via as linhas, temos três funções relevantes: `filter`, `distinct` e `arrange`. 
 
 #### filter
 
@@ -174,7 +175,7 @@ CO2 %>% filter(Plant != "Qn1") %>% filter("chilled" == Treatment)
 # Filtrando as linhas que o valor de `conc` seja maior que 250.
 
 #CO2 %>% filter(conc > 250)
-CO2 %>% filter(250 < 250)
+CO2 %>% filter(250 < conc)
 
 # Filtrando as linhas que o valor de `uptake` seja menor ou igual a 10
 
@@ -272,6 +273,8 @@ airquality %>% filter(is.na(Ozone))
 airquality %>% filter(!is.na(Ozone)) %>% .[1:20,]
 ```
 
+(Veja a subseção "Removendo linhas `NA` diretamente" para um método direto.)
+
 Já a função `between` serve para você filtrar linhas que contém elementos númericos entre dois valores.
 
 ```{r}
@@ -354,6 +357,20 @@ Também é possível fazer isso em vetores `character`:
 ```{r}
 iris %>% arrange(Species) %>% head()
 ```
+
+#### Removendo linhas `NA` diretamente
+
+Se queremos apenas remover linhas que tem `NA`, há uma forma mais direta do que combinar a função `filter` do pacote `dplyr`, com o argumento `is.na`. Tal forma é podemos usar a função `drop_na` do pacote `tidyr` para elimnar linhas com `NA`.
+
+```{r}
+airquality %>% tidyr::drop_na() %>% head()
+```
+
+Você pode escolher inclusive se você quer que sejam eliminadas linhas  com `NA` de uma coluna especifica.
+```{r}
+airquality %>% tidyr::drop_na("Ozone") %>% head()
+```
+
 
 ## Arrumando dados.
 
@@ -484,6 +501,59 @@ Agora suponha que se quer saber quais dos corredores inscritos foram jogar bolar
 df_futebol %>% inner_join(df_inscritos, by = c( "Jogador" = "Nomes"))
 ```
 
+### Alterando tipos de colunas
+
+A primeira vista pode ser desafiador trocar os tipos de uma coluna no R. Isso pode ser especialmente problemático quando se trata de uma base de dados de Matrizes Insumo Produto. Isso porque muitas vezes os dados vão ser acompanhados por duas linhas de texto. Uma contendo um código e outra uma descrição. Veja um exemplo abaixo:
+
+```{r}
+df <- tibble("Codigo" = c("Nome dos Setores", "Demanda de Trigo", "Demanda de Ferro"),  "Tr" = c("Oferta de Trigo", 2, 3), "Fe" = c("Oferta de Ferro", 1, 5 ))
+```
+
+Suponha que a tabela `df` seja proveniente de um arquivo que você importou. Por toda coluna ter uma linha com um `character`, todas as linhas serão `character`. Lembrando que um data.frame é uma lista de vetores atômicos. Assim, você pode ter vetores com tipos de dados diferentes entre si, porém cada vetor pode ter apenas um tipo de dado.
+
+```{r}
+# Tipo do df
+typeof(df)
+
+#Tipo de cada coluna do df:
+
+df[,1] %>% typeof #Nem sempre dá certo pois pode permanecer com a estrutura de lista.
+df[[2]] %>% typeof # Sempre dará certo.
+
+df$Tr %>% typeof # Também sempre dá certo
+
+df[["Fe"]] %>% typeof # Dá certo sempre também. 
+```
+
+Assim, suponhamos que excluimos a primeira linha:
+
+```{r warning=TRUE}
+# Pelo Base R
+#df <- df[-1,]
+
+# Ou pelo filter
+df <- df %>% filter(Codigo != "Nome dos Setores" )
+```
+
+Se tentarmos mudar o tipo de cada uma das colunas abaixo, o R ou irá retornar um erro pois não consegue modificar à força `df[,2]` no lado direito do assignment.
+
+```{r, eval = FALSE}
+df[,2] <- df[,2] %>% as.numeric()
+```
+
+Há uma alternativa à isso, que seria:
+
+```{r}
+df[,2] <- df[,2] %>% unlist %>% as.numeric()
+```
+
+No `dplyr` há a função `mutate` que poderia nos ser útil agora. Porém, vamos deixar para assimilar o `mutate` em um outro momento. Vamos agora usar uma função do `readr` que é muito mais prática inclusive, a `type_convert`:
+
+```{r}
+df2 <- readr::type_convert(df)
+```
+
+A função `type_convert()` converte os tipos de cada coluna naquelas que ela acredita ser a mais conveniente para o uso. Importante notar que no `Base R` existe o `type.convert()` que faz o mesmo serviço porém, enquanto a versão do `readr` tende a converter tudo para `double` e `characther`, a versão do `Base R` converter as coisas também para `integer` e `factor`. E *factors* são chatos.
 
 ## Fontes:
 
