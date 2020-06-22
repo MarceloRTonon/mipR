@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Neste
+Neste Tópico iremos apresentar 
 
 ## 3.1 - Operações Lógicas
 
