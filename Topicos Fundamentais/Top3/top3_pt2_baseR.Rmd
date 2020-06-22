@@ -16,6 +16,26 @@ Neste parte discutiremos a forma de se manipular uma base de dados dentro do R. 
 Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Toda parte 
 
 
+O que colocar aqui:
+Falar da diferença entre `[]` e `[[]]` e `$`
+Usar condições dentro do `[]`.
+Usar e abusar de coisas elaboradas dentro de funções como:
+Falar RAPIDAMENTE de factors.
+```{r, eval= FALSE}
+sss <- sss[, (ncol(sss)-5:ncol(sss))]
+```
+
+Explicar como transforma valores `NA` em 0.
+
+```{r}
+aa <- matrix(c(1, NA, 2, 3, NA, NA), ncol = 2)
+
+aa[is.na(aa)] <- 0
+```
+
+
+
+
 ## Fontes:
 
 Hands-on Programming with R: https://rstudio-education.github.io/hopr/
