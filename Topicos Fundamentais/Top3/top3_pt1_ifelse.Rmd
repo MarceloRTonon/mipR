@@ -202,6 +202,7 @@ ifelse(condição, resultado se verdadeiro, resultado caso contrário)
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Vamos rapidamente refazer os exemplos da seção anterior com essa função:
 
 
@@ -213,6 +214,8 @@ ifelse(a > b, "a é maior que b", "a é menor ou igual b")
 ifelse(a > b, a + b, a - b)
 
 =======
+=======
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 ```{r}
 a <-2
 ifelse(a ==2, "Condição válida", "Condição inválida")
@@ -220,6 +223,16 @@ ifelse(a ==2, "Condição válida", "Condição inválida")
 b <-3
 ifelse(b ==2, "Condição válida", "Condição inválida")
 
+<<<<<<< HEAD
+=======
+```
+
+```{r}
+
+ifelse(TRUE, "Condição válida", "Condição inválida")
+
+ifelse(FALSE, "Condição válida", "Condição inválida")
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 ```
 
 ```{r}

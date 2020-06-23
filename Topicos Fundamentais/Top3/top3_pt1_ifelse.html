@@ -392,6 +392,7 @@ c(1:3) &gt;= c(3:1)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code># Menor ou igual
 <<<<<<< HEAD
+<<<<<<< HEAD
 2 &lt; 2</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code>2 &lt;= 2</code></pre>
@@ -411,6 +412,8 @@ c(1:3) &gt;= c(3:1)</code></pre>
 <pre><code>## [1]  TRUE FALSE FALSE FALSE</code></pre>
 <p>Ps.: Um ótimo resumo sobre o que cada operador faz pode ser encontrado na <a href="https://rstudio-education.github.io/hopr/modify.html#tab:logop">Table 7.1</a> do <strong>Hands-On Programming with R</strong>.</p>
 =======
+=======
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 # &lt;=
 # Igual à
 # ==
@@ -419,6 +422,9 @@ c(1:3) &gt;= c(3:1)</code></pre>
 # Tem &quot;match&quot; ## Dar muitos exemplos pra %in%, colocar exemplo com data.frame
  2 %in% c(1:3)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
+<<<<<<< HEAD
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
+=======
 >>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 </div>
 <div id="escolhas-e-condições-if-statements" class="section level2">
@@ -464,7 +470,11 @@ b==2</code></pre>
 <div id="if-e-else" class="section level3">
 <h3>3.2.2 - if e else</h3>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <p>Caso seu objetivo não dependa apenas da validade do condição estabelecida ser <code>TRUE</code>, mas de fazer outra determinanda operação caso o resultado lógico da sua condição ser <code>FALSE</code>, é necessário adicionar mais uma etapa. Nesse caso, além do <code>if</code> é necessário inserir a função <code>else</code>, bem como a tarefa ou resultado que você deseja obter. Novamente, a representação no R é da seguitne forma:</p>
+=======
+<p>Caso seu objetivo não dependa apenas da validade do condição estabelecida ser <code>TRUE</code>, mas de fazer outra determinanda operação caso o resultado lógico da sua condição ser <code>FALSE</code>.</p>
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 =======
 <p>Caso seu objetivo não dependa apenas da validade do condição estabelecida ser <code>TRUE</code>, mas de fazer outra determinanda operação caso o resultado lógico da sua condição ser <code>FALSE</code>.</p>
 >>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
@@ -531,8 +541,12 @@ if(a &gt; b){
 <div id="a-função-ifelse" class="section level3">
 <h3>3.2.3 - A função ifelse</h3>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <p>Existe a função ifelse que pode ser mais prática do que escrever o <code>if</code> <code>else</code> como foi feito. Mais importante ainda, o <code>ifelse</code> funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente.</p>
 <p>A estrutura da <code>ifelse</code> é semelhante ao caso de <code>if</code> e <code>else</code> separado, no entanto, todos os argumentos são escritos numa mesma linha:</p>
+=======
+<p>Existe a função ifelse que pode ser mais prática do que escrever o <code>if</code> <code>else</code> como foi feito. Mais importante ainda, o <code>ifelse</code> funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente. No Tópico 4 falaremos mais sobre funções vetoriais.</p>
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 =======
 <p>Existe a função ifelse que pode ser mais prática do que escrever o <code>if</code> <code>else</code> como foi feito. Mais importante ainda, o <code>ifelse</code> funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente. No Tópico 4 falaremos mais sobre funções vetoriais.</p>
 >>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
@@ -568,13 +582,19 @@ is.matrix2(h)</code></pre>
 <pre class="r"><code>is.data.frame2 &lt;- function(x){ifelse(class(x) == &quot;data.frame&quot;, TRUE, FALSE)}
 is.data.frame2(h)</code></pre>
 <pre><code>## [1] FALSE</code></pre>
+<<<<<<< HEAD
 <pre class="r"><code>is.data.frame2(i)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 =======
+=======
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 <pre class="r"><code># eval == FALSE temporario
 #dar exemplos com condições que sejam funções, por exemplo: is.character(), &gt;=, is.data.frame(), %in%.
 
 #Usar exemplos de ifs com duas condições usando &amp;, &amp;&amp;, | e ||</code></pre>
+<<<<<<< HEAD
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
+=======
 >>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 </div>
 </div>
@@ -583,16 +603,22 @@ is.data.frame2(h)</code></pre>
 <p>@<span class="citation">@Citar</span> uma página que explique teoria de conjuntos.</p>
 <p>Veja abaixo alguns exemplos dos chamados <em>Logical Operators</em></p>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <pre class="r"><code>#Fazer aqui o que eu fiz com os operadores lógicos.
 
 #Usar não só vetores, mas também valores lógicos per se:
 #Usar exemplos de ifs com duas condições usando &amp;, &amp;&amp;, | e ||
 =======
+=======
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 <pre class="r"><code># O eval= FALSE é temporário
 #Fazer aqui o que eu fiz com os operadores lógicos.
 
 #Usar não só vetores, mas também valores lógicos per se:
 
+<<<<<<< HEAD
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
+=======
 >>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 
 TRUE &amp; FALSE
@@ -607,7 +633,10 @@ xor(c(1:3), (2:4))
 any
 all</code></pre>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <p>Ps.: Um ótimo resumo sobre o que cada operador Booleano faz pode ser encontrado na <a href="https://rstudio-education.github.io/hopr/modify.html#tab:boole">Table 7.2</a> do <strong>Hands-On Programming with R</strong>.</p>
+=======
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 =======
 >>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 </div>
