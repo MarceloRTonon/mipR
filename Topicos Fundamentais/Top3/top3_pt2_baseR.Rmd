@@ -11,9 +11,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Neste parte discutiremos a forma de se manipular uma base de dados dentro do R. Isto é particulamente útil se vc está trabalhando com uma base de dados extensa e com várias observações, mas também para base de dados menores mas heterogêneas. No caso da matriz insumo-produto, estamos em geral trabalhando com base de dados que não apresentam elevados números de observações tanto no tempo quanto em países, pessoas ou empresas. Ainda assim, base de dados no estilo insumo-produto que, por exemplo, lidem com fluxo de comércio entre países, que apresentam informações setoriais mais específicas ou que até mesmo aumentem a frequência temporal dos dados... podem ser manipuladas e refinar somente as informações necessárias para você trabalhar no R.
 
+ - Destaque aqui para a [seção 4](https://adv-r.hadley.nz/subsetting.html) do **Advanced R**.
+ 
 ## 3.3 - Manipulação de Dados no base R
 
-Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Toda parte 
+Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Essa parte tem relação direta com o tópico anterior em que foi ensinado sobre a leitura de dados no R.
+
+
+There are six ways to subset atomic vectors.
+
+There are three subsetting operators, [[, [, and $.
+
+Subsetting operators interact differently with different vector types (e.g., atomic vectors, lists, factors, matrices, and data frames).
+
+Subsetting can be combined with assignment.
 
 
 O que colocar aqui:
