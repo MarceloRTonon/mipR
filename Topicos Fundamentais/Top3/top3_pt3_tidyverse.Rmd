@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-## O tidyverse: Instalação e Introdução
+## O tidyverse: Instalação
 
 Como iremos tratar de muitos pacotes dentro do *tidyverse*, vale baixar a familia de pacote como um todo. Por ser muito grande, pode demorar um tempo, então sugiro que se vocês ainda não estiverem instalado eles, que o façam logo se vocês ainda não tiverem a familia instalada. Se você tiver que instala-lo, você pode esperar isso enquanto:
 
@@ -24,16 +24,28 @@ install.packages("tidyverse")
 A vantagem de assinalar o `tidyverse` é que o R irá baixar e instalar todos os pacotes do tidyverse. Ao usar `library(tidyverse)`, todos os pacotes do *"nucleo duro"* do `tidyverse` são carregados. Repare que se você instalou o `tidyverse` inteiro, ele irá carregar o `dplyr` e o`tidyr`^[O inverso não seria verdadeiro por outro lado. A instalação do `dplyr` não garante a instalação do resto da do resto dos pacotes.].
 
 
-```{r}
-#Carregando o tidyverse inteiro
-#library(tidyverse)
 
+```{r}
+#Carregando os pacotes nucleares tidyverse
+#library(tidyverse)
+# O magrittr é instalado com o tidyverse, porém não é carregado com library(tidyverse), logo precisa ser carregado explicitamente.
+
+#library(magrittr)
 #Carregando só os pacotes que iremos precisar.
+
 library(dplyr)
 library(tidyr)
 library(magrittr)
+library(readr)
 ```
 
+## Introdução ao subsetting com tidyverse
+
+Muitas das coisas que o `base R` faz podem ser feitas de forma mais verbosa com os pacotes do `tidyverse`. Apesar de no fim acabar que se escreve mais, o código pode ficar mais claro para quem escreve e lê o código. Desse modo, a manipulação de dados é mais baseada em verbos e nome de colunas do que em colchetes, chaves e índices das colunas. Além disso, o `tidyverse` dá uma gama de elementos para as suas funções do subsetting que não é tão trivial assim usar no `base R`. Além disso, muitas funções do `tidyverse` foram escritas em `C++` e isso faz com que elas sejam *muito* rápidas.
+
+Neste tópico iremos apresentar o básico de como manipular base de dados no R a partir do `tidyverse`, focando especialmente no `dplyr`. É necessário no entanto atentar para o fato de que talvez as funções mais poderosa do `dplyr` não sejam explicadas aqui. É o caso de funções como `mutate`, `summary`, `group_by`e coisas que aumentam o poder do pacote como  [`across`](https://dplyr.tidyverse.org/reference/across.html).
+
+## O tidyverse: Introdução
 
 A familia de pacotes do `tidyverse` fortalece bastante a análise e manipulação de dados no R, especialmente para bases de dados retangulares e mais ainda para bases *tidy*. Vale notar, que este não é o caso de Matrizes Insumo Produto (que no geral são bases de dados quadradas), porém além de várias funcionalidades uteis como um todo, além do maravilhoso pacote *purrr* que veremos no Tópico sobre automatizar as tarefas.
 
@@ -54,7 +66,7 @@ Os pacotes do núcleo duro do *tidyverse* são:
 
 - ***ggplot2***: A ferramente mais poderosa de construção de gráficos do R. É o que se tem para falar do `ggplot2`. Ele será introduzido no Tópico 6. Uma abordagem mais ampla de todo o seu poder pode ser vista no livro [*ggplot2: Elegant Graphics for Data Analysis*](https://ggplot2-book.org/) feito pelo Hadley Wickham.
 
-- ***forcats***: Este pacote é útil para lidar com `factors` (*forcats* é um anagrama de *factors*), que é uma `classe` de vetores que servem para dar categorias à um `data.frame`. `factors` já foram mais comuns no R do que são hoje, em especial após a expansão do *Tidyverse* e da versão 4.0.0 da linguagem. Um ensino detalhado sobre `factors` e como manipula-los está fora do escopo deste curso. Para quem tiver interesse, vale acessar o capitulo [15 do R for Data Science](https://r4ds.had.co.nz/factors.html) para aprender sobre o *forcats*. Para usar *factors* com um maior enfoque no base-R, vale a leitura da subseção [5.5.2](https://rstudio-education.github.io/hopr/r-objects.html#factors) do *Hands-on Programming with R*, e das subseções [3.4](https://adv-r.hadley.nz/vectors-chap.html#s3-atomic-vectors) e [4.2.1](https://adv-r.hadley.nz/subsetting.html#atomic-vectors-1) do *Advanced R*. 
+- ***forcats***: Este pacote é útil para lidar com `factors` (*forcats* é um anagrama de *factors*), que é uma `classe` de vetores que servem para dar categorias à um `data.frame`. `factors` já foram mais comuns no R do que são hoje, em especial após a expansão do *Tidyverse* e da versão 4.0.0 da linguagem. Por conta disso, não vamos entrar em `factors` nesse curso à principio, sendo que com o `stringr` se consegue fazer tudo e mais um pouco que se faz com `factors`. Para quem tiver interesse, vale acessar o capitulo [15 do R for Data Science](https://r4ds.had.co.nz/factors.html) para aprender sobre o *forcats*. Para usar *factors* com um maior enfoque no base-R, vale a leitura da subseção [5.5.2](https://rstudio-education.github.io/hopr/r-objects.html#factors) do *Hands-on Programming with R*, e das subseções [3.4](https://adv-r.hadley.nz/vectors-chap.html#s3-atomic-vectors) e [4.2.1](https://adv-r.hadley.nz/subsetting.html#atomic-vectors-1) do *Advanced R*. 
 
 Dada a natureza do *Tidyverse*, será mais usada nessa parte o operador *pipe* `%>%`, ao invés da escrita *nested*. Sempre que você carregar algum dos pacotes Relembrando o uso dele abaixo:
 
@@ -563,3 +575,5 @@ R for Data Science: https://r4ds.had.co.nz/
 
 Código para função moda: https://www.tutorialspoint.com/r/r_mean_median_mode.htm
 
+Explicação de `across`:
+https://dplyr.tidyverse.org/reference/across.html

@@ -369,8 +369,8 @@ summary {
 </div>
 
 
-<div id="o-tidyverse-instalação-e-introdução" class="section level2">
-<h2>O tidyverse: Instalação e Introdução</h2>
+<div id="o-tidyverse-instalação" class="section level2">
+<h2>O tidyverse: Instalação</h2>
 <p>Como iremos tratar de muitos pacotes dentro do <em>tidyverse</em>, vale baixar a familia de pacote como um todo. Por ser muito grande, pode demorar um tempo, então sugiro que se vocês ainda não estiverem instalado eles, que o façam logo se vocês ainda não tiverem a familia instalada. Se você tiver que instala-lo, você pode esperar isso enquanto:</p>
 <ol style="list-style-type: decimal">
 <li>Ir no banheiro ou lavar ao menos parte da louça enquanto escuto o Podcast do IE;</li>
@@ -378,10 +378,13 @@ summary {
 </ol>
 <pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
 <p>A vantagem de assinalar o <code>tidyverse</code> é que o R irá baixar e instalar todos os pacotes do tidyverse. Ao usar <code>library(tidyverse)</code>, todos os pacotes do <em>“nucleo duro”</em> do <code>tidyverse</code> são carregados. Repare que se você instalou o <code>tidyverse</code> inteiro, ele irá carregar o <code>dplyr</code> e o<code>tidyr</code><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
-<pre class="r"><code>#Carregando o tidyverse inteiro
+<pre class="r"><code>#Carregando os pacotes nucleares tidyverse
 #library(tidyverse)
+# O magrittr é instalado com o tidyverse, porém não é carregado com library(tidyverse), logo precisa ser carregado explicitamente.
 
+#library(magrittr)
 #Carregando só os pacotes que iremos precisar.
+
 library(dplyr)</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;dplyr&#39;</code></pre>
@@ -398,6 +401,15 @@ library(magrittr)</code></pre>
 <pre><code>## The following object is masked from &#39;package:tidyr&#39;:
 ## 
 ##     extract</code></pre>
+<pre class="r"><code>library(readr)</code></pre>
+</div>
+<div id="introdução-ao-subsetting-com-tidyverse" class="section level2">
+<h2>Introdução ao subsetting com tidyverse</h2>
+<p>Muitas das coisas que o <code>base R</code> faz podem ser feitas de forma mais verbosa com os pacotes do <code>tidyverse</code>. Apesar de no fim acabar que se escreve mais, o código pode ficar mais claro para quem escreve e lê o código. Desse modo, a manipulação de dados é mais baseada em verbos e nome de colunas do que em colchetes, chaves e índices das colunas. Além disso, o <code>tidyverse</code> dá uma gama de elementos para as suas funções do subsetting que não é tão trivial assim usar no <code>base R</code>. Além disso, muitas funções do <code>tidyverse</code> foram escritas em <code>C++</code> e isso faz com que elas sejam <em>muito</em> rápidas.</p>
+<p>Neste tópico iremos apresentar o básico de como manipular base de dados no R a partir do <code>tidyverse</code>, focando especialmente no <code>dplyr</code>. É necessário no entanto atentar para o fato de que talvez as funções mais poderosa do <code>dplyr</code> não sejam explicadas aqui. É o caso de funções como <code>mutate</code>, <code>summary</code>, <code>group_by</code>e coisas que aumentam o poder do pacote como <a href="https://dplyr.tidyverse.org/reference/across.html"><code>across</code></a>.</p>
+</div>
+<div id="o-tidyverse-introdução" class="section level2">
+<h2>O tidyverse: Introdução</h2>
 <p>A familia de pacotes do <code>tidyverse</code> fortalece bastante a análise e manipulação de dados no R, especialmente para bases de dados retangulares e mais ainda para bases <em>tidy</em>. Vale notar, que este não é o caso de Matrizes Insumo Produto (que no geral são bases de dados quadradas), porém além de várias funcionalidades uteis como um todo, além do maravilhoso pacote <em>purrr</em> que veremos no Tópico sobre automatizar as tarefas.</p>
 <p>Os pacotes do núcleo duro do <em>tidyverse</em> são:</p>
 <ul>
@@ -408,7 +420,7 @@ library(magrittr)</code></pre>
 <li><p><strong><em>purrr</em></strong>: O pacote <code>purrr</code> traz consigo um poderoso ferramental para lidar com automação de tarefas e com estruturas de dados muito recursivas (listas). Sua abordagem radicalmente funcional te dá uma grande vantagem frente ao loop tradicional do base R. Uma parte deste pacote será abordado no Tópico 4, sendo também abordado no capítulo <a href="https://r4ds.had.co.nz/iteration.html">21</a> do <em>R for Data Science</em> e no <a href="https://adv-r.hadley.nz/functionals.html">9</a> do <em>Advanced R</em>.</p></li>
 <li><p><strong><em>stringr</em></strong>: Esse pacote lida com dados que na realidade são textos, as chamadas <code>string</code>. Assim sendo, é uma ferramenta muito poderosa, que para além de questões óbvias, serve de apoio para o <code>subsetting</code> e a automação de determinadas tarefas. O pacote <code>stringr</code> e suas aplicações será discutido no Tópico 5. As funcionalidades do pacote são explicadas no capítulo <a href="https://r4ds.had.co.nz/strings.html">14</a> do <em>R for Data Science</em>.</p></li>
 <li><p><strong><em>ggplot2</em></strong>: A ferramente mais poderosa de construção de gráficos do R. É o que se tem para falar do <code>ggplot2</code>. Ele será introduzido no Tópico 6. Uma abordagem mais ampla de todo o seu poder pode ser vista no livro <a href="https://ggplot2-book.org/"><em>ggplot2: Elegant Graphics for Data Analysis</em></a> feito pelo Hadley Wickham.</p></li>
-<li><p><strong><em>forcats</em></strong>: Este pacote é útil para lidar com <code>factors</code> (<em>forcats</em> é um anagrama de <em>factors</em>), que é uma <code>classe</code> de vetores que servem para dar categorias à um <code>data.frame</code>. <code>factors</code> já foram mais comuns no R do que são hoje, em especial após a expansão do <em>Tidyverse</em> e da versão 4.0.0 da linguagem. Um ensino detalhado sobre <code>factors</code> e como manipula-los está fora do escopo deste curso. Para quem tiver interesse, vale acessar o capitulo <a href="https://r4ds.had.co.nz/factors.html">15 do R for Data Science</a> para aprender sobre o <em>forcats</em>. Para usar <em>factors</em> com um maior enfoque no base-R, vale a leitura da subseção <a href="https://rstudio-education.github.io/hopr/r-objects.html#factors">5.5.2</a> do <em>Hands-on Programming with R</em>, e das subseções <a href="https://adv-r.hadley.nz/vectors-chap.html#s3-atomic-vectors">3.4</a> e <a href="https://adv-r.hadley.nz/subsetting.html#atomic-vectors-1">4.2.1</a> do <em>Advanced R</em>.</p></li>
+<li><p><strong><em>forcats</em></strong>: Este pacote é útil para lidar com <code>factors</code> (<em>forcats</em> é um anagrama de <em>factors</em>), que é uma <code>classe</code> de vetores que servem para dar categorias à um <code>data.frame</code>. <code>factors</code> já foram mais comuns no R do que são hoje, em especial após a expansão do <em>Tidyverse</em> e da versão 4.0.0 da linguagem. Por conta disso, não vamos entrar em <code>factors</code> nesse curso à principio, sendo que com o <code>stringr</code> se consegue fazer tudo e mais um pouco que se faz com <code>factors</code>. Para quem tiver interesse, vale acessar o capitulo <a href="https://r4ds.had.co.nz/factors.html">15 do R for Data Science</a> para aprender sobre o <em>forcats</em>. Para usar <em>factors</em> com um maior enfoque no base-R, vale a leitura da subseção <a href="https://rstudio-education.github.io/hopr/r-objects.html#factors">5.5.2</a> do <em>Hands-on Programming with R</em>, e das subseções <a href="https://adv-r.hadley.nz/vectors-chap.html#s3-atomic-vectors">3.4</a> e <a href="https://adv-r.hadley.nz/subsetting.html#atomic-vectors-1">4.2.1</a> do <em>Advanced R</em>.</p></li>
 </ul>
 <p>Dada a natureza do <em>Tidyverse</em>, será mais usada nessa parte o operador <em>pipe</em> <code>%&gt;%</code>, ao invés da escrita <em>nested</em>. Sempre que você carregar algum dos pacotes Relembrando o uso dele abaixo:</p>
 <pre class="r"><code>#Modo Nested
@@ -565,9 +577,56 @@ CO2 %&gt;% filter(Plant != &quot;Qn1&quot;) %&gt;% filter(&quot;chilled&quot; ==
 <pre class="r"><code># Filtrando as linhas que o valor de `conc` seja maior que 250.
 
 #CO2 %&gt;% filter(conc &gt; 250)
-CO2 %&gt;% filter(250 &lt; 250)</code></pre>
-<pre><code>## [1] Plant     Type      Treatment conc      uptake   
-## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+CO2 %&gt;% filter(250 &lt; conc)</code></pre>
+<pre><code>##    Plant        Type  Treatment conc uptake
+## 1    Qn1      Quebec nonchilled  350   37.2
+## 2    Qn1      Quebec nonchilled  500   35.3
+## 3    Qn1      Quebec nonchilled  675   39.2
+## 4    Qn1      Quebec nonchilled 1000   39.7
+## 5    Qn2      Quebec nonchilled  350   41.8
+## 6    Qn2      Quebec nonchilled  500   40.6
+## 7    Qn2      Quebec nonchilled  675   41.4
+## 8    Qn2      Quebec nonchilled 1000   44.3
+## 9    Qn3      Quebec nonchilled  350   42.1
+## 10   Qn3      Quebec nonchilled  500   42.9
+## 11   Qn3      Quebec nonchilled  675   43.9
+## 12   Qn3      Quebec nonchilled 1000   45.5
+## 13   Qc1      Quebec    chilled  350   34.6
+## 14   Qc1      Quebec    chilled  500   32.5
+## 15   Qc1      Quebec    chilled  675   35.4
+## 16   Qc1      Quebec    chilled 1000   38.7
+## 17   Qc2      Quebec    chilled  350   38.8
+## 18   Qc2      Quebec    chilled  500   38.6
+## 19   Qc2      Quebec    chilled  675   37.5
+## 20   Qc2      Quebec    chilled 1000   42.4
+## 21   Qc3      Quebec    chilled  350   34.0
+## 22   Qc3      Quebec    chilled  500   38.9
+## 23   Qc3      Quebec    chilled  675   39.6
+## 24   Qc3      Quebec    chilled 1000   41.4
+## 25   Mn1 Mississippi nonchilled  350   30.0
+## 26   Mn1 Mississippi nonchilled  500   30.9
+## 27   Mn1 Mississippi nonchilled  675   32.4
+## 28   Mn1 Mississippi nonchilled 1000   35.5
+## 29   Mn2 Mississippi nonchilled  350   31.8
+## 30   Mn2 Mississippi nonchilled  500   32.4
+## 31   Mn2 Mississippi nonchilled  675   31.1
+## 32   Mn2 Mississippi nonchilled 1000   31.5
+## 33   Mn3 Mississippi nonchilled  350   27.9
+## 34   Mn3 Mississippi nonchilled  500   28.5
+## 35   Mn3 Mississippi nonchilled  675   28.1
+## 36   Mn3 Mississippi nonchilled 1000   27.8
+## 37   Mc1 Mississippi    chilled  350   18.9
+## 38   Mc1 Mississippi    chilled  500   19.5
+## 39   Mc1 Mississippi    chilled  675   22.2
+## 40   Mc1 Mississippi    chilled 1000   21.9
+## 41   Mc2 Mississippi    chilled  350   13.0
+## 42   Mc2 Mississippi    chilled  500   12.5
+## 43   Mc2 Mississippi    chilled  675   13.7
+## 44   Mc2 Mississippi    chilled 1000   14.4
+## 45   Mc3 Mississippi    chilled  350   17.9
+## 46   Mc3 Mississippi    chilled  500   17.9
+## 47   Mc3 Mississippi    chilled  675   18.9
+## 48   Mc3 Mississippi    chilled 1000   19.9</code></pre>
 <pre class="r"><code># Filtrando as linhas que o valor de `uptake` seja menor ou igual a 10
 
 #CO2 %&gt;% filter(10 &gt;= uptake)
@@ -1058,8 +1117,8 @@ iris %&gt;% arrange(desc(Sepal.Length)) %&gt;% head()</code></pre>
 </div>
 <div id="removendo-linhas-na-diretamente" class="section level4">
 <h4>Removendo linhas <code>NA</code> diretamente</h4>
-<p>Para além do uso de <code>filter</code>, podemos usar a função <code>drop_na</code> do <code>tidyr</code> para elimnar linhas com <code>NA</code>.</p>
-<pre class="r"><code>airquality %&gt;% drop_na() %&gt;% head()</code></pre>
+<p>Se queremos apenas remover linhas que tem <code>NA</code>, há uma forma mais direta do que combinar a função <code>filter</code> do pacote <code>dplyr</code>, com o argumento <code>is.na</code>. Tal forma é podemos usar a função <code>drop_na</code> do pacote <code>tidyr</code> para elimnar linhas com <code>NA</code>.</p>
+<pre class="r"><code>airquality %&gt;% tidyr::drop_na() %&gt;% head()</code></pre>
 <pre><code>##   Ozone Solar.R Wind Temp Month Day
 ## 1    41     190  7.4   67     5   1
 ## 2    36     118  8.0   72     5   2
@@ -1067,6 +1126,15 @@ iris %&gt;% arrange(desc(Sepal.Length)) %&gt;% head()</code></pre>
 ## 4    18     313 11.5   62     5   4
 ## 7    23     299  8.6   65     5   7
 ## 8    19      99 13.8   59     5   8</code></pre>
+<p>Você pode escolher inclusive se você quer que sejam eliminadas linhas com <code>NA</code> de uma coluna especifica.</p>
+<pre class="r"><code>airquality %&gt;% tidyr::drop_na(&quot;Ozone&quot;) %&gt;% head()</code></pre>
+<pre><code>##   Ozone Solar.R Wind Temp Month Day
+## 1    41     190  7.4   67     5   1
+## 2    36     118  8.0   72     5   2
+## 3    12     149 12.6   74     5   3
+## 4    18     313 11.5   62     5   4
+## 6    28      NA 14.9   66     5   6
+## 7    23     299  8.6   65     5   7</code></pre>
 </div>
 </div>
 </div>
@@ -1183,12 +1251,50 @@ df_futebol %&gt;% inner_join(df_inscritos, by = c( &quot;Jogador&quot; = &quot;N
 ## 3    2   Maria    15
 ## 4    1  Silvia    13</code></pre>
 </div>
+<div id="alterando-tipos-de-colunas" class="section level3">
+<h3>Alterando tipos de colunas</h3>
+<p>A primeira vista pode ser desafiador trocar os tipos de uma coluna no R. Isso pode ser especialmente problemático quando se trata de uma base de dados de Matrizes Insumo Produto. Isso porque muitas vezes os dados vão ser acompanhados por duas linhas de texto. Uma contendo um código e outra uma descrição. Veja um exemplo abaixo:</p>
+<pre class="r"><code>df &lt;- tibble(&quot;Codigo&quot; = c(&quot;Nome dos Setores&quot;, &quot;Demanda de Trigo&quot;, &quot;Demanda de Ferro&quot;),  &quot;Tr&quot; = c(&quot;Oferta de Trigo&quot;, 2, 3), &quot;Fe&quot; = c(&quot;Oferta de Ferro&quot;, 1, 5 ))</code></pre>
+<p>Suponha que a tabela <code>df</code> seja proveniente de um arquivo que você importou. Por toda coluna ter uma linha com um <code>character</code>, todas as linhas serão <code>character</code>. Lembrando que um data.frame é uma lista de vetores atômicos. Assim, você pode ter vetores com tipos de dados diferentes entre si, porém cada vetor pode ter apenas um tipo de dado.</p>
+<pre class="r"><code># Tipo do df
+typeof(df)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>#Tipo de cada coluna do df:
+
+df[,1] %&gt;% typeof #Nem sempre dá certo pois pode permanecer com a estrutura de lista.</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>df[[2]] %&gt;% typeof # Sempre dará certo.</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>df$Tr %&gt;% typeof # Também sempre dá certo</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>df[[&quot;Fe&quot;]] %&gt;% typeof # Dá certo sempre também. </code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>Assim, suponhamos que excluimos a primeira linha:</p>
+<pre class="r"><code># Pelo Base R
+#df &lt;- df[-1,]
+
+# Ou pelo filter
+df &lt;- df %&gt;% filter(Codigo != &quot;Nome dos Setores&quot; )</code></pre>
+<p>Se tentarmos mudar o tipo de cada uma das colunas abaixo, o R ou irá retornar um erro pois não consegue modificar à força <code>df[,2]</code> no lado direito do assignment.</p>
+<pre class="r"><code>df[,2] &lt;- df[,2] %&gt;% as.numeric()</code></pre>
+<p>Há uma alternativa à isso, que seria:</p>
+<pre class="r"><code>df[,2] &lt;- df[,2] %&gt;% unlist %&gt;% as.numeric()</code></pre>
+<p>No <code>dplyr</code> há a função <code>mutate</code> que poderia nos ser útil agora. Porém, vamos deixar para assimilar o <code>mutate</code> em um outro momento. Vamos agora usar uma função do <code>readr</code> que é muito mais prática inclusive, a <code>type_convert</code>:</p>
+<pre class="r"><code>df2 &lt;- readr::type_convert(df)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Codigo = col_character(),
+##   Fe = col_double()
+## )</code></pre>
+<p>A função <code>type_convert()</code> converte os tipos de cada coluna naquelas que ela acredita ser a mais conveniente para o uso. Importante notar que no <code>Base R</code> existe o <code>type.convert()</code> que faz o mesmo serviço porém, enquanto a versão do <code>readr</code> tende a converter tudo para <code>double</code> e <code>characther</code>, a versão do <code>Base R</code> converter as coisas também para <code>integer</code> e <code>factor</code>. E <em>factors</em> são chatos.</p>
+</div>
 </div>
 <div id="fontes" class="section level2">
 <h2>Fontes:</h2>
 <p>Pacotes do tidyverse: <a href="https://www.tidyverse.org/packages/" class="uri">https://www.tidyverse.org/packages/</a></p>
 <p>R for Data Science: <a href="https://r4ds.had.co.nz/" class="uri">https://r4ds.had.co.nz/</a></p>
 <p>Código para função moda: <a href="https://www.tutorialspoint.com/r/r_mean_median_mode.htm" class="uri">https://www.tutorialspoint.com/r/r_mean_median_mode.htm</a></p>
+<p>Explicação de <code>across</code>: <a href="https://dplyr.tidyverse.org/reference/across.html" class="uri">https://dplyr.tidyverse.org/reference/across.html</a></p>
 </div>
 <div class="footnotes">
 <hr />
