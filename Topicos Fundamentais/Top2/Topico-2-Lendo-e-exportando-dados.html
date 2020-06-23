@@ -392,7 +392,7 @@ library(tibble)</code></pre>
 <p>O porém levantado sobre a aula do curso <em>Programming with</em> é relevante de modo geral. Muitos dos materiais que podem ser encontrados na internet foram produzidos antes de se anunciar a mudança do argumento <code>stringAsFactors</code> na versão <code>4.0.0</code>, logo deve-se permanecer atento quanto a essa questão. Aqui trataremos já na versão atualizada.</p>
 </div>
 <div id="o-onde" class="section level2">
-<h2>. O onde</h2>
+<h2>1. O onde</h2>
 <p>Para importar e exportar dados precisamos delimitar <em>onde</em> isso será feito no seu disco rígido. De modo geral, é de bom tom que você coloque os seus dados na pasta do seu projeto. Se for 1 ou 2 arquivos a serem lidos, não precisa criar uma pasta <code>data/</code> não. Se for mais, talvez valha a pena. O mesmo vale para os arquivos exportados.</p>
 <p><em>Boas Prátiacs:</em> Exceto que seja o seu objetivo, nunca salve um objeto modificado com o mesmo nome e tipo que o arquivo importado indicado no seu RScript. Se você quer consertar o arquivo original, vale você indicar isso no seu código principal, e deixar tudo relacionado a isso num RScript em separado do resto, de modo que quando alguém for pegar o seu código principal do inicio ao fim, não terá problemas por conta de estar faltando um dado a ser importado.</p>
 <p>De todo modo, o R apenas irá ler arquivos que ele encontre no diretorio (pasta/folder) indicado por você. É nisso que entra o conceito de Diretório de Trabalho (<em>working directory</em>, ou wd). Sempre que você for ler um arquivo que está fora do seu <code>wd</code>, você terá que indicar todo o caminho até o arquivo, é o que é chamado de <em>absolute path</em>. Quando for o caso do arquivo estár no <code>wd</code>, basta que você use o nome do arquivo, precedido se for o caso, de pastas que estejam dentro dele. Há um terceiro caso ainda, como vamos ver no exemplo abaixo:</p>
@@ -411,7 +411,7 @@ library(tibble)</code></pre>
 <li><p>Se estiver <strong>fora</strong> do wd e do <em>default directory</em> use o <em>Absolute Path</em>.</p></li>
 </ul>
 <div id="mudando-o-wd" class="section level3">
-<h3>Mudando o wd</h3>
+<h3>1.1 Mudando o wd</h3>
 <p>Existe um modo de mudar o working directory (wd). É pela função <code>setwd(dir)</code>, sendo <code>dir</code> um <em>path</em> que segue as regras expostas acima. Por outro lado, se você deseja saber qual é o wd atual, use <code>getwd()</code>.</p>
 <p><strong>Importante</strong>: Evite mudar o wd. Só evite. Dá mais trabalho e confusão do que beneficio.</p>
 <p><strong>Importante 2</strong>: Se for mudar o wd, antes disso rode <code>wdOriginal &lt;- getwd()</code>. Assim você pode depois voltar para o diretorio original apenas fazendo <code>setwd(wdOriginal)</code>.</p>
@@ -420,7 +420,7 @@ library(tibble)</code></pre>
 </div>
 </div>
 <div id="os-arquivos-.rdata" class="section level2">
-<h2>. Os arquivos .Rdata</h2>
+<h2>2. Os arquivos .Rdata</h2>
 <p>Quem fez os exercicios indicados para aula 1 completamente, se deparou com as funções <code>save</code> e <code>load</code>.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Essas são as funções principais para salvar objetos no formato ideal do R, o <code>.Rdata</code>. Esse formato comprime o espaço exigido do disco rígido com bastante eficiência. Além disso, o <code>R</code> lê com mais velocidade arquivos que já estão no próprio formato.</p>
 <p>Uma vantagem do <code>.Rdata</code> é que ele te permite salvar vários objetos de uma só vez. Existe uma variação da função <code>save</code> inclusive que diz para salvar todos os objetos presentes no seu <code>Global Environment</code>: <code>save.image</code>. Veja abaixo, o exemplo baseado no vindo da <code>R documentation</code> da função <code>save</code>:</p>
 <pre class="r"><code>x &lt;- c(1:20)
@@ -445,7 +445,7 @@ load(&quot;z2.Rdata&quot;)</code></pre>
 <p>Repare que ao dar <code>rm(z, save.image2)</code>, ambos os objetos somem do <code>Global Environment</code> no seu canto superior esquerdo. Porém quando usamos a função <code>load</code>, estes já são automáticamente adicionados. Isso ocorre pois <code>.Rdata</code> estoca não só os valores como os nomes.</p>
 </div>
 <div id="rds" class="section level2">
-<h2>rds</h2>
+<h2>3. rds</h2>
 <p>Além de <code>.Rdata</code> também existe um outro tipo de arquivo próprio ao R, o <code>.rds</code>. O arquivo <code>.rds</code> é menos comum de ser visto pelo usuário na ponta, sendo mais usado pelo <code>R</code> internamente. O <code>.rds</code> tem duas caracteristicas principais:</p>
 <ul>
 <li>Só salva 1 objeto por vez;</li>
@@ -464,7 +464,7 @@ readRDS(&quot;z.rds&quot;)</code></pre>
 <p>O arquivo <code>.rds</code> não salva o nome para o objeto ser associado. Você precisa dar um a ele. Apesar de isso parecer inutil, esse tipo de arquivo pode ser extremamente util para metadata e arquivos que servem como condição durante poucas vezes ao longo do projeto e assim não precisam ocupar o seu <code>Environment</code>.</p>
 </div>
 <div id="csv-e-csv2" class="section level2">
-<h2>csv e csv2</h2>
+<h2>4. csv e csv2</h2>
 <p>A forma mais tradicional de você ver uma base de dados sendo disponibilizada é pelo formato <code>csv</code> <em>comma separated values</em>, ou valores separados pela virgula. Neste caso, cada coluna seria separada por <code>,</code> e os decimais por <code>.</code>, seguindo o padrão dos países de lingua inglesa. Vamos usar uma base de dados interna do R <code>iris</code>.</p>
 <pre class="r"><code>#Criando uma pasta de dados chamada
 dir.create(&quot;top2&quot;)
@@ -508,7 +508,7 @@ exemplo_iris_br &lt;- column_to_rownames(exemplo_iris_br, &quot;X1&quot;)</code>
 <p>Há ainda uma forma mais eficiente ainda de importar dados, que é pelo pacote <code>data.table</code>. Se torna extremamente necessário quando os dados são imensos. Porém, o aprendizado para isso é um tanto quanto demorado e mais complicado. Assim sendo, vamos deixar para outra ocasião.</p>
 </div>
 <div id="excel" class="section level2">
-<h2>Excel</h2>
+<h2>5. Excel</h2>
 <p>Não adianta fingir que não: boa parte dos dados de Matriz Insumo Produto que você irá encontrar estão em algum formato proveniente do Excel. E também não adianta fingir que isso não te irritará profundamente, porque irá.</p>
 <p>Dados MIP no Excel dificultam sua vida da seguinte forma:</p>
 <ol style="list-style-type: decimal">
@@ -520,11 +520,11 @@ exemplo_iris_br &lt;- column_to_rownames(exemplo_iris_br, &quot;X1&quot;)</code>
 </ol>
 <p>O item 4 é uma questão de comodidade pura, há de se admitir. O item 3 pode ou não atrapalhar. O item 1 por si só seria algo facilmente resolvido, Agora… os itens 2 e 5 te dão uma bela dor de cabeça no inicio e no geral te exigem uma bela de uma atenção sempre que você pega uma base nova. Por isso, essa seção iremos dividir por partes.</p>
 <div id="baixando-a-matriz" class="section level3">
-<h3>Baixando a matriz</h3>
+<h3>5.0 Baixando a matriz</h3>
 <p>E iremos usar as matrizes do IBGE de 2015. <a href="ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls">Clique aqui para baixa-las</a>. E coloque na pasta <code>top2</code>. No geral, tem formas de se baixar diretamente pelo console, porém no site do IBGE isso sempre dá erro.</p>
 </div>
 <div id="abrindo-o-arquivo" class="section level3">
-<h3>Abrindo o arquivo</h3>
+<h3>5.1 Abrindo o arquivo</h3>
 <p>Antes que você pense outra coisa, estamos aqui falando do arquivo do excel mesmo. Abra o arquivo com o Excel mesmo. Vamos examinar esse arquivo. A primeira coisa que vemos na aba 1 é:</p>
 <ul>
 <li>A linha 1 tem apenas uma célula. Isso por si só faria o R se confundir por conta da primeira linha ter apenas uma coluna.</li>
@@ -537,7 +537,7 @@ exemplo_iris_br &lt;- column_to_rownames(exemplo_iris_br, &quot;X1&quot;)</code>
 <p>Repare que na primeira aba já demos de cara com os 5 pontos que levantamos inicialmente. Baixar esses dados não é desse modo assim tão trivial.</p>
 </div>
 <div id="first-things-first-decidindo-a-organização-dos-dados-no-r." class="section level3">
-<h3>First things first: Decidindo a organização dos dados no R.</h3>
+<h3>5.2 First things first: Decidindo a organização dos dados no R.</h3>
 <p>Você então precisa decidir o que vai querer fazer com os dados ao passar do formato de excel para o R.</p>
 <ol style="list-style-type: decimal">
 <li>Os dados da “Oferta de bens e serviços”, “Produção de Bens” e “Importações…” ficarão tods juntos?</li>
@@ -554,7 +554,7 @@ exemplo_iris_br &lt;- column_to_rownames(exemplo_iris_br, &quot;X1&quot;)</code>
 <p>Assim, se quisermos acessar uma base de dados ou outra, basta fazermos <code>aba1$OfertaDeBensServicos</code>, <code>aba1$ProduçãoDeAtividades</code> ou <code>aba1$Importações</code>. Você tem assim uma forma de diferenciar e acessar ambas ao mesmo tempo.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></p>
 </div>
 <div id="lidando-com-colnames" class="section level3">
-<h3>Lidando com Colnames</h3>
+<h3>5.3 Lidando com Colnames</h3>
 <p>Como já foi dito, algumas das células dos colnames tem as linhas mescladas no arquivo original. É o caso das colunas <code>A</code>, <code>B</code> e <code>BX</code>. Da coluna <code>C</code> até a coluna <code>BW</code> os nomes das colunas estão na linha 4. Quando duas linhas do excel estão mescladas, o Excel entende que o conteúdo delas pertence a de cima. Assim, vamos usar a função <code>read_excel</code> do pacote <code>readxl</code> para carregar três partes em separado:</p>
 <pre class="r"><code>library(readxl)
 #dois primeiros nomes
@@ -574,7 +574,7 @@ Olhe a documentação do R aberto pelo <code>?read_excel</code>, em especial sob
 <p>Temos assim todos os colnames que iremos usar na próxima seção.</p>
 </div>
 <div id="importando-os-dados" class="section level3">
-<h3>Importando os dados</h3>
+<h3>5.4 Importando os dados</h3>
 <p>Se você deu uma olhada na definição dos argumentos <code>range</code> e <code>skip</code> na documentação da função <code>read_excel</code>, você verá que enquanto <code>range</code> você vai determinar os limites da planilha que você quer importar, <code>skip</code> vai apenas determinar quantas linhas você irá pular.</p>
 <pre class="r"><code>library(readxl)
 
@@ -589,7 +589,7 @@ nrow(aba1_inteira2)</code></pre>
 <p>Uma das vantangens do método <code>range</code> em relação ao <code>skip</code> é que nele você não fica refém de acontecer coisas como em <code>aba1_inteira2</code> que as últimas linhas só existem por conta da Fonte. Assim, dê preferência à usar o argumento <code>range</code> ao invés de <code>skip</code>.</p>
 </div>
 <div id="preenchendo-a-lista-aba1" class="section level3">
-<h3>Preenchendo a lista aba1</h3>
+<h3>5.5 Preenchendo a lista aba1</h3>
 <p>Vamos agora preencher a lista <code>aba1</code> com as suas 3 sublistas. Vamos neste caso usar <code>aba1_inteira</code> para preencher:</p>
 <pre class="r"><code># tirando a penultima linha de NA
 aba1_inteira &lt;- aba1_inteira[-(nrow(aba1_inteira)-1),]
