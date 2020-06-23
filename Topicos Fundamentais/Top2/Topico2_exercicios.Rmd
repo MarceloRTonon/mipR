@@ -56,12 +56,12 @@ Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. [Clique 
 #### Q.1.1 Crie um tibble `dfQ1.1` com os dados da matriz de coeficientes técnicos intersetoriais (aba 14 de IBGE_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas
 ```{r}
 library(readxl)
-colnames_dfQ1.1 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", 
+colnames_dfQ1.1 <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", 
                                  sheet = "14", range = "A4:BQ4", col_names = FALSE)
-colnames_dfQ1.1[1:2] <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", 
+colnames_dfQ1.1[1:2] <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", 
                                  sheet = "14", range = "A3:B3", col_names = FALSE)
 
-dfQ1.1 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", 
+dfQ1.1 <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", 
                                  sheet = "14", range = "A6:BQ72", col_names = unlist(colnames_dfQ1.1))
 ```
 
@@ -69,7 +69,7 @@ dfQ1.1 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",
 
 ```{r}
 
-dfQ1.2 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",                               sheet = "15", range = "A6:BQ72", col_names = unlist(colnames_dfQ1.1))
+dfQ1.2 <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",                               sheet = "15", range = "A6:BQ72", col_names = unlist(colnames_dfQ1.1))
 ```
 
 **Atenção:** Abaixo estamos abstraindo os carácteres `\n` dos nomes das primeiras duas colunas de `dfQ1.1` e `dfQ1.2`. Na questão 
@@ -108,10 +108,13 @@ vignette("lifecycle")
  - `dfQ1.5` tenha row.names com a Descrição de atividades.
  - `dfQ1.5` seja uma matriz quadrada (67 x 67), apenas com os dados númericos
 
-**Dica:** Ao contrario do que foi exposto na Aula 2, há um modo em que não é necessário uma nova linha apenas para mudar os `row.names` de `dfQ1.5`. Veja a documentação de `as.data.frame` para ver como.
+**Dica:** Ao contrario do que foi exposto na Aula 2, há um modo em que não é necessário uma nova linha apenas para mudar os `row.names` de `dfQ1.5`. Veja a documentação de `as.data.frame` para ver como. **Isso está errado**
+
+
 
 ```{r}
 dfQ1.5 <- as.data.frame(dfQ1.1[,-c(1:2)], row.names = dfQ1.1[,2])
+#rownames(dfQ1.5) <- dfQ1.1[,2]
 ```
 
 #### Q.1.6 Usando a função `column_to_rownames`, crie um data.frame `dfQ1.6` a partir de `dfQ1.2` que siga as mesma 

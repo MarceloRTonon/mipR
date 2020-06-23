@@ -15,6 +15,7 @@ url_ibge <- "ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/201
 
 download.file(url = url_ibge, destfile = tmp, mode = "wb")
 
+library(readxl)
 colnames_dfQ1.1 <- read_excel(tmp, sheet = "14", range = "A4:BQ4", col_names = FALSE)
 
 
@@ -23,23 +24,28 @@ colnames_dfQ1.1 <- read_excel(tmp, sheet = "14", range = "A4:BQ4", col_names = F
 
 library(readxl)
 
-colnames_dfQ1.1 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", sheet = "14", range = "A4:BQ4", col_names = FALSE)
+colnames_dfQ1.1 <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", sheet = "14", range = "A4:BQ4", col_names = FALSE)
 
-colnames_dfQ1.1[1:2] <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", sheet = "14", range = "A3:B3", col_names = FALSE)
+colnames_dfQ1.1[1:2] <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", sheet = "14", range = "A3:B3", col_names = FALSE)
 
-dfQ1.1 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",
+dfQ1.1 <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",
                      sheet = "14", range = "A6:BQ72", col_names = unlist(colnames_dfQ1.1))
 
 
 
 #### Q.1.2 Crie um tibble `dfq1.2` com a matriz de Leontief (aba 15 de IBGE_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas ------
 
-dfQ1.2 <- read_excel("aula2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",                               sheet = "15", range = "A6:BQ72", col_names = unlist(colnames_dfQ1.1))
+dfQ1.2 <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",                               sheet = "15", range = "A6:BQ72", col_names = unlist(colnames_dfQ1.1))
 
 
 #### Q.1.3 Crie um tibble `cod67` contendo apenas os dados da coluna `"Código da atividade nível 67"` da matriz `dfQ1.1`. Crie também um tibble `des67` contendo apenas os dados da coluna `"Descrição da atividade nível 67"` da matriz `dfQ1.1`; Mantenha os colnames de ambas.  -----
 
 cod67 <- dfQ1.1[,1]
+colnames(cod67)
+
+dfQ1.1$`Código
+da atividade
+nível 67`
 is_tibble(cod67)
 
 des67 <- dfQ1.1[,2]

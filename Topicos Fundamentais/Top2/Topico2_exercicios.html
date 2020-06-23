@@ -374,14 +374,11 @@ summary {
 <div id="pacotes-necessários-para-o-exercício." class="section level2">
 <h2>Pacotes necessários para o exercício.</h2>
 <p>Antes de começar a ler o restante do exercício, confira se você tem instalado os seguintes pacotes.</p>
-<pre class="r"><code>library(purrr)</code></pre>
-<pre><code>## Warning: package &#39;purrr&#39; was built under R version 3.6.3</code></pre>
-<pre class="r"><code>library(tibble)</code></pre>
-<pre><code>## Warning: package &#39;tibble&#39; was built under R version 3.6.3</code></pre>
-<pre class="r"><code>library(readxl)
-library(openxlsx)</code></pre>
-<pre><code>## Warning: package &#39;openxlsx&#39; was built under R version 3.6.3</code></pre>
-<pre class="r"><code>#Não havendo, use:
+<pre class="r"><code>library(purrr)
+library(tibble)
+library(readxl)
+library(openxlsx)
+#Não havendo, use:
 #install.packages(&quot;purrr&quot;)
 #install.packages(&quot;tibble&quot;)
 #install.packages(&quot;openxlsx&quot;)</code></pre>
@@ -427,7 +424,7 @@ library(openxlsx)</code></pre>
 <li><code>dfQ1.5</code> tenha row.names com a Descrição de atividades.</li>
 <li><code>dfQ1.5</code> seja uma matriz quadrada (67 x 67), apenas com os dados númericos</li>
 </ul>
-<p><strong>Dica:</strong> Ao contrario do que foi exposto na Aula 2, há um modo em que não é necessário uma nova linha apenas para mudar os <code>row.names</code> de <code>dfQ1.5</code>. Veja a documentação de <code>as.data.frame</code> para ver como.</p>
+<p><strong>Dica:</strong> Ao contrario do que foi exposto na Aula 2, há um modo em que não é necessário uma nova linha apenas para mudar os <code>row.names</code> de <code>dfQ1.5</code>. Veja a documentação de <code>as.data.frame</code> para ver como. <strong>Isso está errado</strong></p>
 </div>
 <div id="q.1.6-usando-a-função-column_to_rownames-crie-um-data.frame-dfq1.6-a-partir-de-dfq1.2-que-siga-as-mesma" class="section level4">
 <h4>Q.1.6 Usando a função <code>column_to_rownames</code>, crie um data.frame <code>dfQ1.6</code> a partir de <code>dfQ1.2</code> que siga as mesma</h4>
@@ -449,7 +446,7 @@ colnames(dfQ1.1)[1]</code></pre>
 <h4>Q.1.7 Faça uma inversa de Leontief a partir de <code>dfQ1.5</code>. Nomeie-a <code>dfQ1.7</code> e coerce-a em um <code>data.frame</code>.</h4>
 <div id="d.1.3-como-nos-desafios-na-lista-de-exercicios-2-da-aula-1-compare-os-dados-de-dfq1.6-com-dfq1.7." class="section level5">
 <h5>D.1.3 Como nos desafios na lista de exercicios 2 da aula 1, compare os dados de <code>dfQ1.6</code> com <code>dfQ1.7</code>.</h5>
-<p><strong>Dica:</strong> Mude a configuração do argumento <code>check.attributes</code> de uma das .</p>
+<p><strong>Dica:</strong> Mude a configuração do argumento <code>check.attributes</code>.</p>
 </div>
 <div id="d.1.4---desafio-o-que-explica-a-diferença-entre-os-valores-obtidos-em-d.1.3-pelas-funções-all.equal-e-identical" class="section level5">
 <h5>D.1.4 - <strong>Desafio:</strong> O que explica a diferença entre os valores obtidos em D.1.3 pelas funções <code>all.equal</code> e <code>identical</code>?</h5>
