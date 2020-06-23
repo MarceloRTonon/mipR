@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Neste parte discutiremos a forma de se manipular uma base de dados dentro do R. Isto é particulamente útil se vc está trabalhando com uma base de dados extensa e com várias observações, mas também para base de dados menores mas heterogêneas. No caso da matriz insumo-produto, estamos em geral trabalhando com base de dados que não apresentam elevados números de observações tanto no tempo quanto em países, pessoas ou empresas. Ainda assim, base de dados que, por exemplo, lidem com fluxo de comércio entre países, apresentam informações setoriais mais específicas ou até mesmo aumentem a frequência temporal dos dados... podem ser manipuladas e somente as informações necessárias sejam separadas para você trabalhar no R.
+Neste parte discutiremos a forma de se manipular uma base de dados dentro do R. Isto é particulamente útil se vc está trabalhando com uma base de dados extensa e com várias observações, mas também para base de dados menores mas heterogêneas. No caso da matriz insumo-produto, estamos em geral trabalhando com base de dados que não apresentam elevados números de observações tanto no tempo quanto em países, pessoas ou empresas. Ainda assim, base de dados no estilo insumo-produto que, por exemplo, lidem com fluxo de comércio entre países, que apresentam informações setoriais mais específicas ou que até mesmo aumentem a frequência temporal dos dados... podem ser manipuladas e refinar somente as informações necessárias para você trabalhar no R.
 
 ## 3.3 - Manipulação de Dados no base R
 

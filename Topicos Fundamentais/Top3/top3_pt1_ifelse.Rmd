@@ -24,6 +24,7 @@ Podemos citar outras referências que foram usadas na criação deste material:
 
 Para você realizar operações que os resultados são respostas lógicas, existem algumas opções a serem usadas. Veja abaixo exemplos dos chamados *Relational Operators*:
 
+
 ```{r}
 #Maior que:
 2>3
@@ -32,14 +33,20 @@ c(1:3) >= c(3:1)
 #Menor que:
 4<5
 # Menor ou igual
-# <=
+2 < 2
+2 <= 2
 # Igual à
-# ==
+2 == 2
 # Diferente de
-# !=
-# Tem "match" ## Dar muitos exemplos pra %in%, colocar exemplo com data.frame
+2 != 2
+# Se está contido em um grupo
  2 %in% c(1:3)
+ c(1:3) %in% matrix(1:6, 3, 2)
+ c(6:9) %in% matrix(1:6, 3, 2)
+
 ```
+
+Ps.: Um ótimo resumo sobre o que cada operador faz pode ser encontrado na [Table 7.1](https://rstudio-education.github.io/hopr/modify.html#tab:logop) do **Hands-On Programming with R**. 
 
 
 ## 3.2 - Escolhas e Condições (If Statements)
@@ -49,6 +56,8 @@ Imagine que você queira fazer determinada operação somente no caso de certa c
 ![](Imagem/ifelse.jpg)
 
 ### 3.2.1 - if
+
+A função `if`é a responsável por realizar a "pergunta" por trás da condição escolhida. No caso, **se** algo acontecer faça determinada operação (que estará entre {}):
 
 ```{r, eval = FALSE}
 
@@ -102,7 +111,7 @@ if(FALSE){
 
 ### 3.2.2 - if e else
 
-Caso seu objetivo não dependa apenas da validade do condição estabelecida ser `TRUE`, mas de fazer outra determinanda operação caso o resultado lógico da sua condição ser `FALSE`.
+Caso seu objetivo não dependa apenas da validade do condição estabelecida ser `TRUE`, mas de fazer outra determinanda operação caso o resultado lógico da sua condição ser `FALSE`, é necessário adicionar mais uma etapa. Nesse caso, além do `if` é necessário inserir a função `else`, bem como a tarefa ou resultado que você deseja obter. Novamente, a representação no R é da seguitne forma:
 
 ```{r, eval=FALSE}
 
@@ -134,12 +143,58 @@ if(b == 2){
   }
 ```
 
-No caso acima os dois casos tem um retorno pois tem o else (....)
+No caso acima os dois casos tem um retorno pois tem o `else`. Os exemplos acima foram realizados usando condição de igualdade `==`, mas qualquer uma das operações lógicas citadas na seção 3.1 pode ser usada. Vamos fazer alguns exemplos (mas não de todos)
+
+```{r}
+a <- 2
+b <- 3
+
+if(a > b){
+  "a é maior que b"
+  }else{
+  "a é menor ou igual que b"  
+  }
+
+d <- c(1:5)
+e <- c(6:10)
+
+if(a %in% d){
+  "a está contido em d"
+  }else{
+  "a não está contido em d"
+  }
+
+if(a %in% e){
+  "a está contido em d"
+  }else{
+  "a não está contido em d"
+  }
+
+
+```
+
+As opções não se resumem apenas à mensagens indicando o resultado da condição que você escolheu, mas fazer novas operações de acordo com o `TRUE` ou `FALSE`.
+
+Vamos fazer um exemplo que caso a condição `a>b` seja atendida realiza-se a soma desses valores e, caso contrário, realiza-se a subtração:
+
+
+```{r}
+
+a <- 2
+b <- 3
+
+if(a > b){
+    a + b
+  }else{
+    a - b
+  }
+```
 
 ### 3.2.3 - A função ifelse
 
 Existe a função ifelse que pode ser mais prática do que escrever o `if` `else` como foi feito. Mais importante ainda, o `ifelse` funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente.  
 
+A estrutura da `ifelse` é semelhante ao caso de `if` e `else` separado, no entanto, todos os argumentos são escritos numa mesma linha:
 
 ```{r, eval=FALSE}
 
@@ -147,58 +202,78 @@ ifelse(condição, resultado se verdadeiro, resultado caso contrário)
 
 ```
 
-```{r, eval = FALSE}
-Fazer igual eu fiz em if e else, com o exemplo dos objetos a e b. E depois fazer um caso com ifelse(TRUE, "cond val", "cond inval")
+Vamos rapidamente refazer os exemplos da seção anterior com essa função:
+
+
+```{r}
+
+ifelse(a == b, "a é igual a b", "a é diferente de b")
+ifelse(a > b, "a é maior que b", "a é menor ou igual b")
+# Podemos também inserir as operações (replicando o caso da some e subtração)
+ifelse(a > b, a + b, a - b)
+
 ```
 
+Um importante detalhe a ser lembrado é que a própria condição pode ser a existência de algum resultado lógico. Ou seja, caso se um encontre um `TRUE` ou `FALSE`, faça determinada tarefa.
 
+```{r, eval = FALSE} 
 
-Vamos rapidamente relembrar algumas funções que já usamos e que são da estrutura de condições, por exemplo: `is.character`, `is.matrix`.
+ifelse (a=TRUE, "faça isso", "faça outra coisa")
 
-Vamos primeiro criar 3 objetos de diferentes tipos: um vetor atômico `character`, um vetor atômico `double` e uma matriz `double`:
+```
+
+Vamos rapidamente relembrar algumas funções que já usamos e que são da estrutura de condições, por exemplo: `is.character`, `is.matrix` e `is.data.frame`.
+
+Vamos primeiro criar 3 objetos de diferentes tipos: um vetor atômico `character`, um vetor atômico `double`, uma matriz `double` e um data.frame `double`:
 
 ```{r, eval=T}
-a <- c("a", "b", "c")
-b <- c(1, 2, 3)
-d <- matrix(1:9, 3, 3)
+f <- c("a", "b", "c")
+g <- c(1:3)
+h <- matrix(1:9, 3, 3)
+i <- data.frame(h)
 ```
+
+Agora vamos criar uma nova função que exerça o mesmo papel das funções que queremos representar:
 
 ```{r, eval=T}
 is.character2 <- function(x){ifelse(typeof(x) == 'character', TRUE, FALSE)}
-is.character2(a)
-is.character2(b)
+is.character2(f)
+is.character2(g)
 
 ```
 
+```{r, eval=T}
+is.matrix2 <- function(x){ifelse(class(x) == "matrix", TRUE, FALSE)}
+is.matrix2(h)
+is.matrix2(i)
 
-```{r, eval = FALSE}
-# eval == FALSE temporario
-#dar exemplos com condições que sejam funções, por exemplo: is.character(), >=, is.data.frame(), %in%.
-
-#Usar exemplos de ifs com duas condições usando &, &&, | e ||
 ```
 
+```{r, eval=T}
+is.data.frame2 <- function(x){ifelse(class(x) == "data.frame", TRUE, FALSE)}
+is.data.frame2(h)
+is.data.frame2(i)
+
+```
 
 ## 3.3 - Operações em Conjuntos (Booleans)
 
-
-@@Citar uma página que explique teoria de conjuntos.
+Para essa parte é importante relembrar a ideia de conjuntos, em que iremos incluir mais de uma condição. Poderemos especificar determinadas tarefas para o caso em que diversas condições necessitam ser atendidas. 
 
 Veja abaixo alguns exemplos dos chamados *Logical Operators*
 
 ```{r, eval = FALSE}
 
-# O eval= FALSE é temporário
 #Fazer aqui o que eu fiz com os operadores lógicos.
 
 #Usar não só vetores, mas também valores lógicos per se:
-
+#Usar exemplos de ifs com duas condições usando &, &&, | e ||
 
 TRUE & FALSE
 TRUE & TRUE
 FALSE & FALSE
 
-&&
+&& # Nessa situação a 
 |
 ||
 xor(c(1:3), (2:4))
@@ -209,7 +284,7 @@ all
 
 ```
 
-
+Ps.: Um ótimo resumo sobre o que cada operador Booleano faz pode ser encontrado na [Table 7.2](https://rstudio-education.github.io/hopr/modify.html#tab:boole) do **Hands-On Programming with R**. 
 
 
 ## Fontes:
