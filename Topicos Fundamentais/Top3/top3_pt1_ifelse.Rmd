@@ -19,7 +19,6 @@ Podemos citar outras referências que foram usadas na criação deste material:
  - Para a parte de condicionais e escolhas foram usadas as subseções [9.2](https://rstudio-education.github.io/hopr/programs.html#if-statements) do *Hans-On Programming with R* e a subseção [5.2](https://adv-r.hadley.nz/control-flow.html#choices) do **Advanced R** do Hadley Wickham.
  
 
-
 ## 3.1 - Operações Lógicas
 
 Para você realizar operações que os resultados são respostas lógicas, existem algumas opções a serem usadas. Veja abaixo exemplos dos chamados *Relational Operators*:
@@ -192,7 +191,7 @@ if(a > b){
 
 ### 3.2.3 - A função ifelse
 
-Existe a função ifelse que pode ser mais prática do que escrever o `if` `else` como foi feito. Mais importante ainda, o `ifelse` funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente.  
+Existe a função ifelse que pode ser mais prática do que escrever o `if` `else` como foi feito. Mais importante ainda, o `ifelse` funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente.  No Tópico 4 falaremos mais sobre funções vetoriais.
 
 A estrutura da `ifelse` é semelhante ao caso de `if` e `else` separado, no entanto, todos os argumentos são escritos numa mesma linha:
 
@@ -202,6 +201,7 @@ ifelse(condição, resultado se verdadeiro, resultado caso contrário)
 
 ```
 
+<<<<<<< HEAD
 Vamos rapidamente refazer os exemplos da seção anterior com essa função:
 
 
@@ -212,6 +212,22 @@ ifelse(a > b, "a é maior que b", "a é menor ou igual b")
 # Podemos também inserir as operações (replicando o caso da some e subtração)
 ifelse(a > b, a + b, a - b)
 
+=======
+```{r}
+a <-2
+ifelse(a ==2, "Condição válida", "Condição inválida")
+
+b <-3
+ifelse(b ==2, "Condição válida", "Condição inválida")
+
+```
+
+```{r}
+
+ifelse(TRUE, "Condição válida", "Condição inválida")
+
+ifelse(FALSE, "Condição válida", "Condição inválida")
+>>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 ```
 
 Um importante detalhe a ser lembrado é que a própria condição pode ser a existência de algum resultado lógico. Ou seja, caso se um encontre um `TRUE` ou `FALSE`, faça determinada tarefa.
