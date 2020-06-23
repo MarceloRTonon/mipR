@@ -291,3 +291,50 @@ vecQ3.5 <- ItaQ1.9 %>% filter(Origin == "Domestic", Year == 2000) %>%
   .[,-c(1:4)] %>% rowSums()
 ```
 
+### 4. Treinando join e arrange
+
+Vamos praticar os verbos da familia `join` do pacote `dplyr` agora. Tenha certeza que leu a parte referente a ela no Tópico 3! Qualquer coisa use o `help()` ou veja as partes ***Mutating joins*** e ***Types of join*** em `vignette("two-table")`.
+
+Não se sinta acanhado de recorrer a eles em nenhum momento.
+
+#### Q.4.1 Crie uma tabela `dfQ4.1` unindo as tabelas `americadoSul` e `ganhadores` mantendo a coluna `Participações`.
+
+```{r, include=TRUE}
+americadoSul <- data.frame("Países" = c("Chile", "Argentina", "Uruguai", "Brasil"), "Titulos" = c(0,2,2,5), "Participações" = c(9, 17, 13, 21))
+
+ganhadores <- data.frame("Países" = c( "Alemanha", "Argentina","Itália", "França",  "França", "Uruguai", "Espanha","Brasil", "Inglaterra"), "Titulos" = c( 4,2,4,2,2,2,1,5,1))
+```
+
+```{r}
+dfQ4.1 <- dplyr::full_join(ganhadores, americadoSul)
+```
+
+#### Q.4.1 Crie:
+
+- `dfQ4.2a`: `americadoSul` países ordenados por número de participações em ordem crescente.
+
+```{r}
+dfQ4.2a <- americadoSul %>% arrange(Participações)
+```
+
+
+-`dfQ4.2b`:  `americadoSul` ordenados por número de titulos, em ordem decrescente.
+
+
+```{r}
+dfQ4.2b <- americadoSul %>% arrange(Titulos)
+```
+
+-`dfQ4.2c`: `ganhadores` ordenada por número de títulos em ordem decrescente.
+
+```{r}
+dfQ4.2c <- ganhadores %>% arrange(desc(Titulos))
+```
+
+#### Q.4.3 
+
+```{r}
+dfQ4.3 <- americadoSul %>% inner_join()
+```
+
+ O número de formas para você fazer isso é mesmo número de mãos que uma pessoa usualmente tem.

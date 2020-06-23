@@ -75,7 +75,9 @@ is.tibble(cod67)
 
 
 
-dfQ1.5 <- as.data.frame(dfQ1.1[,-c(1:2)], row.names = dfQ1.1[,2])
+dfQ1.5 <- as.data.frame(dfQ1.1[,-c(1:2)])
+
+rownames(dfQ1.5) <- dfQ1.1[,2]
 
 #### Q.1.6 Usando a função `column_to_rownames`, crie um data.frame `dfQ1.6` a partir de `dfQ1.2` que siga as mesma 
 #**Dica 1:** O argumento `var =` precisa estar explicito na função `column_to_rownames`. Ou seja, `var = "name_of_the_column"`, precisa estar escrito. Se você não escrever `var =`, a função irá pensar que esse segundo argumento é uma base de dados. Se precisar, veja como ela é usada nos exemplos da documentação.
