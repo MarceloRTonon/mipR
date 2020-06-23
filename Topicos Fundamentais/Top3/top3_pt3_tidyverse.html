@@ -403,10 +403,10 @@ library(magrittr)</code></pre>
 ##     extract</code></pre>
 <pre class="r"><code>library(readr)</code></pre>
 </div>
-<div id="introdução-ao-subsetting-com-tidyverse" class="section level2">
-<h2>Introdução ao subsetting com tidyverse</h2>
+<div id="introdução-a-manipulação-de-dados-pelo-tidyverse" class="section level2">
+<h2>Introdução a manipulação de dados pelo <code>tidyverse</code></h2>
 <p>Muitas das coisas que o <code>base R</code> faz podem ser feitas de forma mais verbosa com os pacotes do <code>tidyverse</code>. Apesar de no fim acabar que se escreve mais, o código pode ficar mais claro para quem escreve e lê o código. Desse modo, a manipulação de dados é mais baseada em verbos e nome de colunas do que em colchetes, chaves e índices das colunas. Além disso, o <code>tidyverse</code> dá uma gama de elementos para as suas funções do subsetting que não é tão trivial assim usar no <code>base R</code>. Além disso, muitas funções do <code>tidyverse</code> foram escritas em <code>C++</code> e isso faz com que elas sejam <em>muito</em> rápidas.</p>
-<p>Neste tópico iremos apresentar o básico de como manipular base de dados no R a partir do <code>tidyverse</code>, focando especialmente no <code>dplyr</code>. É necessário no entanto atentar para o fato de que talvez as funções mais poderosa do <code>dplyr</code> não sejam explicadas aqui. É o caso de funções como <code>mutate</code>, <code>summary</code>, <code>group_by</code>e coisas que aumentam o poder do pacote como <a href="https://dplyr.tidyverse.org/reference/across.html"><code>across</code></a>.</p>
+<p>Neste tópico iremos apresentar o básico de como manipular base de dados no R a partir do <code>tidyverse</code>, focando especialmente no <code>dplyr</code>. É necessário no entanto atentar para o fato de que talvez as funções mais poderosa do <code>dplyr</code> não sejam explicadas aqui. É o caso de funções como <code>mutate</code>, <code>summary</code>, <code>group_by</code>e coisas que aumentam o poder do pacote como <a href="https://dplyr.tidyverse.org/reference/across.html"><code>across</code></a>. O <code>tidyverse</code> é incrível e faz muita coisa, tanto é que escreveram um livro em que você basicamente só usa ele do inicio ao fim, o <em>R for Data Science</em>.</p>
 </div>
 <div id="o-tidyverse-introdução" class="section level2">
 <h2>O tidyverse: Introdução</h2>
@@ -414,11 +414,11 @@ library(magrittr)</code></pre>
 <p>Os pacotes do núcleo duro do <em>tidyverse</em> são:</p>
 <ul>
 <li><p><strong><em>tibble</em></strong>: Já falamos, brevemente, desse pacote no Tópico 2. Um <code>tibble</code> é como um <code>data.frame</code> só que, na propria definição do site do <a href="https://tibble.tidyverse.org/"><code>tidyverse</code></a>, mais preguiçoso e ranzinza. Ele não facilita sua vida como o <code>data.frame</code> o faz. Por exemplo, ele não muda nem o nome nem o tipo das variáveis e irão reclamar mais. Importante notar que antes um <code>tibble</code> e um <code>data.frame</code> eram mais diferentes do que são hoje<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>, pois a função <code>data.frame</code> por default convertia <code>strings</code> em <code>factor</code>, o que mudou na atualização 4.0.0 do R.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> A principio, o <code>tibble</code> não será mais abordado aqui no curso, (pelo fato de que teremos um ) assim que desejar se aprofundar mais nele pode conferir o capitulo 10 do <a href="https://r4ds.had.co.nz/tibbles.html"><em>R for Data Science</em></a> e <a href="https://tibble.tidyverse.org/articles/tibble.html">neste artigo</a>.</p></li>
-<li><p><strong><em>readr</em></strong>: No tópico 2, também já falamos sobre o pacote <code>readr</code>, e como ele é muito mais rápido que o <code>base</code> R para importar uma base de dados. É importante considerar apenas que ele importa a base como um <code>tibble</code> e não um <code>data.frame</code>.</p></li>
-<li><p><strong><em>dplyr</em></strong>: O pacote <code>dplyr</code> é <strong>O</strong> pacote para manipular os dados. Ele irá te ajudar a lidar com problemas comuns na hora de manipular a base de dados. Uma parte das suas utilidades será apresentada no Tópico 3<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. Os capítulos <a href="https://r4ds.had.co.nz/transform.html">5</a> e <a href="https://r4ds.had.co.nz/relational-data.html">13</a> do <em>R for Data Science</em> introduzem uma boa parte das funções que <code>dplyr</code> oferece.</p></li>
+<li><p><strong><em>readr</em></strong>: No tópico 2, também já falamos sobre o pacote <code>readr</code>, e como ele é muito mais rápido que o <code>base</code> R para importar uma base de dados. É importante considerar apenas que ele importa a base como um <code>tibble</code> e não um <code>data.frame</code>. Vamos falar um pouco dele aqui também.</p></li>
+<li><p><strong><em>dplyr</em></strong>: O pacote <code>dplyr</code> é <strong>O</strong> pacote para manipular os dados. Ele irá te ajudar a lidar conscientemente com problemas comuns na hora de manipular a base de dados. Uma parte das suas utilidades será apresentada no Tópico 3<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. Os capítulos <a href="https://r4ds.had.co.nz/transform.html">5</a> e <a href="https://r4ds.had.co.nz/relational-data.html">13</a> do <em>R for Data Science</em> introduzem uma boa parte das funções que <code>dplyr</code> oferece, inclusive algumas das que não falaremos aqui.</p></li>
 <li><p><strong><em>tidyr</em></strong>: O pacote <code>tidyr</code> é por sua vez focado em deixar uma base de dados mais bem comportada, especificamente no modo <code>tidy</code>. Assim, o <code>tidyr</code> é muito voltado para base de dados retangulares. Algumas poucas funções do <code>tidyr</code> serão apresentadas no Tópico 3, em especial as mais úteis para Matriz Insumo Produto. Para uma visão (bem) mais abrangente do <code>tidyr</code> olhe o capítulo <a href="https://r4ds.had.co.nz/tidy-data.html">12</a> do <em>R for Data Science</em></p></li>
 <li><p><strong><em>purrr</em></strong>: O pacote <code>purrr</code> traz consigo um poderoso ferramental para lidar com automação de tarefas e com estruturas de dados muito recursivas (listas). Sua abordagem radicalmente funcional te dá uma grande vantagem frente ao loop tradicional do base R. Uma parte deste pacote será abordado no Tópico 4, sendo também abordado no capítulo <a href="https://r4ds.had.co.nz/iteration.html">21</a> do <em>R for Data Science</em> e no <a href="https://adv-r.hadley.nz/functionals.html">9</a> do <em>Advanced R</em>.</p></li>
-<li><p><strong><em>stringr</em></strong>: Esse pacote lida com dados que na realidade são textos, as chamadas <code>string</code>. Assim sendo, é uma ferramenta muito poderosa, que para além de questões óbvias, serve de apoio para o <code>subsetting</code> e a automação de determinadas tarefas. O pacote <code>stringr</code> e suas aplicações será discutido no Tópico 5. As funcionalidades do pacote são explicadas no capítulo <a href="https://r4ds.had.co.nz/strings.html">14</a> do <em>R for Data Science</em>.</p></li>
+<li><p><strong><em>stringr</em></strong>: Esse pacote lida com dados que na realidade são textos, as chamadas <code>strings</code>. Assim sendo, é uma ferramenta muito poderosa, que para além de questões óbvias, serve de apoio para o <code>subsetting</code> e a automação de determinadas tarefas. O pacote <code>stringr</code> e suas aplicações será discutido no Tópico 5. As funcionalidades do pacote são explicadas no capítulo <a href="https://r4ds.had.co.nz/strings.html">14</a> do <em>R for Data Science</em>.</p></li>
 <li><p><strong><em>ggplot2</em></strong>: A ferramente mais poderosa de construção de gráficos do R. É o que se tem para falar do <code>ggplot2</code>. Ele será introduzido no Tópico 6. Uma abordagem mais ampla de todo o seu poder pode ser vista no livro <a href="https://ggplot2-book.org/"><em>ggplot2: Elegant Graphics for Data Analysis</em></a> feito pelo Hadley Wickham.</p></li>
 <li><p><strong><em>forcats</em></strong>: Este pacote é útil para lidar com <code>factors</code> (<em>forcats</em> é um anagrama de <em>factors</em>), que é uma <code>classe</code> de vetores que servem para dar categorias à um <code>data.frame</code>. <code>factors</code> já foram mais comuns no R do que são hoje, em especial após a expansão do <em>Tidyverse</em> e da versão 4.0.0 da linguagem. Por conta disso, não vamos entrar em <code>factors</code> nesse curso à principio, sendo que com o <code>stringr</code> se consegue fazer tudo e mais um pouco que se faz com <code>factors</code>. Para quem tiver interesse, vale acessar o capitulo <a href="https://r4ds.had.co.nz/factors.html">15 do R for Data Science</a> para aprender sobre o <em>forcats</em>. Para usar <em>factors</em> com um maior enfoque no base-R, vale a leitura da subseção <a href="https://rstudio-education.github.io/hopr/r-objects.html#factors">5.5.2</a> do <em>Hands-on Programming with R</em>, e das subseções <a href="https://adv-r.hadley.nz/vectors-chap.html#s3-atomic-vectors">3.4</a> e <a href="https://adv-r.hadley.nz/subsetting.html#atomic-vectors-1">4.2.1</a> do <em>Advanced R</em>.</p></li>
 </ul>
@@ -454,10 +454,10 @@ mtcars %$% mean(drat)
 <p>Quanto mais longo a linha de comando, melhor será aplicar o modo <em>pipe</em> em detrimento do <em>nested</em>. O modo <em>pipe</em> que usamos foi desenvolvido no pacote <code>magrittr</code>, sendo que o operador <em>pipe forward</em> <code>%&gt;%</code> estará disponível para uso sempre que você carregar um pacote do <code>tidyverse</code>. Isso não é o caso do operador <em>exposition pipe</em>, que é necessário que você carregue explicitamente o pacote <code>magrittr</code>, pois este não é um dos pacotes do “núcleo” do <em>Tidyverse</em>. Existem outros dois operadores dentro do pacote <code>magrittr</code><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> que são o <em>tee pipe</em> <code>%T&gt;%</code> e o <em>compound assignment pipe</em> <code>%&lt;&gt;%</code>, mas que não serão discutidos aqui<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>.</p>
 </div>
 <div id="subsetting-com-o-tidyverse" class="section level2">
-<h2>Subsetting com o Tidyverse</h2>
+<h2>Subsetting com o <code>tidyverse</code></h2>
 <div id="extraindo-colunas-a-partir-dos-seus-nomes" class="section level3">
 <h3>Extraindo colunas a partir dos seus nomes</h3>
-<p>Existe duas funções para você retirar colunas a partir dos seus nomes, <code>select</code> e <code>pull</code>. O <code>select</code> irá manter a estrutura de dados, enquanto <code>pull</code> irá alocar todos os dados selecionados num vetor atómico. Veja os exemplos abaixo:</p>
+<p>Existe duas funções para você retirar colunas a partir dos seus nomes, <code>select</code> e <code>pull</code>. O <code>select</code> irá manter a estrutura de dados, enquanto <code>pull</code> irá alocar todos os dados selecionados num vetor atômico. Veja os exemplos abaixo:</p>
 <pre class="r"><code># Selecionando apenas a coluna 5
 selExemplo1 &lt;- select(mtcars, 5)
 pullExemplo1 &lt;- pull(mtcars, 5)
@@ -757,7 +757,7 @@ CO2 %&gt;% filter(conc ==moda(conc), uptake &lt;= median(uptake))</code></pre>
 ## 10   Mc1 Mississippi    chilled   95   10.5
 ## 11   Mc2 Mississippi    chilled   95    7.7
 ## 12   Mc3 Mississippi    chilled   95   10.6</code></pre>
-<p>No caso acima foram selecionadas as linhas que ao mesmo tempo eram iguais à moda da coluna <code>conc</code> e eram menores que a mediana de <code>uptake</code>. Poderiamos ir além e colocar um terceiro elemento:</p>
+<p>No caso acima foram selecionadas as linhas que ao mesmo tempo eram iguais à moda da coluna <code>conc</code> e eram menores que a mediana de <code>uptake</code>. Poderíamos ir além e colocar um terceiro elemento:</p>
 <pre class="r"><code>CO2 %&gt;% filter(conc ==moda(conc), uptake &lt;= median(uptake), Treatment == &quot;chilled&quot;)</code></pre>
 <pre><code>##   Plant        Type Treatment conc uptake
 ## 1   Qc1      Quebec   chilled   95   14.2
@@ -911,7 +911,7 @@ CO2 %&gt;% filter(!conc == moda(conc) &amp; uptake &lt;= median(uptake))</code><
 ## 28   Mc3 Mississippi    chilled  500   17.9
 ## 29   Mc3 Mississippi    chilled  675   18.9
 ## 30   Mc3 Mississippi    chilled 1000   19.9</code></pre>
-<p>Perceba que <code>filter</code>, como toda função do subsetting, faz nada mais que selecionar as linhas que retornam <code>TRUE</code> às condições que ele impõe. Por isso, as comporações e operações lógicas são instrumentos tão poderosos para a seleção <code>filter</code>.</p>
+<p>Perceba que <code>filter</code>, como toda função do subsetting, faz nada mais que selecionar as linhas que retornam <code>TRUE</code> às condições que ele impõe. Por isso, as comparações e operações lógicas são instrumentos tão poderosos para a seleção <code>filter</code>.</p>
 <p>Existem mais três funções que podem ser usados para aumentar a força de <code>filter</code>: <code>is.na()</code>, <code>between()</code> e <code>near</code>. A função <code>is.na()</code> confere se um valor é <code>NA</code>. Assim podemos usa-la para selecionar (ou excluir), linhas que possuam valores <code>NA</code>.</p>
 <pre class="r"><code># Checando se valores são NA.
 is.na(1)</code></pre>
@@ -1000,7 +1000,7 @@ airquality %&gt;% filter(!is.na(Ozone)) %&gt;% .[1:20,]</code></pre>
 ## 19     1       8  9.7   59     5  21
 ## 20    11     320 16.6   73     5  22</code></pre>
 <p>(Veja a subseção “Removendo linhas <code>NA</code> diretamente” para um método direto.)</p>
-<p>Já a função <code>between</code> serve para você filtrar linhas que contém elementos númericos entre dois valores.</p>
+<p>Já a função <code>between</code> serve para você filtrar linhas que contém elementos numéricos entre dois valores.</p>
 <pre class="r"><code>x &lt;- 1:7
 # Testando quais elementos de x estão entre 3 e 5. (3 e 5 estão inclusos.)
 dplyr::between(x, 3,5)</code></pre>
@@ -1046,7 +1046,7 @@ CO2 %&gt;% filter(near(uptake, 40, tol = 1))</code></pre>
 ## 4   Qn3 Quebec nonchilled  250   40.3
 ## 5   Qc3 Quebec    chilled  675   39.6</code></pre>
 <div id="decidindo-se-farei-variações-de-filter" class="section level5">
-<h5>(decidindo se farei) Variações de filter</h5>
+<h5>(decidindo se farei) Variações de <code>filter</code></h5>
 <p>Existem três variações de <code>filter</code>: <code>filter_all</code>, <code>filter_if</code> e <code>filter_at</code>. Iremos explicar aqui as duas primeiras variações, pois a terceira é complexa demais para esse estágio. De todo modo, <code>filter_all</code> e <code>filter_if</code> são filtram uma base de dados aplicando um predicando a todas as variáveis. Esses predicados devem ser expostos com <code>all.vars()</code> ou <code>any_vars()</code>.</p>
 <pre class="r"><code>#filtrando as linhas de airquality que algum dos seus valores for NA
 # você deve usar o . para se referir as variáveis.
@@ -1067,8 +1067,8 @@ airquality %&gt;% filter_all(all_vars(is.na(.)))</code></pre>
 </div>
 </div>
 <div id="removendo-duplicatas-com-distinc" class="section level4">
-<h4>Removendo duplicatas com distinc</h4>
-<p>A função distinct remove linhas duplicadas dos seus data.frames. Veja o exemplo abaixo:</p>
+<h4>Removendo duplicatas com <code>distinc</code></h4>
+<p>A função <code>distinct</code> remove linhas duplicadas dos seus data.frames. Veja o exemplo abaixo:</p>
 <pre class="r"><code>ex_df &lt;- data.frame(&quot;A&quot;=c(1,0,1,1,-0), &quot;B&quot; = c(0,1,0,1, 1) )
 ex_df</code></pre>
 <pre><code>##   A B
@@ -1085,7 +1085,7 @@ ex_df %&gt;% distinct()</code></pre>
 ## 3 1 1</code></pre>
 </div>
 <div id="reordenando-as-linhas-com-arrange" class="section level4">
-<h4>Reordenando as linhas com arrange</h4>
+<h4>Reordenando as linhas com <code>arrange</code></h4>
 <p>A função <code>arrange</code> serve para reordenar as linhas de acordo com uma coluna.</p>
 <pre class="r"><code># Forma crescente (menores primeiro)
 iris %&gt;% arrange(Sepal.Length) %&gt;% head()</code></pre>
@@ -1117,7 +1117,7 @@ iris %&gt;% arrange(desc(Sepal.Length)) %&gt;% head()</code></pre>
 </div>
 <div id="removendo-linhas-na-diretamente" class="section level4">
 <h4>Removendo linhas <code>NA</code> diretamente</h4>
-<p>Se queremos apenas remover linhas que tem <code>NA</code>, há uma forma mais direta do que combinar a função <code>filter</code> do pacote <code>dplyr</code>, com o argumento <code>is.na</code>. Tal forma é podemos usar a função <code>drop_na</code> do pacote <code>tidyr</code> para elimnar linhas com <code>NA</code>.</p>
+<p>Se queremos apenas remover linhas que tem <code>NA</code>, há uma forma mais direta do que combinar a função <code>filter</code> do pacote <code>dplyr</code>, com o argumento <code>is.na</code>. Tal forma é podemos usar a função <code>drop_na</code> do pacote <code>tidyr</code> para eliminar linhas com <code>NA</code>.</p>
 <pre class="r"><code>airquality %&gt;% tidyr::drop_na() %&gt;% head()</code></pre>
 <pre><code>##   Ozone Solar.R Wind Temp Month Day
 ## 1    41     190  7.4   67     5   1
@@ -1151,7 +1151,7 @@ iris %&gt;% arrange(desc(Sepal.Length)) %&gt;% head()</code></pre>
 E &lt;- rep(c(1,2), 3)
 
 df_ex &lt;- data.frame(df_ex, &quot;D&quot;= D, &quot;E&quot; = E)</code></pre>
-<p>Suponha, então queremos fazer uma coluna <code>&quot;DE&quot;</code>, que seria um vetor tal qual <code>c(&quot;BRA1&quot;, &quot;BRA2&quot;, &quot;ARG1&quot;, ...)</code> o que poderiamos fazer? Há dois modos. O primeiro, mais longo, seria concatenar os vetores <code>&quot;D&quot;</code> e <code>&quot;E&quot;</code> usando a função <code>paste0</code> e realizar um subsetting de <code>df_ex</code> para criar esse vetor:</p>
+<p>Suponha, então queremos fazer uma coluna <code>&quot;DE&quot;</code>, que seria um vetor tal qual <code>c(&quot;BRA1&quot;, &quot;BRA2&quot;, &quot;ARG1&quot;, ...)</code> o que poderíamos fazer? Há dois modos. O primeiro, mais longo, seria concatenar os vetores <code>&quot;D&quot;</code> e <code>&quot;E&quot;</code> usando a função <code>paste0</code> e realizar um subsetting de <code>df_ex</code> para criar esse vetor:</p>
 <pre class="r"><code># Primeiro modo.
 
 #Concatenando D e E 
@@ -1208,7 +1208,7 @@ left_join(x,y) = right_join(y,x)</code></pre>
 <pre class="r"><code>corredor_extra &lt;- data.frame(&quot;Nomes&quot; = c(&quot;Juliano&quot;), &quot;Tempo_min&quot; = 92)
 
 df_km2 &lt;- rbind.data.frame(df_km, corredor_extra)</code></pre>
-<p>Agora, vamos supor que se quer todas as informações possiveis juntas, mesmo incluindo quem não estava inscrito. Para tanto podemos usar a função <code>full_join</code>, que irá manter as linhas dos dois dataframes. Veja abaixo:</p>
+<p>Agora, vamos supor que se quer todas as informações possíveis juntas, mesmo incluindo quem não estava inscrito. Para tanto podemos usar a função <code>full_join</code>, que irá manter as linhas dos dois dataframes. Veja abaixo:</p>
 <pre class="r"><code>df_km2 %&gt;% full_join(df_inscritos)</code></pre>
 <pre><code>## Joining, by = &quot;Nomes&quot;</code></pre>
 <pre><code>##       Nomes Tempo_min Idade

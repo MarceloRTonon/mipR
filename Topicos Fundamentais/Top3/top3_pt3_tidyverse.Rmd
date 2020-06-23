@@ -39,11 +39,11 @@ library(magrittr)
 library(readr)
 ```
 
-## Introdução ao subsetting com tidyverse
+## Introdução a manipulação de dados pelo `tidyverse`
 
 Muitas das coisas que o `base R` faz podem ser feitas de forma mais verbosa com os pacotes do `tidyverse`. Apesar de no fim acabar que se escreve mais, o código pode ficar mais claro para quem escreve e lê o código. Desse modo, a manipulação de dados é mais baseada em verbos e nome de colunas do que em colchetes, chaves e índices das colunas. Além disso, o `tidyverse` dá uma gama de elementos para as suas funções do subsetting que não é tão trivial assim usar no `base R`. Além disso, muitas funções do `tidyverse` foram escritas em `C++` e isso faz com que elas sejam *muito* rápidas.
 
-Neste tópico iremos apresentar o básico de como manipular base de dados no R a partir do `tidyverse`, focando especialmente no `dplyr`. É necessário no entanto atentar para o fato de que talvez as funções mais poderosa do `dplyr` não sejam explicadas aqui. É o caso de funções como `mutate`, `summary`, `group_by`e coisas que aumentam o poder do pacote como  [`across`](https://dplyr.tidyverse.org/reference/across.html).
+Neste tópico iremos apresentar o básico de como manipular base de dados no R a partir do `tidyverse`, focando especialmente no `dplyr`. É necessário no entanto atentar para o fato de que talvez as funções mais poderosa do `dplyr` não sejam explicadas aqui. É o caso de funções como `mutate`, `summary`, `group_by`e coisas que aumentam o poder do pacote como  [`across`](https://dplyr.tidyverse.org/reference/across.html). O `tidyverse` é incrível e faz muita coisa, tanto é que escreveram um livro em que você basicamente só usa ele do inicio ao fim, o *R for Data Science*.
 
 ## O tidyverse: Introdução
 
@@ -53,15 +53,15 @@ Os pacotes do núcleo duro do *tidyverse* são:
 
 - ***tibble***: Já falamos, brevemente, desse pacote no Tópico 2. Um `tibble` é como um `data.frame` só que, na propria definição do site do [`tidyverse`](https://tibble.tidyverse.org/), mais preguiçoso e ranzinza. Ele não facilita sua vida como o `data.frame` o faz. Por exemplo, ele não muda nem o nome nem o tipo das variáveis e irão reclamar mais. Importante notar que antes um `tibble` e um `data.frame` eram mais diferentes do que são hoje^[Até agora (Junho de 2020) nem o [site](https://tibble.tidyverse.org/) nem a documentação do `tibble` no R foram atualizadas nesse sentido.], pois a função `data.frame` por default convertia `strings` em `factor`, o que mudou na atualização 4.0.0 do R.^[Veja mais na documentação de `data.frame`, em especial no argumento de `stringAsFactors`.] A principio, o `tibble` não será mais abordado aqui no curso, (pelo fato de que teremos um ) assim que desejar se aprofundar mais nele pode conferir o capitulo 10 do [*R for Data Science*](https://r4ds.had.co.nz/tibbles.html) e [neste artigo](https://tibble.tidyverse.org/articles/tibble.html).
 
-- ***readr***: No tópico 2, também já falamos sobre o pacote `readr`, e como ele é muito mais rápido que o `base` R para importar uma base de dados. É importante considerar apenas que ele importa a base como um `tibble` e não um `data.frame`.
+- ***readr***: No tópico 2, também já falamos sobre o pacote `readr`, e como ele é muito mais rápido que o `base` R para importar uma base de dados. É importante considerar apenas que ele importa a base como um `tibble` e não um `data.frame`. Vamos falar um pouco dele aqui também.
 
-- ***dplyr***: O pacote `dplyr` é **O** pacote para manipular os dados. Ele irá te ajudar a lidar com problemas comuns na hora de manipular a base de dados. Uma parte das suas utilidades será apresentada no Tópico 3^[A mais relacionada com `subsetting`]. Os capítulos [5](https://r4ds.had.co.nz/transform.html) e [13](https://r4ds.had.co.nz/relational-data.html) do *R for Data Science* introduzem uma boa parte das funções que `dplyr` oferece.
+- ***dplyr***: O pacote `dplyr` é **O** pacote para manipular os dados. Ele irá te ajudar a lidar conscientemente com problemas comuns na hora de manipular a base de dados. Uma parte das suas utilidades será apresentada no Tópico 3^[A mais relacionada com `subsetting`]. Os capítulos [5](https://r4ds.had.co.nz/transform.html) e [13](https://r4ds.had.co.nz/relational-data.html) do *R for Data Science* introduzem uma boa parte das funções que `dplyr` oferece, inclusive algumas das que não falaremos aqui.
 
 - ***tidyr***: O pacote `tidyr` é por sua vez focado em deixar uma base de dados mais bem comportada, especificamente no modo `tidy`. Assim, o `tidyr` é muito voltado para base de dados retangulares. Algumas poucas funções do `tidyr` serão apresentadas no Tópico 3, em especial as mais úteis para Matriz Insumo Produto. Para uma visão (bem) mais abrangente do `tidyr` olhe o capítulo [12](https://r4ds.had.co.nz/tidy-data.html) do *R for Data Science*
 
 - ***purrr***: O pacote `purrr` traz consigo um poderoso ferramental para lidar com automação de tarefas e com estruturas de dados muito recursivas (listas). Sua abordagem radicalmente funcional te dá uma grande vantagem frente ao loop tradicional do base R. Uma parte deste pacote será abordado no Tópico 4, sendo também abordado no capítulo [21](https://r4ds.had.co.nz/iteration.html) do *R for Data Science* e no [9](https://adv-r.hadley.nz/functionals.html) do *Advanced R*.
 
-- ***stringr***: Esse pacote lida com dados que na realidade são textos, as chamadas `string`. Assim sendo, é uma ferramenta muito poderosa, que para além de questões óbvias, serve de apoio para o `subsetting` e a automação de determinadas tarefas. O pacote `stringr` e suas aplicações será discutido no Tópico 5. As funcionalidades do pacote são explicadas no capítulo
+- ***stringr***: Esse pacote lida com dados que na realidade são textos, as chamadas `strings`. Assim sendo, é uma ferramenta muito poderosa, que para além de questões óbvias, serve de apoio para o `subsetting` e a automação de determinadas tarefas. O pacote `stringr` e suas aplicações será discutido no Tópico 5. As funcionalidades do pacote são explicadas no capítulo
 [14](https://r4ds.had.co.nz/strings.html) do *R for Data Science*.
 
 - ***ggplot2***: A ferramente mais poderosa de construção de gráficos do R. É o que se tem para falar do `ggplot2`. Ele será introduzido no Tópico 6. Uma abordagem mais ampla de todo o seu poder pode ser vista no livro [*ggplot2: Elegant Graphics for Data Analysis*](https://ggplot2-book.org/) feito pelo Hadley Wickham.
@@ -107,11 +107,11 @@ mtcars %$% mean(drat)
 
 Quanto mais longo a linha de comando, melhor será aplicar o modo *pipe* em detrimento do *nested*. O modo *pipe* que usamos foi desenvolvido no pacote `magrittr`, sendo que o operador *pipe forward* `%>%` estará disponível para uso sempre que você carregar um pacote do `tidyverse`. Isso não é o caso do operador *exposition pipe*, que é necessário que você carregue explicitamente o pacote `magrittr`, pois este não é um dos pacotes do "núcleo" do *Tidyverse*. Existem outros dois operadores dentro do pacote `magrittr`^[E ficam disponíveis apenas se você carregar o `magrittr` explicitamente.] que são o *tee pipe* `%T>%` e o *compound assignment pipe* `%<>%`, mas que não serão discutidos aqui^[Para mais informações sobre o `magrittr` veja https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html].
 
-## Subsetting com o Tidyverse
+## Subsetting com o `tidyverse`
 
 ### Extraindo colunas a partir dos seus nomes
 
-Existe duas funções para você retirar colunas a partir dos seus nomes, `select` e `pull`. O `select` irá manter a estrutura de dados, enquanto `pull` irá alocar todos os dados selecionados  num vetor atómico. Veja os exemplos abaixo:
+Existe duas funções para você retirar colunas a partir dos seus nomes, `select` e `pull`. O `select` irá manter a estrutura de dados, enquanto `pull` irá alocar todos os dados selecionados  num vetor atômico. Veja os exemplos abaixo:
 
 ```{r, eval = FALSE}
 # Selecionando apenas a coluna 5
@@ -222,7 +222,7 @@ Podemos colocar mais de uma condição em `filter` para não ter que fazer uma s
 CO2 %>% filter(conc ==moda(conc), uptake <= median(uptake))
 ```
 
-No caso acima foram selecionadas as linhas que ao mesmo tempo eram iguais à moda da coluna `conc` e eram menores que a  mediana de `uptake`. Poderiamos ir além e colocar um terceiro elemento:
+No caso acima foram selecionadas as linhas que ao mesmo tempo eram iguais à moda da coluna `conc` e eram menores que a  mediana de `uptake`. Poderíamos ir além e colocar um terceiro elemento:
 
 ```{r}
 CO2 %>% filter(conc ==moda(conc), uptake <= median(uptake), Treatment == "chilled")
@@ -262,7 +262,7 @@ CO2 %>% filter(conc == moda(conc) & !uptake <= median(uptake))
 CO2 %>% filter(!conc == moda(conc) & uptake <= median(uptake))
 ```
 
-Perceba que `filter`, como toda função do subsetting, faz nada mais que selecionar as linhas que retornam `TRUE` às condições que ele impõe. Por isso, as comporações e operações lógicas são instrumentos tão poderosos para a seleção `filter`.
+Perceba que `filter`, como toda função do subsetting, faz nada mais que selecionar as linhas que retornam `TRUE` às condições que ele impõe. Por isso, as comparações e operações lógicas são instrumentos tão poderosos para a seleção `filter`.
 
 Existem mais três funções que podem ser usados para aumentar a força de `filter`: `is.na()`, `between()` e `near`. A função `is.na()` confere se um valor é `NA`. Assim podemos usa-la para selecionar (ou excluir), linhas que possuam valores `NA`.
 
@@ -287,7 +287,7 @@ airquality %>% filter(!is.na(Ozone)) %>% .[1:20,]
 
 (Veja a subseção "Removendo linhas `NA` diretamente" para um método direto.)
 
-Já a função `between` serve para você filtrar linhas que contém elementos númericos entre dois valores.
+Já a função `between` serve para você filtrar linhas que contém elementos numéricos entre dois valores.
 
 ```{r}
 
@@ -322,7 +322,7 @@ CO2 %>% filter(near(uptake, 40, tol = 1))
  
 ```
 
-##### (decidindo se farei) Variações de filter 
+##### (decidindo se farei) Variações de `filter` 
 
 Existem três variações de `filter`: `filter_all`, `filter_if` e `filter_at`. Iremos explicar aqui as duas primeiras variações, pois a terceira é complexa demais para esse estágio. De todo modo, `filter_all` e `filter_if` são filtram uma base de dados aplicando um predicando a todas as variáveis. Esses predicados devem ser expostos com `all.vars()` ou `any_vars()`.
 
@@ -340,9 +340,9 @@ airquality %>% filter_all(all_vars(is.na(.)))
 
 
 
-#### Removendo duplicatas com distinc
+#### Removendo duplicatas com `distinc`
 
-A função distinct remove linhas duplicadas dos seus data.frames. Veja o exemplo abaixo:
+A função `distinct` remove linhas duplicadas dos seus data.frames. Veja o exemplo abaixo:
 
 ```{r}
 ex_df <- data.frame("A"=c(1,0,1,1,-0), "B" = c(0,1,0,1, 1) )
@@ -352,7 +352,7 @@ ex_df %>% distinct()
 
 ```
 
-#### Reordenando as linhas com arrange
+#### Reordenando as linhas com `arrange`
 
 A função `arrange` serve para reordenar as linhas de acordo com uma coluna. 
 
@@ -372,7 +372,7 @@ iris %>% arrange(Species) %>% head()
 
 #### Removendo linhas `NA` diretamente
 
-Se queremos apenas remover linhas que tem `NA`, há uma forma mais direta do que combinar a função `filter` do pacote `dplyr`, com o argumento `is.na`. Tal forma é podemos usar a função `drop_na` do pacote `tidyr` para elimnar linhas com `NA`.
+Se queremos apenas remover linhas que tem `NA`, há uma forma mais direta do que combinar a função `filter` do pacote `dplyr`, com o argumento `is.na`. Tal forma é podemos usar a função `drop_na` do pacote `tidyr` para eliminar linhas com `NA`.
 
 ```{r}
 airquality %>% tidyr::drop_na() %>% head()
@@ -406,7 +406,7 @@ E <- rep(c(1,2), 3)
 df_ex <- data.frame(df_ex, "D"= D, "E" = E)
 ```
 
-Suponha, então queremos fazer uma coluna `"DE"`, que seria um vetor tal qual `c("BRA1", "BRA2", "ARG1", ...)` o que poderiamos fazer? Há dois modos. O primeiro, mais longo, seria concatenar os vetores `"D"` e `"E"` usando a função `paste0` e realizar um subsetting de `df_ex` para criar esse vetor:
+Suponha, então queremos fazer uma coluna `"DE"`, que seria um vetor tal qual `c("BRA1", "BRA2", "ARG1", ...)` o que poderíamos fazer? Há dois modos. O primeiro, mais longo, seria concatenar os vetores `"D"` e `"E"` usando a função `paste0` e realizar um subsetting de `df_ex` para criar esse vetor:
 
 ```{r}
 # Primeiro modo.
@@ -473,7 +473,7 @@ corredor_extra <- data.frame("Nomes" = c("Juliano"), "Tempo_min" = 92)
 df_km2 <- rbind.data.frame(df_km, corredor_extra)
 ```
 
-Agora, vamos supor que se quer todas as informações possiveis juntas, mesmo incluindo quem não estava inscrito. Para tanto podemos usar a função `full_join`, que irá manter as linhas dos dois dataframes. Veja abaixo:
+Agora, vamos supor que se quer todas as informações possíveis juntas, mesmo incluindo quem não estava inscrito. Para tanto podemos usar a função `full_join`, que irá manter as linhas dos dois dataframes. Veja abaixo:
 
 ```{r}
 df_km2 %>% full_join(df_inscritos)
@@ -512,6 +512,7 @@ Agora suponha que se quer saber quais dos corredores inscritos foram jogar bolar
 
 df_futebol %>% inner_join(df_inscritos, by = c( "Jogador" = "Nomes"))
 ```
+
 
 ### Alterando tipos de colunas
 
