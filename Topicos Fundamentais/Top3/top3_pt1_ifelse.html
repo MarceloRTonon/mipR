@@ -391,8 +391,6 @@ c(1:3) &gt;= c(3:1)</code></pre>
 4&lt;5</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code># Menor ou igual
-<<<<<<< HEAD
-<<<<<<< HEAD
 2 &lt; 2</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code>2 &lt;= 2</code></pre>
@@ -411,21 +409,6 @@ c(1:3) &gt;= c(3:1)</code></pre>
 <pre class="r"><code> c(6:9) %in% matrix(1:6, 3, 2)</code></pre>
 <pre><code>## [1]  TRUE FALSE FALSE FALSE</code></pre>
 <p>Ps.: Um ótimo resumo sobre o que cada operador faz pode ser encontrado na <a href="https://rstudio-education.github.io/hopr/modify.html#tab:logop">Table 7.1</a> do <strong>Hands-On Programming with R</strong>.</p>
-=======
-=======
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-# &lt;=
-# Igual à
-# ==
-# Diferente de
-# !=
-# Tem &quot;match&quot; ## Dar muitos exemplos pra %in%, colocar exemplo com data.frame
- 2 %in% c(1:3)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<<<<<<< HEAD
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-=======
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 </div>
 <div id="escolhas-e-condições-if-statements" class="section level2">
 <h2>3.2 - Escolhas e Condições (If Statements)</h2>
@@ -469,15 +452,7 @@ b==2</code></pre>
 </div>
 <div id="if-e-else" class="section level3">
 <h3>3.2.2 - if e else</h3>
-<<<<<<< HEAD
-<<<<<<< HEAD
 <p>Caso seu objetivo não dependa apenas da validade do condição estabelecida ser <code>TRUE</code>, mas de fazer outra determinanda operação caso o resultado lógico da sua condição ser <code>FALSE</code>, é necessário adicionar mais uma etapa. Nesse caso, além do <code>if</code> é necessário inserir a função <code>else</code>, bem como a tarefa ou resultado que você deseja obter. Novamente, a representação no R é da seguitne forma:</p>
-=======
-<p>Caso seu objetivo não dependa apenas da validade do condição estabelecida ser <code>TRUE</code>, mas de fazer outra determinanda operação caso o resultado lógico da sua condição ser <code>FALSE</code>.</p>
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-=======
-<p>Caso seu objetivo não dependa apenas da validade do condição estabelecida ser <code>TRUE</code>, mas de fazer outra determinanda operação caso o resultado lógico da sua condição ser <code>FALSE</code>.</p>
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 <pre class="r"><code>if (condição){
   
   Execute esta operação caso a condição seja verdadeira
@@ -498,7 +473,7 @@ if(a == 2){
 if(b == 2){
   &quot;Condição válida&quot;
   }else{
-    &quot;Condição inválida&quot;
+  &quot;Condição inválida&quot;
   }</code></pre>
 <pre><code>## [1] &quot;Condição inválida&quot;</code></pre>
 <p>No caso acima os dois casos tem um retorno pois tem o <code>else</code>. Os exemplos acima foram realizados usando condição de igualdade <code>==</code>, mas qualquer uma das operações lógicas citadas na seção 3.1 pode ser usada. Vamos fazer alguns exemplos (mas não de todos)</p>
@@ -527,7 +502,7 @@ if(a %in% d){
   }</code></pre>
 <pre><code>## [1] &quot;a não está contido em d&quot;</code></pre>
 <p>As opções não se resumem apenas à mensagens indicando o resultado da condição que você escolheu, mas fazer novas operações de acordo com o <code>TRUE</code> ou <code>FALSE</code>.</p>
-<p>Vamos fazer um exemplo que caso a condição <code>a&gt;b</code> seja atendida realiza-se a soma desses valores e, caso contrário, realiza-se a subtração:</p>
+<p>Vamos fazer um exemplo que caso a condição <code>a &gt; b</code> seja atendida realiza-se a soma desses valores e, caso contrário, realiza-se a subtração:</p>
 <pre class="r"><code>a &lt;- 2
 b &lt;- 3
 
@@ -540,27 +515,20 @@ if(a &gt; b){
 </div>
 <div id="a-função-ifelse" class="section level3">
 <h3>3.2.3 - A função ifelse</h3>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<p>Existe a função ifelse que pode ser mais prática do que escrever o <code>if</code> <code>else</code> como foi feito. Mais importante ainda, o <code>ifelse</code> funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente.</p>
+<p>Existe a função ifelse que pode ser mais prática do que escrever o <code>if</code> <code>else</code> como foi feito. Mais importante ainda, o <code>ifelse</code> funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente. No Tópico 4 falaremos mais sobre funções vetoriais.</p>
 <p>A estrutura da <code>ifelse</code> é semelhante ao caso de <code>if</code> e <code>else</code> separado, no entanto, todos os argumentos são escritos numa mesma linha:</p>
-=======
-<p>Existe a função ifelse que pode ser mais prática do que escrever o <code>if</code> <code>else</code> como foi feito. Mais importante ainda, o <code>ifelse</code> funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente. No Tópico 4 falaremos mais sobre funções vetoriais.</p>
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-=======
-<p>Existe a função ifelse que pode ser mais prática do que escrever o <code>if</code> <code>else</code> como foi feito. Mais importante ainda, o <code>ifelse</code> funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente. No Tópico 4 falaremos mais sobre funções vetoriais.</p>
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 <pre class="r"><code>ifelse(condição, resultado se verdadeiro, resultado caso contrário)</code></pre>
 <p>Vamos rapidamente refazer os exemplos da seção anterior com essa função:</p>
 <pre class="r"><code>ifelse(a == b, &quot;a é igual a b&quot;, &quot;a é diferente de b&quot;)</code></pre>
 <pre><code>## [1] &quot;a é diferente de b&quot;</code></pre>
 <pre class="r"><code>ifelse(a &gt; b, &quot;a é maior que b&quot;, &quot;a é menor ou igual b&quot;)</code></pre>
 <pre><code>## [1] &quot;a é menor ou igual b&quot;</code></pre>
-<pre class="r"><code># Podemos também inserir as operações (replicando o caso da some e subtração)
+<pre class="r"><code># Podemos também inserir as operações (replicando o caso da soma e subtração)
 ifelse(a &gt; b, a + b, a - b)</code></pre>
 <pre><code>## [1] -1</code></pre>
 <p>Um importante detalhe a ser lembrado é que a própria condição pode ser a existência de algum resultado lógico. Ou seja, caso se um encontre um <code>TRUE</code> ou <code>FALSE</code>, faça determinada tarefa.</p>
-<pre class="r"><code>ifelse (a=TRUE, &quot;faça isso&quot;, &quot;faça outra coisa&quot;)</code></pre>
+<pre class="r"><code>ifelse (a == TRUE, &quot;faça isso&quot;, &quot;faça outra coisa&quot;)
+ifelse (b == FALSE, &quot;faça isso&quot;, &quot;faça outra coisa&quot;)</code></pre>
 <p>Vamos rapidamente relembrar algumas funções que já usamos e que são da estrutura de condições, por exemplo: <code>is.character</code>, <code>is.matrix</code> e <code>is.data.frame</code>.</p>
 <p>Vamos primeiro criar 3 objetos de diferentes tipos: um vetor atômico <code>character</code>, um vetor atômico <code>double</code>, uma matriz <code>double</code> e um data.frame <code>double</code>:</p>
 <pre class="r"><code>f &lt;- c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)
@@ -573,7 +541,6 @@ is.character2(f)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code>is.character2(g)</code></pre>
 <pre><code>## [1] FALSE</code></pre>
-<<<<<<< HEAD
 <pre class="r"><code>is.matrix2 &lt;- function(x){ifelse(class(x) == &quot;matrix&quot;, TRUE, FALSE)}
 is.matrix2(h)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
@@ -582,63 +549,76 @@ is.matrix2(h)</code></pre>
 <pre class="r"><code>is.data.frame2 &lt;- function(x){ifelse(class(x) == &quot;data.frame&quot;, TRUE, FALSE)}
 is.data.frame2(h)</code></pre>
 <pre><code>## [1] FALSE</code></pre>
-<<<<<<< HEAD
 <pre class="r"><code>is.data.frame2(i)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-=======
-=======
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-<pre class="r"><code># eval == FALSE temporario
-#dar exemplos com condições que sejam funções, por exemplo: is.character(), &gt;=, is.data.frame(), %in%.
-
-#Usar exemplos de ifs com duas condições usando &amp;, &amp;&amp;, | e ||</code></pre>
-<<<<<<< HEAD
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-=======
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 </div>
 </div>
 <div id="operações-em-conjuntos-booleans" class="section level2">
 <h2>3.3 - Operações em Conjuntos (Booleans)</h2>
-<p>@<span class="citation">@Citar</span> uma página que explique teoria de conjuntos.</p>
-<p>Veja abaixo alguns exemplos dos chamados <em>Logical Operators</em></p>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<pre class="r"><code>#Fazer aqui o que eu fiz com os operadores lógicos.
+<p>Para essa parte é importante relembrar a ideia de conjuntos, em que iremos incluir mais de uma condição. Poderemos especificar determinadas tarefas para o caso em que diversas condições necessitam ser atendidas.</p>
+<p>Veja abaixo alguns exemplos dos chamados <em>Logical Operators</em>, em especial os do tipo <code>and ( &amp; )</code>e <code>or ( | )</code>.</p>
+<p>O operador &amp; vai representar se duas ou mais condições são verdadeiros ou não:</p>
+<pre class="r"><code># Se uma delas é FALSE, automaticamente o resultado é FALSE
+TRUE &amp; FALSE</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code># Se as duas são FALSE, o resultado também será FALSE
+FALSE &amp; FALSE</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code># Somente ocorrerá TRUE, caso ambas condições sejam TRUE:
+TRUE &amp; TRUE</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Vamos ver uns exemplos numéricos:</p>
+<pre class="r"><code>a &lt;- 2
+b &lt;- 3
+d &lt;- c(1:5)
+e &lt;- c(6:10)
 
-#Usar não só vetores, mas também valores lógicos per se:
-#Usar exemplos de ifs com duas condições usando &amp;, &amp;&amp;, | e ||
-=======
-=======
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-<pre class="r"><code># O eval= FALSE é temporário
-#Fazer aqui o que eu fiz com os operadores lógicos.
+# Vamos testar se a e b são maiores que 1
 
-#Usar não só vetores, mas também valores lógicos per se:
+a &gt; 1 &amp; b &gt; 1</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>a &gt; 2 &amp; b &gt; 2</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>a %in% d &amp; b %in% e</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code># Vc também pode adicionar mais condições:
+a &gt; 1 &amp; b &gt;1 &amp; a %in% d</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Agora juntando isso com o ifelse, você pode refinar ainda mais as escolhas que você deseja:</p>
+<pre class="r"><code># Se cond1 e cond2 forem atendidas:
+ifelse(cond1 &amp; cond2, &quot;Faça isso&quot;. &quot;Faça outra coisa&quot;)
+# Se cond1, cond2 e cond3 forem atendidas:
+ifelse(cond1 &amp; cond2 &amp; cond3, &quot;Faça isso&quot;. &quot;Faça outra coisa&quot;)
+# e assim  por diante</code></pre>
+<p>Já o operador <code>|</code> será reponsável por avaliar se pelo menos umas das condições é satisfeita:</p>
+<pre class="r"><code># Se pelo menos uma das condições é verdadeiro, o resultado é verdadeiro:
+TRUE | FALSE</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code># Agora dois resultados FALSE, darão FALSE:
+FALSE | FALSE</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>Todos os casos realizados para o <code>&amp;</code> são também válidos para <code>|</code>, mas ainda faremos um caso somente pra ilustrar:</p>
+<pre class="r"><code>a &gt; 2 | b &gt; 2</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>a &gt; 2 | b == 2 </code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code># Como a é menor que 2 e b é diferente de 2, o resultado é FALSE</code></pre>
+<p>Em alguns casos, outra opção é usar dois operadores em sequência <code>&amp;&amp;</code> ou <code>||</code> que realizaram a mesma tarefa mas pouparão a capacidade computacional do seu computador. Na caso de <code>&amp;&amp;</code>, o resultado é automaticamente dado como <code>FALSE</code> caso a primeira condição já não seja atendida. Já para <code>||</code>, caso a primeira condição seja atendida, o resultado automaticamente é <code>TRUE</code>.</p>
+<p>Outros possíveis casos de operações lógicas envolvem:</p>
+<pre class="r"><code># Caso você queira que apenas UMA das condições seja atendida use xor(cond1, cond 2) 
+xor(a &gt; 2, b == 2)
+xor(a &gt; 2, b &gt; 2)
 
-<<<<<<< HEAD
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-=======
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
+# Caso você queira extrair o resultado de uma condição escolhida use &quot;!&quot;:
+!(a &gt; 2) # Que equivale a receber o resultado lógico do teste TRUE ou FALSE
 
-TRUE &amp; FALSE
-TRUE &amp; TRUE
-FALSE &amp; FALSE
-
-&amp;&amp;
-|
-||
-xor(c(1:3), (2:4))
-!
-any
-all</code></pre>
-<<<<<<< HEAD
-<<<<<<< HEAD
+# Caso você tenha várias condições, você pode perguntar se qualquer uma delas é atendida usando o &quot;any()&quot; ou se todas são atendidas com &quot;all()&quot;:
+any(a &gt; 2, b == 2, 6 %in% d) # nenhuma é atendido logo devemos receber &quot;FALSE&quot;
+any(a &gt;= 2, b == 2, 6 %in% d) # mudando a condição, agora &quot;a &gt;= 2&quot; é atendida
+all(a &gt;= 2, b == 2, 6 %in% d) # ao menos uma não é atendida resultado deve ser FALSE
+all(a &gt;= 2, b &gt; 2, 5 %in% d) # agora com todas sendo antendidas</code></pre>
+<p>Por fim, novamente, todas essas operações podem ser usadas conjuntamente com <code>if</code>, <code>else</code> e <code>ifelse</code>. Isso amplia seu leque de opções quando deseja automatizar algumas tarefas, bem como realizar testes na sua base de dados.</p>
 <p>Ps.: Um ótimo resumo sobre o que cada operador Booleano faz pode ser encontrado na <a href="https://rstudio-education.github.io/hopr/modify.html#tab:boole">Table 7.2</a> do <strong>Hands-On Programming with R</strong>.</p>
-=======
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-=======
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 </div>
 <div id="fontes" class="section level2">
 <h2>Fontes:</h2>

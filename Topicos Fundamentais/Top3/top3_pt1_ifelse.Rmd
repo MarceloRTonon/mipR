@@ -138,7 +138,7 @@ b <- 3
 if(b == 2){
   "Condição válida"
   }else{
-    "Condição inválida"
+  "Condição inválida"
   }
 ```
 
@@ -174,7 +174,7 @@ if(a %in% e){
 
 As opções não se resumem apenas à mensagens indicando o resultado da condição que você escolheu, mas fazer novas operações de acordo com o `TRUE` ou `FALSE`.
 
-Vamos fazer um exemplo que caso a condição `a>b` seja atendida realiza-se a soma desses valores e, caso contrário, realiza-se a subtração:
+Vamos fazer um exemplo que caso a condição `a > b` seja atendida realiza-se a soma desses valores e, caso contrário, realiza-se a subtração:
 
 
 ```{r}
@@ -201,53 +201,23 @@ ifelse(condição, resultado se verdadeiro, resultado caso contrário)
 
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 Vamos rapidamente refazer os exemplos da seção anterior com essa função:
-
 
 ```{r}
 
 ifelse(a == b, "a é igual a b", "a é diferente de b")
 ifelse(a > b, "a é maior que b", "a é menor ou igual b")
-# Podemos também inserir as operações (replicando o caso da some e subtração)
+# Podemos também inserir as operações (replicando o caso da soma e subtração)
 ifelse(a > b, a + b, a - b)
 
-=======
-=======
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-```{r}
-a <-2
-ifelse(a ==2, "Condição válida", "Condição inválida")
-
-b <-3
-ifelse(b ==2, "Condição válida", "Condição inválida")
-
-<<<<<<< HEAD
-=======
-```
-
-```{r}
-
-ifelse(TRUE, "Condição válida", "Condição inválida")
-
-ifelse(FALSE, "Condição válida", "Condição inválida")
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
-```
-
-```{r}
-
-ifelse(TRUE, "Condição válida", "Condição inválida")
-
-ifelse(FALSE, "Condição válida", "Condição inválida")
->>>>>>> be81fb577df201e6493dada52f3e7b7cac1d656c
 ```
 
 Um importante detalhe a ser lembrado é que a própria condição pode ser a existência de algum resultado lógico. Ou seja, caso se um encontre um `TRUE` ou `FALSE`, faça determinada tarefa.
 
 ```{r, eval = FALSE} 
 
-ifelse (a=TRUE, "faça isso", "faça outra coisa")
+ifelse (a == TRUE, "faça isso", "faça outra coisa")
+ifelse (b == FALSE, "faça isso", "faça outra coisa")
 
 ```
 
@@ -289,29 +259,89 @@ is.data.frame2(i)
 
 Para essa parte é importante relembrar a ideia de conjuntos, em que iremos incluir mais de uma condição. Poderemos especificar determinadas tarefas para o caso em que diversas condições necessitam ser atendidas. 
 
-Veja abaixo alguns exemplos dos chamados *Logical Operators*
+Veja abaixo alguns exemplos dos chamados *Logical Operators*, em especial os do tipo `and ( & )`e `or ( | )`.
 
-```{r, eval = FALSE}
+O operador & vai representar se duas ou mais condições são verdadeiros ou não:
 
-#Fazer aqui o que eu fiz com os operadores lógicos.
-
-#Usar não só vetores, mas também valores lógicos per se:
-#Usar exemplos de ifs com duas condições usando &, &&, | e ||
-
+```{r}
+# Se uma delas é FALSE, automaticamente o resultado é FALSE
 TRUE & FALSE
-TRUE & TRUE
+# Se as duas são FALSE, o resultado também será FALSE
 FALSE & FALSE
+# Somente ocorrerá TRUE, caso ambas condições sejam TRUE:
+TRUE & TRUE
+```
+Vamos ver uns exemplos numéricos:
 
-&& # Nessa situação a 
-|
-||
-xor(c(1:3), (2:4))
-!
-any
-all
+```{r}
+a <- 2
+b <- 3
+d <- c(1:5)
+e <- c(6:10)
 
+# Vamos testar se a e b são maiores que 1
+
+a > 1 & b > 1
+a > 2 & b > 2
+a %in% d & b %in% e
+
+# Vc também pode adicionar mais condições:
+a > 1 & b >1 & a %in% d
 
 ```
+
+Agora juntando isso com o ifelse, você pode refinar ainda mais as escolhas que você deseja:
+
+```{r, eval=FALSE}
+# Se cond1 e cond2 forem atendidas:
+ifelse(cond1 & cond2, "Faça isso". "Faça outra coisa")
+# Se cond1, cond2 e cond3 forem atendidas:
+ifelse(cond1 & cond2 & cond3, "Faça isso". "Faça outra coisa")
+# e assim  por diante
+
+```
+
+Já o operador `|` será reponsável por avaliar se pelo menos umas das condições é satisfeita:
+
+```{r}
+# Se pelo menos uma das condições é verdadeiro, o resultado é verdadeiro:
+TRUE | FALSE
+# Agora dois resultados FALSE, darão FALSE:
+FALSE | FALSE
+
+```
+
+Todos os casos realizados para o `&` são também válidos para `|`, mas ainda faremos um caso somente pra ilustrar:
+
+```{r}
+
+a > 2 | b > 2
+a > 2 | b == 2 
+# Como a é menor que 2 e b é diferente de 2, o resultado é FALSE
+```
+
+
+Em alguns casos, outra opção é usar dois operadores em sequência `&&` ou `||` que realizaram a mesma tarefa mas pouparão a capacidade computacional do seu computador. Na caso de `&&`, o resultado é automaticamente dado como `FALSE` caso a primeira condição já não seja atendida. Já para `||`, caso a primeira condição seja atendida, o resultado automaticamente é `TRUE`.
+
+Outros possíveis casos de operações lógicas envolvem:
+
+```{r, eval=FALSE}
+
+# Caso você queira que apenas UMA das condições seja atendida use xor(cond1, cond 2) 
+xor(a > 2, b == 2)
+xor(a > 2, b > 2)
+
+# Caso você queira extrair o resultado de uma condição escolhida use "!":
+!(a > 2) # Que equivale a receber o resultado lógico do teste TRUE ou FALSE
+
+# Caso você tenha várias condições, você pode perguntar se qualquer uma delas é atendida usando o "any()" ou se todas são atendidas com "all()":
+any(a > 2, b == 2, 6 %in% d) # nenhuma é atendido logo devemos receber "FALSE"
+any(a >= 2, b == 2, 6 %in% d) # mudando a condição, agora "a >= 2" é atendida
+all(a >= 2, b == 2, 6 %in% d) # ao menos uma não é atendida resultado deve ser FALSE
+all(a >= 2, b > 2, 5 %in% d) # agora com todas sendo antendidas
+```
+
+Por fim, novamente, todas essas operações podem ser usadas conjuntamente com `if`, `else` e `ifelse`. Isso amplia seu leque de opções quando deseja automatizar algumas tarefas, bem como realizar testes na sua base de dados.
 
 Ps.: Um ótimo resumo sobre o que cada operador Booleano faz pode ser encontrado na [Table 7.2](https://rstudio-education.github.io/hopr/modify.html#tab:boole) do **Hands-On Programming with R**. 
 
