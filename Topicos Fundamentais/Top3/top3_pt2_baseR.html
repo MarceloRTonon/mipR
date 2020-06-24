@@ -369,16 +369,62 @@ summary {
 </div>
 
 
-<p>Neste parte discutiremos a forma de se manipular uma base de dados dentro do R. Isto é particulamente útil se vc está trabalhando com uma base de dados extensa e com várias observações, mas também para base de dados menores mas heterogêneas. No caso da matriz insumo-produto, estamos em geral trabalhando com base de dados que não apresentam elevados números de observações tanto no tempo quanto em países, pessoas ou empresas. Ainda assim, base de dados que, por exemplo, lidem com fluxo de comércio entre países, apresentam informações setoriais mais específicas ou até mesmo aumentem a frequência temporal dos dados… podem ser manipuladas e somente as informações necessárias sejam separadas para você trabalhar no R.</p>
+<p>Neste parte discutiremos a forma de se manipular uma base de dados dentro do R. Isto é particulamente útil se vc está trabalhando com uma base de dados extensa e com várias observações, mas também para base de dados menores mas heterogêneas. No caso da matriz insumo-produto, estamos em geral trabalhando com base de dados que não apresentam elevados números de observações tanto no tempo quanto em países, pessoas ou empresas. Ainda assim, base de dados no estilo insumo-produto que, por exemplo, lidem com fluxo de comércio entre países, que apresentam informações setoriais mais específicas ou que até mesmo aumentem a frequência temporal dos dados… podem ser manipuladas e refinar somente as informações necessárias para você trabalhar no R.</p>
+<ul>
+<li>Destaque aqui para a <a href="https://adv-r.hadley.nz/subsetting.html">seção 4</a> do <strong>Advanced R</strong>.</li>
+<li>Também importante a <a href="https://rstudio-education.github.io/hopr/r-notation.html#selecting-values">seção 6.1</a> do <strong>Hands-On Programming with R</strong>.</li>
+</ul>
 <div id="manipulação-de-dados-no-base-r" class="section level2">
 <h2>3.3 - Manipulação de Dados no base R</h2>
-<p>Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Toda parte</p>
-<p>O que colocar aqui: Falar da diferença entre <code>[]</code> e <code>[[]]</code> e <code>$</code> Usar condições dentro do <code>[]</code>. Usar e abusar de coisas elaboradas dentro de funções como: Falar RAPIDAMENTE de factors.</p>
+<p>Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Essa parte tem relação direta com o tópico anterior em que foi ensinado sobre a leitura de dados no R.</p>
+<div id="selecionando-valores" class="section level3">
+<h3>3.3.1 - Selecionando Valores</h3>
+<p>Conforme já apresentado em tópicos anteriores, temos seis formas de escolher valores dentro de um vetor atômico:</p>
+<pre class="r"><code>a &lt;- c(4,1,3,2)
+
+# Números Inteiros Positivos: pegam o elemento da posição especifica
+a[2]</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code># Números Inteiros Negativos: pegam todos elementos exceto o especificado
+a[-1]</code></pre>
+<pre><code>## [1] 1 3 2</code></pre>
+<pre class="r"><code># Zero: retorna o valor zero (útil para gerar vetores com zeros)
+a[0]</code></pre>
+<pre><code>## numeric(0)</code></pre>
+<pre class="r"><code># Vazio: retorna o próprio vetor (o mesmo que chamar somente &quot;a&quot;)
+a[]</code></pre>
+<pre><code>## [1] 4 1 3 2</code></pre>
+<pre class="r"><code># Logical Values: somente as posições com TRUE serão retornadas
+a[c(TRUE,FALSE,TRUE,FALSE)]</code></pre>
+<pre><code>## [1] 4 3</code></pre>
+<pre class="r"><code># Names: se o vetor é nomeado, vc pode chamar os elementos pelo seu &quot;nome&quot;
+a &lt;- setNames(a,c(&quot;Primeiro&quot;, &quot;Segundo&quot;, &quot;Terceiro&quot;, &quot;Quarto&quot;))
+a[&quot;Segundo&quot;]</code></pre>
+<pre><code>## Segundo 
+##       1</code></pre>
+<p>Quando estamos trabalhando com estruturas que tenham duas dimensões (linhas e colunas), a lógica é semelhante:</p>
+<pre class="r"><code>b &lt;- matrix(a, 2, 2)
+
+# Números Inteiros Positivos
+# Números Inteiros Negativos
+# Zero
+# Vazio
+# Logical Values
+# Names</code></pre>
+<p>Quando estamos trabalhando com listas, existem três operadores para selecionar valores: <code>[]</code> e <code>[[]]</code> e <code>$</code></p>
+<ul>
+<li><code>[]</code> extrairá uma list</li>
+</ul>
+<p>Subsetting operators interact differently with different vector types (e.g., atomic vectors, lists, factors, matrices, and data frames).</p>
+<p>Subsetting can be combined with assignment.</p>
+<p>O que colocar aqui: Usar condições dentro do <code>[]</code>. Usar e abusar de coisas elaboradas dentro de funções como: Falar RAPIDAMENTE de factors.</p>
 <pre class="r"><code>sss &lt;- sss[, (ncol(sss)-5:ncol(sss))]</code></pre>
 <p>Explicar como transforma valores <code>NA</code> em 0.</p>
 <pre class="r"><code>aa &lt;- matrix(c(1, NA, 2, 3, NA, NA), ncol = 2)
 
+# Usa-se a função is.na() para identificar e selecionar os valores com NA e substitui por 0:
 aa[is.na(aa)] &lt;- 0</code></pre>
+</div>
 </div>
 <div id="fontes" class="section level2">
 <h2>Fontes:</h2>

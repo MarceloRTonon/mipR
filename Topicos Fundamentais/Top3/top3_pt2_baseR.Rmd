@@ -12,23 +12,73 @@ knitr::opts_chunk$set(echo = TRUE)
 Neste parte discutiremos a forma de se manipular uma base de dados dentro do R. Isto é particulamente útil se vc está trabalhando com uma base de dados extensa e com várias observações, mas também para base de dados menores mas heterogêneas. No caso da matriz insumo-produto, estamos em geral trabalhando com base de dados que não apresentam elevados números de observações tanto no tempo quanto em países, pessoas ou empresas. Ainda assim, base de dados no estilo insumo-produto que, por exemplo, lidem com fluxo de comércio entre países, que apresentam informações setoriais mais específicas ou que até mesmo aumentem a frequência temporal dos dados... podem ser manipuladas e refinar somente as informações necessárias para você trabalhar no R.
 
  - Destaque aqui para a [seção 4](https://adv-r.hadley.nz/subsetting.html) do **Advanced R**.
+ - Também importante a [seção 6.1](https://rstudio-education.github.io/hopr/r-notation.html#selecting-values)
+  do **Hands-On Programming with R**.
  
 ## 3.3 - Manipulação de Dados no base R
 
 Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Essa parte tem relação direta com o tópico anterior em que foi ensinado sobre a leitura de dados no R.
 
+### 3.3.1 - Selecionando Valores
 
-There are six ways to subset atomic vectors.
+POdemos citar três operadores para selecionar valores em um objeto: `[]` e `[[]]` e `$`. O `[]` é decerto o mais útil e mais usado, enquanto os outros dois cumprem funções mais especificas.
 
-There are three subsetting operators, [[, [, and $.
+-`[]` retornará as informações 
+-`[[]]`
+-`$`
+
+Conforme já apresentado em tópicos anteriores, temos seis formas de escolher valores dentro de um vetor atômico:
+
+```{r}
+a <- c(4,1,3,2)
+
+# Números Inteiros Positivos: pegam o elemento da posição especifica
+a[2]
+# Números Inteiros Negativos: pegam todos elementos exceto o especificado
+a[-1]
+# Zero: retorna o valor zero (útil para gerar vetores com zeros)
+a[0]
+# Vazio: retorna o próprio vetor (o mesmo que chamar somente "a")
+a[]
+# Logical Values: somente as posições com TRUE serão retornadas
+a[c(TRUE,FALSE,TRUE,FALSE)]
+# Names: se o vetor é nomeado, vc pode chamar os elementos pelo seu "nome"
+a <- setNames(a,c("Primeiro", "Segundo", "Terceiro", "Quarto"))
+a["Segundo"]
+
+```
+
+Quando estamos trabalhando com estruturas que tenham duas dimensões (linhas e colunas), a lógica é semelhante:
+
+```{r}
+b <- matrix(a, 2, 2)
+
+# Números Inteiros Positivos
+# Números Inteiros Negativos
+# Zero
+# Vazio
+# Logical Values
+# Names
+```
+
+
+
+### 3.2.2 - Manipulandos Base de Dados Usando Condições
 
 Subsetting operators interact differently with different vector types (e.g., atomic vectors, lists, factors, matrices, and data frames).
 
 Subsetting can be combined with assignment.
 
 
+```{r}
+head(iris)
+```
+
+
+
+
+
 O que colocar aqui:
-Falar da diferença entre `[]` e `[[]]` e `$`
 Usar condições dentro do `[]`.
 Usar e abusar de coisas elaboradas dentro de funções como:
 Falar RAPIDAMENTE de factors.
@@ -41,6 +91,7 @@ Explicar como transforma valores `NA` em 0.
 ```{r}
 aa <- matrix(c(1, NA, 2, 3, NA, NA), ncol = 2)
 
+# Usa-se a função is.na() para identificar e selecionar os valores com NA e substitui por 0:
 aa[is.na(aa)] <- 0
 ```
 
