@@ -375,11 +375,14 @@ summary {
 <li>Também importante a <a href="https://rstudio-education.github.io/hopr/r-notation.html#selecting-values">seção 6.1</a> do <strong>Hands-On Programming with R</strong>.</li>
 </ul>
 <div id="manipulação-de-dados-no-base-r" class="section level2">
-<h2>3.3 - Manipulação de Dados no base R</h2>
-<p>Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Essa parte tem relação direta com o tópico anterior em que foi ensinado sobre a leitura de dados no R.</p>
+<h2>3.2 - Manipulação de Dados no base R</h2>
+<p>Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Essa parte tem relação direta com o tópico anterior em que foi ensinado sobre a leitura de dados no R. Agora iremos explorar como trabalhar base de dados importadas ou geradas no próprio R.</p>
 <div id="selecionando-valores" class="section level3">
-<h3>3.3.1 - Selecionando Valores</h3>
-<p>Conforme já apresentado em tópicos anteriores, temos seis formas de escolher valores dentro de um vetor atômico:</p>
+<h3>3.2.1 - Selecionando Valores</h3>
+<p>Em primeiro lugar, a forma de extração ou seleção de valores no R é feito mediante o uso de colchetes <code>[]</code>. Logo, para extrair informações de um objeto “exemplo” qualquer:</p>
+<pre class="r"><code>a[] # se for um objeto de uma dimensão
+a[,] # se for um objeto de duas dimensões</code></pre>
+<p>Antes disso vamos relembrar alguns conceitos já apresentados em tópicos anteriores, mas que são fundamentais para esse tópico. Temos, basicamente, seis formas de escolher valores dentro de um vetor atômico:</p>
 <pre class="r"><code>a &lt;- c(4,1,3,2)
 
 # Números Inteiros Positivos: pegam o elemento da posição especifica
@@ -402,28 +405,131 @@ a &lt;- setNames(a,c(&quot;Primeiro&quot;, &quot;Segundo&quot;, &quot;Terceiro&q
 a[&quot;Segundo&quot;]</code></pre>
 <pre><code>## Segundo 
 ##       1</code></pre>
-<p>Quando estamos trabalhando com estruturas que tenham duas dimensões (linhas e colunas), a lógica é semelhante:</p>
+<p>Quando estamos trabalhando com estruturas que tenham duas dimensões (linhas e colunas), tal como o caso de matrizes, a lógica é semelhante. No entanto, é necessário especificar valores para ambas dimensões. Lembrando sempre que os espaços vazios representam extrair toda a informação naquela dimensão. Em outras palavras, ao deixar vazio o espaço para as linhas você estará retornando todas os elementos nas linhas de um determinado intervalo das colunas.</p>
 <pre class="r"><code>b &lt;- matrix(a, 2, 2)
+row.names(b) &lt;- c(&quot;Linha 1&quot;, &quot;Linha 2&quot;)
+colnames(b) &lt;- c(&quot;Coluna 1&quot;, &quot;Coluna 2&quot;)
 
 # Números Inteiros Positivos
-# Números Inteiros Negativos
-# Zero
-# Vazio
-# Logical Values
-# Names</code></pre>
-<p>Quando estamos trabalhando com listas, existem três operadores para selecionar valores: <code>[]</code> e <code>[[]]</code> e <code>$</code></p>
+b[,1] # Pegar a Coluna 1</code></pre>
+<pre><code>## Linha 1 Linha 2 
+##       4       1</code></pre>
+<pre class="r"><code>b[1,] # Pegar a Linha 1</code></pre>
+<pre><code>## Coluna 1 Coluna 2 
+##        4        3</code></pre>
+<pre class="r"><code>b[1,1] # Pegar a Linha 1 e Coluna 1</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code># Números Inteiros Negativos
+b[,-1] # Tudo exceto a Coluna 1</code></pre>
+<pre><code>## Linha 1 Linha 2 
+##       3       2</code></pre>
+<pre class="r"><code># Logical Values
+b[c(TRUE, FALSE),] # Linha 1 (TRUE) e Linha 2 (FALSE)</code></pre>
+<pre><code>## Coluna 1 Coluna 2 
+##        4        3</code></pre>
+<pre class="r"><code># Names
+b[&quot;Linha 1&quot;,] # Pegar somente a Linha 1</code></pre>
+<pre><code>## Coluna 1 Coluna 2 
+##        4        3</code></pre>
+<p>Podemos citar três operadores para selecionar valores em um objeto: <code>[]</code> e <code>[[]]</code> e <code>$</code>. O <code>[]</code> é decerto o mais útil e mais usado, enquanto os outros dois cumprem funções mais especificas, em especial quando usado em listas.</p>
 <ul>
-<li><code>[]</code> extrairá uma list</li>
+<li><code>[]</code> retornará as informações especificadas, como uma sublista, uma coluna, uma linha, etc. Essa opção vai trazer os resultados na menor dimensão possível.</li>
+<li><code>[[]]</code>retornará uma informação especifica que está contida, por exemplo, em uma lista ou data.frame.</li>
+<li><code>$</code> retornará uma lista ou objeto especificado em uma lista ou data.frame.</li>
 </ul>
-<p>Subsetting operators interact differently with different vector types (e.g., atomic vectors, lists, factors, matrices, and data frames).</p>
-<p>Subsetting can be combined with assignment.</p>
-<p>O que colocar aqui: Usar condições dentro do <code>[]</code>. Usar e abusar de coisas elaboradas dentro de funções como: Falar RAPIDAMENTE de factors.</p>
-<pre class="r"><code>sss &lt;- sss[, (ncol(sss)-5:ncol(sss))]</code></pre>
-<p>Explicar como transforma valores <code>NA</code> em 0.</p>
-<pre class="r"><code>aa &lt;- matrix(c(1, NA, 2, 3, NA, NA), ncol = 2)
+<p>O <code>$</code> e <code>[[]]</code> são basicamente a mesma coisa, com o primeiro sendo uma forma mais “direta” de realizar a extração. No entanto, o <code>$</code> é mais indicado quando se está trabalhando com colunas que estão nomeadas, enquanto o <code>[[]]</code> é preferível quando as colunas não estão nomeadas (e que você deva colocar a posição escolhida dentro do objeto).</p>
+<p>No caso de uma lista, ocorre de forma semelhante ao vetor atômico. Dessa forma, usar <code>[]</code> em uma lista retornará uma lista, enquanto <code>[[]]</code> e <code>$</code> retornarão o elemento especificado que está dentro da lista (que pode ser inclusive uma lista).</p>
+<p>No caso de data frames, eles compartilham características tanto de listas quanto de matrizes. Caso você faça a manipulação com somente um elemento entre colchetes, ele se comportará como uma lista.</p>
+<pre class="r"><code>df &lt;- data.frame(matrix(1:9,3,3))
+colnames(df) &lt;- c(&quot;C1&quot;, &quot;C2&quot;, &quot;C3&quot;)
+rownames(df) &lt;- c(&quot;L1&quot;, &quot;L2&quot;, &quot;L3&quot;)
+df[1:2]</code></pre>
+<pre><code>##    C1 C2
+## L1  1  4
+## L2  2  5
+## L3  3  6</code></pre>
+<p>Ou seja, ele retorna apenas as duas primeiras colunas. Agora, caso você manipule sua base usando os dois índices, o dataframe se comporta como uma matriz:</p>
+<pre class="r"><code>df[2, 1:2]</code></pre>
+<pre><code>##    C1 C2
+## L2  2  5</code></pre>
+<p>No caso, retornou apenas os elementos da segunda linhas e das duas primeiras colunas.</p>
+</div>
+<div id="manipulando-base-de-dados-usando-condições" class="section level3">
+<h3>3.2.2 - Manipulando Base de Dados usando Condições</h3>
+<p>Uma das melhores formas de se manipular uma base de dados é fazendo uso dos diversos operadores condicionais ou relacionais explicados anteriormente. Tais operações podem facilitar muito a limpeza de dados, ao estabelecer para o R as “regras” que você deseja. Inúmeras combinações podem ser utilizadas, tais como selecionar observações que são maiores que determinado valores, países especificios por meio de seu nome ou até mesmo “outliers” da sua série.</p>
+<p>Como exemplo, vamos aqui trabalhar com uma das base de dados padrão do R, a <code>iris</code>. Vamos avaliar qual é o tipo de base de dados, e fazer uma visualização parcial dos dados:</p>
+<pre class="r"><code>typeof(iris)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>head(iris)</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
+<pre class="r"><code>str(iris)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p>Ou seja estamos trabalhando com uma lista, composta por 5 variáveis. Vamos supor que nós desejamos somente trabalhar com a variável “Species”. Vamos dar três formas como exemplo, mas todas alternativas citadas anteriormente são válidas:</p>
+<pre class="r"><code>iris_species &lt;- iris[,5]
+iris_species2 &lt;- iris$Species
+iris_species3 &lt;- iris[,&quot;Species&quot;]
+iris_species4 &lt;- iris[[5]]
 
-# Usa-se a função is.na() para identificar e selecionar os valores com NA e substitui por 0:
-aa[is.na(aa)] &lt;- 0</code></pre>
+# São todas iguais?
+all.equal(iris_species,iris_species2,iris_species3,iris_species4)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Essas são formas de se extraírem váriaveis por inteiro de uma base de dados. No entanto, podemos ter situações em que queremos filtrar a base de dados para pegar apenas alguns casos especificos. Retornando para a base de dados original <code>iris</code>, a sublista “species” é composta por 3 categorias: “setosa”, “versicolor” e “virginica”. Vamos então filtrar a base de dados para somente pegar as informações sobre “virginica”:</p>
+<pre class="r"><code>virginica &lt;- iris[iris$Species == &quot;virginica&quot;,]
+virginica2 &lt;- iris[iris[,5] == &quot;virginica&quot;,]
+
+head(virginica)</code></pre>
+<pre><code>##     Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+## 101          6.3         3.3          6.0         2.5 virginica
+## 102          5.8         2.7          5.1         1.9 virginica
+## 103          7.1         3.0          5.9         2.1 virginica
+## 104          6.3         2.9          5.6         1.8 virginica
+## 105          6.5         3.0          5.8         2.2 virginica
+## 106          7.6         3.0          6.6         2.1 virginica</code></pre>
+<p>Seguindo no nosso exemplo, imagine que agora você precisa filtrar ainda mais sua base, agora com flores que apresentam valores maiores que um determinando valor. Vamos então pegar as flores do tipo “virginica” que apresentam “Petal.Length” maiores que a média:</p>
+<pre class="r"><code>virginica_petal &lt;- virginica[virginica$Petal.Length &gt; mean(virginica$Petal.Length),]
+head(virginica_petal)</code></pre>
+<pre><code>##     Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+## 101          6.3         3.3          6.0         2.5 virginica
+## 103          7.1         3.0          5.9         2.1 virginica
+## 104          6.3         2.9          5.6         1.8 virginica
+## 105          6.5         3.0          5.8         2.2 virginica
+## 106          7.6         3.0          6.6         2.1 virginica
+## 108          7.3         2.9          6.3         1.8 virginica</code></pre>
+<pre class="r"><code># Você também pode fazer essa operação de forma sequencial (isso pode ser útil caso você queira também a média como um objeto separado ou um código do R mais limpo).
+media_petal_virginica &lt;- mean(virginica$Petal.Length)
+virginica_petal_2 &lt;- virginica[virginica$Petal.Length &gt; media_petal_virginica,]
+
+# Vamos testar se todos os valores são realmente maiores que a média?
+
+ifelse(virginica_petal$Petal.Length &gt; mean(media_petal_virginica), &quot;OK&quot;, &quot;Errado&quot;)</code></pre>
+<pre><code>##  [1] &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot;
+## [16] &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot; &quot;OK&quot;</code></pre>
+<p>Você pode ter a liberdade de realizar quanto mais “subsetting” desejar usando os diversos outros operadores apresentados.</p>
+<p>Por fim, um procedimento muito comum é substituir valores que não podem ser aplicados que resultam em <code>NA</code> (Por exemplo, uma divisão com denominar zero ou valores faltantes em uma base de dados). Uma forma de substituir valores <code>NA</code> por 0 é a seguinte:</p>
+<pre class="r"><code>aa &lt;- matrix(c(1, NA, 2, 3, NA, NA), ncol = 2)
+aa</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    3
+## [2,]   NA   NA
+## [3,]    2   NA</code></pre>
+<pre class="r"><code># Usa-se a função is.na() para identificar e selecionar os valores com NA e substitui por 0:
+aa[is.na(aa)] &lt;- 0
+aa</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    3
+## [2,]    0    0
+## [3,]    2    0</code></pre>
 </div>
 </div>
 <div id="fontes" class="section level2">

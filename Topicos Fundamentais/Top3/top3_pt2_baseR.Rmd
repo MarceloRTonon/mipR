@@ -15,19 +15,21 @@ Neste parte discutiremos a forma de se manipular uma base de dados dentro do R. 
  - Também importante a [seção 6.1](https://rstudio-education.github.io/hopr/r-notation.html#selecting-values)
   do **Hands-On Programming with R**.
  
-## 3.3 - Manipulação de Dados no base R
+## 3.2 - Manipulação de Dados no base R
 
-Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Essa parte tem relação direta com o tópico anterior em que foi ensinado sobre a leitura de dados no R.
+Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Essa parte tem relação direta com o tópico anterior em que foi ensinado sobre a leitura de dados no R. Agora iremos explorar como trabalhar base de dados importadas ou geradas no próprio R.
 
-### 3.3.1 - Selecionando Valores
+### 3.2.1 - Selecionando Valores
 
-POdemos citar três operadores para selecionar valores em um objeto: `[]` e `[[]]` e `$`. O `[]` é decerto o mais útil e mais usado, enquanto os outros dois cumprem funções mais especificas.
+Em primeiro lugar, a forma de extração ou seleção de valores no R é feito mediante o uso de colchetes `[]`. Logo, para extrair informações de um objeto "exemplo" qualquer:
 
--`[]` retornará as informações 
--`[[]]`
--`$`
+```{r, eval=FALSE}
+a[] # se for um objeto de uma dimensão
+a[,] # se for um objeto de duas dimensões
+```
 
-Conforme já apresentado em tópicos anteriores, temos seis formas de escolher valores dentro de um vetor atômico:
+
+Antes disso vamos relembrar alguns conceitos já apresentados em tópicos anteriores, mas que são fundamentais para esse tópico. Temos, basicamente, seis formas de escolher valores dentro de um vetor atômico:
 
 ```{r}
 a <- c(4,1,3,2)
@@ -48,51 +50,120 @@ a["Segundo"]
 
 ```
 
-Quando estamos trabalhando com estruturas que tenham duas dimensões (linhas e colunas), a lógica é semelhante:
+Quando estamos trabalhando com estruturas que tenham duas dimensões (linhas e colunas), tal como o caso de matrizes, a lógica é semelhante. No entanto, é necessário especificar valores para ambas dimensões. Lembrando sempre que os espaços vazios representam extrair toda a informação naquela dimensão. Em outras palavras, ao deixar vazio o espaço para as linhas você estará retornando todas os elementos nas linhas de um determinado intervalo das colunas.
 
 ```{r}
 b <- matrix(a, 2, 2)
+row.names(b) <- c("Linha 1", "Linha 2")
+colnames(b) <- c("Coluna 1", "Coluna 2")
 
 # Números Inteiros Positivos
+b[,1] # Pegar a Coluna 1
+b[1,] # Pegar a Linha 1
+b[1,1] # Pegar a Linha 1 e Coluna 1
+
 # Números Inteiros Negativos
-# Zero
-# Vazio
+b[,-1] # Tudo exceto a Coluna 1
+
 # Logical Values
+b[c(TRUE, FALSE),] # Linha 1 (TRUE) e Linha 2 (FALSE)
+
 # Names
+b["Linha 1",] # Pegar somente a Linha 1
 ```
 
 
+Podemos citar três operadores para selecionar valores em um objeto: `[]` e `[[]]` e `$`. O `[]` é decerto o mais útil e mais usado, enquanto os outros dois cumprem funções mais especificas, em especial quando usado em listas.
 
-### 3.2.2 - Manipulandos Base de Dados Usando Condições
+  - `[]` retornará as informações especificadas, como uma sublista, uma coluna, uma linha, etc. Essa opção vai trazer os resultados na menor dimensão possível.
+  - `[[]]`retornará uma informação especifica que está contida, por exemplo, em uma lista ou data.frame. 
+  - `$` retornará uma lista ou objeto especificado em uma lista ou data.frame.
 
-Subsetting operators interact differently with different vector types (e.g., atomic vectors, lists, factors, matrices, and data frames).
+O `$` e `[[]]` são basicamente a mesma coisa, com o primeiro sendo uma forma mais "direta" de realizar a extração. No entanto, o `$` é mais indicado quando se está trabalhando com colunas que estão nomeadas, enquanto o `[[]]` é preferível quando as colunas não estão nomeadas (e que você deva colocar a posição escolhida dentro do objeto).
 
-Subsetting can be combined with assignment.
+No caso de uma lista, ocorre de forma semelhante ao vetor atômico. Dessa forma, usar `[]` em uma lista retornará uma lista, enquanto `[[]]` e `$` retornarão o elemento especificado que está dentro da lista (que pode ser inclusive uma lista).
 
+No caso de data frames, eles compartilham características tanto de listas quanto de matrizes. Caso você faça a manipulação com somente um elemento entre colchetes, ele se comportará como uma lista.
 
 ```{r}
+df <- data.frame(matrix(1:9,3,3))
+colnames(df) <- c("C1", "C2", "C3")
+rownames(df) <- c("L1", "L2", "L3")
+df[1:2]
+
+```
+
+Ou seja, ele retorna apenas as duas primeiras colunas. Agora, caso você manipule sua base usando os dois índices, o dataframe se comporta como uma matriz:
+
+```{r}
+df[2, 1:2]
+```
+
+No caso, retornou apenas os elementos da segunda linhas e das duas primeiras colunas.
+
+### 3.2.2 - Manipulando Base de Dados usando Condições
+
+Uma das melhores formas de se manipular uma base de dados é fazendo uso dos diversos operadores condicionais ou relacionais explicados anteriormente. Tais operações podem facilitar muito a limpeza de dados, ao estabelecer para o R as "regras" que você deseja. Inúmeras combinações podem ser utilizadas, tais como selecionar observações que são maiores que determinado valores, países especificios por meio de seu nome ou até mesmo "outliers" da sua série. 
+
+Como exemplo, vamos aqui trabalhar com uma das base de dados padrão do R, a `iris`. Vamos avaliar qual é o tipo de base de dados, e fazer uma visualização parcial dos dados:
+
+```{r}
+
+typeof(iris)
 head(iris)
+str(iris)
 ```
 
+Ou seja estamos trabalhando com uma lista, composta por 5 variáveis. Vamos supor que nós desejamos somente trabalhar com a variável "Species". Vamos dar três formas como exemplo, mas todas alternativas citadas anteriormente são válidas:
 
+```{r}
+iris_species <- iris[,5]
+iris_species2 <- iris$Species
+iris_species3 <- iris[,"Species"]
+iris_species4 <- iris[[5]]
 
-
-
-O que colocar aqui:
-Usar condições dentro do `[]`.
-Usar e abusar de coisas elaboradas dentro de funções como:
-Falar RAPIDAMENTE de factors.
-```{r, eval= FALSE}
-sss <- sss[, (ncol(sss)-5:ncol(sss))]
+# São todas iguais?
+all.equal(iris_species,iris_species2,iris_species3,iris_species4)
 ```
 
-Explicar como transforma valores `NA` em 0.
+Essas são formas de se extraírem váriaveis por inteiro de uma base de dados. No entanto, podemos ter situações em que queremos filtrar a base de dados para pegar apenas alguns casos especificos. Retornando para a base de dados original `iris`, a sublista "species" é composta por 3 categorias: "setosa", "versicolor" e "virginica". Vamos então filtrar a base de dados para somente pegar as informações sobre "virginica":
+
+```{r}
+
+virginica <- iris[iris$Species == "virginica",]
+virginica2 <- iris[iris[,5] == "virginica",]
+
+head(virginica)
+```
+
+Seguindo no nosso exemplo, imagine que agora você precisa filtrar ainda mais sua base, agora com flores que apresentam valores maiores que um determinando valor. Vamos então pegar as flores do tipo "virginica" que apresentam "Petal.Length" maiores que a média:
+
+```{r}
+
+virginica_petal <- virginica[virginica$Petal.Length > mean(virginica$Petal.Length),]
+head(virginica_petal)
+
+# Você também pode fazer essa operação de forma sequencial (isso pode ser útil caso você queira também a média como um objeto separado ou um código do R mais limpo).
+media_petal_virginica <- mean(virginica$Petal.Length)
+virginica_petal_2 <- virginica[virginica$Petal.Length > media_petal_virginica,]
+
+# Vamos testar se todos os valores são realmente maiores que a média?
+
+ifelse(virginica_petal$Petal.Length > mean(media_petal_virginica), "OK", "Errado")
+
+```
+
+Você pode ter a liberdade de realizar quanto mais "subsetting" desejar usando os diversos outros operadores apresentados.
+
+Por fim, um procedimento muito comum é substituir valores que não podem ser aplicados que resultam em `NA` (Por exemplo, uma divisão com denominar zero ou valores faltantes em uma base de dados). Uma forma de substituir valores `NA` por 0 é a seguinte:
 
 ```{r}
 aa <- matrix(c(1, NA, 2, 3, NA, NA), ncol = 2)
+aa
 
 # Usa-se a função is.na() para identificar e selecionar os valores com NA e substitui por 0:
 aa[is.na(aa)] <- 0
+aa
 ```
 
 
