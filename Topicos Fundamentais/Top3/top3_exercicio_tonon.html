@@ -372,12 +372,12 @@ summary {
 <div id="pacotes-necessários-para-esse-exercício." class="section level2">
 <h2>Pacotes necessários para esse exercício.</h2>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## -- Attaching packages -------------------------------- tidyverse 1.3.0 --</code></pre>
+<pre><code>## -- Attaching packages -------------------------------------------- tidyverse 1.3.0 --</code></pre>
 <pre><code>## v ggplot2 3.3.0     v purrr   0.3.4
 ## v tibble  3.0.1     v dplyr   0.8.5
 ## v tidyr   1.0.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.5.0</code></pre>
-<pre><code>## -- Conflicts ----------------------------------- tidyverse_conflicts() --
+<pre><code>## -- Conflicts ----------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(magrittr)</code></pre>
@@ -622,7 +622,7 @@ ItaQ3.2c &lt;- ItaQ1.9 %&gt;% filter(Origin == &quot;Domestic&quot;,
 <h4>Q.4.1 Crie uma tabela <code>dfQ4.1</code> unindo as tabelas <code>americadoSul</code> e <code>ganhadores</code> mantendo a coluna <code>Participações</code>.</h4>
 <pre class="r"><code>americadoSul &lt;- data.frame(&quot;Países&quot; = c(&quot;Chile&quot;, &quot;Argentina&quot;, &quot;Uruguai&quot;, &quot;Brasil&quot;), &quot;Titulos&quot; = c(0,2,2,5), &quot;Participações&quot; = c(9, 17, 13, 21))
 
-ganhadores &lt;- data.frame(&quot;Países&quot; = c( &quot;Alemanha&quot;, &quot;Argentina&quot;,&quot;Itália&quot;, &quot;França&quot;,  &quot;França&quot;, &quot;Uruguai&quot;, &quot;Espanha&quot;,&quot;Brasil&quot;, &quot;Inglaterra&quot;), &quot;Titulos&quot; = c( 4,2,4,2,2,2,1,5,1))</code></pre>
+ganhadores &lt;- data.frame(&quot;Países&quot; = c( &quot;Alemanha&quot;, &quot;Argentina&quot;,&quot;Itália&quot;, &quot;França&quot;, &quot;Uruguai&quot;, &quot;Espanha&quot;,&quot;Brasil&quot;, &quot;Inglaterra&quot;), &quot;Titulos&quot; = c( 4,2,4,2,2,1,5,1))</code></pre>
 <pre class="r"><code>dfQ4.1 &lt;- dplyr::full_join(ganhadores, americadoSul)</code></pre>
 <pre><code>## Joining, by = c(&quot;Países&quot;, &quot;Titulos&quot;)</code></pre>
 </div>
@@ -637,11 +637,189 @@ ganhadores &lt;- data.frame(&quot;Países&quot; = c( &quot;Alemanha&quot;, &quot
 <p>-<code>dfQ4.2c</code>: <code>ganhadores</code> ordenada por número de títulos em ordem decrescente.</p>
 <pre class="r"><code>dfQ4.2c &lt;- ganhadores %&gt;% arrange(desc(Titulos))</code></pre>
 </div>
-<div id="q.4.3-usando-uma-função-da-família-join-crie-uma-tabela-da-dfq4.3-contendo-apenas-os" class="section level4">
-<h4>Q.4.3 Usando uma função da família <code>join</code>, crie uma tabela da <code>dfQ4.3</code> contendo apenas os</h4>
+<div id="q.4.3-usando-uma-função-da-família-join-crie-uma-tabela-da-dfq4.3-contendo-apenas-os-integrantes-de-americadosul-que-já-ganharam-um-copa." class="section level4">
+<h4>Q.4.3 Usando uma função da família <code>join</code>, crie uma tabela da <code>dfQ4.3</code> contendo apenas os integrantes de <code>americadoSul</code> que já ganharam um copa.</h4>
 <pre class="r"><code>dfQ4.3 &lt;- americadoSul %&gt;% inner_join(ganhadores)</code></pre>
 <pre><code>## Joining, by = c(&quot;Países&quot;, &quot;Titulos&quot;)</code></pre>
-<p>O número de formas para você fazer isso é mesmo número de mãos que uma pessoa usualmente tem.</p>
+<p>Considere agora a base de dados <code>edicoes</code>:</p>
+<pre class="r"><code>edicoes &lt;- data.frame(&quot;Copa&quot;=c(2018, 2014, 2010, 2006, 2002, 1998,1994, 1990, 1986), &quot;Ganhador&quot;= c(&quot;França&quot;, &quot;Alemanha&quot;, &quot;Espanha&quot;, &quot;Itália&quot;, &quot;Brasil&quot;, &quot;França&quot;, &quot;Brasil&quot;, &quot;Alemanha&quot;, &quot;Argentina&quot;), &quot;Vice&quot; = c(&quot;Croácia&quot;, &quot;Argentina&quot;, &quot;Holanda&quot;, &quot;França&quot;, &quot;Alemanha&quot;, &quot;Brasil&quot;, &quot;Itália&quot;, &quot;Argentina&quot;, &quot;Alemanha&quot;))</code></pre>
+</div>
+<div id="q.4.4-usando-o-dplyr-exclua-a-coluna-vice-e-filtre-apenas-a-as-edições-depois-de-1990-em-diante.-nomeie-essa-tabela-de-dfq4.4." class="section level4">
+<h4>Q.4.4 Usando o <code>dplyr</code> Exclua a coluna <code>Vice</code> e filtre apenas a as edições depois de 1990 em diante. Nomeie essa tabela de <code>dfQ4.4</code>.</h4>
+<pre class="r"><code>dfQ4.4 &lt;- edicoes %&gt;% select(-Vice) %&gt;% filter(Copa &gt; 1990)</code></pre>
+</div>
+<div id="q.4.5-crie-uma-tabela-chamada-ganhadores_30anos-juntando-as-tabelas-dfq4.4-e-ganhadores-mantendo-apenas-os-países-que-ganharam-de-1990-em-diante.-faça-de-modo-que-dfq4.4-não-tenha-mais-de-duas-linhas-por-país-e-mantenha-as-duas-." class="section level4">
+<h4>Q.4.5 Crie uma tabela chamada <code>ganhadores_30anos</code>, juntando as tabelas <code>dfQ4.4</code> e <code>ganhadores</code>, mantendo apenas os países que ganharam de 1990 em diante. Faça de modo que <code>dfQ4.4</code> não tenha mais de duas linhas por país e mantenha as duas .</h4>
+<p><strong>Dica 1:</strong> Lembre do argumento <code>by</code></p>
+<p><strong>Dica 2:</strong> Sem usar <code>distinc</code>, há uma função da familia <code>join</code> de fazer isso. Usando <code>distinct</code> com algumas alterações nos seus argumentos, há mais <code>três</code> funções da familia <code>join</code> que podem fazer isso.</p>
+<pre class="r"><code>ganhadores_30anos &lt;- dfQ4.4 %&gt;% left_join(ganhadores, by = c(&quot;Ganhador&quot;= &quot;Países&quot;)) %&gt;% distinct(Ganhador, keep_all = TRUE)
+
+ganhadores_30anos_b &lt;- ganhadores %&gt;% right_join(dfQ4.4, by = c(&quot;Países&quot; = &quot;Ganhador&quot;)) %&gt;% distinct(Países, keep_all = TRUE)
+
+ganhadores_30anos_c &lt;- ganhadores %&gt;% inner_join(dfQ4.4, by = c(&quot;Países&quot; = &quot;Ganhador&quot;)) %&gt;% distinct(Países,  keep_all = TRUE)
+
+ganhadores_30anos_d &lt;- ganhadores %&gt;% semi_join(dfQ4.4, by = c(&quot;Países&quot; = &quot;Ganhador&quot;))</code></pre>
+</div>
+<div id="q.4.6-crie-uma-tabela-dfq4.6-com-apenas-os-países-da-americadosul-que-ganharam-a-copa-do-mundo-desde-1986.-mantenha-as-linhas-duplicadas-e-todas-as-colunas.-deixe-o-mais-recente-nas-primeiras-linhas." class="section level4">
+<h4>Q.4.6 Crie uma tabela <code>dfQ4.6</code> com apenas os países da <code>americadoSul</code> que ganharam a Copa do Mundo desde 1986. Mantenha as linhas duplicadas e todas as colunas. Deixe o mais recente nas primeiras linhas.</h4>
+<pre class="r"><code>dfQ4.6 &lt;- americadoSul %&gt;% inner_join(edicoes, by = c(&quot;Países&quot; = &quot;Ganhador&quot;)) %&gt;% arrange(Copa)</code></pre>
+</div>
+<div id="q.4.7-crie-uma-tabela-dfq4.7-dos-países-da-américa-do-sul-que-não-foram-para-vice-desde-1986." class="section level4">
+<h4>Q.4.7 Crie uma tabela <code>dfQ4.7</code> dos países da América do Sul que não foram para <code>Vice</code> desde 1986.</h4>
+<pre class="r"><code>dfQ4.7 &lt;- americadoSul %&gt;% anti_join(edicoes, by = c(&quot;Países&quot; = &quot;Ganhador&quot;))</code></pre>
+</div>
+</div>
+<div id="entendendo-melhor-estruturas-de-dados" class="section level3">
+<h3>5. Entendendo melhor Estruturas de dados</h3>
+<p>No material expositivo do Tópico 3, especificamente na questão <code>3.5.1</code>, foi falado sobre <code>data.frame</code> compartilhar estruturas tanto com <code>list</code> quanto com <code>matrix</code>. Vamos usar a questão 5 para mostrar o que isso quer dizer, e as suas consequências práticas.</p>
+<p>Vamos começar definindo os elementos abaixo:</p>
+<pre class="r"><code>dfQ5 &lt;- data.frame(&quot;A&quot;= c(1,2,4), &quot;B&quot; = c(2,3,5), row.names = c(&quot;J&quot;, &quot;H&quot;, &quot;L&quot;))
+lstQ5 &lt;- list(&quot;A&quot; = c(1,2,4), &quot;B&quot; = c(2,3,5))
+matQ5 &lt;- matrix(c(1,2,4,2,3,5), ncol = 2, dimnames = list(c(&quot;J&quot;, &quot;H&quot;, &quot;L&quot;), c(&quot;A&quot;, &quot;B&quot;)))
+
+atmQ5 &lt;- c(1,2,4,2,3,5)</code></pre>
+<div id="q.5.1-diga-quais-das-afirmações-abaixo-seriam-possíveis-e-quais-não-seriam.-se-tiver-dificuldades-revisite-o-tópico-1." class="section level4">
+<h4>Q.5.1 Diga quais das afirmações abaixo seriam possíveis e quais não seriam. Se tiver dificuldades revisite o Tópico 1.</h4>
+<div id="q.5.1.a-criar-uma-list-com-elementos-de-tipos-diferentes." class="section level5">
+<h5>Q.5.1.a Criar uma <code>list</code> com elementos de tipos diferentes.</h5>
+</div>
+<div id="q.5.1.b-criar-um-data.frame-com-colunas-de-tipos-diferentes." class="section level5">
+<h5>Q.5.1.b Criar um <code>data.frame</code> com colunas de tipos diferentes.</h5>
+</div>
+<div id="q.5.1.c-criar-um-data.frame-com-linhas-de-tipos-diferentes." class="section level5">
+<h5>Q.5.1.c Criar um <code>data.frame</code> com linhas de tipos diferentes.</h5>
+</div>
+<div id="q.5.1.d-criar-uma-matrix-com-colunas-de-tipos-diferentes." class="section level5">
+<h5>Q.5.1.d Criar uma <code>matrix</code> com colunas de tipos diferentes.</h5>
+</div>
+<div id="q.5.1.e-criar-uma-matrix-com-linhas-de-tipos-diferentes." class="section level5">
+<h5>Q.5.1.e Criar uma <code>matrix</code> com linhas de tipos diferentes.</h5>
+</div>
+<div id="q.5.1.f-criar-um-vetor-atômico-com-elementos-de-tipos-diferentes." class="section level5">
+<h5>Q.5.1.f Criar um vetor atômico com elementos de tipos diferentes.</h5>
+<pre class="r"><code>Q51 &lt;- list(T, T, F, F, F, F)
+names(Q51) &lt;-letters[1:6]</code></pre>
+</div>
+</div>
+<div id="q.5.2-use-typeof-em-dfq5-lstq5-matq5-atmq5.-como-isso-se-relaciona-com-as-afirmações-q.5.1.aq.5.1.b-q.5.1.d-q.5.1.e-e-q.5.1.f" class="section level4">
+<h4>Q.5.2 Use <code>typeof</code> em <code>dfQ5</code>, <code>lstQ5</code>, <code>matQ5</code>, <code>atmQ5</code>. Como isso se relaciona com as afirmações <code>Q.5.1.a</code>,<code>Q.5.1.b</code>, <code>Q.5.1.d</code>, <code>Q.5.1.e</code> e <code>Q.5.1.f</code>?</h4>
+<pre class="r"><code>typeof(dfQ5)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>typeof(lstQ5)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>typeof(matQ5)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>typeof(atmQ5)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>&quot;O fato de dfQ5 SER uma lista explica porque um data.frame pode conter colunas de tipos diferentes&quot;</code></pre>
+<pre><code>## [1] &quot;O fato de dfQ5 SER uma lista explica porque um data.frame pode conter colunas de tipos diferentes&quot;</code></pre>
+</div>
+<div id="q.5.3-a-partir-de-q.5.2-e-analisando-o-código-abaixo-você-consegue-dizer-como-eles-ajudam-a-explicar-a-resposta-para-a-afirmação-q.5.1.c" class="section level4">
+<h4>Q.5.3 A partir de <code>Q.5.2</code> e analisando o código abaixo, você consegue dizer como eles ajudam a explicar a resposta para a afirmação <code>Q.5.1.c</code>?</h4>
+<pre class="r"><code>lstQ53_a &lt;- list(&quot;A&quot; = list(TRUE, &quot;2&quot;), &quot;B&quot; = list(2, 3))
+
+as.data.frame(lstQ53_a)</code></pre>
+<pre><code>##   A.TRUE A..2. B.2 B.3
+## 1   TRUE     2   2   3</code></pre>
+<pre class="r"><code>lstQ53_b &lt;-list(&quot;A&quot; = c(TRUE, &quot;2&quot;), &quot;B&quot; = c(2, 3))
+
+as.data.frame(lstQ53_b)</code></pre>
+<pre><code>##      A B
+## 1 TRUE 2
+## 2    2 3</code></pre>
+<pre class="r"><code>&quot;Um data.frame é uma junção de vetores atômicos. Ou seja, uma junção de vetores que podem ser de tipos diferentes entre eles, porém cada vetor é de um mesmo tipo.&quot;</code></pre>
+<pre><code>## [1] &quot;Um data.frame é uma junção de vetores atômicos. Ou seja, uma junção de vetores que podem ser de tipos diferentes entre eles, porém cada vetor é de um mesmo tipo.&quot;</code></pre>
+</div>
+<div id="q.5.4-use-a-função-class-em-dfq5-lstq5-matq5-atmq5." class="section level4">
+<h4>Q.5.4 Use a função <code>class()</code> em <code>dfQ5</code>, <code>lstQ5</code>, <code>matQ5</code>, <code>atmQ5</code>.</h4>
+</div>
+<div id="q.5.5-use-a-função-length-em-dfq5-lstq5-matq5-atmq5.-o-que-ela-mede-em-cada-um" class="section level4">
+<h4>Q.5.5 Use a função <code>length()</code> em <code>dfQ5</code>, <code>lstQ5</code>, <code>matQ5</code>, <code>atmQ5</code>. O que ela mede em cada um?</h4>
+</div>
+<div id="q.5.6-use-typeof-e-class-em-dfq51-dfq51-dfq5jdfq511-dfq51-dfq5a-dfq5a-dfq51-dfq5a-dfa." class="section level4">
+<h4>Q.5.6 Use <code>typeof</code> e <code>class</code> em <code>dfQ5[1,]</code>, <code>dfQ5[,1]</code>, <code>dfQ5[&quot;J&quot;,]</code>,<code>dfQ5[1,1]</code>, <code>dfQ5[1]</code>, <code>dfQ5[&quot;A&quot;]</code>, <code>dfQ5[,&quot;A&quot;]</code> <code>dfQ5[[1]]</code>, <code>dfQ5[[&quot;A&quot;]]</code>, <code>df$A</code>.</h4>
+<pre class="r"><code>typeof(dfQ5[1,])</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>class(dfQ5[1,])</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<pre class="r"><code>typeof(dfQ5[,1])</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>class(dfQ5[,1])</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>typeof(dfQ5[1])</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>class(dfQ5[1])</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<pre class="r"><code>typeof(dfQ5[&quot;A&quot;])</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>class(dfQ5[&quot;A&quot;])</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<pre class="r"><code>typeof(dfQ5[[1]])</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>class(dfQ5[[1]])</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>typeof(dfQ5[[&quot;A&quot;]])</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>class(dfQ5[[&quot;A&quot;]])</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>typeof(dfQ5$A)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>class(dfQ5$A)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+</div>
+<div id="q.5.7-como-os-resultados-de-q.5.6-podem-ser-entendidos-a-luz-das-funções-pull-e-select-do-dplyr" class="section level4">
+<h4>Q.5.7 Como os resultados de <code>Q.5.6</code> podem ser entendidos a luz das funções <code>pull</code> e <code>select</code> do <code>dplyr</code>?</h4>
+</div>
+<div id="q.5.8-investigue-porque-os-valores-de-class-e-typeof-para-dfq51-e-dfq51-são-diferentes.-pense-na-relação-disso-com-as-afirmações-q.5.1.b-e-q.5.1.c." class="section level4">
+<h4>Q.5.8 Investigue porque os valores de <code>class</code> e <code>typeof</code> para <code>dfQ5[1,]</code> e <code>dfQ5[,1]</code> são diferentes. Pense na relação disso com as afirmações <code>Q.5.1.b</code> e <code>Q.5.1.c</code>.</h4>
+</div>
+<div id="d.5.1-qual-o-motivo-pelo-qual-lsta-e-dfq5a-funcionam-enquanto-matq5a-não-por-que-então-matq5a-funciona-bem-como-dfq5a" class="section level4">
+<h4>D.5.1 Qual o motivo pelo qual <code>lst$A</code> e <code>dfQ5$A</code> funcionam enquanto <code>matQ5$A</code> não? Por que então <code>matQ5[,&quot;A&quot;]</code> funciona bem como <code>dfQ5[,&quot;A&quot;]</code>?</h4>
+</div>
+<div id="q.5.9-dado-tudo-que-já-vimos-até-agora-procure-falar-o-motivo-pelo-qual-e-são-sempre-usados-em-data.frames-em-conjunto-com-o-nome-de-uma-coluna-e-não-pelo-da-linha." class="section level4">
+<h4>Q.5.9 Dado tudo que já vimos até agora, procure falar o motivo pelo qual <code>$</code> e <code>[[]]</code> são sempre usados em data.frames em conjunto com o nome de uma coluna e não pelo da linha.</h4>
+</div>
+<div id="q.5.10-verifique-o-tipo-e-classe-de-tdfq5.-sendo-que-dfq5-tem-3-linhas-e-2-colunas-você-consegue-deduzir-sem-rodar-a-função-o-length-de-tdfq5-e-o-de-as.data.frametdfq5" class="section level4">
+<h4>Q.5.10 Verifique o tipo e classe de <code>t(dfQ5)</code>. Sendo que <code>dfQ5</code> tem 3 linhas e 2 colunas, você consegue deduzir, <strong>sem rodar a função</strong>, o <code>length</code> de <code>t(dfQ5)</code> ? E o de <code>as.data.frame(t(dfQ5))</code></h4>
+</div>
+<div id="q.5.11-sejam-df.nomes-df.nomes2-df.nomes3-e-dfq5.11-definidos-como" class="section level4">
+<h4>Q.5.11 Sejam <code>df.nomes</code>, <code>df.nomes2</code>, <code>df.nomes3</code> e <code>dfQ5.11</code> definidos como:</h4>
+<pre class="r"><code>df.nomes &lt;- data.frame(&quot;Nomes&quot; = c(&quot;D&quot;, &quot;F&quot;, &quot;E&quot;), &quot;Nomes_B&quot; = c(&quot;W&quot;, &quot;X&quot;, &quot;Y&quot;))
+
+df.nomes2 &lt;- as.data.frame(t(df.nomes))
+
+dfQ5.11 &lt;- dfQ5</code></pre>
+<p>E seja a definição do <em>Argument</em> <code>row.names</code> da função <code>data.frame</code> a seguinte:</p>
+<p>NULL or a single integer or character string specifying a column to be used as row names, <strong><em>or a character or integer vector giving the row names for the data frame.</em></strong></p>
+<p>O que irá ocorrer em cada uma dessas situações? Você consegue dizer o porquê?</p>
+<div id="q.5.11.1" class="section level5">
+<h5>Q.5.11.1</h5>
+<pre class="r"><code>dfQ5.11.1 &lt;- data.frame(dfQ5.11, row.names = df.nomes[&quot;Nomes&quot;])</code></pre>
+</div>
+<div id="q.5.11.2" class="section level5">
+<h5>Q.5.11.2</h5>
+<pre class="r"><code>dfQ5.11.2 &lt;- data.frame(dfQ5.11, row.names = df.nomes[[&quot;Nomes&quot;]])</code></pre>
+</div>
+<div id="q.5.11.3" class="section level5">
+<h5>Q.5.11.3</h5>
+<pre class="r"><code>dfQ5.11.3 &lt;- data.frame(dfQ5.11, row.names = df.nomes[,&quot;Nomes&quot;])</code></pre>
+</div>
+<div id="q.5.11.4" class="section level5">
+<h5>Q.5.11.4</h5>
+<pre class="r"><code>dfQ5.11.4 &lt;- data.frame(dfQ5.11, row.names = df.nomes$Nomes)</code></pre>
+</div>
+<div id="q.5.11.5" class="section level5">
+<h5>Q.5.11.5</h5>
+<pre class="r"><code>dfQ5.11.5 &lt;- data.frame(dfQ5.11, row.names = t(df.nomes[,1]))</code></pre>
+</div>
+<div id="q.5.11.6" class="section level5">
+<h5>Q.5.11.6</h5>
+<pre class="r"><code>dfQ5.11.6 &lt;- data.frame(dfQ5.11, row.names = df.nomes2[1,])</code></pre>
+</div>
+<div id="q.5.11.7" class="section level5">
+<h5>Q.5.11.7</h5>
+<pre class="r"><code>dfQ5.11.7 &lt;- data.frame(dfQ5.11, row.names = t(df.nomes2[1,]))</code></pre>
+</div>
 </div>
 </div>
 </div>

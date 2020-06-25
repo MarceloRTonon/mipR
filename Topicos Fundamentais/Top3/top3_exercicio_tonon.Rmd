@@ -306,7 +306,7 @@ Não se sinta acanhado de recorrer a eles em nenhum momento.
 ```{r, include=TRUE}
 americadoSul <- data.frame("Países" = c("Chile", "Argentina", "Uruguai", "Brasil"), "Titulos" = c(0,2,2,5), "Participações" = c(9, 17, 13, 21))
 
-ganhadores <- data.frame("Países" = c( "Alemanha", "Argentina","Itália", "França",  "França", "Uruguai", "Espanha","Brasil", "Inglaterra"), "Titulos" = c( 4,2,4,2,2,2,1,5,1))
+ganhadores <- data.frame("Países" = c( "Alemanha", "Argentina","Itália", "França", "Uruguai", "Espanha","Brasil", "Inglaterra"), "Titulos" = c( 4,2,4,2,2,1,5,1))
 ```
 
 ```{r}
@@ -335,10 +335,210 @@ dfQ4.2b <- americadoSul %>% arrange(Titulos)
 dfQ4.2c <- ganhadores %>% arrange(desc(Titulos))
 ```
 
-#### Q.4.3 Usando uma função da família `join`, crie uma tabela da `dfQ4.3` contendo apenas os 
+#### Q.4.3 Usando uma função da família `join`, crie uma tabela da `dfQ4.3` contendo apenas os integrantes de `americadoSul` que já ganharam um copa.
 
 ```{r}
 dfQ4.3 <- americadoSul %>% inner_join(ganhadores)
 ```
 
- O número de formas para você fazer isso é mesmo número de mãos que uma pessoa usualmente tem.
+Considere agora a base de dados `edicoes`:
+
+```{r, TRUE}
+edicoes <- data.frame("Copa"=c(2018, 2014, 2010, 2006, 2002, 1998,1994, 1990, 1986), "Ganhador"= c("França", "Alemanha", "Espanha", "Itália", "Brasil", "França", "Brasil", "Alemanha", "Argentina"), "Vice" = c("Croácia", "Argentina", "Holanda", "França", "Alemanha", "Brasil", "Itália", "Argentina", "Alemanha"))
+```
+
+#### Q.4.4 Usando o `dplyr` Exclua a coluna `Vice` e filtre apenas a as edições depois de 1990 em diante. Nomeie essa tabela de `dfQ4.4`.
+
+
+```{r}
+dfQ4.4 <- edicoes %>% select(-Vice) %>% filter(Copa > 1990)
+```
+
+#### Q.4.5 Crie uma tabela chamada `ganhadores_30anos`, juntando as tabelas `dfQ4.4` e `ganhadores`, mantendo apenas os países que ganharam de 1990 em diante. Faça de modo que `dfQ4.4` não tenha mais de duas linhas por país e mantenha as duas .
+
+**Dica 1:** Lembre do argumento `by`
+
+**Dica 2:** Sem usar `distinc`, há uma função da familia `join` de fazer isso. Usando `distinct` com algumas alterações nos seus argumentos, há mais `três` funções da familia `join` que podem fazer isso.
+
+```{r}
+ganhadores_30anos <- dfQ4.4 %>% left_join(ganhadores, by = c("Ganhador"= "Países")) %>% distinct(Ganhador, keep_all = TRUE)
+
+ganhadores_30anos_b <- ganhadores %>% right_join(dfQ4.4, by = c("Países" = "Ganhador")) %>% distinct(Países, keep_all = TRUE)
+
+ganhadores_30anos_c <- ganhadores %>% inner_join(dfQ4.4, by = c("Países" = "Ganhador")) %>% distinct(Países,  keep_all = TRUE)
+
+ganhadores_30anos_d <- ganhadores %>% semi_join(dfQ4.4, by = c("Países" = "Ganhador"))
+```
+
+#### Q.4.6 Crie uma tabela `dfQ4.6` com apenas os países da `americadoSul` que ganharam a Copa do Mundo desde 1986. Mantenha as linhas duplicadas e todas as colunas. Deixe o mais recente nas primeiras linhas.
+
+```{r}
+dfQ4.6 <- americadoSul %>% inner_join(edicoes, by = c("Países" = "Ganhador")) %>% arrange(Copa)
+```
+
+#### Q.4.7 Crie uma tabela `dfQ4.7` dos países da América do Sul que não foram para `Vice` desde 1986.
+
+```{r}
+dfQ4.7 <- americadoSul %>% anti_join(edicoes, by = c("Países" = "Ganhador"))
+```
+
+### 5. Entendendo melhor Estruturas de dados
+
+No material expositivo do Tópico 3, especificamente na questão `3.5.1`, foi falado sobre `data.frame` compartilhar estruturas tanto com `list` quanto com `matrix`. Vamos usar a questão 5 para mostrar o que isso quer dizer, e as suas consequências práticas.
+
+Vamos começar definindo os elementos abaixo:
+
+```{r, include=TRUE}
+dfQ5 <- data.frame("A"= c(1,2,4), "B" = c(2,3,5), row.names = c("J", "H", "L"))
+lstQ5 <- list("A" = c(1,2,4), "B" = c(2,3,5))
+matQ5 <- matrix(c(1,2,4,2,3,5), ncol = 2, dimnames = list(c("J", "H", "L"), c("A", "B")))
+
+atmQ5 <- c(1,2,4,2,3,5)
+
+```
+
+#### Q.5.1 Diga quais das afirmações abaixo seriam possíveis e quais não seriam. Se tiver dificuldades revisite o Tópico 1.
+
+##### Q.5.1.a Criar uma `list` com elementos de tipos diferentes.
+
+##### Q.5.1.b Criar um `data.frame` com colunas de tipos diferentes.
+
+##### Q.5.1.c Criar um `data.frame` com linhas de tipos diferentes.
+
+##### Q.5.1.d Criar uma `matrix` com colunas de tipos diferentes.
+
+##### Q.5.1.e Criar uma `matrix` com linhas de tipos diferentes.
+
+##### Q.5.1.f Criar um vetor atômico com elementos de tipos diferentes.
+
+```{r, eval= FALSE}
+Q51 <- list(T, T, F, F, F, F)
+names(Q51) <-letters[1:6]
+```
+
+
+
+
+#### Q.5.2 Use `typeof` em `dfQ5`, `lstQ5`, `matQ5`, `atmQ5`. Como isso se relaciona com as afirmações `Q.5.1.a`,`Q.5.1.b`, `Q.5.1.d`, `Q.5.1.e` e `Q.5.1.f`?
+
+```{r}
+typeof(dfQ5)
+typeof(lstQ5)
+typeof(matQ5)
+typeof(atmQ5)
+
+"O fato de dfQ5 SER uma lista explica porque um data.frame pode conter colunas de tipos diferentes"
+```
+
+#### Q.5.3 A partir de `Q.5.2` e analisando o código abaixo, você consegue dizer como eles ajudam a explicar a resposta para a afirmação `Q.5.1.c`?
+
+```{r, include=TRUE}
+lstQ53_a <- list("A" = list(TRUE, "2"), "B" = list(2, 3))
+
+as.data.frame(lstQ53_a)
+
+lstQ53_b <-list("A" = c(TRUE, "2"), "B" = c(2, 3))
+
+as.data.frame(lstQ53_b)
+
+"Um data.frame é uma junção de vetores atômicos. Ou seja, uma junção de vetores que podem ser de tipos diferentes entre eles, porém cada vetor é de um mesmo tipo."
+```
+
+#### Q.5.4 Use a função `class()` em `dfQ5`, `lstQ5`, `matQ5`, `atmQ5`.
+
+#### Q.5.5 Use a função `length()` em `dfQ5`, `lstQ5`, `matQ5`, `atmQ5`. O que ela mede em cada um?
+
+#### Q.5.6 Use `typeof` e `class` em `dfQ5[1,]`, `dfQ5[,1]`, `dfQ5["J",]`,`dfQ5[1,1]`, `dfQ5[1]`, `dfQ5["A"]`, `dfQ5[,"A"]` `dfQ5[[1]]`, `dfQ5[["A"]]`, `df$A`.
+
+```{r}
+typeof(dfQ5[1,])
+class(dfQ5[1,])
+
+typeof(dfQ5[,1])
+class(dfQ5[,1])
+
+typeof(dfQ5[1])
+class(dfQ5[1])
+
+typeof(dfQ5["A"])
+class(dfQ5["A"])
+
+typeof(dfQ5[[1]])
+class(dfQ5[[1]])
+
+typeof(dfQ5[["A"]])
+class(dfQ5[["A"]])
+
+typeof(dfQ5$A)
+class(dfQ5$A)
+
+```
+
+#### Q.5.7 Como os resultados de `Q.5.6` podem ser entendidos a luz das funções `pull` e `select` do `dplyr`?
+
+#### Q.5.8 Investigue porque os valores de `class` e `typeof` para `dfQ5[1,]` e `dfQ5[,1]` são diferentes. Pense na relação disso com as afirmações `Q.5.1.b` e `Q.5.1.c`.
+
+#### D.5.1 Qual o motivo pelo qual `lst$A` e `dfQ5$A` funcionam enquanto `matQ5$A` não? Por que então `matQ5[,"A"]` funciona bem como `dfQ5[,"A"]`?
+
+#### Q.5.9 Dado tudo que já vimos até agora, procure falar o motivo pelo qual `$` e `[[]]` são sempre usados em data.frames em conjunto com o nome de uma coluna e não pelo da linha.
+
+#### Q.5.10 Verifique o tipo e classe de `t(dfQ5)`. Sendo que `dfQ5` tem 3 linhas e 2 colunas, você consegue deduzir, **sem rodar a função**, o `length` de `t(dfQ5)` ? E o de `as.data.frame(t(dfQ5))`
+
+
+#### Q.5.11 Sejam `df.nomes`, `df.nomes2`, `df.nomes3` e `dfQ5.11`  definidos como:
+
+```{r, include= TRUE}
+df.nomes <- data.frame("Nomes" = c("D", "F", "E"), "Nomes_B" = c("W", "X", "Y"))
+
+df.nomes2 <- as.data.frame(t(df.nomes))
+
+dfQ5.11 <- dfQ5
+```
+
+E seja a definição do *Argument* `row.names` da função `data.frame` a seguinte:
+
+NULL or a single integer or character string specifying a column to be used as row names, ***or a character or integer vector giving the row names for the data frame.***
+
+O que irá ocorrer em cada uma dessas situações? Você consegue dizer o porquê?
+
+##### Q.5.11.1
+```{r, include = TRUE, eval = FALSE}
+dfQ5.11.1 <- data.frame(dfQ5.11, row.names = df.nomes["Nomes"])
+```
+
+##### Q.5.11.2
+
+```{r, include = TRUE, eval = FALSE}
+dfQ5.11.2 <- data.frame(dfQ5.11, row.names = df.nomes[["Nomes"]])
+```
+
+##### Q.5.11.3
+
+```{r, include = TRUE, eval = FALSE}
+dfQ5.11.3 <- data.frame(dfQ5.11, row.names = df.nomes[,"Nomes"])
+```
+
+##### Q.5.11.4
+
+```{r, include = TRUE, eval = FALSE}
+dfQ5.11.4 <- data.frame(dfQ5.11, row.names = df.nomes$Nomes)
+```
+
+##### Q.5.11.5
+
+```{r, include = TRUE, eval = FALSE}
+dfQ5.11.5 <- data.frame(dfQ5.11, row.names = t(df.nomes[,1]))
+```
+
+##### Q.5.11.6
+
+```{r, include = TRUE, eval = FALSE}
+dfQ5.11.6 <- data.frame(dfQ5.11, row.names = df.nomes2[1,])
+```
+
+##### Q.5.11.7
+
+```{r}
+dfQ5.11.7 <- data.frame(dfQ5.11, row.names = t(df.nomes2[1,]))
+```
+
