@@ -6,13 +6,13 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(include = FALSE, eval = FALSE)
+knitr::opts_chunk$set(echo= TRUE)
 ```
 
 
 ## Pacotes necessários para esse exercício.
 
-```{r, eval = FALSE, include = TRUE}
+```{r, include = TRUE}
 library(tidyverse)
 library(magrittr)
 library(readxl)
@@ -79,7 +79,7 @@ Vamos agora usar a base de dados NIOT para praticar o que foi passado nos últim
 
 Porém vamos agora mostrar uma outra forma de baixar, os dados sem precisar sair do Rstudio. (E sem gravar no disco rígido esse arquivo, usando apenas um arquivo temporário)
 
-```{r, eval = FALSE, include = TRUE}
+```{r, include = TRUE}
 library(readxl)
 #Criando um arquivo temporário
 arq_temp <- tempfile(fileext = ".xlsx")
@@ -106,6 +106,10 @@ Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter p
 save(niotITA, file = "Q11niotITA.Rdata")
 ```
 
+```{r}
+unlink("Q11niotITA.Rdata")
+```
+
 #### Q.1.2 Qual é a `class` e `type` de `niotITA`?
 
 ```{r}
@@ -119,7 +123,7 @@ class(niotITA)
 ```{r}
 ItaQ1.3 <- niotITA %>% dplyr::filter((!is.na(Year)))
 # Usando filter_all
-ItaQ1.3 <- niotITA %>% dplyr::filter_all(any_vars(!is.na(.)))
+ItaQ1.3 <- niotITA %>% dplyr::filter_all(all_vars(!is.na(.)))
 ```
 
 #### Q.1.4 Usando o pacote `tidyr`, crie um objeto `ItaQ1.4` que exclui de `niotITA` as linhas que possuem NA.
@@ -203,9 +207,9 @@ CodeQ2.2 <- ItaQ2.1[, "Code"] %>% distinct()
 CodeQ2.2 <- ItaQ2.1["Code"] %>% distinct()
 
 # Dará errado pois distinct quer pelo menos um vagão (tibble ou df) e não o que tem dentro do vagão (dados em vetores atômicos)
-CodeQ2.2 <- ItaQ2.1$Code %>% distinct()
-CodeQ2.2 <- ItaQ2.1[["Code"]] %>% distinct()
-CodeQ2.2 <- ItaQ2.1 %$% Code %>% distinct()
+#CodeQ2.2 <- ItaQ2.1$Code %>% distinct()
+#CodeQ2.2 <- ItaQ2.1[["Code"]] %>% distinct()
+#CodeQ2.2 <- ItaQ2.1 %$% Code %>% distinct()
 ```
 
 Repare que esses codes são os mesmos que os nomes das colunas de `ItaQ2.1`. E que a Demanda Final está apenas nas colunas.
@@ -221,6 +225,7 @@ vecQ2.3 <- c(colnames(ItaQ2.1)[1:4], CodeQ2.2$Code)
 ```{r}
 ItaQ2.4 <- ItaQ1.9 %>% select(vecQ2.3)
 
+ItaQ2.4 <- ItaQ1.9 %>% select(all_of(vecQ2.3))
 ItaQ2.4 <- ItaQ1.9[, vecQ2.3]
 ```
 
@@ -254,28 +259,27 @@ Nas questões a seguir, exceto se indicado, a tabela `ItaQ1.9` será a base de d
 ```{r}
 ItaQ3.1 <- ItaQ1.9 %>% filter(Year == 2000, Origin == "Imports")
 
-ItaQ3.1 <- ItaQ1.9 %>% filter(Year == 2000 & Origin == "Imports")
+ItaQ3.1b <- ItaQ1.9 %>% filter(Year == 2000 & Origin == "Imports")
 
-ItaQ3.1 <- ItaQ1.9[ItaQ1.9$Year == 2000 & ItaQ1.9$Origin == "Imports",]
+ItaQ3.1c <- ItaQ1.9[ItaQ1.9$Year == 2000 & ItaQ1.9$Origin == "Imports",]
 ```
 
 #### Q.3.2 Crie um objeto `ItaQ3.2`, contendo os valores `"Domestic"` do setor `B` para os anos entre 2000 e 2005.
 
 ```{r}
-ItaQ3.2 <- ItaQ1.9 %>% filter(Origin == "Domestic",
-                              Year == 2000:2005, Code == "B")
-
 ItaQ3.2 <- ItaQ1.9 %>% filter(Origin == "Domestic", between(Year, 2000, 2005), Code == "B")
 
-ItaQ3.2 <- ItaQ1.9 %>% filter(Origin == "Domestic" & between(Year, 2000, 2005) & Code == "B")
+ItaQ3.2b <- ItaQ1.9 %>% filter(Origin == "Domestic" & between(Year, 2000, 2005) & Code == "B")
 
-ItaQ3.2 <- ItaQ1.9[ItaQ1.9$Origin == "Domestic" & ItaQ1.9$Year == 2000:2005 & ItaQ3.2$Code == "B",]
+ItaQ3.2c <- ItaQ1.9 %>% filter(Origin == "Domestic",
+                              Year == 2000:2005, Code == "B")
+
 ```
 
-#### Q.3.3 Crie `ItaQ3.3` de modo que tenha apenas os valores para o ano 2000 e que os valores  do *Gross Output* (código `GO`) sejam maiores ou iguais a média.
+#### Q.3.3 Crie `ItaQ3.3` de modo que tenha apenas os valores para o ano 2000 e que os valores  do *Gross Output* (código `GO`) sejam maiores ou iguais a média de `GO`.
 
 ```{r}
-ItaQ3.3 <- ItaQ1.9 %>% filter(GO >= mean(GO), Year == 2000)
+ItaQ3.3 <- ItaQ1.9 %>% filter(Year == 2000) %>% .$GO %>% typeof()
 ```
 
 #### Q.3.4 Crie `ItaQ3.4` com os valores do coluna `GO` pertos de `20000` com uma tolerância de `15000`.
@@ -331,10 +335,10 @@ dfQ4.2b <- americadoSul %>% arrange(Titulos)
 dfQ4.2c <- ganhadores %>% arrange(desc(Titulos))
 ```
 
-#### Q.4.3 
+#### Q.4.3 Usando uma função da família `join`, crie uma tabela da `dfQ4.3` contendo apenas os 
 
 ```{r}
-dfQ4.3 <- americadoSul %>% inner_join()
+dfQ4.3 <- americadoSul %>% inner_join(ganhadores)
 ```
 
  O número de formas para você fazer isso é mesmo número de mãos que uma pessoa usualmente tem.

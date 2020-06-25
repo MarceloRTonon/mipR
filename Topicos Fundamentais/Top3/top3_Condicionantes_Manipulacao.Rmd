@@ -79,6 +79,7 @@ No que tange as seções referentes ao `tidyverse`, vale notar que várias funç
 - Para uma visão especifica do `dplyr` vale conferir os capítulos [5](https://r4ds.had.co.nz/transform.html) e [13](https://r4ds.had.co.nz/relational-data.html) do *R for Data Science*
 
 - Para uma visão especifica do `tidyr` ver o capítulo [12](https://r4ds.had.co.nz/tidy-data.html) do *R for Data Science*.
+
 ## [3.2 - Operações Lógicas](#32oplogicas)
 
 Para você realizar operações que os resultados são respostas lógicas, existem algumas opções a serem usadas. Veja abaixo exemplos dos chamados *Relational Operators*:

@@ -371,9 +371,25 @@ summary {
 
 <div id="pacotes-necessários-para-esse-exercício." class="section level2">
 <h2>Pacotes necessários para esse exercício.</h2>
-<pre class="r"><code>library(tidyverse)
-library(magrittr)
-library(readxl)</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages -------------------------------- tidyverse 1.3.0 --</code></pre>
+<pre><code>## v ggplot2 3.3.0     v purrr   0.3.4
+## v tibble  3.0.1     v dplyr   0.8.5
+## v tidyr   1.0.2     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.5.0</code></pre>
+<pre><code>## -- Conflicts ----------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(magrittr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;magrittr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     set_names</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     extract</code></pre>
+<pre class="r"><code>library(readxl)</code></pre>
 </div>
 <div id="the-seviration-enfrentando-os-seus-erros." class="section level2">
 <h2><strong><em>The SeViration:</em></strong> Enfrentando os seus erros.</h2>
@@ -443,37 +459,73 @@ unlink(arq_temp)</code></pre>
 </div>
 <div id="q.1.1-crie-um-arquivo-q11niotita.rdata-com-os-dados-da-niotita" class="section level4">
 <h4>Q.1.1 Crie um arquivo <code>Q11niotITA.Rdata</code> com os dados da <code>niotITA</code></h4>
+<pre class="r"><code>save(niotITA, file = &quot;Q11niotITA.Rdata&quot;)</code></pre>
+<pre class="r"><code>unlink(&quot;Q11niotITA.Rdata&quot;)</code></pre>
 </div>
 <div id="q.1.2-qual-é-a-class-e-type-de-niotita" class="section level4">
 <h4>Q.1.2 Qual é a <code>class</code> e <code>type</code> de <code>niotITA</code>?</h4>
+<pre class="r"><code>typeof(niotITA)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>class(niotITA)</code></pre>
+<pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
 </div>
 <div id="q.1.3-usando-o-pacote-dplyr-crie-um-objeto-itaq1.3-que-exclui-de-niotita-as-linhas-que-possuem-na." class="section level4">
 <h4>Q.1.3 Usando o pacote <code>dplyr</code>, crie um objeto <code>ItaQ1.3</code> que exclui de <code>niotITA</code> as linhas que possuem NA.</h4>
+<pre class="r"><code>ItaQ1.3 &lt;- niotITA %&gt;% dplyr::filter((!is.na(Year)))
+# Usando filter_all
+ItaQ1.3 &lt;- niotITA %&gt;% dplyr::filter_all(all_vars(!is.na(.)))</code></pre>
 </div>
 <div id="q.1.4-usando-o-pacote-tidyr-crie-um-objeto-itaq1.4-que-exclui-de-niotita-as-linhas-que-possuem-na." class="section level4">
 <h4>Q.1.4 Usando o pacote <code>tidyr</code>, crie um objeto <code>ItaQ1.4</code> que exclui de <code>niotITA</code> as linhas que possuem NA.</h4>
+<pre class="r"><code>ItaQ1.4 &lt;- niotITA %&gt;% tidyr::drop_na()</code></pre>
 </div>
 <div id="q.1.5-confira-se-itaq1.4-e-itaq1.3-são-iguais." class="section level4">
 <h4>Q.1.5 Confira se <code>ItaQ1.4</code> e <code>ItaQ1.3</code> são iguais.</h4>
+<pre class="r"><code>identical(ItaQ1.3, ItaQ1.4)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 </div>
 <div id="q.1.6-crie-um-data.frame-vecq1.6-com-a-linha-de-niotita-que-possui-na." class="section level4">
 <h4>Q.1.6 Crie um data.frame <code>vecQ1.6</code> com a linha de <code>niotITA</code> que possui <code>NA</code>.</h4>
+<pre class="r"><code>vecQ1.6 &lt;- niotITA %&gt;% filter(is.na(Year))
+
+vecQ1.6 &lt;- niotITA %&gt;% filter_all(any_vars(is.na(.)))</code></pre>
 </div>
 <div id="q.1.7-crie-um-vetor-atômico-vecq1.7-de-tal-modo-que-os-valores-de-vecq1.6-que-contém-na-fiquem-com-os-nomes-das-suas-respectivas-colunas." class="section level4">
 <h4>Q.1.7 Crie um <strong>vetor atômico</strong> <code>vecQ1.7</code>, de tal modo que os valores de <code>vecQ1.6</code> que contém <code>NA</code> fiquem com os nomes das suas respectivas colunas.</h4>
 <p><em>Dica 1:</em> Crie <code>vecQ1.7</code> como cópia de <code>vecQ1.6</code> (<code>vecQ1.7 &lt;- vecQ1.6</code>) para iniciar a resolução. Porém, fique atento, pois tem não uma, mas duas pegadinhas.</p>
+<pre class="r"><code>vecQ1.7 &lt;- vecQ1.6 %&gt;% c()
+vecQ1.7[1:4] &lt;- names(vecQ1.7)[1:4]</code></pre>
 </div>
 <div id="d.1.1-desafio-complicado-crie-a-partir-de-vecq1.6-um-vetor-atómico-vecd1.1-que-fique-igual-à-vecq1.6.-porém-o-faça-sem-escrever-arbitrariamente-o-índice-das-colunas.-ou-seja-não-escreva-número-algum-para-além-dos-usados-nos-nomes-dos-objetos." class="section level4">
 <h4>D.1.1 <strong>DESAFIO COMPLICADO:</strong> Crie, <strong>a partir de <code>vecQ1.6</code></strong>, um vetor atómico <code>vecD1.1</code> que fique igual à <code>vecQ1.6</code>. <strong>PORÉM</strong>, o faça sem escrever arbitrariamente o índice das colunas. Ou seja, não escreva número algum para além dos usados nos nomes dos objetos.</h4>
+<pre class="r"><code>vecD1.1 &lt;- vecQ1.6 %&gt;% c()
+valores_na &lt;- is.na(vecD1.1)
+vecD1.1[valores_na] &lt;- vecD1.1 %&gt;% names() %&gt;% .[valores_na]</code></pre>
 </div>
 <div id="q.1.8-coloque-vecq1.7-como-os-colnames-de-itaq1.4." class="section level4">
 <h4>Q.1.8 Coloque <code>vecQ1.7</code> como os <code>colnames</code> de <code>ItaQ1.4</code>.</h4>
+<pre class="r"><code>colnames(ItaQ1.4) &lt;- vecQ1.7</code></pre>
 </div>
 <div id="d.1.2-confira-o-tipo-de-dados-presentes-da-5a-coluna-de-itaq1.3.-list-não-é-a-resposta-que-você-quer." class="section level4">
 <h4>D.1.2 Confira o tipo de dados presentes da 5a coluna de ItaQ1.3. <code>list</code> não é a resposta que você quer.</h4>
+<pre class="r"><code>ItaQ1.3 %&gt;% .[[5]] %&gt;% is.character()</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 </div>
 <div id="q.1.9-converta-em-double-todas-as-colunas-de-itaq1.3-que-são-pássiveis-de-serem-convertidas.-faça-isso-com-apenas-um-comando.-nomeie-de-itaq1.9" class="section level4">
 <h4>Q.1.9 Converta em <code>double</code> todas as colunas de <code>ItaQ1.3</code> que são pássiveis de serem convertidas. Faça isso com apenas um comando. Nomeie de <code>ItaQ1.9</code></h4>
+<pre class="r"><code>ItaQ1.9 &lt;- ItaQ1.3 %&gt;% type_convert()</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre class="r"><code>typeof(ItaQ1.9[[4]])</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>typeof(ItaQ1.9[[5]])</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
 </div>
 </div>
 <div id="separando-as-varíaves-de-demanda-final." class="section level3">
@@ -481,25 +533,51 @@ unlink(arq_temp)</code></pre>
 <p>Vamos agora separar as varíaveis de demanda final da tabela <code>ItaQ1.3</code> do restante delas.</p>
 <div id="q.2.1-crie-um-objeto-itaq2.1-a-partir-de-itaq1.9-em-que-as-linhas-da-coluna-origin-que-tem-os-valores-tot-são-excluidas.-você-consegue-fazer-tanto-pelo-base-r-quanto-pelo-tidyverse" class="section level4">
 <h4>Q.2.1 Crie um objeto <code>ItaQ2.1</code> a partir de <code>ItaQ1.9</code> em que as linhas da coluna <code>Origin</code> que tem os valores <code>&quot;TOT&quot;</code> são excluidas. Você consegue fazer tanto pelo Base R quanto pelo tidyverse?</h4>
+<pre class="r"><code>ItaQ2.1 &lt;- ItaQ1.9[ItaQ1.9$Origin != &quot;TOT&quot;,]
+ItaQ2.1 &lt;- ItaQ1.9 %&gt;% filter(Origin != &quot;TOT&quot;)</code></pre>
 </div>
 <div id="q.2.2-crie-o-objeto-codeq2.2-a-partir-da-coluna-code-de-itaq2.1-de-modo-que-esta-não-tenha-nenhum-valor-repetido.-pense-no-máximo-de-formas-possíveis-que-você-consegue-fazer-isso." class="section level4">
 <h4>Q.2.2 Crie o objeto <code>CodeQ2.2</code> a partir da coluna <code>Code</code> de <code>ItaQ2.1</code> de modo que esta não tenha nenhum valor repetido. Pense no máximo de formas possíveis que você consegue fazer isso.</h4>
+<pre class="r"><code>CodeQ2.2 &lt;- ItaQ2.1 %&gt;% select(Code) %&gt;% distinct() 
+
+CodeQ2.2 &lt;- ItaQ2.1[, &quot;Code&quot;] %&gt;% distinct()
+
+CodeQ2.2 &lt;- ItaQ2.1[&quot;Code&quot;] %&gt;% distinct()
+
+# Dará errado pois distinct quer pelo menos um vagão (tibble ou df) e não o que tem dentro do vagão (dados em vetores atômicos)
+#CodeQ2.2 &lt;- ItaQ2.1$Code %&gt;% distinct()
+#CodeQ2.2 &lt;- ItaQ2.1[[&quot;Code&quot;]] %&gt;% distinct()
+#CodeQ2.2 &lt;- ItaQ2.1 %$% Code %&gt;% distinct()</code></pre>
 <p>Repare que esses codes são os mesmos que os nomes das colunas de <code>ItaQ2.1</code>. E que a Demanda Final está apenas nas colunas.</p>
 </div>
 <div id="q.2.3-crie-um-vetor-atômico-vecq2.3que-inclua-os-nomes-das-quatro-primeiras-colunas-de-itaq2.1-e-todos-os-valores-de-code." class="section level4">
 <h4>Q.2.3 Crie um vetor atômico <code>vecQ2.3</code>que inclua os nomes das quatro primeiras colunas de <code>ItaQ2.1</code> e todos os valores de Code.</h4>
+<pre class="r"><code>vecQ2.3 &lt;- c(colnames(ItaQ2.1)[1:4], CodeQ2.2$Code)</code></pre>
 </div>
 <div id="q.2.4-crie-uma-base-de-dados-itaq2.4-selecionando-os-dados-de-itaq1.9-que-são-da-demanda-intersetorial-ou-seja-não-são-da-demanda-final.-não-use-nenhum-número-arbitrário.-de-quantas-formas-você-consegue-fazer-isso-não-deixe-de-selecionar-as-4-primeiras-colunas-com-as-informações-dos-dados." class="section level4">
 <h4>Q.2.4 Crie uma base de dados <code>ItaQ2.4</code> selecionando os dados de <code>ItaQ1.9</code> que são da demanda intersetorial (ou seja, não são da demanda final). <strong>Não use nenhum número arbitrário</strong>. De quantas formas você consegue fazer isso? Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.</h4>
+<pre class="r"><code>ItaQ2.4 &lt;- ItaQ1.9 %&gt;% select(vecQ2.3)</code></pre>
+<pre><code>## Note: Using an external vector in selections is ambiguous.
+## i Use `all_of(vecQ2.3)` instead of `vecQ2.3` to silence this message.
+## i See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
+## This message is displayed once per session.</code></pre>
+<pre class="r"><code>ItaQ2.4 &lt;- ItaQ1.9 %&gt;% select(all_of(vecQ2.3))
+ItaQ2.4 &lt;- ItaQ1.9[, vecQ2.3]</code></pre>
 </div>
 <div id="q.2.5-crie-uma-base-de-dados-itaq2.5-selecionando-as-colunas-de-itaq1.9-que-são-da-demadna-final-ou-seja-não-são-da-demanda-intersetorial.-não-use-nenhum-número-arbitrário.-não-deixe-de-selecionar-as-4-primeiras-colunas-com-as-informações-dos-dados." class="section level4">
 <h4>Q.2.5 Crie uma base de dados <code>ItaQ2.5</code> selecionando as colunas de <code>ItaQ1.9</code> que são da demadna final (ou seja, não são da demanda intersetorial). <strong>Não use nenhum número arbitrário</strong>. Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.</h4>
+<pre class="r"><code>ItaQ2.5 &lt;- ItaQ1.9 %&gt;% select(-CodeQ2.2$Code)</code></pre>
 </div>
 <div id="q.2.7-quantas-são-as-colunas-da-demanda-final-calcule-pela-de-itaq1.9-diferença-em-relação-à-itaq2.4.-nomeie-o-valor-de-q2.7" class="section level4">
 <h4>Q.2.7 Quantas são as colunas da demanda final? Calcule pela de <code>ItaQ1.9</code> diferença em relação à <code>ItaQ2.4</code>. Nomeie o valor de <code>Q2.7</code></h4>
+<pre class="r"><code>Q2.7 &lt;- ncol(ItaQ1.9) - ncol(ItaQ2.4)</code></pre>
 </div>
 <div id="d.2.1-provido-do-número-de-colunas-de-itaq1.9-e-do-valor-q2.7-crie-um-objeto-chamado-itad2.1-que-seja-igual-à-itaq2.4.-não-use-nenhum-número-arbitrário." class="section level4">
 <h4>D.2.1 Provido do número de colunas de <code>ItaQ1.9</code> e do valor <code>Q2.7</code>, crie um objeto chamado <code>ItaD2.1</code> que seja igual à <code>ItaQ2.4</code>. <em>Não use nenhum número arbitrário</em>.</h4>
+<pre class="r"><code>ItaD2.1 &lt;- ItaQ1.9[,1:(ncol(ItaQ1.9)-Q2.7)]
+
+identical(ItaD2.1, ItaQ2.4)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 </div>
 </div>
 <div id="treinando-subsetting-de-linhas" class="section level3">
@@ -507,15 +585,63 @@ unlink(arq_temp)</code></pre>
 <p>Nas questões a seguir, exceto se indicado, a tabela <code>ItaQ1.9</code> será a base de dados a ser manipulada.</p>
 <div id="q.3.1-crie-um-objeto-itaq3.1-que-contenha-apenas-os-valores-imports-do-ano-de-2000.-de-quais-formas-você-consegue-fazer-isso" class="section level4">
 <h4>Q.3.1 Crie um objeto <code>ItaQ3.1</code>, que contenha apenas os valores <code>&quot;Imports&quot;</code> do ano de 2000. De quais formas você consegue fazer isso?</h4>
+<pre class="r"><code>ItaQ3.1 &lt;- ItaQ1.9 %&gt;% filter(Year == 2000, Origin == &quot;Imports&quot;)
+
+ItaQ3.1b &lt;- ItaQ1.9 %&gt;% filter(Year == 2000 &amp; Origin == &quot;Imports&quot;)
+
+ItaQ3.1c &lt;- ItaQ1.9[ItaQ1.9$Year == 2000 &amp; ItaQ1.9$Origin == &quot;Imports&quot;,]</code></pre>
 </div>
 <div id="q.3.2-crie-um-objeto-itaq3.2-contendo-os-valores-domestic-do-setor-b-para-os-anos-entre-2000-e-2005." class="section level4">
 <h4>Q.3.2 Crie um objeto <code>ItaQ3.2</code>, contendo os valores <code>&quot;Domestic&quot;</code> do setor <code>B</code> para os anos entre 2000 e 2005.</h4>
+<pre class="r"><code>ItaQ3.2 &lt;- ItaQ1.9 %&gt;% filter(Origin == &quot;Domestic&quot;, between(Year, 2000, 2005), Code == &quot;B&quot;)
+
+ItaQ3.2b &lt;- ItaQ1.9 %&gt;% filter(Origin == &quot;Domestic&quot; &amp; between(Year, 2000, 2005) &amp; Code == &quot;B&quot;)
+
+ItaQ3.2c &lt;- ItaQ1.9 %&gt;% filter(Origin == &quot;Domestic&quot;,
+                              Year == 2000:2005, Code == &quot;B&quot;)</code></pre>
 </div>
-<div id="q.3.3-crie-itaq3.3-de-modo-que-tenha-apenas-os-valores-para-o-ano-2000-e-que-os-valores-do-gross-output-código-go-sejam-maiores-ou-iguais-a-média." class="section level4">
-<h4>Q.3.3 Crie <code>ItaQ3.3</code> de modo que tenha apenas os valores para o ano 2000 e que os valores do <em>Gross Output</em> (código <code>GO</code>) sejam maiores ou iguais a média.</h4>
+<div id="q.3.3-crie-itaq3.3-de-modo-que-tenha-apenas-os-valores-para-o-ano-2000-e-que-os-valores-do-gross-output-código-go-sejam-maiores-ou-iguais-a-média-de-go." class="section level4">
+<h4>Q.3.3 Crie <code>ItaQ3.3</code> de modo que tenha apenas os valores para o ano 2000 e que os valores do <em>Gross Output</em> (código <code>GO</code>) sejam maiores ou iguais a média de <code>GO</code>.</h4>
+<pre class="r"><code>ItaQ3.3 &lt;- ItaQ1.9 %&gt;% filter(Year == 2000) %&gt;% .$GO %&gt;% typeof()</code></pre>
 </div>
-<div id="q.3.4-filtre" class="section level4">
-<h4>Q.3.4 Filtre</h4>
+<div id="q.3.4-crie-itaq3.4-com-os-valores-do-coluna-go-pertos-de-20000-com-uma-tolerância-de-15000." class="section level4">
+<h4>Q.3.4 Crie <code>ItaQ3.4</code> com os valores do coluna <code>GO</code> pertos de <code>20000</code> com uma tolerância de <code>15000</code>.</h4>
+<pre class="r"><code>ItaQ3.4 &lt;- ItaQ1.9 %&gt;% filter(near(GO, 20000, tol= 15000))</code></pre>
+</div>
+<div id="q.3.5-some-os-valores-de-todas-as-linhas-da-base-filtrada-com-as-seguintes-caracteristicas-origin-domestic-year-2000.-chame-o-objeto-de-vecq3.5" class="section level4">
+<h4>Q.3.5 Some os valores de todas as linhas da base filtrada com as seguintes caracteristicas: <code>Origin = Domestic</code>; <code>Year = 2000</code>. Chame o objeto de <code>vecQ3.5</code></h4>
+<pre class="r"><code>vecQ3.5 &lt;- ItaQ1.9 %&gt;% filter(Origin == &quot;Domestic&quot;, Year == 2000) %&gt;%
+  .[,-c(1:4)] %&gt;% rowSums()</code></pre>
+</div>
+</div>
+<div id="treinando-join-e-arrange" class="section level3">
+<h3>4. Treinando join e arrange</h3>
+<p>Vamos praticar os verbos da familia <code>join</code> do pacote <code>dplyr</code> agora. Tenha certeza que leu a parte referente a ela no Tópico 3! Qualquer coisa use o <code>help()</code> ou veja as partes <strong><em>Mutating joins</em></strong> e <strong><em>Types of join</em></strong> em <code>vignette(&quot;two-table&quot;)</code>.</p>
+<p>Não se sinta acanhado de recorrer a eles em nenhum momento.</p>
+<div id="q.4.1-crie-uma-tabela-dfq4.1-unindo-as-tabelas-americadosul-e-ganhadores-mantendo-a-coluna-participações." class="section level4">
+<h4>Q.4.1 Crie uma tabela <code>dfQ4.1</code> unindo as tabelas <code>americadoSul</code> e <code>ganhadores</code> mantendo a coluna <code>Participações</code>.</h4>
+<pre class="r"><code>americadoSul &lt;- data.frame(&quot;Países&quot; = c(&quot;Chile&quot;, &quot;Argentina&quot;, &quot;Uruguai&quot;, &quot;Brasil&quot;), &quot;Titulos&quot; = c(0,2,2,5), &quot;Participações&quot; = c(9, 17, 13, 21))
+
+ganhadores &lt;- data.frame(&quot;Países&quot; = c( &quot;Alemanha&quot;, &quot;Argentina&quot;,&quot;Itália&quot;, &quot;França&quot;,  &quot;França&quot;, &quot;Uruguai&quot;, &quot;Espanha&quot;,&quot;Brasil&quot;, &quot;Inglaterra&quot;), &quot;Titulos&quot; = c( 4,2,4,2,2,2,1,5,1))</code></pre>
+<pre class="r"><code>dfQ4.1 &lt;- dplyr::full_join(ganhadores, americadoSul)</code></pre>
+<pre><code>## Joining, by = c(&quot;Países&quot;, &quot;Titulos&quot;)</code></pre>
+</div>
+<div id="q.4.1-crie" class="section level4">
+<h4>Q.4.1 Crie:</h4>
+<ul>
+<li><code>dfQ4.2a</code>: <code>americadoSul</code> países ordenados por número de participações em ordem crescente.</li>
+</ul>
+<pre class="r"><code>dfQ4.2a &lt;- americadoSul %&gt;% arrange(Participações)</code></pre>
+<p>-<code>dfQ4.2b</code>: <code>americadoSul</code> ordenados por número de titulos, em ordem decrescente.</p>
+<pre class="r"><code>dfQ4.2b &lt;- americadoSul %&gt;% arrange(Titulos)</code></pre>
+<p>-<code>dfQ4.2c</code>: <code>ganhadores</code> ordenada por número de títulos em ordem decrescente.</p>
+<pre class="r"><code>dfQ4.2c &lt;- ganhadores %&gt;% arrange(desc(Titulos))</code></pre>
+</div>
+<div id="q.4.3-usando-uma-função-da-família-join-crie-uma-tabela-da-dfq4.3-contendo-apenas-os" class="section level4">
+<h4>Q.4.3 Usando uma função da família <code>join</code>, crie uma tabela da <code>dfQ4.3</code> contendo apenas os</h4>
+<pre class="r"><code>dfQ4.3 &lt;- americadoSul %&gt;% inner_join(ganhadores)</code></pre>
+<pre><code>## Joining, by = c(&quot;Países&quot;, &quot;Titulos&quot;)</code></pre>
+<p>O número de formas para você fazer isso é mesmo número de mãos que uma pessoa usualmente tem.</p>
 </div>
 </div>
 </div>
