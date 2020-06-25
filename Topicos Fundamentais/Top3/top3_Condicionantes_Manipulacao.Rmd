@@ -1,0 +1,59 @@
+---
+title: "Tópico 3 - Condicionalidades e Manipulação de Dados"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "25/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+O Tópico 3 propõe introduzir duas questões principais aos alunos: o uso de Condicionalidades e a Manipulação de Dados. Falaremos na parte [3.0](objetivos) do que se propõe com cada um deles, mas antes, vamos passar para uma questão relevante que é a instalação do `tidyverse`. O uso deste será a última parte deste tópico, mas como sua instalação pode tomar tempo, colocamos ele logo no ínicio.
+
+## O `tidyverse`: Instalação
+
+Como iremos tratar de muitos pacotes dentro do *tidyverse*, vale baixar a familia de pacote como um todo. Por ser muito grande, pode demorar um tempo, então sugiro que se vocês ainda não estiverem instalado eles, que o façam logo se vocês ainda não tiverem a familia instalada. Se você tiver que instala-lo, você pode esperar isso enquanto:
+
+  1. Ir no banheiro ou lavar ao menos parte da louça enquanto escuto o Podcast do IE;
+  2. Ler o resto do Tópico, enquanto espera o R instalar o tidyverse.
+
+```{r, eval = FALSE}
+install.packages("tidyverse")
+```
+
+A vantagem de assinalar o `tidyverse` é que o R irá baixar e instalar todos os pacotes do tidyverse. Ao usar `library(tidyverse)`, todos os pacotes do *"nucleo duro"* do `tidyverse` são carregados. Repare que se você instalou o `tidyverse` inteiro, ele irá carregar o `dplyr` e o`tidyr`^[O inverso não seria verdadeiro por outro lado. A instalação do `dplyr` não garante a instalação do resto da do resto dos pacotes.].
+
+
+
+```{r}
+#Carregando os pacotes nucleares tidyverse
+#library(tidyverse)
+# O magrittr é instalado com o tidyverse, porém não é carregado com library(tidyverse), logo precisa ser carregado explicitamente.
+
+#library(magrittr)
+#Carregando só os pacotes que iremos precisar.
+
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(readr)
+```
+
+
+
+
+
+
+## [3.0 - Os objetivos do Tópico 3](#objetivos)
+
+A introdução ao uso dos Condicionantes e à Manipulação de Dados estão sendo expostas no mesmo Tópico pelo fato de que a combinação de ambos te permite realizar muita coisa na hora de extrair os dados que você quer.
+
+Ao longo das seções 3.1, 3.2 e 3.3 deste Tópico, iremos apresentar situações em que você necessite realizar operações lógicas para tomar decisões ou realizar tarefas especificas de acordo com determinadas condições. Essas operações podem ser importantes para avaliar resultados obtidos e automatizar ações condicionais aos resultados. Englobam-se aqui as operações lógicas e as condicionais (usando as funções `if`, `else` e `ifelse`).
+
+
+
+Podemos citar outras referências que foram usadas na criação deste material:
+
+ - A subseção [7.0.2](https://rstudio-education.github.io/hopr/modify.html#logical-subsetting) do **Hands-on Programming with R** do Hadley Wickham para a parte de *Operações Lógicas*.
+ - Para a parte de condicionais e escolhas foram usadas as subseções [9.2](https://rstudio-education.github.io/hopr/programs.html#if-statements) do *Hans-On Programming with R* e a subseção [5.2](https://adv-r.hadley.nz/control-flow.html#choices) do **Advanced R** do Hadley Wickham.

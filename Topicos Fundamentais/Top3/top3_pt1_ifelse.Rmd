@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## 3.0 - Objetivo
+## 3.1 - Objetivo
 
 Neste tópico iremos apresentar situações em que você necessite realizar operações lógicas para tomar decisões ou realizar tarefas especificas de acordo com determinadas condições. Essas operações podem ser importantes para avaliar resultados obtidos e automatizar ações condicionais aos resultados. Englobam-se aqui as operações lógicas e as condicionais (usando as funções `if`, `else` e `ifelse`).
 
@@ -19,7 +19,7 @@ Podemos citar outras referências que foram usadas na criação deste material:
  - Para a parte de condicionais e escolhas foram usadas as subseções [9.2](https://rstudio-education.github.io/hopr/programs.html#if-statements) do *Hans-On Programming with R* e a subseção [5.2](https://adv-r.hadley.nz/control-flow.html#choices) do **Advanced R** do Hadley Wickham.
  
 
-## 3.1 - Operações Lógicas
+## 3.2 - Operações Lógicas
 
 Para você realizar operações que os resultados são respostas lógicas, existem algumas opções a serem usadas. Veja abaixo exemplos dos chamados *Relational Operators*:
 
@@ -48,13 +48,13 @@ c(1:3) >= c(3:1)
 Ps.: Um ótimo resumo sobre o que cada operador faz pode ser encontrado na [Table 7.1](https://rstudio-education.github.io/hopr/modify.html#tab:logop) do **Hands-On Programming with R**. 
 
 
-## 3.2 - Escolhas e Condições (If Statements)
+## 3.3 - Escolhas e Condições (If Statements)
 
 Imagine que você queira fazer determinada operação somente no caso de certa condições são atendidas? Ou fazer uma sequência de operações de acordo com o resultado de etapas anteriores? Nessas situações, o uso das função `if`, `else` e `ifelse` podem ser úteis.
 
 ![](Imagem/ifelse.jpg)
 
-### 3.2.1 - if
+### 3.3.1 - if
 
 A função `if`é a responsável por realizar a "pergunta" por trás da condição escolhida. No caso, **se** algo acontecer faça determinada operação (que estará entre {}):
 
@@ -108,7 +108,7 @@ if(FALSE){
 ```
 
 
-### 3.2.2 - if e else
+### 3.3.2 - if e else
 
 Caso seu objetivo não dependa apenas da validade do condição estabelecida ser `TRUE`, mas de fazer outra determinanda operação caso o resultado lógico da sua condição ser `FALSE`, é necessário adicionar mais uma etapa. Nesse caso, além do `if` é necessário inserir a função `else`, bem como a tarefa ou resultado que você deseja obter. Novamente, a representação no R é da seguitne forma:
 
@@ -122,7 +122,7 @@ if (condição){
     }
 ```
 
-Voltando ao exemplo usado em `3.2.2`, nesse caso teremos:
+Voltando ao exemplo usado em `3.3.2`, nesse caso teremos:
 
 ```{r}
 a <- 2
@@ -142,7 +142,7 @@ if(b == 2){
   }
 ```
 
-No caso acima os dois casos tem um retorno pois tem o `else`. Os exemplos acima foram realizados usando condição de igualdade `==`, mas qualquer uma das operações lógicas citadas na seção 3.1 pode ser usada. Vamos fazer alguns exemplos (mas não de todos)
+No caso acima os dois casos tem um retorno pois tem o `else`. Os exemplos acima foram realizados usando condição de igualdade `==`, mas qualquer uma das operações lógicas citadas na seção 3.2 pode ser usada. Vamos fazer alguns exemplos (mas não de todos)
 
 ```{r}
 a <- 2
@@ -189,7 +189,7 @@ if(a > b){
   }
 ```
 
-### 3.2.3 - A função ifelse
+### 3.3.3 - A função ifelse
 
 Existe a função ifelse que pode ser mais prática do que escrever o `if` `else` como foi feito. Mais importante ainda, o `ifelse` funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente.  No Tópico 4 falaremos mais sobre funções vetoriais.
 
@@ -255,7 +255,7 @@ is.data.frame2(i)
 
 ```
 
-## 3.3 - Operações em Conjuntos (Booleans)
+## 3.4 - Operações em Conjuntos (Booleans)
 
 Para essa parte é importante relembrar a ideia de conjuntos, em que iremos incluir mais de uma condição. Poderemos especificar determinadas tarefas para o caso em que diversas condições necessitam ser atendidas. 
 
