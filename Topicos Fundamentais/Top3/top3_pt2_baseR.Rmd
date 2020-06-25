@@ -15,11 +15,11 @@ Neste parte discutiremos a forma de se manipular uma base de dados dentro do R. 
  - Também importante a [seção 6.1](https://rstudio-education.github.io/hopr/r-notation.html#selecting-values)
   do **Hands-On Programming with R**.
  
-## 3.4 - Manipulação de Dados no base R
+## 3.5 - Manipulação de Dados no base R
 
 Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Essa parte tem relação direta com o tópico anterior em que foi ensinado sobre a leitura de dados no R. Agora iremos explorar como trabalhar base de dados importadas ou geradas no próprio R.
 
-### 3.4.1 - Selecionando Valores
+### 3.5.1 - Selecionando Valores
 
 Em primeiro lugar, a forma de extração ou seleção de valores no R é feito mediante o uso de colchetes `[]`. Logo, para extrair informações de um objeto "exemplo" qualquer:
 
@@ -101,7 +101,7 @@ df[2, 1:2]
 
 No caso, retornou apenas os elementos da segunda linhas e das duas primeiras colunas.
 
-### 3.4.2 - Manipulando Base de Dados usando Condições
+### 3.5.2 - Manipulando Base de Dados usando Condições
 
 Uma das melhores formas de se manipular uma base de dados é fazendo uso dos diversos operadores condicionais ou relacionais explicados anteriormente. Tais operações podem facilitar muito a limpeza de dados, ao estabelecer para o R as "regras" que você deseja. Inúmeras combinações podem ser utilizadas, tais como selecionar observações que são maiores que determinado valores, países especificios por meio de seu nome ou até mesmo "outliers" da sua série. 
 
