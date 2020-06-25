@@ -499,7 +499,7 @@ E seja a definição do *Argument* `row.names` da função `data.frame` a seguin
 
 NULL or a single integer or character string specifying a column to be used as row names, ***or a character or integer vector giving the row names for the data frame.***
 
-O que irá ocorrer em cada uma dessas situações? Você consegue dizer o porquê?
+O que irá ocorrer em cada uma dessas situações? Você consegue dizer o porquê? Tente dizer antes de rodar o código.
 
 ##### Q.5.11.1
 ```{r, include = TRUE, eval = FALSE}
