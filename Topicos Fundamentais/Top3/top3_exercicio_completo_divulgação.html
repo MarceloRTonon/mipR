@@ -439,8 +439,69 @@ unlink(arq_temp)</code></pre>
 <p>Existem vantagens e desvantagens de você baixar as coisas diretamente do seu terminal. Uma desvantagem é que pode ser mais lento baixar pelo R do que pelo brownser. Além disso, se sua conexão for instável, pode dar tudo errado no meio do caminho. Além disso nem sempre dá certo o download pelo R. Por outro lado, você ter até o download no seu código aumenta bastante a reprodutibilidade dele, fazendo que com que não seja necessário nada além do código para baixar ele. A sugestão dada é na primeira vez, baixar o arquivo manualmente, e então ver como você pode tratar o(s) arquivo(s) e então buscar automatizar no código o download.</p>
 <p>Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter problemas. Rode o código acima para seguir no exercicio a seguir.</p>
 </div>
-<div id="tidyverse" class="section level3">
-<h3>Tidyverse</h3>
+<div id="parte-1---operadores-lógicos-e-booleanos" class="section level3">
+<h3>Parte 1 - Operadores Lógicos e Booleanos</h3>
+<div id="q.1.1---revise-a-table-7.1-do-hopr-para-deixar-claro-como-funciona-cada-operador-lógico." class="section level4">
+<h4>Q.1.1 - Revise a <a href="https://rstudio-education.github.io/hopr/modify.html#tab:logop">Table 7.1</a> do <strong>HOPR</strong> para deixar claro como funciona cada operador lógico.</h4>
+</div>
+<div id="q.1.2---faça-o-mesmo-para-os-operadores-booleanos-na-table-7.2." class="section level4">
+<h4>Q.1.2 - Faça o mesmo para os Operadores Booleanos na <a href="https://rstudio-education.github.io/hopr/modify.html#tab:boole">Table 7.2</a>.</h4>
+</div>
+<div id="q.1.3---atribua-valores-arbitrários-para-a-b-e-c-na-table-7.1-e-explique-com-suas-palavras-o-resultado-de-cada-teste." class="section level4">
+<h4>Q.1.3 - Atribua valores arbitrários para “a”, “b” e “c” na Table 7.1 e explique com suas palavras o resultado de cada teste.</h4>
+</div>
+<div id="q.1.4---explique-as-diferenças-entre-e" class="section level4">
+<h4>Q.1.4 - Explique as diferenças entre <code>&amp;</code>, <code>&amp;&amp;</code>, <code>|</code> e <code>||</code></h4>
+</div>
+<div id="q.1.5---teste-a-condição-x-5-10.-por-que-ela-não-funciona-como-você-resolveria" class="section level4">
+<h4>Q.1.5 - Teste a condição (x &gt; 5 &amp; &lt; 10). Por que ela não funciona? Como você resolveria?</h4>
+</div>
+</div>
+<div id="parte-2---if-else" class="section level3">
+<h3>Parte 2 - If Else</h3>
+<div id="q.2.1---quais-as-diferenças-entre-usar-if-else-e-ifelse-quais-as-melhores-situações-para-usar-cada-uma-delas" class="section level4">
+<h4>Q.2.1 - Quais as diferenças entre usar if, else e ifelse? Quais as melhores situações para usar cada uma delas?</h4>
+</div>
+<div id="desafio-2.1---crie-uma-função-para-saber-se-um-número-inteiro-é-par-ou-ímpar.-dica-pensar-no-resto-da-divisão-operador-no-r." class="section level4">
+<h4>Desafio 2.1 - Crie uma função para saber se um número inteiro é par ou ímpar. <strong>Dica</strong> pensar no resto da divisão (Operador %% no R).</h4>
+</div>
+<div id="q.2.2---no-material-de-algebra-linear-discutimos-que-para-uma-matriz-ser-invertível-é-necessário-que-ela-atenda-à-algumas-condições.-escreva-uma-função-que-diga-se-as-matrizes-abaixo-são-invertíveis-ou-não-e-diga-se-as-matrizes-abaixo-tem-inversa." class="section level4">
+<h4>Q.2.2 - No material de Algebra Linear, discutimos que para uma matriz ser invertível é necessário que ela atenda à algumas condições. Escreva uma função que diga se as matrizes abaixo são invertíveis ou não, e diga se as matrizes abaixo tem inversa.</h4>
+<pre class="r"><code>a &lt;- matrix(c(5,3,7,8,5,0,1,2,7), 3, 3)
+b &lt;- matrix(c(4,3,0,6,2,0,5,1,0), 3, 3)</code></pre>
+</div>
+</div>
+<div id="parte-3---subsetting-base-r" class="section level3">
+<h3>Parte 3 - Subsetting Base R</h3>
+<p>Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em matrizes insumo-produto dado que sua estrutura de dados são mais “quadradas”, no máximo retangulares. Esse é o caso, por exemplo, da MIP extraída diretamente do IBGE. No entanto, tabelas mais amplas, como a própria base da “WIOD”, traz uma série temporal de matrizes empilhadas. Usaremos a mesma base para a manipulação no base R e pelo tidyverse, de forma que fique mais clara as alternativas.</p>
+<div id="q.3.1---visualize-niotita-e-perceba-que-existem-valores-na-por-conta-do-cabeçalho-da-base-de-dados.-ajuste-o-cabeçalho-de-acordo-com-o-conhecimento-adquirido-no-tópico-anterior-criando-uma-lista-com-o-nome-das-variáveis." class="section level4">
+<h4>Q.3.1 - Visualize <code>niotITA</code> e perceba que existem valores <code>NA</code> por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando uma lista com o nome das variáveis.</h4>
+</div>
+<div id="q.3.2---elimine-a-linha-que-contém-na-e-renomeie-as-colunas-de-niotita.-salve-como-niotita_3.2." class="section level4">
+<h4>Q.3.2 - Elimine a linha que contém <code>NA</code> e renomeie as colunas de <code>niotITA</code>. Salve como <code>niotITA_3.2</code>.</h4>
+</div>
+<div id="q.3.3---extraia-da-sua-base-valores-somente-para-o-ano-de-2008.-salve-como-niotita_3.3" class="section level4">
+<h4>Q.3.3 - Extraia da sua base valores somente para o ano de 2008. Salve como <code>niotITA_3.3</code></h4>
+</div>
+<div id="q.3.4---agora-pegue-apenas-os-valores-que-tem-origem-doméstica-e-salve-no-arquivo-nitoita_3.4." class="section level4">
+<h4>Q.3.4 - Agora pegue apenas os valores que tem origem doméstica e salve no arquivo <code>nitoITA_3.4</code>.</h4>
+</div>
+<div id="q.3.5---caso-você-quisesse-fazer-as-duas-últimas-questões-em-só-uma-linha-de-comando-como-você-faria-dica-lembrar-dos-operadores-booleanos.-não-esqueça-de-comparar-com-a-base-gerada-na-questão-anterior-e-se-elas-são-idênticas." class="section level4">
+<h4>Q.3.5 - Caso você quisesse fazer as duas últimas questões em só uma linha de comando, como você faria? (<strong>Dica</strong>: lembrar dos operadores Booleanos). Não esqueça de comparar com a base gerada na questão anterior e se elas são idênticas.</h4>
+</div>
+<div id="q.3.6---crie-um-novo-conjunto-de-dados-somente-com-as-informações-da-demanda-intermediária-i.e-faça-um-subsetting-para-eliminar-as-colunas-a-partir-de-final-consumption-expenditure-by-households." class="section level4">
+<h4>Q.3.6 - Crie um novo conjunto de dados somente com as informações da Demanda Intermediária (i.e faça um subsetting para eliminar as colunas a partir de “Final Consumption Expenditure by Households”).</h4>
+</div>
+<div id="desafio-3.1-monte-uma-matriz-de-coeficientes-técnicos-a-partir-das-informaçoes-extraídas.-lembrando-que-os-coeficientes-são-a-divisão-de-um-elemento-da-matriz-de-demanda-intermediária-em-relação-ao-setor-que-está-na-coluna." class="section level4">
+<h4><strong>Desafio 3.1</strong>: Monte uma matriz de coeficientes técnicos a partir das informaçoes extraídas. Lembrando que os coeficientes são a divisão de um elemento da matriz de demanda intermediária em relação ao setor (que está na coluna).</h4>
+<p><strong>Dica</strong>: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.</p>
+</div>
+<div id="q.3.7---vamos-criar-um-novo-conjunto-de-dados-composto-apenas-pela-soma-da-demanda-intemediária-soma-da-demanda-final-e-a-demanda-total.-não-esqueça-de-nomear-as-colunas." class="section level4">
+<h4>Q.3.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.</h4>
+</div>
+</div>
+<div id="parte-4---tidyverse" class="section level3">
+<h3>Parte 4 - Tidyverse</h3>
 <div id="q.1.0-vizualize-niotita.-qual-é-o-problema-com-os-valores" class="section level4">
 <h4>Q.1.0 Vizualize <code>niotITA</code>. Qual é o problema com os valores?</h4>
 </div>
@@ -675,67 +736,6 @@ dfQ5.11 &lt;- dfQ5</code></pre>
 <h5>Q.5.11.7</h5>
 <pre class="r"><code>dfQ5.11.7 &lt;- data.frame(dfQ5.11, row.names = t(df.nomes2[1,]))</code></pre>
 </div>
-</div>
-</div>
-<div id="operadores-lógicos-e-booleanos" class="section level3">
-<h3>Operadores Lógicos e Booleanos</h3>
-<div id="q.6.1---revise-a-table-7.1-do-hopr-para-deixar-claro-como-funciona-cada-operador-lógico." class="section level4">
-<h4>Q.6.1 - Revise a <a href="https://rstudio-education.github.io/hopr/modify.html#tab:logop">Table 7.1</a> do <strong>HOPR</strong> para deixar claro como funciona cada operador lógico.</h4>
-</div>
-<div id="q.6.2---faça-o-mesmo-para-os-operadores-booleanos-na-table-7.2." class="section level4">
-<h4>Q.6.2 - Faça o mesmo para os Operadores Booleanos na <a href="https://rstudio-education.github.io/hopr/modify.html#tab:boole">Table 7.2</a>.</h4>
-</div>
-<div id="q.6.3---atribua-valores-arbitrários-para-a-b-e-c-na-table-7.1-e-explique-com-suas-palavras-o-resultado-de-cada-teste." class="section level4">
-<h4>Q.6.3 - Atribua valores arbitrários para “a”, “b” e “c” na Table 7.1 e explique com suas palavras o resultado de cada teste.</h4>
-</div>
-<div id="q.6.4---explique-as-diferenças-entre-e" class="section level4">
-<h4>Q.6.4 - Explique as diferenças entre <code>&amp;</code>, <code>&amp;&amp;</code>, <code>|</code> e <code>||</code></h4>
-</div>
-<div id="q.6.5---teste-a-condição-x-5-10.-por-que-ela-não-funciona-como-você-resolveria" class="section level4">
-<h4>Q.6.5 - Teste a condição (x &gt; 5 &amp; &lt; 10). Por que ela não funciona? Como você resolveria?</h4>
-</div>
-</div>
-<div id="if-else" class="section level3">
-<h3>If Else</h3>
-<div id="q.7.1---quais-as-diferenças-entre-usar-if-else-e-ifelse-quais-as-melhores-situações-para-usar-cada-uma-delas" class="section level4">
-<h4>Q.7.1 - Quais as diferenças entre usar if, else e ifelse? Quais as melhores situações para usar cada uma delas?</h4>
-</div>
-<div id="desafio-7.1---crie-uma-função-para-saber-se-um-número-inteiro-é-par-ou-ímpar.-dica-pensar-no-resto-da-divisão-operador-no-r." class="section level4">
-<h4>Desafio 7.1 - Crie uma função para saber se um número inteiro é par ou ímpar. <strong>Dica</strong> pensar no resto da divisão (Operador %% no R).</h4>
-</div>
-<div id="q.7.2---no-material-de-algebra-linear-discutimos-que-para-uma-matriz-ser-invertível-é-necessário-que-ela-atenda-à-algumas-condições.-escreva-uma-função-que-diga-se-as-matrizes-abaixo-são-invertíveis-ou-não-e-diga-se-as-matrizes-abaixo-tem-inversa." class="section level4">
-<h4>Q.7.2 - No material de Algebra Linear, discutimos que para uma matriz ser invertível é necessário que ela atenda à algumas condições. Escreva uma função que diga se as matrizes abaixo são invertíveis ou não, e diga se as matrizes abaixo tem inversa.</h4>
-<pre class="r"><code>a &lt;- matrix(c(5,3,7,8,5,0,1,2,7), 3, 3)
-b &lt;- matrix(c(4,3,0,6,2,0,5,1,0), 3, 3)</code></pre>
-</div>
-</div>
-<div id="subsetting-base-r" class="section level3">
-<h3>Subsetting Base R</h3>
-<p>Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em matrizes insumo-produto dado que sua estrutura de dados são mais “quadradas”, no máximo retangulares. Esse é o caso, por exemplo, da MIP extraída diretamente do IBGE. No entanto, tabelas mais amplas, como a própria base da “WIOD”, traz uma série temporal de matrizes empilhadas. Usaremos a mesma base para a manipulação no base R e pelo tidyverse, de forma que fique mais clara as alternativas.</p>
-<div id="q.8.1---visualize-niotita-e-perceba-que-existem-valores-na-por-conta-do-cabeçalho-da-base-de-dados.-ajuste-o-cabeçalho-de-acordo-com-o-conhecimento-adquirido-no-tópico-anterior-criando-uma-lista-com-o-nome-das-variáveis." class="section level4">
-<h4>Q.8.1 - Visualize <code>niotITA</code> e perceba que existem valores <code>NA</code> por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando uma lista com o nome das variáveis.</h4>
-</div>
-<div id="q.8.2---elimine-a-linha-que-contém-na-e-renomeie-as-colunas-de-niotita.-salve-como-niotita_8.2." class="section level4">
-<h4>Q.8.2 - Elimine a linha que contém <code>NA</code> e renomeie as colunas de <code>niotITA</code>. Salve como <code>niotITA_8.2</code>.</h4>
-</div>
-<div id="q.8.3---extraia-da-sua-base-valores-somente-para-o-ano-de-2008.-salve-como-niotita_8.3" class="section level4">
-<h4>Q.8.3 - Extraia da sua base valores somente para o ano de 2008. Salve como <code>niotITA_8.3</code></h4>
-</div>
-<div id="q.8.4---agora-pegue-apenas-os-valores-que-tem-origem-doméstica-e-salve-no-arquivo-nitoita_8.4." class="section level4">
-<h4>Q.8.4 - Agora pegue apenas os valores que tem origem doméstica e salve no arquivo <code>nitoITA_8.4</code>.</h4>
-</div>
-<div id="q.8.5---caso-você-quisesse-fazer-as-duas-últimas-questões-em-só-uma-linha-de-comando-como-você-faria-dica-lembrar-dos-operadores-booleanos.-não-esqueça-de-comparar-com-a-base-gerada-na-questão-anterior-e-se-elas-são-idênticas." class="section level4">
-<h4>Q.8.5 - Caso você quisesse fazer as duas últimas questões em só uma linha de comando, como você faria? (<strong>Dica</strong>: lembrar dos operadores Booleanos). Não esqueça de comparar com a base gerada na questão anterior e se elas são idênticas.</h4>
-</div>
-<div id="q.8.6---crie-um-novo-conjunto-de-dados-somente-com-as-informações-da-demanda-intermediária-i.e-faça-um-subsetting-para-eliminar-as-colunas-a-partir-de-final-consumption-expenditure-by-households." class="section level4">
-<h4>Q.8.6 - Crie um novo conjunto de dados somente com as informações da Demanda Intermediária (i.e faça um subsetting para eliminar as colunas a partir de “Final Consumption Expenditure by Households”).</h4>
-</div>
-<div id="desafio-8.1-monte-uma-matriz-de-coeficientes-técnicos-a-partir-das-informaçoes-extraídas.-lembrando-que-os-coeficientes-são-a-divisão-de-um-elemento-da-matriz-de-demanda-intermediária-em-relação-ao-setor-que-está-na-coluna." class="section level4">
-<h4><strong>Desafio 8.1</strong>: Monte uma matriz de coeficientes técnicos a partir das informaçoes extraídas. Lembrando que os coeficientes são a divisão de um elemento da matriz de demanda intermediária em relação ao setor (que está na coluna).</h4>
-<p><strong>Dica</strong>: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.</p>
-</div>
-<div id="q.8.7---vamos-criar-um-novo-conjunto-de-dados-composto-apenas-pela-soma-da-demanda-intemediária-soma-da-demanda-final-e-a-demanda-total.-não-esqueça-de-nomear-as-colunas." class="section level4">
-<h4>Q.8.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.</h4>
 </div>
 </div>
 </div>

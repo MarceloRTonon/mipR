@@ -104,7 +104,132 @@ Existem vantagens e desvantagens de você baixar as coisas diretamente do seu te
 
 Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter problemas. Rode o código acima para seguir no exercicio a seguir.
 
-### Tidyverse
+
+### Parte 1 - Operadores Lógicos e Booleanos
+
+#### Q.1.1 - Revise a [Table 7.1](https://rstudio-education.github.io/hopr/modify.html#tab:logop) do **HOPR** para deixar claro como funciona cada operador lógico.
+
+#### Q.1.2 - Faça o mesmo para os Operadores Booleanos na [Table 7.2](https://rstudio-education.github.io/hopr/modify.html#tab:boole).
+
+#### Q.1.3 - Atribua valores arbitrários para "a", "b" e "c" na Table 7.1 e explique com suas palavras o resultado de cada teste.
+
+#### Q.1.4 - Explique as diferenças entre `&`, `&&`, `|` e `||`
+
+```{r, eval=FALSE, include=FALSE}
+
+& e | irão avaliar se todas as condições estabelecidas serão satisfeitas ou não.
+Já && e || irão avaliar as condições (da esquerda para direita) e caso alguma das condições não seja atendida, o resultado é automaticamente obtido sem que se faça os demais.
+
+
+```
+
+#### Q.1.5 - Teste a condição (x > 5 & < 10). Por que ela não funciona? Como você resolveria?
+
+```{r, include=FALSE}
+x <- 7
+x > 5 & x < 10
+```
+
+
+### Parte 2 - If Else
+
+#### Q.2.1 - Quais as diferenças entre usar if, else e ifelse? Quais as melhores situações para usar cada uma delas?
+
+```{r,eval=FALSE,include=FALSE}
+
+if e else são aplicadas para condições em escalares.
+ifelse comporta condições vetorizadas.
+
+```
+
+#### Desafio 2.1 - Crie uma função para saber se um número inteiro é par ou ímpar. **Dica** pensar no resto da divisão (Operador %% no R).
+
+```{r, include=FALSE}
+par_impar <- function(x){
+  ifelse(x %% 2 == 0, "par", "ímpar")
+}
+par_impar(2)
+par_impar(3)
+```
+
+
+
+#### Q.2.2 - No material de Algebra Linear, discutimos que para uma matriz ser invertível é necessário que ela atenda à algumas condições. Escreva uma função que diga se as matrizes abaixo são invertíveis ou não, e diga se as matrizes abaixo tem inversa.
+
+```{r, include=TRUE}
+a <- matrix(c(5,3,7,8,5,0,1,2,7), 3, 3)
+b <- matrix(c(4,3,0,6,2,0,5,1,0), 3, 3)
+
+```
+
+```{r, include=FALSE}
+tem_inversa <- function(x){
+  ifelse(det(x) != 0, "Tem Inversa", "Não tem Inversa")
+}
+```
+
+
+### Parte 3 - Subsetting Base R
+
+Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em matrizes insumo-produto dado que sua estrutura de dados são mais "quadradas", no máximo retangulares. Esse é o caso, por exemplo, da MIP extraída diretamente do IBGE. No entanto, tabelas mais amplas, como a própria base da "WIOD", traz uma série temporal de matrizes empilhadas. Usaremos a mesma base para a manipulação no base R e pelo tidyverse, de forma que fique mais clara as alternativas.
+
+#### Q.3.1 - Visualize `niotITA` e perceba que existem valores `NA` por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando uma lista com o nome das variáveis.
+
+```{r, include=FALSE}
+nomes_colunas <- c("Year", "Code", "Description", "Origin", niotITA[1,5:67])
+```
+
+
+#### Q.3.2 - Elimine a linha que contém `NA` e renomeie as colunas de `niotITA`. Salve como `niotITA_3.2`.
+
+```{r, include=FALSE}
+niotITA_3.2 <- niotITA[2:1081,]
+colnames(niotITA_3.2) <- nomes_colunas
+```
+
+#### Q.3.3 - Extraia da sua base valores somente para o ano de 2008. Salve como `niotITA_3.3`
+
+```{r, include=FALSE}
+niotITA_3.3 <- niotITA_3.2[niotITA_3.2$Year == "2008",]
+```
+
+#### Q.3.4 - Agora pegue apenas os valores que tem origem doméstica e salve no arquivo `nitoITA_3.4`.
+
+```{r, include=FALSE}
+niotITA_3.4 <- niotITA_3.3[niotITA_3.3$Origin == "Domestic",]
+```
+
+#### Q.3.5 - Caso você quisesse fazer as duas últimas questões em só uma linha de comando, como você faria? (**Dica**: lembrar dos operadores Booleanos). Não esqueça de comparar com a base gerada na questão anterior e se elas são idênticas.
+
+```{r, include=FALSE}
+niotITA_3.5 <- niotITA_3.2[niotITA_3.2$Year == "2008" & niotITA_3.2$Origin == "Domestic",]
+
+identical(niotITA_3.4,niotITA_3.5)
+
+View(niotITA_3.5)
+```
+
+#### Q.3.6 - Crie um novo conjunto de dados somente com as informações da Demanda Intermediária (i.e faça um subsetting para eliminar as colunas a partir de "Final Consumption Expenditure by Households").
+
+
+```{r, include=FALSE}
+niotITA_3.6 <- niotITA_3.5[,-c(61:67)]
+```
+
+
+
+#### **Desafio 3.1**: Monte uma matriz de coeficientes técnicos a partir das informaçoes extraídas. Lembrando que os coeficientes são a divisão de um elemento da matriz de demanda intermediária em relação ao setor (que está na coluna).
+
+**Dica**: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.
+
+```{r, include=FALSE}
+total_output <- niotITA_3.2[niotITA_3.2$Year == "2008" & niotITA_3.2$Description == "Output at basic prices",]
+```
+
+#### Q.3.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.
+
+
+### Parte 4 - Tidyverse
 
 #### Q.1.0 Vizualize `niotITA`. Qual é o problema com os valores?
 
@@ -551,128 +676,5 @@ dfQ5.11.7 <- data.frame(dfQ5.11, row.names = t(df.nomes2[1,]))
 ```
 
 
-
-### Operadores Lógicos e Booleanos
-
-#### Q.6.1 - Revise a [Table 7.1](https://rstudio-education.github.io/hopr/modify.html#tab:logop) do **HOPR** para deixar claro como funciona cada operador lógico.
-
-#### Q.6.2 - Faça o mesmo para os Operadores Booleanos na [Table 7.2](https://rstudio-education.github.io/hopr/modify.html#tab:boole).
-
-#### Q.6.3 - Atribua valores arbitrários para "a", "b" e "c" na Table 7.1 e explique com suas palavras o resultado de cada teste.
-
-#### Q.6.4 - Explique as diferenças entre `&`, `&&`, `|` e `||`
-
-```{r, eval=FALSE, include=FALSE}
-
-& e | irão avaliar se todas as condições estabelecidas serão satisfeitas ou não.
-Já && e || irão avaliar as condições (da esquerda para direita) e caso alguma das condições não seja atendida, o resultado é automaticamente obtido sem que se faça os demais.
-
-
-```
-
-#### Q.6.5 - Teste a condição (x > 5 & < 10). Por que ela não funciona? Como você resolveria?
-
-```{r, include=FALSE}
-x <- 7
-x > 5 & x < 10
-```
-
-
-### If Else
-
-#### Q.7.1 - Quais as diferenças entre usar if, else e ifelse? Quais as melhores situações para usar cada uma delas?
-
-```{r,eval=FALSE,include=FALSE}
-
-if e else são aplicadas para condições em escalares.
-ifelse comporta condições vetorizadas.
-
-```
-
-#### Desafio 7.1 - Crie uma função para saber se um número inteiro é par ou ímpar. **Dica** pensar no resto da divisão (Operador %% no R).
-
-```{r, include=FALSE}
-par_impar <- function(x){
-  ifelse(x %% 2 == 0, "par", "ímpar")
-}
-par_impar(2)
-par_impar(3)
-```
-
-
-
-#### Q.7.2 - No material de Algebra Linear, discutimos que para uma matriz ser invertível é necessário que ela atenda à algumas condições. Escreva uma função que diga se as matrizes abaixo são invertíveis ou não, e diga se as matrizes abaixo tem inversa.
-
-```{r, include=TRUE}
-a <- matrix(c(5,3,7,8,5,0,1,2,7), 3, 3)
-b <- matrix(c(4,3,0,6,2,0,5,1,0), 3, 3)
-
-```
-
-```{r, include=FALSE}
-tem_inversa <- function(x){
-  ifelse(det(x) != 0, "Tem Inversa", "Não tem Inversa")
-}
-```
-
-
-### Subsetting Base R
-
-Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em matrizes insumo-produto dado que sua estrutura de dados são mais "quadradas", no máximo retangulares. Esse é o caso, por exemplo, da MIP extraída diretamente do IBGE. No entanto, tabelas mais amplas, como a própria base da "WIOD", traz uma série temporal de matrizes empilhadas. Usaremos a mesma base para a manipulação no base R e pelo tidyverse, de forma que fique mais clara as alternativas.
-
-#### Q.8.1 - Visualize `niotITA` e perceba que existem valores `NA` por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando uma lista com o nome das variáveis.
-
-```{r, include=FALSE}
-nomes_colunas <- c("Year", "Code", "Description", "Origin", niotITA[1,5:67])
-```
-
-
-#### Q.8.2 - Elimine a linha que contém `NA` e renomeie as colunas de `niotITA`. Salve como `niotITA_8.2`.
-
-```{r, include=FALSE}
-niotITA_8.2 <- niotITA[2:1081,]
-colnames(niotITA_8.2) <- nomes_colunas
-```
-
-#### Q.8.3 - Extraia da sua base valores somente para o ano de 2008. Salve como `niotITA_8.3`
-
-```{r, include=FALSE}
-niotITA_8.3 <- niotITA_8.2[niotITA_8.2$Year == "2008",]
-```
-
-#### Q.8.4 - Agora pegue apenas os valores que tem origem doméstica e salve no arquivo `nitoITA_8.4`.
-
-```{r, include=FALSE}
-niotITA_8.4 <- niotITA_8.3[niotITA_8.3$Origin == "Domestic",]
-```
-
-#### Q.8.5 - Caso você quisesse fazer as duas últimas questões em só uma linha de comando, como você faria? (**Dica**: lembrar dos operadores Booleanos). Não esqueça de comparar com a base gerada na questão anterior e se elas são idênticas.
-
-```{r, include=FALSE}
-niotITA_8.5 <- niotITA_8.2[niotITA_8.2$Year == "2008" & niotITA_8.2$Origin == "Domestic",]
-
-identical(niotITA_8.4,niotITA_8.5)
-
-View(niotITA_8.5)
-```
-
-#### Q.8.6 - Crie um novo conjunto de dados somente com as informações da Demanda Intermediária (i.e faça um subsetting para eliminar as colunas a partir de "Final Consumption Expenditure by Households").
-
-
-```{r, include=FALSE}
-niotITA_8.6 <- niotITA_8.5[,-c(61:67)]
-```
-
-
-
-#### **Desafio 8.1**: Monte uma matriz de coeficientes técnicos a partir das informaçoes extraídas. Lembrando que os coeficientes são a divisão de um elemento da matriz de demanda intermediária em relação ao setor (que está na coluna).
-
-**Dica**: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.
-
-```{r, include=FALSE}
-total_output <- niotITA_8.2[niotITA_8.2$Year == "2008" & niotITA_8.2$Description == "Output at basic prices",]
-```
-
-#### Q.8.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.
 
 
