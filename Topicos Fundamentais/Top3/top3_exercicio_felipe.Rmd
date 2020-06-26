@@ -63,13 +63,13 @@ par_impar(3)
 
 #### Q.2.2 - No material de Algebra Linear, discutimos que para uma matriz ser invertível é necessário que ela atenda à algumas condições. Escreva uma função que diga se as matrizes abaixo são invertíveis ou não, e diga se as matrizes abaixo tem inversa.
 
-```{r, eval=FALSE}
+```{r, include=FALSE}
 a <- matrix(c(5,3,7,8,5,0,1,2,7), 3, 3)
 b <- matrix(c(4,3,0,6,2,0,5,1,0), 3, 3)
 
 ```
 
-```{r,eval=FALSE, include=FALSE}
+```{r, include=FALSE}
 tem_inversa <- function(x){
   ifelse(det(x) != 0, "Tem Inversa", "Não tem Inversa")
 }
@@ -82,36 +82,59 @@ Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em 
 
 #### Q.3.1 - Visualize `niotITA` e perceba que existem valores `NA` por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando uma lista com o nome das variáveis.
 
-```{r}
+```{r, include=FALSE}
 nomes_colunas <- c("Year", "Code", "Description", "Origin", niotITA[1,5:67])
 ```
 
 
 #### Q.3.2 - Elimine a linha que contém `NA` e renomeie as colunas de `niotITA`. Salve como `niotITA_3.2`.
 
-```{r}
+```{r, include=FALSE}
 niotITA_3.2 <- niotITA[2:1081,]
 colnames(niotITA_3.2) <- nomes_colunas
 ```
 
 #### Q.3.3 - Extraia da sua base valores somente para o ano de 2008. Salve como `niotITA_3.3`
 
-```{r}
+```{r, include=FALSE}
 niotITA_3.3 <- niotITA_3.2[niotITA_3.2$Year == "2008",]
 ```
 
 #### Q.3.4 - Agora pegue apenas os valores que tem origem doméstica e salve no arquivo `nitoITA_3.4`.
 
-```{r}
+```{r, include=FALSE}
 niotITA_3.4 <- niotITA_3.3[niotITA_3.3$Origin == "Domestic",]
 ```
 
 #### Q.3.5 - Caso você quisesse fazer as duas últimas questões em só uma linha de comando, como você faria? (**Dica**: lembrar dos operadores Booleanos). Não esqueça de comparar com a base gerada na questão anterior e se elas são idênticas.
 
-```{r}
+```{r, include=FALSE}
 niotITA_3.5 <- niotITA_3.2[niotITA_3.2$Year == "2008" & niotITA_3.2$Origin == "Domestic",]
 
 identical(niotITA_3.4,niotITA_3.5)
+
+View(niotITA_3.5)
 ```
 
-#### Q.3.6 - Crie uma nova base de dados com 
+#### Q.3.6 - Crie um novo conjunto de dados somente com as informações da Demanda Intermediária (i.e faça um subsetting para eliminar as colunas a partir de "Final Consumption Expenditure by Households").
+
+
+```{r, include=FALSE}
+niotITA_3.6 <- niotITA_3.5[,-c(61:67)]
+```
+
+
+
+#### **Desafio 3.1**: Monte uma matriz de coeficientes técnicos a partir das informaçoes extraídas. Lembrando que os coeficientes são a divisão de um elemento da matriz de demanda intermediária em relação ao setor (que está na coluna).
+
+**Dica**: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.
+
+```{r}
+total_output <- niotITA_3.2[niotITA_3.2$Year == "2008" & niotITA_3.2$Description == "Output at basic prices",]
+
+```
+
+
+
+#### Q.3.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.
+
