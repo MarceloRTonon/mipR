@@ -9,12 +9,18 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#  Automatizando o seu código
 
 
-Nesta seção, eu vou explicar nesta parte o que é um loop, porquê não fazer as repetições manualmente, vou contextualizar como ele funciona e então apresentar como fazer um loop no R e algumas nuances sobre ele. Assim sendo, se você entende bem porque automatizar seu código é necessário e a lógica de um loop, você pode ir direto para a parte 
+
+Nesta seção, serão explicadas  o que é um loop, porquê não fazer as repetições manualmente. Além disso, iremos contextualizar como ele funciona e então apresentar como fazer um loop no R e algumas nuances sobre ele. 
+
+Além disso vamos falar do que é uma função vetorizada e apresentar a família `map` do pacote `purrr`.
 
 ## O que é um Loop
+
+Um `loop` é uma instrução que você dá ao programa para que ele repita um conjunto de operações um determinado número de vezes pré-determinado (`for`) ou que se cumpra uma determinada condição (`while`).
+
+Aqui iremos tratar apenas do `for`, pois ele é mais restritivo que o `while`, de modo que a propensão a dar problemas é menor. Para quem tiver interesse no `while` (e também no `repeat`) pode acessar a seção [21.3](https://r4ds.had.co.nz/iteration.html#for-loops) do *R for Data Science* e [5.3](https://adv-r.hadley.nz/control-flow.html#loops) do *Advanced R*.
 
 ## Por que não fazer repetições manualmente?
 
@@ -51,10 +57,6 @@ A exceção de quem acredita na _infalibilidade papal_, o trecho abaixo é algo 
 
 Com isso em mente, vamos supor então que você pense numa solução _"esperta"_ para os seus problemas de repetição: o bom e velho `ctrl c` e `ctrl v`. Afinal, os anos de prática no ensino fundamental e médio, ~~e na graduação~~, por que não usa-lo agora com as repetições?
 
-<br>
-<center>
-![](leitura_de_dados/bilbo.jpg)
-</center>
 
 <br>
 O problema do `ctrl c` e `ctrl v` neste caso é a possibilidade de errar no inicio ou no meio do caminho. O primeiro caso é: imagine que você escreveu seu código, e usou `ctrl c` e `ctrl v` para fazer as repetições. Porém descobriu mais a frente que você descobriu que a conta que você estava fazendo estava errada, que por exemplo você esqueceu de diagonalizar um vetor coluna. Assim sendo, você terá que ajustar isso manualmente em cada uma das repetições. Não parece muito bom né? Assim, você teria que ter certeza de todos as suas operações estariam corretas.
@@ -195,3 +197,10 @@ for(anos in 1:16){
 Ou seja, não há limite para o que você quiser fazer.
 
 Apenas um aviso que você deve se atentar: cuidado ao lidar com fors muito recursivos, pois é fácil se perder dentro deles, especialmente sobre o que deve 
+
+
+## Fonte
+
+Advanced R - 2nd Edition - https://adv-r.hadley.nz/
+
+R for Data Science - https://r4ds.had.co.nz/
