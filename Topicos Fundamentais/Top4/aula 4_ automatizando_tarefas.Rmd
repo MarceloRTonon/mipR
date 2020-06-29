@@ -16,7 +16,7 @@ library(tictoc)
 #install.packages("tictoc")
 
 library(purrr)
-
+library(dplyr)
 ```
 
 O pacote `tictoc` mede a diferença de tempo entre os comandos `tic()` e `toc()`:
@@ -369,9 +369,125 @@ toc()
 
 Desse modo, podemos também usar `map2` para realizar multiplicação de matrizes, nomear diferentes tipos de matrizes e etc... Importante notar que as duas listas usadas em `map2` devem ter o mesmo `length()`. Se for diferente, dará erro.
 
-### Atuar sobre três ou mais listas: `pmap`
+### Atuar sobre três ou mais listas: `pmap()`
 
+Não existe `map3`, `map4` e etc... No entanto existe `pmap()`, que serve para todos os casos com 3 ou mais listas. Nessa situação, iremos criar um lista com as listas nas quais vamos atuar. Veja o quadro abaixo para entender melhor:
 
+```{r, eval=FALSE}
+#map
+map(lista1, funcao)
+
+#map2
+map2(lista1, lista2, funcao_2)
+
+#pmap
+pmap(list(lista1, lista2, lista3, ...), funcao_p)
+
+#Você pode também fazer:
+
+p_lista <- list(lista1,lista2, lista3)
+
+pmap(p_lista, funcao_p)
+```
+
+## Recursividade na familia `map`
+
+Tratamos nos ultimos casos, de uma lista com recursividade 1. Ou seja, não havia lista dentro de uma lista neste caso. Porém, vamos criar a lista `lista_recursiva`:
+
+```{r}
+A_b <- matrix(9:12, nrow = 2)
+B_b <- matrix(13:16, nrow =2)
+
+lista_matb <- list("A" = A_b,"B" = B_b)
+
+lista_recursiva <- list( "Pri" = lista_mat, "Sec" = lista_matb)
+```
+
+Se quisessemos multiplicar todas as matrizes da `lista_recursiva` por 2, não iriamos conseguir fazendo:
+
+```{r, eval = FALSE}
+lista_recursiva2 <- map(lista_recursiva, vezes.dois)
+```
+
+Isso ocorre, pois `map` irá tentar fazer `vezes.dois(lista_recursiva[[1]])`. Porém, como `lista_recursiva[[1]]` é uma lista, e não um objeto númerico, teremos um erro como resultado. Porém da mesma forma que poderiamos usar um `for` dentro de um outro `for`, podemos usar um `map` dentro de outro. Veja:
+
+```{r}
+#Criar uma função anônima com map:
+lista_recursiva2 <- map(lista_recursiva, function(x) map(x, vezes.dois))
+
+# Pode-se escrever assim também:
+lista_recursiva2 <- map(lista_recursiva, map, vezes.dois)
+```
+
+No caso de querermos `A*2` e `B*3`, podemos fazer:
+
+```{r}
+lista_escalares2 <- list(lista_escalares, lista_escalares)
+
+# Usando map2 dentro da função anônima:
+lista_recursiva3 <- map2(lista_recursiva, lista_escalares2, function(x,y) map2(x,y, function(z,w) z*w))
+
+# Usando uma função anônima depois de 2 map2:
+lista_recursiva3 <- map2(lista_recursiva, lista_escalares2, map2, function(x,y) x*y)
+```
+
+No caso em que usamos `map2` dentro de uma função anônima, repare que usamos depois `function(z,w)`. Fizemos assim para evitar problemas na hora do programa interpretar o comando. Para ele `x` é `lista_recursiva[[i]]` enquanto `z` é `lista_rescursiva[[i]][[j]]`. 
+
+É importante notar que a forma como fizemos agora, requer que tanto `lista_recursiva` quanto `lista_escalares2` tenham a mesma recursividade. Há, no entanto, uma forma usar `lista_escalares` ao invés de `lista_escalares2`. E essa forma é combinando `map` com `map2`. Veja abaixo as duas formas de escrever isso:
+
+```{r}
+lista_recursiva3 <- map(lista_recursiva, function(x) map2(x, lista_escalares, function(z,y) z*y))
+
+lista_recursiva3 <- map(lista_recursiva, map2, lista_escalares, function(x,y) x*y)
+```
+
+O que ocorre no exemplo acima, é que mandamos a função `map` aplicar sobre os elementos de `lista_recursiva`, que são listas, a função `map2`. Essa por sua vez, vai multiplicar cada elemento de `lista_recursiva[[i]]`, que são numéricos, com os elementos de `lista_escalares`, que também são númericos.
+
+## Criando listas com a familia map.
+
+Suponha agora que você quer criar uma lista com os elementos da base de dados `CO2`. Porém, você quer separar ela por `Treatment` que ela tem.^[**Importante:** o exemplo dado aqui poderia ser feito usando varias funções do `dplyr` porém queremos deixar claro como criar uma lista via `purrr`] Vamos criar então uma lista com cada valor `Treatment`:
+
+```{r}
+co2_treatment <- CO2 %>% select(Treatment) %>% distinct()
+```
+
+`co2_treatment` no entanto, é uma lista, apenas porque é um data.frame! Os valores de `Treatment` estão alocados como um vetor atômico. E queremos eles alocados como uma lista. Veja abaixo:
+
+```{r}
+#Enquanto data.frame
+is.list(co2_treatment)
+
+#Enquanto vetor
+is.list(co2_treatment[,1])
+```
+
+Para fazer isso, vamos usar a função `as.list`.
+
+```{r}
+lst_treatment <- co2_treatment[,1] %>% as.character() %>% as.list()
+```
+
+Agora, temos uma lista com os valores de `Treatment`. Vamos então criar uma lista em que cada data.frame tem apenas um tipo de valor para `Treatment`.
+
+```{r}
+lst_CO2 <- map(lst_treatment, function(x) filter(CO2, Treatment == x))
+```
+
+### Subdividindo uma lista
+
+Dado que temos a lista `lst_CO2`, que contém duas matrizes. Suponha que queremos então criar um lista `lst_CO2b` em que vamos ter matrizes agrupadas por `Treatment` por `Type`. Vamos fazer o mesmo que fizemos com `Treatment`:
+
+```{r}
+lst_type <- CO2 %>% select(Type) %>%
+            distinct() %>% unlist %>%
+            as.character %>% as.list 
+```
+
+Podemos então fazer o mesmo que fizemos para criar `lst_CO2`, só que com a própria `lst_CO2`.
+
+```{r}
+lst_CO2_b <- map(lst_type, function(x) map(lst_CO2, function(y) filter(y, Type ==x)))
+```
 
 ## Fonte
 
