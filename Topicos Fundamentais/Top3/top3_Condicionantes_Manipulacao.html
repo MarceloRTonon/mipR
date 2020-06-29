@@ -1557,7 +1557,7 @@ df_ex &lt;- data.frame(df_ex, &quot;D&quot;= D, &quot;E&quot; = E)</code></pre>
 DE &lt;- paste0(D, E)
 
 # Trocando D e E por DE
-df_ex &lt;- df_ex[,-c(4,5)] %&gt;% data.frame(., DE)</code></pre>
+df_ex &lt;- df_ex[,-c(3,4)] %&gt;% data.frame(., DE)</code></pre>
 <p>No entanto, pelo pacote <code>dplyr</code> nós podemos fazer isso num passo apenas.</p>
 <pre class="r"><code>df_ex &lt;- data.frame(df_ex[1:2], &quot;D&quot;=D, &quot;E&quot;= E)
 

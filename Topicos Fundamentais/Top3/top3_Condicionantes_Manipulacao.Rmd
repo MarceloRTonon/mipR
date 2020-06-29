@@ -917,7 +917,7 @@ Suponha, então queremos fazer uma coluna `"DE"`, que seria um vetor tal qual `c
 DE <- paste0(D, E)
 
 # Trocando D e E por DE
-df_ex <- df_ex[,-c(4,5)] %>% data.frame(., DE)
+df_ex <- df_ex[,-c(3,4)] %>% data.frame(., DE)
 ```
 
 No entanto, pelo pacote `dplyr` nós podemos fazer isso num passo apenas.
