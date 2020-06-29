@@ -9,8 +9,26 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Pacotes necessários
+
+```{r}
+library(tictoc)
+#install.packages("tictoc")
+
+library(purrr)
+
+```
+
+O pacote `tictoc` mede a diferença de tempo entre os comandos `tic()` e `toc()`:
+
+```{r}
+tic()
+d <- 2+1
+toc()
+```
 
 
+## Objetivos do Tópico
 
 Nesta seção, serão explicadas  o que é um loop, porquê não fazer as repetições manualmente. Além disso, iremos contextualizar como ele funciona e então apresentar como fazer um loop no R e algumas nuances sobre ele. 
 
@@ -61,7 +79,7 @@ Com isso em mente, vamos supor então que você pense numa solução _"esperta"_
 <br>
 O problema do `ctrl c` e `ctrl v` neste caso é a possibilidade de errar no inicio ou no meio do caminho. O primeiro caso é: imagine que você escreveu seu código, e usou `ctrl c` e `ctrl v` para fazer as repetições. Porém descobriu mais a frente que você descobriu que a conta que você estava fazendo estava errada, que por exemplo você esqueceu de diagonalizar um vetor coluna. Assim sendo, você terá que ajustar isso manualmente em cada uma das repetições. Não parece muito bom né? Assim, você teria que ter certeza de todos as suas operações estariam corretas.
 
-Porém, há um outro problema que pode aparecer ao longo do caminho: os erros de digitação. Ao contrário de um texto comum, em que um erro de digital ***pode*** ser mortal, na programação ele ***é*** fatal. E o pior, é extremamente fácil deixar passar um ou outro erro de digitação. Sem contar em confusão. Se você sem querer escrever `listaY[[2]]` ao invés de `listaY[[3]]`, o código provavelmente rodará sem retornar nenhum erro ou warning, porém seus resultados estarão errados. Assim, usar o `ctrl c` e `ctrl v` para repetição é uma estrategia extremamente desaconselhável. E escrever isso na mão é ***PIOR AINDA***.
+Porém, há um outro problema que pode aparecer ao longo do caminho: os erros de digitação. Ao contrário de um texto comum, em que um erro de digital ***pode*** ser mortal, na programação ele ***é*** fatal. E o pior, é extremamente fácil deixar passar um ou outro erro de digitação. Sem contar em confusão. Se você sem querer escrever `listaY[[2]]` ao invés de `listaY[[3]]`, o código provavelmente rodará sem retornar nenhum `error` ou `warning`, porém seus resultados estarão errados. Assim, usar o `ctrl c` e `ctrl v` para repetição é uma estrategia extremamente desaconselhável. E escrever isso na mão é ***PIOR AINDA***.
 
 Assim sendo, mesmo quando não estamos numa situação de fazer algo como 400 repetições, escrever corridamente o código não é uma boa opção.
 
@@ -71,7 +89,7 @@ Assim sendo, mesmo quando não estamos numa situação de fazer algo como 400 re
 
 Imagine que você quer repetir para 15 anos os seguintes comandos:
 
-```{r}
+```{r, eval = FALSE}
 
 I_Pub <- list()
 G <- list()
@@ -92,7 +110,7 @@ S[[ano]] <- tY[[ano]] - G[[ano]] - I_Pub[[ano]]
 
 Assim, se mudarmos o valor de `ano` de `1` para `2` podemos repetir inteiramente a parte final do código para o ano seguinte:
 
-```{r}
+```{r, eval= FALSE}
 ano <- 2
 
 I_Pub[[ano]] <- 1.03 *(1.02* ano)
@@ -109,7 +127,7 @@ E poderiamos fazer assim por diante. Quando falamos em automatizar o seu código
 
 Feitas as explicações da lógica por de trás de um loop, vamos usar agora o `for`. Para obter os resultados de 15 anos do exemplo passado, basta fazer simplesmente `for`:
 
-```{r}
+```{r, eval = FALSE}
 for(ano in 1:15) {
  I_Pub[[ano]] <- 1.03 *(1.02* ano)
 G[[ano]] <- 4 * (1.10 * ano)
@@ -120,38 +138,38 @@ S[[ano]] <- tY[[ano]] - G[[ano]] - I_Pub[[ano]]
 }
 ```
 
-A utilidade de Loops é extremamente alta. Assim, podemos usa-lo da seguinte maneira:
+Assim fica claro como é extremamente alta a utilidade de automatizar o seu código. Assim, podemos usa-lo da seguinte maneira, sendo que a função `Sys.sleep()` pausa o sistema por um número determinado de tempo (neste caso 1 segundo) e `Sys.time()` retorna o tempo do sistema na hora em que foi acionado.
 
 ```{r}
-for(i in 1:10) {
+for(i in 1:4) {
   print(c(10,20, 30) * i)
   Sys.sleep(1)
     print(Sys.time())
   }
 ```
 
+Repare como há a diferença de um segundo entre cada `print`. Isso porque **os loops ocorrem em sequência** e não todos ao mesmo tempo.
+
 Quando se trata de um `for` que irá ocupar mais de uma linha, ou com uma linha grande, o conteúdo a ser repetido no loop deve ser colocado entre as chaves `{}`. Quando se tratar de uma equação curta e de uma única linha, pode-se escrever na mesma linha após o parentêses. Veja abaixo:
 
-```{r}
+```{r, eval =FALSE}
 s_Y <- list()
 
 for(ano in 1:15) s_Y[[ano]] <- S[[ano]]/Y[[ano]]
 ```
 
 
-## Nuances ao usar Loop no R
-
-### Flexibilidade
+## 
 
 ### Performance e purrr
 
-Pelas caracteristicas das linguagens como o R, estes têm sua performance penalizada ao usar loopings. Por conta disso, o mais comum é a partir de um certo momento, abandonar o uso do loop em detrimento da programação funcional, no caso do R permitido pelo pacote `purrr`. Aqui não irei explicar isso, só quero deixar claro que o `for` não é a linha de chegada quando se trata de automatizar os seus códigos. Iremos tratar disso com mais calma mais a frente. Em duas oportunidades.
+Pelas caracteristicas das linguagens como o R, estes têm sua performance penalizada ao usar loopings. Por conta disso, o mais comum é a partir de um certo momento, abandonar o uso do loop em detrimento da programação funcional, no caso do R aconselhamos que seja pelo pacote `purrr`. Não falarei aqui o porque disso, mas vale deixar claro que o `for` não é a linha de chegada quando se trata de automatizar os seus códigos.
 
-Na próxima seção iremos explicar como tratar de loops dentro de loops, com um foco especial para as listas!
+Vamos aqui falar antes de como usar loops dentro de loops (aproveitando a recursividade das listas). Isso tudo para explicar depois como usar a função `purrr:map`!
 
 # Listas e sua recursividade aplicadas ao Loop
 
-Na apostila anterior nós falamos sobre as listas e a sua recursividade. Agora, vamos mostrar aqui, como isso é útil para nós quando tratamos de Loops.
+No Tópico 1, falamos sobre as listas e a sua recursividade. Agora, vamos mostrar aqui, como isso é útil para nós quando tratamos de Loops.
 
 Vamos supor que queremos montar a estrutura dos dados tal qual expusemos antes: 16 anos, 5 grupos de setores, 6 componentes da demanda final. Como podemos fazer isso? Primeiramente devemos decidir qual será a organização da nossa lista. Qual variável deve vir primeiro? Ano, setor ou componente da demanda final? Vamos seguir no exemplo em que a lista mais geral será aquela do ano, seguida pelo setor e por fim o componente da demanda final, de modo que nossa listaX será igual à  `listaX[[ano]][[setor]][[df]]`.
 
@@ -196,7 +214,163 @@ for(anos in 1:16){
 
 Ou seja, não há limite para o que você quiser fazer.
 
-Apenas um aviso que você deve se atentar: cuidado ao lidar com fors muito recursivos, pois é fácil se perder dentro deles, especialmente sobre o que deve 
+Apenas um aviso que você deve se atentar: cuidado ao lidar com fors muito recursivos, pois é fácil se perder dentro deles, especialmente sobre o que deve ser utilizado em determinado momento. Além disso, quanto maior o número de repetições (multiplique cada `for` interno) maior a penalidade na performance do *R*.
+
+
+## Funções vetorizadas.
+
+Uma função vetorizada é uma função que opera sobre um conjunto valores dentro de um vetor de uma só vez. Neste caso, falamos aqui de vetor enquanto estrutura de dados como um todo, seja um vetor atômico, seja uma lista. Assim sendo temos alguns exemplos de funções vetorizadas.
+
+```{r, eval = FALSE}
+a<- c(1:4)
+
+b <- c(5:8)
+
+# paste e paste0 são funções vetorizadas
+
+exemplo_a <- paste0("Se aplica paste0 no vetor a todo de uma vez, veja: ", a)
+
+exemplo_b <- paste("na função paste também", b, sep = ": ")
+
+# Os operadores matématicos e lógicos também são vetorizados (a exceção de %*%) e podem atuar sobre vetores atômicos:
+
+exemplo_c <- a * b
+exemplo_d <- a * 3
+exemplo_e <- b - 4
+exemplo_f <- a == exemplo_e
+```
+
+Algumas das funções mais poderosas do `dplyr` (que não apresentamos no Tópico 3 e podem ser conferidas no capítulo [5](https://r4ds.had.co.nz/transform.html) do *R for Data Science*) como o `summarise` também são vetorizadas. A grande vantagem é que ao invés de ter que fazer a operação para cada elemento de um objeto, o R opera sobre todos ao mesmo tempo. Isso permite um maior grau de perfomance para o R, além de deixar mais limpo o seu código. Veja abaixo como muda a praticidade e a perfomance usando a forma vetorizada:
+
+```{r, eval = FALSE}
+# Um elemento apenas:
+tic()
+exemplo_g <-  paste0("Usando paste0 em um elemento apenas", exemplo_f[1])
+toc()
+
+# Vetorizado
+tic()
+exemplo_g <- paste0("Usando paste0 como vetorizado", exemplo_f)
+toc()
+
+
+# Loop
+
+exemplo_g <- vector(mode = "character", length = length(exemplo_f))
+tic()
+for(i in i:length(exemplo_g)){
+  exemplo_g[i] <- paste0("Usando paste0 como se não fosse vetorizado", exemplo_f)
+}
+toc()
+```
+
+Se desconsiderarmos os comandos `tic()` e `toc()` temos 4 linhas em `for` contra 1 na forma vetorizada! Além disso, mesmo sem contar o tempo gasto criando o vetor `exemplo_g`, que é necessário usando `for`, temos que o desempenho da função vetorizada é similar quando se usa `paste0` em apenas 1 elemento. Na comparação com `for`, vemos que a função vetorizada é 3 vezes mais rápida. Vale notar no entanto que:
+
+- Com vetores muito grandes, funções vetorizadas não terão o mesmo desempenho que se fosse apenas 1 elemento.
+
+- A diferença de tempo entre loop e função vetorizada *aumenta* conforme aumenta o tamanho do vetor.
+
+- A depender do tamanho do vetor (em especial listas extremamente recursivas), a forma vetorial pode travar (pois o computador não tem memoria RAM para tanto). Vale notar no entanto que no geral o loop também não vai funcionar muito bem nesses momentos. É uma questão de hardware. Porém é apenas para objetos que estiverem na casa dos gigabytes!
+
+## Introduzindo `map`, `map2` e `pmap`
+
+Vale notar certa coisa sobre o uso das operações lógicas e matemáticas enquanto funções vetorizadas: eles não se aplicam a listas. Além disso, para o caso de análises usando Matrizes Insumo-Produto, muitas vezes precisamos usar operadores (como o próprio `%*%`) para várias matrizes dentro de uma lista com grande recursividade. Assim sendo, o pacote `purrr` oferece uma forma especial para tratarmos lista, em especial com a família `map()`.
+
+Suponha que temos a seguinte lista `lista_mat`:
+
+```{r}
+A <- matrix(c(1:4), nrow = 2)
+B <- matrix(c(5:8), nrow = 2)
+
+lista_mat <- list("A"= A, "B"= B)
+
+x <- 2
+```
+
+Queremos então multiplicar as duas listas pelo valor `x`. Se tentarmos `lista_mat * x`, teremos um erro, pois `*` não pode multiplicar listas (nem sublistas). Porém podemos usar a função `purrr::map()` para lidar com isso:
+
+```{r eval=FALSE}
+lista_mat2 <- map(lista_mat, function(x) x*2)
+```
+
+No caso acima, usamos a função `purrr::map` para indicar que o conteúdo dentro de cada sublista de `lista_mat` deve ser operado pela função  `x*2`. Neste caso, vale dizermos que `function(x) x*2` é o que chamamos de **função anônima*. Ou seja, uma função que determinamos para ser usada, porém não nomeamos ela e nem ficará guardada no `Environment` após ser usada pela função `purrr::map`. Veja abaixo:
+
+```{r}
+# Vamos criar uma função vezes.dois que é x*2, podemos escrever ela então da seguinte forma:
+vezes.dois <- function(x){
+  x*2
+}
+
+# No entanto, cabe notar, que para funções curtas é mais prático não usar a {}:
+vezes.dois <- function(x) x*2
+
+# As duas linhas abaixo são iguais:
+
+#Usando função anônima
+## Sem usar {}
+lista_mat2 <- map(lista_mat, function(x) x*2)
+
+## Usando {}
+lista_mat2 <- map(lista_mat, function(x){
+  x*2}
+  )
+
+#Usando função identificada
+tic()
+lista_mat2 <- map(lista_mat, vezes.dois)
+toc()
+```
+
+Via de regra, se você precisa de mais de uma linha na sua função, use `{}`. E se sua função precisa de mais de uma linha dentro de um `purrr::map`, não use-a como uma função anônima: defina-a antes e então use-a como uma função identificada.
+
+Porém, pode estar confuso ainda como funciona uma função `purrr::map()`. Pense assim: a função `map()` pega uma função e aplica, de forma vetorizada, sobre todos os elementos de uma lista. Assim sendo, temos que `purrr::map` é como um comando `for`, porém mais prático e mais fácil. Veja abaixo:
+
+```{r}
+lista_mat2_for <- list()
+
+tic()
+for(i in seq_along(lista_mat)){
+  lista_mat2_for[[i]] <- lista_mat[[i]]*2
+}
+toc()
+
+# Ou com a função identificada
+
+tic()
+for(i in seq_along(lista_mat)){
+  lista_mat2_for[[i]] <- vezes.dois(lista_mat[[i]])
+}
+toc()
+```
+
+Podemos usar `map()` para importar base de dados (e colocar elas diretamente como uma lista), para dar nomes a colunas de varios `data.frames` e etc... Tudo numa mesma linha, sem precisar criar uma lista vazia antes, e com uma performance melhor do que usando `for`. Se você for fazer uma cadeia de comandos, você pode inclusive criar uma função identificada antes que faça tudo isso, para então realizar o map apenas uma vez^[Importante: isso pode forçar bastante a sua memória RAM, então não empolgue! Se tiver problemas com isso, quebre a função longa em várias pequenas e vá fazer o `map()` em partes!].
+
+### Atuar sobre duas listas: `map2()`
+
+Vamos agora tratar do caso em que não queremos multiplicar ambas as funções por 2, mas sim queremos multiplicar `A*2` e `B*3`. O que podemos fazer? Por meio de `for` poderiamos fazer:
+
+```{r}
+lista_escalares <- list(2,3)
+lista_mat3_for <- list()
+tic()
+for(i in seq_along(lista_escalares)){
+  lista_mat3_for[[i]] <- lista_mat[[i]]*lista_escalares[[i]] 
+}
+toc()
+```
+
+No looping acima teriamos que o primeiro (segundo) elemento de `lista_mat`, a matrix `A` (`B`), seria multiplicado pelo primeiro (segundo) elemento da `lista_escalares`, `2` (`3`). Podemos no entanto, usar uma variante de `purrr::map` para tanto, a função `purrr::map2`. Veja abaixo:
+
+```{r}
+tic()
+lista_mat3 <- map2(lista_mat, lista_escalares, function(x,y) x*y)
+toc()
+```
+
+Desse modo, podemos também usar `map2` para realizar multiplicação de matrizes, nomear diferentes tipos de matrizes e etc... Importante notar que as duas listas usadas em `map2` devem ter o mesmo `length()`. Se for diferente, dará erro.
+
+### Atuar sobre três ou mais listas: `pmap`
+
 
 
 ## Fonte
