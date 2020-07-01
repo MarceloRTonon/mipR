@@ -375,8 +375,15 @@ summary {
 <pre class="r"><code>library(tictoc)
 #install.packages(&quot;tictoc&quot;)
 
+<<<<<<< HEAD
 library(purrr)
 library(dplyr)</code></pre>
+=======
+library(purrr)</code></pre>
+<pre><code>## Warning: package &#39;purrr&#39; was built under R version 3.6.3</code></pre>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 3.6.3</code></pre>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <pre><code>## 
 ## Attaching package: &#39;dplyr&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:stats&#39;:
@@ -389,12 +396,21 @@ library(dplyr)</code></pre>
 <pre class="r"><code>tic()
 d &lt;- 2+1
 toc()</code></pre>
+<<<<<<< HEAD
 <pre><code>## 0.02 sec elapsed</code></pre>
 </div>
 <div id="objetivos-do-tópico" class="section level2">
 <h2>Objetivos do Tópico</h2>
 <p>Nesta seção, serão explicadas o que é um loop, porquê não fazer as repetições manualmente. Além disso, iremos contextualizar como ele funciona e então apresentar como fazer um loop no R e algumas nuances sobre ele.</p>
 <p>Além disso vamos falar do que é uma função vetorizada e apresentar a família <code>map</code> do pacote <code>purrr</code>.</p>
+=======
+<pre><code>## 0 sec elapsed</code></pre>
+</div>
+<div id="objetivos-do-tópico" class="section level2">
+<h2>Objetivos do Tópico</h2>
+<p>Nesta seção, serão explicadas o que é um loop e porquê não fazer manualmente tarefas que envolvem repetições. Além disso, iremos contextualizar como funciona o loop no R, bem como a forma de fazê-lo e algums nuances sobre ele.</p>
+<p>Por fim, vamos também falar do que é uma função vetorizada e apresentar a família <code>map</code> do pacote <code>purrr</code>.</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 </div>
 <div id="o-que-é-um-loop" class="section level2">
 <h2>O que é um Loop</h2>
@@ -406,7 +422,11 @@ toc()</code></pre>
 <p>Podemos dizer que há dois motivos pricipais para você automatizar o seu código. Praticidade e Erros.</p>
 <div id="praticidade" class="section level3">
 <h3>Praticidade</h3>
+<<<<<<< HEAD
 <p>Uma das grandes vantagens de se programar é a automação do processo. Assim, suponha que você os produtos da multiplicação de <code>umObjeto</code> qualquer pelos valores de 1 a 3. Assim sendo, você pode fazer:</p>
+=======
+<p>Uma das grandes vantagens de se programar é a automação do processo. Assim, suponha que você quer calcular os produtos da multiplicação de <code>umObjeto</code> qualquer pelos valores de 1 a 3. Assim sendo, você pode fazer:</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <pre class="r"><code>umObjeto &lt;- 15
 resultados &lt;- list()
 
@@ -414,7 +434,11 @@ resultados &lt;- list()
 resultados[[1]] &lt;- umObjeto * 1
 resultados[[2]] &lt;- umObjeto * 2
 resultados[[3]] &lt;- umObjeto * 3</code></pre>
+<<<<<<< HEAD
 <p>No caso de três valores, pode não <strong>parecer</strong> tão problemático assim. Porém, mesmo com poucos valores, se você tiver que fazer muitas operações, o número de operações crescerá aritméticamente. E 3 valores é um caso pequeno de repetições. As contas nacionais do IBGE podem ser usadas desde o ano 2000. A WIOD vai ano a ano de 2000 a 2014. Imagine fazer manualmente para cada ano? Isso porque não consideramos país nem setor. Assim, para cada objeto numa decomposição ou cálculo, você está adicionando um múltiplo.</p>
+=======
+<p>No caso de três valores, pode não <strong>parecer</strong> tão problemático assim. Porém, mesmo com poucos valores, se você tiver que fazer muitas operações, o número de operações crescerá aritméticamente (e 3 valores é um caso pequeno de repetições). As contas nacionais do IBGE podem ser usadas desde o ano 2000. A WIOD vai ano a ano de 2000 a 2014. Imagine fazer manualmente para cada ano? Isso porque não consideramos país nem setor. Assim, para cada objeto numa decomposição ou cálculo, você está adicionando um múltiplo.</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <p>Para ilustrar isso, vamos supor que você irá fazer uma análise de decomposição estrutural. Nesta decomposição, você irá usar a série de matrizes do GIC (Passoni e Freitas, 2018) de 2000 a 2015. Temos ai 16 anos. Nisso, você irá usar a agregação setorial proposta por Kupfer (2005), com 5 grupos. Aí, vamos supor que você também quer desagregar a demanda final por componente, que são 6, se você não separar o Investimento da Administração Pública da Formação Bruta de Capital Fixo pois aí seriam 7. Assim, só para montar as equações a serem decompostas, o número de repetições que você terá que fazer será:</p>
 <p><span class="math display">\[Repetições \ = Anos  \ * \ Setores \ * \ DF\]</span></p>
 <p>No nosso caso seria então 16 Anos vezes 5 grupos de Setores vezes 6 componentes da demanda final: um total de 400 repetições! Isso sem entrar na decomposição em si a ser feita que pode adicionar mais multiplos<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Imagine o tempo que isso levará pra escrever. Imagine se pudessemos escrever apenas uma vez?</p>
@@ -428,7 +452,11 @@ resultados[[3]] &lt;- umObjeto * 3</code></pre>
 </blockquote>
 <p>Com isso em mente, vamos supor então que você pense numa solução <em>“esperta”</em> para os seus problemas de repetição: o bom e velho <code>ctrl c</code> e <code>ctrl v</code>. Afinal, os anos de prática no ensino fundamental e médio, <del>e na graduação</del>, por que não usa-lo agora com as repetições?</p>
 <p><br> O problema do <code>ctrl c</code> e <code>ctrl v</code> neste caso é a possibilidade de errar no inicio ou no meio do caminho. O primeiro caso é: imagine que você escreveu seu código, e usou <code>ctrl c</code> e <code>ctrl v</code> para fazer as repetições. Porém descobriu mais a frente que você descobriu que a conta que você estava fazendo estava errada, que por exemplo você esqueceu de diagonalizar um vetor coluna. Assim sendo, você terá que ajustar isso manualmente em cada uma das repetições. Não parece muito bom né? Assim, você teria que ter certeza de todos as suas operações estariam corretas.</p>
+<<<<<<< HEAD
 <p>Porém, há um outro problema que pode aparecer ao longo do caminho: os erros de digitação. Ao contrário de um texto comum, em que um erro de digital <strong><em>pode</em></strong> ser mortal, na programação ele <strong><em>é</em></strong> fatal. E o pior, é extremamente fácil deixar passar um ou outro erro de digitação. Sem contar em confusão. Se você sem querer escrever <code>listaY[[2]]</code> ao invés de <code>listaY[[3]]</code>, o código provavelmente rodará sem retornar nenhum <code>error</code> ou <code>warning</code>, porém seus resultados estarão errados. Assim, usar o <code>ctrl c</code> e <code>ctrl v</code> para repetição é uma estrategia extremamente desaconselhável. E escrever isso na mão é <strong><em>PIOR AINDA</em></strong>.</p>
+=======
+<p>Porém, há um outro problema que pode aparecer ao longo do caminho: os erros de digitação. Ao contrário de um texto comum, em que um erro de digitação <strong><em>pode</em></strong> ser mortal, na programação ele <strong><em>é</em></strong> fatal. E o pior, é extremamente fácil deixar passar um ou outro erro de digitação. Sem contar em confusão. Se você sem querer escrever <code>listaY[[2]]</code> ao invés de <code>listaY[[3]]</code>, o código provavelmente rodará sem retornar nenhum <code>error</code> ou <code>warning</code>, porém seus resultados estarão errados. Assim, usar o <code>ctrl c</code> e <code>ctrl v</code> para repetição é uma estrategia extremamente desaconselhável. E escrever isso na mão é <strong><em>PIOR AINDA</em></strong>.</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <p>Assim sendo, mesmo quando não estamos numa situação de fazer algo como 400 repetições, escrever corridamente o código não é uma boa opção.</p>
 </div>
 </div>
@@ -459,7 +487,11 @@ Y[[ano]] &lt;- 12 * (1.09 * ano)
 t_[[ano]] &lt;- 0.28 + (0.005 * ano)
 tY[[ano]] &lt;- t_[[ano]] * Y[[ano]]
 S[[ano]] &lt;- tY[[ano]] - G[[ano]] - I_Pub[[ano]]</code></pre>
+<<<<<<< HEAD
 <p>E poderiamos fazer assim por diante. Quando falamos em automatizar o seu código falamos em dar de uma vez ao computador um conjunto de informações que darão a ele a capacidade de reproduzir um código diversas vezes para cada elemente deste conjunto. No exemplo acima o Loop vai rodar o seu código do inicio ao fim para cada valor do objeto <code>ano</code> que você determinar.</p>
+=======
+<p>E poderíamos fazer assim por diante. Quando falamos em automatizar o seu código, falamos em dar de uma vez ao computador um conjunto de informações para que ele tenha a capacidade de reproduzir um código diversas vezes para cada elemento deste conjunto. No exemplo acima, se usarmos o Loop, ele irá rodar o seu código do inicio ao fim para cada valor do objeto <code>ano</code> que você determinar.</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 </div>
 <div id="usando-loops-para-automatizar" class="section level2">
 <h2>Usando Loops para automatizar</h2>
@@ -479,6 +511,7 @@ S[[ano]] &lt;- tY[[ano]] - G[[ano]] - I_Pub[[ano]]
     print(Sys.time())
   }</code></pre>
 <pre><code>## [1] 10 20 30
+<<<<<<< HEAD
 ## [1] &quot;2020-06-29 16:29:57 -03&quot;
 ## [1] 20 40 60
 ## [1] &quot;2020-06-29 16:29:58 -03&quot;
@@ -486,6 +519,15 @@ S[[ano]] &lt;- tY[[ano]] - G[[ano]] - I_Pub[[ano]]
 ## [1] &quot;2020-06-29 16:29:59 -03&quot;
 ## [1]  40  80 120
 ## [1] &quot;2020-06-29 16:30:00 -03&quot;</code></pre>
+=======
+## [1] &quot;2020-06-29 22:16:15 -03&quot;
+## [1] 20 40 60
+## [1] &quot;2020-06-29 22:16:17 -03&quot;
+## [1] 30 60 90
+## [1] &quot;2020-06-29 22:16:18 -03&quot;
+## [1]  40  80 120
+## [1] &quot;2020-06-29 22:16:19 -03&quot;</code></pre>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <p>Repare como há a diferença de um segundo entre cada <code>print</code>. Isso porque <strong>os loops ocorrem em sequência</strong> e não todos ao mesmo tempo.</p>
 <p>Quando se trata de um <code>for</code> que irá ocupar mais de uma linha, ou com uma linha grande, o conteúdo a ser repetido no loop deve ser colocado entre as chaves <code>{}</code>. Quando se tratar de uma equação curta e de uma única linha, pode-se escrever na mesma linha após o parentêses. Veja abaixo:</p>
 <pre class="r"><code>s_Y &lt;- list()
@@ -496,15 +538,25 @@ for(ano in 1:15) s_Y[[ano]] &lt;- S[[ano]]/Y[[ano]]</code></pre>
 <h2></h2>
 <div id="performance-e-purrr" class="section level3">
 <h3>Performance e purrr</h3>
+<<<<<<< HEAD
 <p>Pelas caracteristicas das linguagens como o R, estes têm sua performance penalizada ao usar loopings. Por conta disso, o mais comum é a partir de um certo momento, abandonar o uso do loop em detrimento da programação funcional, no caso do R aconselhamos que seja pelo pacote <code>purrr</code>. Não falarei aqui o porque disso, mas vale deixar claro que o <code>for</code> não é a linha de chegada quando se trata de automatizar os seus códigos.</p>
+=======
+<p>Pelas caracteristicas de linguagens como a do R, há uma penalização em sua performance ao usar loopings. Por conta disso, o mais comum é, a partir de um certo momento, abandonar o uso do loop em detrimento da programação funcional. No caso do R, aconselhamos que seja pelo pacote <code>purrr</code>. Não falarei aqui o porque disso, mas vale deixar claro que o <code>for</code> não é a linha de chegada quando se trata de automatizar os seus códigos.</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <p>Vamos aqui falar antes de como usar loops dentro de loops (aproveitando a recursividade das listas). Isso tudo para explicar depois como usar a função <code>purrr:map</code>!</p>
 </div>
 </div>
 <div id="listas-e-sua-recursividade-aplicadas-ao-loop" class="section level1">
 <h1>Listas e sua recursividade aplicadas ao Loop</h1>
+<<<<<<< HEAD
 <p>No Tópico 1, falamos sobre as listas e a sua recursividade. Agora, vamos mostrar aqui, como isso é útil para nós quando tratamos de Loops.</p>
 <p>Vamos supor que queremos montar a estrutura dos dados tal qual expusemos antes: 16 anos, 5 grupos de setores, 6 componentes da demanda final. Como podemos fazer isso? Primeiramente devemos decidir qual será a organização da nossa lista. Qual variável deve vir primeiro? Ano, setor ou componente da demanda final? Vamos seguir no exemplo em que a lista mais geral será aquela do ano, seguida pelo setor e por fim o componente da demanda final, de modo que nossa listaX será igual à <code>listaX[[ano]][[setor]][[df]]</code>.</p>
 <p>Pense nisso como se essa organização, fosse uma pasta na sua área de trabalho. Suponha que uma pasta <code>dados</code>, e a partir de então, você vai ter várias pastas com anos diferentes <code>dados/2000</code>, <code>dados/2001</code>… Então, ao clicar na primeira, você terá pastas referentes aos grupos setoriais <code>dados/2000/ind_inovativa</code>, <code>dados/2000/commodities</code>… Dentro dela, você terá então diferentes pastas para cada componente da demanda final <code>dados/2000/ind_inovativa/consumo_G</code>, <code>dados/2000/ind_inovativa/Consumo_Familias</code> e etc… Então, nessa pasta é que estará o dado, ou conjunto de dados, com os quais iremos trabalhar. Ter bem definido como vamos estruturar os dados é fundamental para projetos mais complexos.</p>
+=======
+<p>No Tópico 1, falamos sobre as listas e a sua recursividade. Agora, vamos mostrar aqui como isso é útil para nós quando tratamos de Loops.</p>
+<p>Vamos supor que queremos montar a estrutura dos dados tal qual expusemos antes: 16 anos, 5 grupos de setores, 6 componentes da demanda final. Como podemos fazer isso? Primeiramente devemos decidir qual será a organização da nossa lista. Qual variável deve vir primeiro? Ano, setor ou componente da demanda final? Vamos seguir no exemplo em que a lista mais geral será aquela do ano, seguida pelo setor e por fim o componente da demanda final, de modo que nossa listaX será igual à <code>listaX[[ano]][[setor]][[df]]</code>.</p>
+<p>Pense nisso como se essa organização fosse uma pasta na sua área de trabalho. Suponha que uma pasta <code>dados</code>, e a partir de então, você vai ter várias pastas com anos diferentes <code>dados/2000</code>, <code>dados/2001</code>… Então, ao clicar na primeira, você terá pastas referentes aos grupos setoriais <code>dados/2000/ind_inovativa</code>, <code>dados/2000/commodities</code>… Dentro dela, você terá então diferentes pastas para cada componente da demanda final <code>dados/2000/ind_inovativa/consumo_G</code>, <code>dados/2000/ind_inovativa/Consumo_Familias</code> e etc… Então, nessa pasta é que estará o dado, ou conjunto de dados, com os quais iremos trabalhar. Ter bem definido como vamos estruturar os dados é fundamental para projetos mais complexos.</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <p>Assim, vamos mostrar como é simples fazer essa estruturação via <code>for</code>.</p>
 <pre class="r"><code>dadosOrg &lt;- list()
 
@@ -536,7 +588,11 @@ for(anos in 1:16){
 <p>Apenas um aviso que você deve se atentar: cuidado ao lidar com fors muito recursivos, pois é fácil se perder dentro deles, especialmente sobre o que deve ser utilizado em determinado momento. Além disso, quanto maior o número de repetições (multiplique cada <code>for</code> interno) maior a penalidade na performance do <em>R</em>.</p>
 <div id="funções-vetorizadas." class="section level2">
 <h2>Funções vetorizadas.</h2>
+<<<<<<< HEAD
 <p>Uma função vetorizada é uma função que opera sobre um conjunto valores dentro de um vetor de uma só vez. Neste caso, falamos aqui de vetor enquanto estrutura de dados como um todo, seja um vetor atômico, seja uma lista. Assim sendo temos alguns exemplos de funções vetorizadas.</p>
+=======
+<p>Uma função vetorizada é uma função que opera sobre um conjunto de valores dentro de um vetor de uma só vez. Neste caso, falamos aqui de vetor enquanto estrutura de dados como um todo, seja um vetor atômico, seja uma lista. Assim sendo temos alguns exemplos de funções vetorizadas.</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <pre class="r"><code>a&lt;- c(1:4)
 
 b &lt;- c(5:8)
@@ -577,12 +633,20 @@ toc()</code></pre>
 <ul>
 <li><p>Com vetores muito grandes, funções vetorizadas não terão o mesmo desempenho que se fosse apenas 1 elemento.</p></li>
 <li><p>A diferença de tempo entre loop e função vetorizada <em>aumenta</em> conforme aumenta o tamanho do vetor.</p></li>
+<<<<<<< HEAD
 <li><p>A depender do tamanho do vetor (em especial listas extremamente recursivas), a forma vetorial pode travar (pois o computador não tem memoria RAM para tanto). Vale notar no entanto que no geral o loop também não vai funcionar muito bem nesses momentos. É uma questão de hardware. Porém é apenas para objetos que estiverem na casa dos gigabytes!</p></li>
+=======
+<li><p>A depender do tamanho do vetor (em especial listas extremamente recursivas), a forma vetorial pode travar (pois o computador não tem memoria RAM para tanto). Vale notar que, no geral, o próprio loop também não vai funcionar muito bem nesses momentos. É uma questão de hardware. Porém, é apenas para objetos que estiverem na casa dos gigabytes (que não costuma ser o caso de dados de insumo-produto)!</p></li>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 </ul>
 </div>
 <div id="introduzindo-map-map2-e-pmap" class="section level2">
 <h2>Introduzindo <code>map</code>, <code>map2</code> e <code>pmap</code></h2>
+<<<<<<< HEAD
 <p>Vale notar certa coisa sobre o uso das operações lógicas e matemáticas enquanto funções vetorizadas: eles não se aplicam a listas. Além disso, para o caso de análises usando Matrizes Insumo-Produto, muitas vezes precisamos usar operadores (como o próprio <code>%*%</code>) para várias matrizes dentro de uma lista com grande recursividade. Assim sendo, o pacote <code>purrr</code> oferece uma forma especial para tratarmos lista, em especial com a família <code>map()</code>.</p>
+=======
+<p>Vale notar certa coisa sobre o uso das operações lógicas e matemáticas enquanto funções vetorizadas: eles não se aplicam a listas. Além disso, para o caso de análises usando Matrizes Insumo-Produto, muitas vezes precisamos usar operadores (como o próprio <code>%*%</code>) para várias matrizes dentro de uma lista com grande recursividade. Assim sendo, o pacote <code>purrr</code> oferece uma forma especial para tratarmos de listas, em especial com a família <code>map()</code>.</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <p>Suponha que temos a seguinte lista <code>lista_mat</code>:</p>
 <pre class="r"><code>A &lt;- matrix(c(1:4), nrow = 2)
 B &lt;- matrix(c(5:8), nrow = 2)
@@ -618,7 +682,11 @@ lista_mat2 &lt;- map(lista_mat, vezes.dois)
 toc()</code></pre>
 <pre><code>## 0 sec elapsed</code></pre>
 <p>Via de regra, se você precisa de mais de uma linha na sua função, use <code>{}</code>. E se sua função precisa de mais de uma linha dentro de um <code>purrr::map</code>, não use-a como uma função anônima: defina-a antes e então use-a como uma função identificada.</p>
+<<<<<<< HEAD
 <p>Porém, pode estar confuso ainda como funciona uma função <code>purrr::map()</code>. Pense assim: a função <code>map()</code> pega uma função e aplica, de forma vetorizada, sobre todos os elementos de uma lista. Assim sendo, temos que <code>purrr::map</code> é como um comando <code>for</code>, porém mais prático e mais fácil. Veja abaixo:</p>
+=======
+<p>Porém, pode ainda estar confuso como funciona uma função <code>purrr::map()</code>. Pense assim: a função <code>map()</code> pega uma função e aplica, de forma vetorizada, sobre todos os elementos de uma lista. Assim sendo, temos que <code>purrr::map</code> é como um comando <code>for</code>, porém mais prático e mais fácil. Veja abaixo:</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <pre class="r"><code>lista_mat2_for &lt;- list()
 
 tic()
@@ -635,7 +703,11 @@ for(i in seq_along(lista_mat)){
 }
 toc()</code></pre>
 <pre><code>## 0.01 sec elapsed</code></pre>
+<<<<<<< HEAD
 <p>Podemos usar <code>map()</code> para importar base de dados (e colocar elas diretamente como uma lista), para dar nomes a colunas de varios <code>data.frames</code> e etc… Tudo numa mesma linha, sem precisar criar uma lista vazia antes, e com uma performance melhor do que usando <code>for</code>. Se você for fazer uma cadeia de comandos, você pode inclusive criar uma função identificada antes que faça tudo isso, para então realizar o map apenas uma vez<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
+=======
+<p>Podemos usar <code>map()</code> para importar base de dados (e colocar elas diretamente como uma lista), para dar nomes a colunas de vários <code>data.frames</code> e etc… Tudo numa mesma linha, sem precisar criar uma lista vazia antes, e com uma performance melhor do que usando <code>for</code>. Se você for fazer uma cadeia de comandos, você pode inclusive criar uma função identificada antes que faça tudo isso, para então realizar o map apenas uma vez<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <div id="atuar-sobre-duas-listas-map2" class="section level3">
 <h3>Atuar sobre duas listas: <code>map2()</code></h3>
 <p>Vamos agora tratar do caso em que não queremos multiplicar ambas as funções por 2, mas sim queremos multiplicar <code>A*2</code> e <code>B*3</code>. O que podemos fazer? Por meio de <code>for</code> poderiamos fazer:</p>
@@ -646,12 +718,21 @@ for(i in seq_along(lista_escalares)){
   lista_mat3_for[[i]] &lt;- lista_mat[[i]]*lista_escalares[[i]] 
 }
 toc()</code></pre>
+<<<<<<< HEAD
 <pre><code>## 0 sec elapsed</code></pre>
 <p>No looping acima teriamos que o primeiro (segundo) elemento de <code>lista_mat</code>, a matrix <code>A</code> (<code>B</code>), seria multiplicado pelo primeiro (segundo) elemento da <code>lista_escalares</code>, <code>2</code> (<code>3</code>). Podemos no entanto, usar uma variante de <code>purrr::map</code> para tanto, a função <code>purrr::map2</code>. Veja abaixo:</p>
 <pre class="r"><code>tic()
 lista_mat3 &lt;- map2(lista_mat, lista_escalares, function(x,y) x*y)
 toc()</code></pre>
 <pre><code>## 0.02 sec elapsed</code></pre>
+=======
+<pre><code>## 0.01 sec elapsed</code></pre>
+<p>No looping acima teríamos que o primeiro (segundo) elemento de <code>lista_mat</code>, a matrix <code>A</code> (<code>B</code>), seria multiplicado pelo primeiro (segundo) elemento da <code>lista_escalares</code>, <code>2</code> (<code>3</code>). Podemos no entanto, usar uma variante de <code>purrr::map</code> para tanto, a função <code>purrr::map2</code>. Veja abaixo:</p>
+<pre class="r"><code>tic()
+lista_mat3 &lt;- map2(lista_mat, lista_escalares, function(x,y) x*y)
+toc()</code></pre>
+<pre><code>## 0 sec elapsed</code></pre>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <p>Desse modo, podemos também usar <code>map2</code> para realizar multiplicação de matrizes, nomear diferentes tipos de matrizes e etc… Importante notar que as duas listas usadas em <code>map2</code> devem ter o mesmo <code>length()</code>. Se for diferente, dará erro.</p>
 </div>
 <div id="atuar-sobre-três-ou-mais-listas-pmap" class="section level3">
@@ -673,9 +754,15 @@ p_lista &lt;- list(lista1,lista2, lista3)
 pmap(p_lista, funcao_p)</code></pre>
 </div>
 </div>
+<<<<<<< HEAD
 <div id="recursividade-na-familia-map" class="section level2">
 <h2>Recursividade na familia <code>map</code></h2>
 <p>Tratamos nos ultimos casos, de uma lista com recursividade 1. Ou seja, não havia lista dentro de uma lista neste caso. Porém, vamos criar a lista <code>lista_recursiva</code>:</p>
+=======
+<div id="recursividade-na-família-map" class="section level2">
+<h2>Recursividade na família <code>map</code></h2>
+<p>Tratamos nos últimos casos, de uma lista com recursividade 1. Ou seja, não havia lista dentro de uma lista neste caso. Porém, vamos criar a lista <code>lista_recursiva</code>:</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <pre class="r"><code>A_b &lt;- matrix(9:12, nrow = 2)
 B_b &lt;- matrix(13:16, nrow =2)
 
@@ -699,7 +786,11 @@ lista_recursiva3 &lt;- map2(lista_recursiva, lista_escalares2, function(x,y) map
 # Usando uma função anônima depois de 2 map2:
 lista_recursiva3 &lt;- map2(lista_recursiva, lista_escalares2, map2, function(x,y) x*y)</code></pre>
 <p>No caso em que usamos <code>map2</code> dentro de uma função anônima, repare que usamos depois <code>function(z,w)</code>. Fizemos assim para evitar problemas na hora do programa interpretar o comando. Para ele <code>x</code> é <code>lista_recursiva[[i]]</code> enquanto <code>z</code> é <code>lista_rescursiva[[i]][[j]]</code>.</p>
+<<<<<<< HEAD
 <p>É importante notar que a forma como fizemos agora, requer que tanto <code>lista_recursiva</code> quanto <code>lista_escalares2</code> tenham a mesma recursividade. Há, no entanto, uma forma usar <code>lista_escalares</code> ao invés de <code>lista_escalares2</code>. E essa forma é combinando <code>map</code> com <code>map2</code>. Veja abaixo as duas formas de escrever isso:</p>
+=======
+<p>É importante notar que a forma como fizemos agora, requer que tanto <code>lista_recursiva</code> quanto <code>lista_escalares2</code> tenham a mesma recursividade. Há, no entanto, uma forma usar <code>lista_escalares</code> ao invés de <code>lista_escalares2</code>. Essa forma é combinando <code>map</code> com <code>map2</code>. Veja abaixo as duas formas de escrever isso:</p>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 <pre class="r"><code>lista_recursiva3 &lt;- map(lista_recursiva, function(x) map2(x, lista_escalares, function(z,y) z*y))
 
 lista_recursiva3 &lt;- map(lista_recursiva, map2, lista_escalares, function(x,y) x*y)</code></pre>
@@ -741,7 +832,11 @@ is.list(co2_treatment[,1])</code></pre>
 <ol>
 <li id="fn1"><p>Em alguns casos o número de repetições se torna fatorial inclusive!<a href="#fnref1" class="footnote-back">↩</a></p></li>
 <li id="fn2"><p>Importante: isso pode forçar bastante a sua memória RAM, então não empolgue! Se tiver problemas com isso, quebre a função longa em várias pequenas e vá fazer o <code>map()</code> em partes!<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<<<<<<< HEAD
 <li id="fn3"><p><strong>Importante:</strong> o exemplo dado aqui poderia ser feito usando varias funções do <code>dplyr</code> porém queremos deixar claro como criar uma lista via <code>purrr</code><a href="#fnref3" class="footnote-back">↩</a></p></li>
+=======
+<li id="fn3"><p><strong>Importante:</strong> o exemplo dado aqui poderia ser feito usando várias funções do <code>dplyr</code> porém queremos deixar claro como criar uma lista via <code>purrr</code><a href="#fnref3" class="footnote-back">↩</a></p></li>
+>>>>>>> 7ac965af7dee2616017f0384496c062e6b7148fe
 </ol>
 </div>
 
