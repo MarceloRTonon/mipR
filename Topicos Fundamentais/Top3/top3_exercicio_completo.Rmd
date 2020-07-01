@@ -623,14 +623,14 @@ Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em 
 #### Q.8.1 - Visualize `niotITA` e perceba que existem valores `NA` por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando uma lista com o nome das variáveis.
 
 ```{r, include=FALSE}
-nomes_colunas <- c("Year", "Code", "Description", "Origin", niotITA[1,5:67])
+nomes_colunas <- c(colnames(niotITA[,1:4]), niotITA[1,5:67])
 ```
 
 
 #### Q.8.2 - Elimine a linha que contém `NA` e renomeie as colunas de `niotITA`. Salve como `niotITA_8.2`.
 
 ```{r, include=FALSE}
-niotITA_8.2 <- niotITA[2:1081,]
+niotITA_8.2 <- niotITA[-is.na(niotITA),] %>% type.convert()
 colnames(niotITA_8.2) <- nomes_colunas
 ```
 
@@ -671,8 +671,19 @@ niotITA_8.6 <- niotITA_8.5[,-c(61:67)]
 
 ```{r, include=FALSE}
 total_output <- niotITA_8.2[niotITA_8.2$Year == "2008" & niotITA_8.2$Description == "Output at basic prices",]
+total_output_diag <- diag(as.data.frame(total_output)[,5:60])
+Dem_Int_matrix <- as.matrix(as.data.frame(niotITA_8.6)[,5:60])
+coef_tec <- total_output_diag%*%Dem_Int_matrix
+  
 ```
 
 #### Q.8.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.
 
+
+```{r, include=FALSE}
+Dem_Int <-rowSums((as.data.frame(niotITA_8.5))[,5:60])
+Dem_Fin <-rowSums((as.data.frame(niotITA_8.5))[,61:66])
+Dem_Tot <-Dem_Int+Dem_Fin
+niotITA_8.7 <- cbind(niotITA_8.5[,1:4],Dem_Int,Dem_Fin,Dem_Tot) 
+```
 
