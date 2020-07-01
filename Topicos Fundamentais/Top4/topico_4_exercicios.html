@@ -12,7 +12,7 @@
 <meta name="author" content="Marcelo Tonon e Felipe Cornelio" />
 
 
-<title>Tópico 3 - Exercicio</title>
+<title>Tópico 4 - exercicios</title>
 
 <script>/*! jQuery v1.11.3 | (c) 2005, 2015 jQuery Foundation, Inc. | jquery.org/license */
 !function(a,b){"object"==typeof module&&"object"==typeof module.exports?module.exports=a.document?b(a,!0):function(a){if(!a.document)throw new Error("jQuery requires a window with a document");return b(a)}:b(a)}("undefined"!=typeof window?window:this,function(a,b){var c=[],d=c.slice,e=c.concat,f=c.push,g=c.indexOf,h={},i=h.toString,j=h.hasOwnProperty,k={},l="1.11.3",m=function(a,b){return new m.fn.init(a,b)},n=/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,o=/^-ms-/,p=/-([\da-z])/gi,q=function(a,b){return b.toUpperCase()};m.fn=m.prototype={jquery:l,constructor:m,selector:"",length:0,toArray:function(){return d.call(this)},get:function(a){return null!=a?0>a?this[a+this.length]:this[a]:d.call(this)},pushStack:function(a){var b=m.merge(this.constructor(),a);return b.prevObject=this,b.context=this.context,b},each:function(a,b){return m.each(this,a,b)},map:function(a){return this.pushStack(m.map(this,function(b,c){return a.call(b,c,b)}))},slice:function(){return this.pushStack(d.apply(this,arguments))},first:function(){return this.eq(0)},last:function(){return this.eq(-1)},eq:function(a){var b=this.length,c=+a+(0>a?b:0);return this.pushStack(c>=0&&b>c?[this[c]]:[])},end:function(){return this.prevObject||this.constructor(null)},push:f,sort:c.sort,splice:c.splice},m.extend=m.fn.extend=function(){var a,b,c,d,e,f,g=arguments[0]||{},h=1,i=arguments.length,j=!1;for("boolean"==typeof g&&(j=g,g=arguments[h]||{},h++),"object"==typeof g||m.isFunction(g)||(g={}),h===i&&(g=this,h--);i>h;h++)if(null!=(e=arguments[h]))for(d in e)a=g[d],c=e[d],g!==c&&(j&&c&&(m.isPlainObject(c)||(b=m.isArray(c)))?(b?(b=!1,f=a&&m.isArray(a)?a:[]):f=a&&m.isPlainObject(a)?a:{},g[d]=m.extend(j,f,c)):void 0!==c&&(g[d]=c));return g},m.extend({expando:"jQuery"+(l+Math.random()).replace(/\D/g,""),isReady:!0,error:function(a){throw new Error(a)},noop:function(){},isFunction:function(a){return"function"===m.type(a)},isArray:Array.isArray||function(a){return"array"===m.type(a)},isWindow:function(a){return null!=a&&a==a.window},isNumeric:function(a){return!m.isArray(a)&&a-parseFloat(a)+1>=0},isEmptyObject:function(a){var b;for(b in a)return!1;return!0},isPlainObject:function(a){var b;if(!a||"object"!==m.type(a)||a.nodeType||m.isWindow(a))return!1;try{if(a.constructor&&!j.call(a,"constructor")&&!j.call(a.constructor.prototype,"isPrototypeOf"))return!1}catch(c){return!1}if(k.ownLast)for(b in a)return j.call(a,b);for(b in a);return void 0===b||j.call(a,b)},type:function(a){return null==a?a+"":"object"==typeof a||"function"==typeof a?h[i.call(a)]||"object":typeof a},globalEval:function(b){b&&m.trim(b)&&(a.execScript||function(b){a.eval.call(a,b)})(b)},camelCase:function(a){return a.replace(o,"ms-").replace(p,q)},nodeName:function(a,b){return a.nodeName&&a.nodeName.toLowerCase()===b.toLowerCase()},each:function(a,b,c){var d,e=0,f=a.length,g=r(a);if(c){if(g){for(;f>e;e++)if(d=b.apply(a[e],c),d===!1)break}else for(e in a)if(d=b.apply(a[e],c),d===!1)break}else if(g){for(;f>e;e++)if(d=b.call(a[e],e,a[e]),d===!1)break}else for(e in a)if(d=b.call(a[e],e,a[e]),d===!1)break;return a},trim:function(a){return null==a?"":(a+"").replace(n,"")},makeArray:function(a,b){var c=b||[];return null!=a&&(r(Object(a))?m.merge(c,"string"==typeof a?[a]:a):f.call(c,a)),c},inArray:function(a,b,c){var d;if(b){if(g)return g.call(b,a,c);for(d=b.length,c=c?0>c?Math.max(0,d+c):c:0;d>c;c++)if(c in b&&b[c]===a)return c}return-1},merge:function(a,b){var c=+b.length,d=0,e=a.length;while(c>d)a[e++]=b[d++];if(c!==c)while(void 0!==b[d])a[e++]=b[d++];return a.length=e,a},grep:function(a,b,c){for(var d,e=[],f=0,g=a.length,h=!c;g>f;f++)d=!b(a[f],f),d!==h&&e.push(a[f]);return e},map:function(a,b,c){var d,f=0,g=a.length,h=r(a),i=[];if(h)for(;g>f;f++)d=b(a[f],f,c),null!=d&&i.push(d);else for(f in a)d=b(a[f],f,c),null!=d&&i.push(d);return e.apply([],i)},guid:1,proxy:function(a,b){var c,e,f;return"string"==typeof b&&(f=a[b],b=a,a=f),m.isFunction(a)?(c=d.call(arguments,2),e=function(){return a.apply(b||this,c.concat(d.call(arguments)))},e.guid=a.guid=a.guid||m.guid++,e):void 0},now:function(){return+new Date},support:k}),m.each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(a,b){h["[object "+b+"]"]=b.toLowerCase()});function r(a){var b="length"in a&&a.length,c=m.type(a);return"function"===c||m.isWindow(a)?!1:1===a.nodeType&&b?!0:"array"===c||0===b||"number"==typeof b&&b>0&&b-1 in a}var s=function(a){var b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u="sizzle"+1*new Date,v=a.document,w=0,x=0,y=ha(),z=ha(),A=ha(),B=function(a,b){return a===b&&(l=!0),0},C=1<<31,D={}.hasOwnProperty,E=[],F=E.pop,G=E.push,H=E.push,I=E.slice,J=function(a,b){for(var c=0,d=a.length;d>c;c++)if(a[c]===b)return c;return-1},K="checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped",L="[\\x20\\t\\r\\n\\f]",M="(?:\\\\.|[\\w-]|[^\\x00-\\xa0])+",N=M.replace("w","w#"),O="\\["+L+"*("+M+")(?:"+L+"*([*^$|!~]?=)"+L+"*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|("+N+"))|)"+L+"*\\]",P=":("+M+")(?:\\((('((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\")|((?:\\\\.|[^\\\\()[\\]]|"+O+")*)|.*)\\)|)",Q=new RegExp(L+"+","g"),R=new RegExp("^"+L+"+|((?:^|[^\\\\])(?:\\\\.)*)"+L+"+$","g"),S=new RegExp("^"+L+"*,"+L+"*"),T=new RegExp("^"+L+"*([>+~]|"+L+")"+L+"*"),U=new RegExp("="+L+"*([^\\]'\"]*?)"+L+"*\\]","g"),V=new RegExp(P),W=new RegExp("^"+N+"$"),X={ID:new RegExp("^#("+M+")"),CLASS:new RegExp("^\\.("+M+")"),TAG:new RegExp("^("+M.replace("w","w*")+")"),ATTR:new RegExp("^"+O),PSEUDO:new RegExp("^"+P),CHILD:new RegExp("^:(only|first|last|nth|nth-last)-(child|of-type)(?:\\("+L+"*(even|odd|(([+-]|)(\\d*)n|)"+L+"*(?:([+-]|)"+L+"*(\\d+)|))"+L+"*\\)|)","i"),bool:new RegExp("^(?:"+K+")$","i"),needsContext:new RegExp("^"+L+"*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\("+L+"*((?:-\\d)?\\d*)"+L+"*\\)|)(?=[^-]|$)","i")},Y=/^(?:input|select|textarea|button)$/i,Z=/^h\d$/i,$=/^[^{]+\{\s*\[native \w/,_=/^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/,aa=/[+~]/,ba=/'|\\/g,ca=new RegExp("\\\\([\\da-f]{1,6}"+L+"?|("+L+")|.)","ig"),da=function(a,b,c){var d="0x"+b-65536;return d!==d||c?b:0>d?String.fromCharCode(d+65536):String.fromCharCode(d>>10|55296,1023&d|56320)},ea=function(){m()};try{H.apply(E=I.call(v.childNodes),v.childNodes),E[v.childNodes.length].nodeType}catch(fa){H={apply:E.length?function(a,b){G.apply(a,I.call(b))}:function(a,b){var c=a.length,d=0;while(a[c++]=b[d++]);a.length=c-1}}}function ga(a,b,d,e){var f,h,j,k,l,o,r,s,w,x;if((b?b.ownerDocument||b:v)!==n&&m(b),b=b||n,d=d||[],k=b.nodeType,"string"!=typeof a||!a||1!==k&&9!==k&&11!==k)return d;if(!e&&p){if(11!==k&&(f=_.exec(a)))if(j=f[1]){if(9===k){if(h=b.getElementById(j),!h||!h.parentNode)return d;if(h.id===j)return d.push(h),d}else if(b.ownerDocument&&(h=b.ownerDocument.getElementById(j))&&t(b,h)&&h.id===j)return d.push(h),d}else{if(f[2])return H.apply(d,b.getElementsByTagName(a)),d;if((j=f[3])&&c.getElementsByClassName)return H.apply(d,b.getElementsByClassName(j)),d}if(c.qsa&&(!q||!q.test(a))){if(s=r=u,w=b,x=1!==k&&a,1===k&&"object"!==b.nodeName.toLowerCase()){o=g(a),(r=b.getAttribute("id"))?s=r.replace(ba,"\\$&"):b.setAttribute("id",s),s="[id='"+s+"'] ",l=o.length;while(l--)o[l]=s+ra(o[l]);w=aa.test(a)&&pa(b.parentNode)||b,x=o.join(",")}if(x)try{return H.apply(d,w.querySelectorAll(x)),d}catch(y){}finally{r||b.removeAttribute("id")}}}return i(a.replace(R,"$1"),b,d,e)}function ha(){var a=[];function b(c,e){return a.push(c+" ")>d.cacheLength&&delete b[a.shift()],b[c+" "]=e}return b}function ia(a){return a[u]=!0,a}function ja(a){var b=n.createElement("div");try{return!!a(b)}catch(c){return!1}finally{b.parentNode&&b.parentNode.removeChild(b),b=null}}function ka(a,b){var c=a.split("|"),e=a.length;while(e--)d.attrHandle[c[e]]=b}function la(a,b){var c=b&&a,d=c&&1===a.nodeType&&1===b.nodeType&&(~b.sourceIndex||C)-(~a.sourceIndex||C);if(d)return d;if(c)while(c=c.nextSibling)if(c===b)return-1;return a?1:-1}function ma(a){return function(b){var c=b.nodeName.toLowerCase();return"input"===c&&b.type===a}}function na(a){return function(b){var c=b.nodeName.toLowerCase();return("input"===c||"button"===c)&&b.type===a}}function oa(a){return ia(function(b){return b=+b,ia(function(c,d){var e,f=a([],c.length,b),g=f.length;while(g--)c[e=f[g]]&&(c[e]=!(d[e]=c[e]))})})}function pa(a){return a&&"undefined"!=typeof a.getElementsByTagName&&a}c=ga.support={},f=ga.isXML=function(a){var b=a&&(a.ownerDocument||a).documentElement;return b?"HTML"!==b.nodeName:!1},m=ga.setDocument=function(a){var b,e,g=a?a.ownerDocument||a:v;return g!==n&&9===g.nodeType&&g.documentElement?(n=g,o=g.documentElement,e=g.defaultView,e&&e!==e.top&&(e.addEventListener?e.addEventListener("unload",ea,!1):e.attachEvent&&e.attachEvent("onunload",ea)),p=!f(g),c.attributes=ja(function(a){return a.className="i",!a.getAttribute("className")}),c.getElementsByTagName=ja(function(a){return a.appendChild(g.createComment("")),!a.getElementsByTagName("*").length}),c.getElementsByClassName=$.test(g.getElementsByClassName),c.getById=ja(function(a){return o.appendChild(a).id=u,!g.getElementsByName||!g.getElementsByName(u).length}),c.getById?(d.find.ID=function(a,b){if("undefined"!=typeof b.getElementById&&p){var c=b.getElementById(a);return c&&c.parentNode?[c]:[]}},d.filter.ID=function(a){var b=a.replace(ca,da);return function(a){return a.getAttribute("id")===b}}):(delete d.find.ID,d.filter.ID=function(a){var b=a.replace(ca,da);return function(a){var c="undefined"!=typeof a.getAttributeNode&&a.getAttributeNode("id");return c&&c.value===b}}),d.find.TAG=c.getElementsByTagName?function(a,b){return"undefined"!=typeof b.getElementsByTagName?b.getElementsByTagName(a):c.qsa?b.querySelectorAll(a):void 0}:function(a,b){var c,d=[],e=0,f=b.getElementsByTagName(a);if("*"===a){while(c=f[e++])1===c.nodeType&&d.push(c);return d}return f},d.find.CLASS=c.getElementsByClassName&&function(a,b){return p?b.getElementsByClassName(a):void 0},r=[],q=[],(c.qsa=$.test(g.querySelectorAll))&&(ja(function(a){o.appendChild(a).innerHTML="<a id='"+u+"'></a><select id='"+u+"-\f]' msallowcapture=''><option selected=''></option></select>",a.querySelectorAll("[msallowcapture^='']").length&&q.push("[*^$]="+L+"*(?:''|\"\")"),a.querySelectorAll("[selected]").length||q.push("\\["+L+"*(?:value|"+K+")"),a.querySelectorAll("[id~="+u+"-]").length||q.push("~="),a.querySelectorAll(":checked").length||q.push(":checked"),a.querySelectorAll("a#"+u+"+*").length||q.push(".#.+[+~]")}),ja(function(a){var b=g.createElement("input");b.setAttribute("type","hidden"),a.appendChild(b).setAttribute("name","D"),a.querySelectorAll("[name=d]").length&&q.push("name"+L+"*[*^$|!~]?="),a.querySelectorAll(":enabled").length||q.push(":enabled",":disabled"),a.querySelectorAll("*,:x"),q.push(",.*:")})),(c.matchesSelector=$.test(s=o.matches||o.webkitMatchesSelector||o.mozMatchesSelector||o.oMatchesSelector||o.msMatchesSelector))&&ja(function(a){c.disconnectedMatch=s.call(a,"div"),s.call(a,"[s!='']:x"),r.push("!=",P)}),q=q.length&&new RegExp(q.join("|")),r=r.length&&new RegExp(r.join("|")),b=$.test(o.compareDocumentPosition),t=b||$.test(o.contains)?function(a,b){var c=9===a.nodeType?a.documentElement:a,d=b&&b.parentNode;return a===d||!(!d||1!==d.nodeType||!(c.contains?c.contains(d):a.compareDocumentPosition&&16&a.compareDocumentPosition(d)))}:function(a,b){if(b)while(b=b.parentNode)if(b===a)return!0;return!1},B=b?function(a,b){if(a===b)return l=!0,0;var d=!a.compareDocumentPosition-!b.compareDocumentPosition;return d?d:(d=(a.ownerDocument||a)===(b.ownerDocument||b)?a.compareDocumentPosition(b):1,1&d||!c.sortDetached&&b.compareDocumentPosition(a)===d?a===g||a.ownerDocument===v&&t(v,a)?-1:b===g||b.ownerDocument===v&&t(v,b)?1:k?J(k,a)-J(k,b):0:4&d?-1:1)}:function(a,b){if(a===b)return l=!0,0;var c,d=0,e=a.parentNode,f=b.parentNode,h=[a],i=[b];if(!e||!f)return a===g?-1:b===g?1:e?-1:f?1:k?J(k,a)-J(k,b):0;if(e===f)return la(a,b);c=a;while(c=c.parentNode)h.unshift(c);c=b;while(c=c.parentNode)i.unshift(c);while(h[d]===i[d])d++;return d?la(h[d],i[d]):h[d]===v?-1:i[d]===v?1:0},g):n},ga.matches=function(a,b){return ga(a,null,null,b)},ga.matchesSelector=function(a,b){if((a.ownerDocument||a)!==n&&m(a),b=b.replace(U,"='$1']"),!(!c.matchesSelector||!p||r&&r.test(b)||q&&q.test(b)))try{var d=s.call(a,b);if(d||c.disconnectedMatch||a.document&&11!==a.document.nodeType)return d}catch(e){}return ga(b,n,null,[a]).length>0},ga.contains=function(a,b){return(a.ownerDocument||a)!==n&&m(a),t(a,b)},ga.attr=function(a,b){(a.ownerDocument||a)!==n&&m(a);var e=d.attrHandle[b.toLowerCase()],f=e&&D.call(d.attrHandle,b.toLowerCase())?e(a,b,!p):void 0;return void 0!==f?f:c.attributes||!p?a.getAttribute(b):(f=a.getAttributeNode(b))&&f.specified?f.value:null},ga.error=function(a){throw new Error("Syntax error, unrecognized expression: "+a)},ga.uniqueSort=function(a){var b,d=[],e=0,f=0;if(l=!c.detectDuplicates,k=!c.sortStable&&a.slice(0),a.sort(B),l){while(b=a[f++])b===a[f]&&(e=d.push(f));while(e--)a.splice(d[e],1)}return k=null,a},e=ga.getText=function(a){var b,c="",d=0,f=a.nodeType;if(f){if(1===f||9===f||11===f){if("string"==typeof a.textContent)return a.textContent;for(a=a.firstChild;a;a=a.nextSibling)c+=e(a)}else if(3===f||4===f)return a.nodeValue}else while(b=a[d++])c+=e(b);return c},d=ga.selectors={cacheLength:50,createPseudo:ia,match:X,attrHandle:{},find:{},relative:{">":{dir:"parentNode",first:!0}," ":{dir:"parentNode"},"+":{dir:"previousSibling",first:!0},"~":{dir:"previousSibling"}},preFilter:{ATTR:function(a){return a[1]=a[1].replace(ca,da),a[3]=(a[3]||a[4]||a[5]||"").replace(ca,da),"~="===a[2]&&(a[3]=" "+a[3]+" "),a.slice(0,4)},CHILD:function(a){return a[1]=a[1].toLowerCase(),"nth"===a[1].slice(0,3)?(a[3]||ga.error(a[0]),a[4]=+(a[4]?a[5]+(a[6]||1):2*("even"===a[3]||"odd"===a[3])),a[5]=+(a[7]+a[8]||"odd"===a[3])):a[3]&&ga.error(a[0]),a},PSEUDO:function(a){var b,c=!a[6]&&a[2];return X.CHILD.test(a[0])?null:(a[3]?a[2]=a[4]||a[5]||"":c&&V.test(c)&&(b=g(c,!0))&&(b=c.indexOf(")",c.length-b)-c.length)&&(a[0]=a[0].slice(0,b),a[2]=c.slice(0,b)),a.slice(0,3))}},filter:{TAG:function(a){var b=a.replace(ca,da).toLowerCase();return"*"===a?function(){return!0}:function(a){return a.nodeName&&a.nodeName.toLowerCase()===b}},CLASS:function(a){var b=y[a+" "];return b||(b=new RegExp("(^|"+L+")"+a+"("+L+"|$)"))&&y(a,function(a){return b.test("string"==typeof a.className&&a.className||"undefined"!=typeof a.getAttribute&&a.getAttribute("class")||"")})},ATTR:function(a,b,c){return function(d){var e=ga.attr(d,a);return null==e?"!="===b:b?(e+="","="===b?e===c:"!="===b?e!==c:"^="===b?c&&0===e.indexOf(c):"*="===b?c&&e.indexOf(c)>-1:"$="===b?c&&e.slice(-c.length)===c:"~="===b?(" "+e.replace(Q," ")+" ").indexOf(c)>-1:"|="===b?e===c||e.slice(0,c.length+1)===c+"-":!1):!0}},CHILD:function(a,b,c,d,e){var f="nth"!==a.slice(0,3),g="last"!==a.slice(-4),h="of-type"===b;return 1===d&&0===e?function(a){return!!a.parentNode}:function(b,c,i){var j,k,l,m,n,o,p=f!==g?"nextSibling":"previousSibling",q=b.parentNode,r=h&&b.nodeName.toLowerCase(),s=!i&&!h;if(q){if(f){while(p){l=b;while(l=l[p])if(h?l.nodeName.toLowerCase()===r:1===l.nodeType)return!1;o=p="only"===a&&!o&&"nextSibling"}return!0}if(o=[g?q.firstChild:q.lastChild],g&&s){k=q[u]||(q[u]={}),j=k[a]||[],n=j[0]===w&&j[1],m=j[0]===w&&j[2],l=n&&q.childNodes[n];while(l=++n&&l&&l[p]||(m=n=0)||o.pop())if(1===l.nodeType&&++m&&l===b){k[a]=[w,n,m];break}}else if(s&&(j=(b[u]||(b[u]={}))[a])&&j[0]===w)m=j[1];else while(l=++n&&l&&l[p]||(m=n=0)||o.pop())if((h?l.nodeName.toLowerCase()===r:1===l.nodeType)&&++m&&(s&&((l[u]||(l[u]={}))[a]=[w,m]),l===b))break;return m-=e,m===d||m%d===0&&m/d>=0}}},PSEUDO:function(a,b){var c,e=d.pseudos[a]||d.setFilters[a.toLowerCase()]||ga.error("unsupported pseudo: "+a);return e[u]?e(b):e.length>1?(c=[a,a,"",b],d.setFilters.hasOwnProperty(a.toLowerCase())?ia(function(a,c){var d,f=e(a,b),g=f.length;while(g--)d=J(a,f[g]),a[d]=!(c[d]=f[g])}):function(a){return e(a,0,c)}):e}},pseudos:{not:ia(function(a){var b=[],c=[],d=h(a.replace(R,"$1"));return d[u]?ia(function(a,b,c,e){var f,g=d(a,null,e,[]),h=a.length;while(h--)(f=g[h])&&(a[h]=!(b[h]=f))}):function(a,e,f){return b[0]=a,d(b,null,f,c),b[0]=null,!c.pop()}}),has:ia(function(a){return function(b){return ga(a,b).length>0}}),contains:ia(function(a){return a=a.replace(ca,da),function(b){return(b.textContent||b.innerText||e(b)).indexOf(a)>-1}}),lang:ia(function(a){return W.test(a||"")||ga.error("unsupported lang: "+a),a=a.replace(ca,da).toLowerCase(),function(b){var c;do if(c=p?b.lang:b.getAttribute("xml:lang")||b.getAttribute("lang"))return c=c.toLowerCase(),c===a||0===c.indexOf(a+"-");while((b=b.parentNode)&&1===b.nodeType);return!1}}),target:function(b){var c=a.location&&a.location.hash;return c&&c.slice(1)===b.id},root:function(a){return a===o},focus:function(a){return a===n.activeElement&&(!n.hasFocus||n.hasFocus())&&!!(a.type||a.href||~a.tabIndex)},enabled:function(a){return a.disabled===!1},disabled:function(a){return a.disabled===!0},checked:function(a){var b=a.nodeName.toLowerCase();return"input"===b&&!!a.checked||"option"===b&&!!a.selected},selected:function(a){return a.parentNode&&a.parentNode.selectedIndex,a.selected===!0},empty:function(a){for(a=a.firstChild;a;a=a.nextSibling)if(a.nodeType<6)return!1;return!0},parent:function(a){return!d.pseudos.empty(a)},header:function(a){return Z.test(a.nodeName)},input:function(a){return Y.test(a.nodeName)},button:function(a){var b=a.nodeName.toLowerCase();return"input"===b&&"button"===a.type||"button"===b},text:function(a){var b;return"input"===a.nodeName.toLowerCase()&&"text"===a.type&&(null==(b=a.getAttribute("type"))||"text"===b.toLowerCase())},first:oa(function(){return[0]}),last:oa(function(a,b){return[b-1]}),eq:oa(function(a,b,c){return[0>c?c+b:c]}),even:oa(function(a,b){for(var c=0;b>c;c+=2)a.push(c);return a}),odd:oa(function(a,b){for(var c=1;b>c;c+=2)a.push(c);return a}),lt:oa(function(a,b,c){for(var d=0>c?c+b:c;--d>=0;)a.push(d);return a}),gt:oa(function(a,b,c){for(var d=0>c?c+b:c;++d<b;)a.push(d);return a})}},d.pseudos.nth=d.pseudos.eq;for(b in{radio:!0,checkbox:!0,file:!0,password:!0,image:!0})d.pseudos[b]=ma(b);for(b in{submit:!0,reset:!0})d.pseudos[b]=na(b);function qa(){}qa.prototype=d.filters=d.pseudos,d.setFilters=new qa,g=ga.tokenize=function(a,b){var c,e,f,g,h,i,j,k=z[a+" "];if(k)return b?0:k.slice(0);h=a,i=[],j=d.preFilter;while(h){(!c||(e=S.exec(h)))&&(e&&(h=h.slice(e[0].length)||h),i.push(f=[])),c=!1,(e=T.exec(h))&&(c=e.shift(),f.push({value:c,type:e[0].replace(R," ")}),h=h.slice(c.length));for(g in d.filter)!(e=X[g].exec(h))||j[g]&&!(e=j[g](e))||(c=e.shift(),f.push({value:c,type:g,matches:e}),h=h.slice(c.length));if(!c)break}return b?h.length:h?ga.error(a):z(a,i).slice(0)};function ra(a){for(var b=0,c=a.length,d="";c>b;b++)d+=a[b].value;return d}function sa(a,b,c){var d=b.dir,e=c&&"parentNode"===d,f=x++;return b.first?function(b,c,f){while(b=b[d])if(1===b.nodeType||e)return a(b,c,f)}:function(b,c,g){var h,i,j=[w,f];if(g){while(b=b[d])if((1===b.nodeType||e)&&a(b,c,g))return!0}else while(b=b[d])if(1===b.nodeType||e){if(i=b[u]||(b[u]={}),(h=i[d])&&h[0]===w&&h[1]===f)return j[2]=h[2];if(i[d]=j,j[2]=a(b,c,g))return!0}}}function ta(a){return a.length>1?function(b,c,d){var e=a.length;while(e--)if(!a[e](b,c,d))return!1;return!0}:a[0]}function ua(a,b,c){for(var d=0,e=b.length;e>d;d++)ga(a,b[d],c);return c}function va(a,b,c,d,e){for(var f,g=[],h=0,i=a.length,j=null!=b;i>h;h++)(f=a[h])&&(!c||c(f,d,e))&&(g.push(f),j&&b.push(h));return g}function wa(a,b,c,d,e,f){return d&&!d[u]&&(d=wa(d)),e&&!e[u]&&(e=wa(e,f)),ia(function(f,g,h,i){var j,k,l,m=[],n=[],o=g.length,p=f||ua(b||"*",h.nodeType?[h]:h,[]),q=!a||!f&&b?p:va(p,m,a,h,i),r=c?e||(f?a:o||d)?[]:g:q;if(c&&c(q,r,h,i),d){j=va(r,n),d(j,[],h,i),k=j.length;while(k--)(l=j[k])&&(r[n[k]]=!(q[n[k]]=l))}if(f){if(e||a){if(e){j=[],k=r.length;while(k--)(l=r[k])&&j.push(q[k]=l);e(null,r=[],j,i)}k=r.length;while(k--)(l=r[k])&&(j=e?J(f,l):m[k])>-1&&(f[j]=!(g[j]=l))}}else r=va(r===g?r.splice(o,r.length):r),e?e(null,g,r,i):H.apply(g,r)})}function xa(a){for(var b,c,e,f=a.length,g=d.relative[a[0].type],h=g||d.relative[" "],i=g?1:0,k=sa(function(a){return a===b},h,!0),l=sa(function(a){return J(b,a)>-1},h,!0),m=[function(a,c,d){var e=!g&&(d||c!==j)||((b=c).nodeType?k(a,c,d):l(a,c,d));return b=null,e}];f>i;i++)if(c=d.relative[a[i].type])m=[sa(ta(m),c)];else{if(c=d.filter[a[i].type].apply(null,a[i].matches),c[u]){for(e=++i;f>e;e++)if(d.relative[a[e].type])break;return wa(i>1&&ta(m),i>1&&ra(a.slice(0,i-1).concat({value:" "===a[i-2].type?"*":""})).replace(R,"$1"),c,e>i&&xa(a.slice(i,e)),f>e&&xa(a=a.slice(e)),f>e&&ra(a))}m.push(c)}return ta(m)}function ya(a,b){var c=b.length>0,e=a.length>0,f=function(f,g,h,i,k){var l,m,o,p=0,q="0",r=f&&[],s=[],t=j,u=f||e&&d.find.TAG("*",k),v=w+=null==t?1:Math.random()||.1,x=u.length;for(k&&(j=g!==n&&g);q!==x&&null!=(l=u[q]);q++){if(e&&l){m=0;while(o=a[m++])if(o(l,g,h)){i.push(l);break}k&&(w=v)}c&&((l=!o&&l)&&p--,f&&r.push(l))}if(p+=q,c&&q!==p){m=0;while(o=b[m++])o(r,s,g,h);if(f){if(p>0)while(q--)r[q]||s[q]||(s[q]=F.call(i));s=va(s)}H.apply(i,s),k&&!f&&s.length>0&&p+b.length>1&&ga.uniqueSort(i)}return k&&(w=v,j=t),r};return c?ia(f):f}return h=ga.compile=function(a,b){var c,d=[],e=[],f=A[a+" "];if(!f){b||(b=g(a)),c=b.length;while(c--)f=xa(b[c]),f[u]?d.push(f):e.push(f);f=A(a,ya(e,d)),f.selector=a}return f},i=ga.select=function(a,b,e,f){var i,j,k,l,m,n="function"==typeof a&&a,o=!f&&g(a=n.selector||a);if(e=e||[],1===o.length){if(j=o[0]=o[0].slice(0),j.length>2&&"ID"===(k=j[0]).type&&c.getById&&9===b.nodeType&&p&&d.relative[j[1].type]){if(b=(d.find.ID(k.matches[0].replace(ca,da),b)||[])[0],!b)return e;n&&(b=b.parentNode),a=a.slice(j.shift().value.length)}i=X.needsContext.test(a)?0:j.length;while(i--){if(k=j[i],d.relative[l=k.type])break;if((m=d.find[l])&&(f=m(k.matches[0].replace(ca,da),aa.test(j[0].type)&&pa(b.parentNode)||b))){if(j.splice(i,1),a=f.length&&ra(j),!a)return H.apply(e,f),e;break}}}return(n||h(a,o))(f,b,!p,e,aa.test(a)&&pa(b.parentNode)||b),e},c.sortStable=u.split("").sort(B).join("")===u,c.detectDuplicates=!!l,m(),c.sortDetached=ja(function(a){return 1&a.compareDocumentPosition(n.createElement("div"))}),ja(function(a){return a.innerHTML="<a href='#'></a>","#"===a.firstChild.getAttribute("href")})||ka("type|href|height|width",function(a,b,c){return c?void 0:a.getAttribute(b,"type"===b.toLowerCase()?1:2)}),c.attributes&&ja(function(a){return a.innerHTML="<input/>",a.firstChild.setAttribute("value",""),""===a.firstChild.getAttribute("value")})||ka("value",function(a,b,c){return c||"input"!==a.nodeName.toLowerCase()?void 0:a.defaultValue}),ja(function(a){return null==a.getAttribute("disabled")})||ka(K,function(a,b,c){var d;return c?void 0:a[b]===!0?b.toLowerCase():(d=a.getAttributeNode(b))&&d.specified?d.value:null}),ga}(a);m.find=s,m.expr=s.selectors,m.expr[":"]=m.expr.pseudos,m.unique=s.uniqueSort,m.text=s.getText,m.isXMLDoc=s.isXML,m.contains=s.contains;var t=m.expr.match.needsContext,u=/^<(\w+)\s*\/?>(?:<\/\1>|)$/,v=/^.[^:#\[\.,]*$/;function w(a,b,c){if(m.isFunction(b))return m.grep(a,function(a,d){return!!b.call(a,d,a)!==c});if(b.nodeType)return m.grep(a,function(a){return a===b!==c});if("string"==typeof b){if(v.test(b))return m.filter(b,a,c);b=m.filter(b,a)}return m.grep(a,function(a){return m.inArray(a,b)>=0!==c})}m.filter=function(a,b,c){var d=b[0];return c&&(a=":not("+a+")"),1===b.length&&1===d.nodeType?m.find.matchesSelector(d,a)?[d]:[]:m.find.matches(a,m.grep(b,function(a){return 1===a.nodeType}))},m.fn.extend({find:function(a){var b,c=[],d=this,e=d.length;if("string"!=typeof a)return this.pushStack(m(a).filter(function(){for(b=0;e>b;b++)if(m.contains(d[b],this))return!0}));for(b=0;e>b;b++)m.find(a,d[b],c);return c=this.pushStack(e>1?m.unique(c):c),c.selector=this.selector?this.selector+" "+a:a,c},filter:function(a){return this.pushStack(w(this,a||[],!1))},not:function(a){return this.pushStack(w(this,a||[],!0))},is:function(a){return!!w(this,"string"==typeof a&&t.test(a)?m(a):a||[],!1).length}});var x,y=a.document,z=/^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/,A=m.fn.init=function(a,b){var c,d;if(!a)return this;if("string"==typeof a){if(c="<"===a.charAt(0)&&">"===a.charAt(a.length-1)&&a.length>=3?[null,a,null]:z.exec(a),!c||!c[1]&&b)return!b||b.jquery?(b||x).find(a):this.constructor(b).find(a);if(c[1]){if(b=b instanceof m?b[0]:b,m.merge(this,m.parseHTML(c[1],b&&b.nodeType?b.ownerDocument||b:y,!0)),u.test(c[1])&&m.isPlainObject(b))for(c in b)m.isFunction(this[c])?this[c](b[c]):this.attr(c,b[c]);return this}if(d=y.getElementById(c[2]),d&&d.parentNode){if(d.id!==c[2])return x.find(a);this.length=1,this[0]=d}return this.context=y,this.selector=a,this}return a.nodeType?(this.context=this[0]=a,this.length=1,this):m.isFunction(a)?"undefined"!=typeof x.ready?x.ready(a):a(m):(void 0!==a.selector&&(this.selector=a.selector,this.context=a.context),m.makeArray(a,this))};A.prototype=m.fn,x=m(y);var B=/^(?:parents|prev(?:Until|All))/,C={children:!0,contents:!0,next:!0,prev:!0};m.extend({dir:function(a,b,c){var d=[],e=a[b];while(e&&9!==e.nodeType&&(void 0===c||1!==e.nodeType||!m(e).is(c)))1===e.nodeType&&d.push(e),e=e[b];return d},sibling:function(a,b){for(var c=[];a;a=a.nextSibling)1===a.nodeType&&a!==b&&c.push(a);return c}}),m.fn.extend({has:function(a){var b,c=m(a,this),d=c.length;return this.filter(function(){for(b=0;d>b;b++)if(m.contains(this,c[b]))return!0})},closest:function(a,b){for(var c,d=0,e=this.length,f=[],g=t.test(a)||"string"!=typeof a?m(a,b||this.context):0;e>d;d++)for(c=this[d];c&&c!==b;c=c.parentNode)if(c.nodeType<11&&(g?g.index(c)>-1:1===c.nodeType&&m.find.matchesSelector(c,a))){f.push(c);break}return this.pushStack(f.length>1?m.unique(f):f)},index:function(a){return a?"string"==typeof a?m.inArray(this[0],m(a)):m.inArray(a.jquery?a[0]:a,this):this[0]&&this[0].parentNode?this.first().prevAll().length:-1},add:function(a,b){return this.pushStack(m.unique(m.merge(this.get(),m(a,b))))},addBack:function(a){return this.add(null==a?this.prevObject:this.prevObject.filter(a))}});function D(a,b){do a=a[b];while(a&&1!==a.nodeType);return a}m.each({parent:function(a){var b=a.parentNode;return b&&11!==b.nodeType?b:null},parents:function(a){return m.dir(a,"parentNode")},parentsUntil:function(a,b,c){return m.dir(a,"parentNode",c)},next:function(a){return D(a,"nextSibling")},prev:function(a){return D(a,"previousSibling")},nextAll:function(a){return m.dir(a,"nextSibling")},prevAll:function(a){return m.dir(a,"previousSibling")},nextUntil:function(a,b,c){return m.dir(a,"nextSibling",c)},prevUntil:function(a,b,c){return m.dir(a,"previousSibling",c)},siblings:function(a){return m.sibling((a.parentNode||{}).firstChild,a)},children:function(a){return m.sibling(a.firstChild)},contents:function(a){return m.nodeName(a,"iframe")?a.contentDocument||a.contentWindow.document:m.merge([],a.childNodes)}},function(a,b){m.fn[a]=function(c,d){var e=m.map(this,b,c);return"Until"!==a.slice(-5)&&(d=c),d&&"string"==typeof d&&(e=m.filter(d,e)),this.length>1&&(C[a]||(e=m.unique(e)),B.test(a)&&(e=e.reverse())),this.pushStack(e)}});var E=/\S+/g,F={};function G(a){var b=F[a]={};return m.each(a.match(E)||[],function(a,c){b[c]=!0}),b}m.Callbacks=function(a){a="string"==typeof a?F[a]||G(a):m.extend({},a);var b,c,d,e,f,g,h=[],i=!a.once&&[],j=function(l){for(c=a.memory&&l,d=!0,f=g||0,g=0,e=h.length,b=!0;h&&e>f;f++)if(h[f].apply(l[0],l[1])===!1&&a.stopOnFalse){c=!1;break}b=!1,h&&(i?i.length&&j(i.shift()):c?h=[]:k.disable())},k={add:function(){if(h){var d=h.length;!function f(b){m.each(b,function(b,c){var d=m.type(c);"function"===d?a.unique&&k.has(c)||h.push(c):c&&c.length&&"string"!==d&&f(c)})}(arguments),b?e=h.length:c&&(g=d,j(c))}return this},remove:function(){return h&&m.each(arguments,function(a,c){var d;while((d=m.inArray(c,h,d))>-1)h.splice(d,1),b&&(e>=d&&e--,f>=d&&f--)}),this},has:function(a){return a?m.inArray(a,h)>-1:!(!h||!h.length)},empty:function(){return h=[],e=0,this},disable:function(){return h=i=c=void 0,this},disabled:function(){return!h},lock:function(){return i=void 0,c||k.disable(),this},locked:function(){return!i},fireWith:function(a,c){return!h||d&&!i||(c=c||[],c=[a,c.slice?c.slice():c],b?i.push(c):j(c)),this},fire:function(){return k.fireWith(this,arguments),this},fired:function(){return!!d}};return k},m.extend({Deferred:function(a){var b=[["resolve","done",m.Callbacks("once memory"),"resolved"],["reject","fail",m.Callbacks("once memory"),"rejected"],["notify","progress",m.Callbacks("memory")]],c="pending",d={state:function(){return c},always:function(){return e.done(arguments).fail(arguments),this},then:function(){var a=arguments;return m.Deferred(function(c){m.each(b,function(b,f){var g=m.isFunction(a[b])&&a[b];e[f[1]](function(){var a=g&&g.apply(this,arguments);a&&m.isFunction(a.promise)?a.promise().done(c.resolve).fail(c.reject).progress(c.notify):c[f[0]+"With"](this===d?c.promise():this,g?[a]:arguments)})}),a=null}).promise()},promise:function(a){return null!=a?m.extend(a,d):d}},e={};return d.pipe=d.then,m.each(b,function(a,f){var g=f[2],h=f[3];d[f[1]]=g.add,h&&g.add(function(){c=h},b[1^a][2].disable,b[2][2].lock),e[f[0]]=function(){return e[f[0]+"With"](this===e?d:this,arguments),this},e[f[0]+"With"]=g.fireWith}),d.promise(e),a&&a.call(e,e),e},when:function(a){var b=0,c=d.call(arguments),e=c.length,f=1!==e||a&&m.isFunction(a.promise)?e:0,g=1===f?a:m.Deferred(),h=function(a,b,c){return function(e){b[a]=this,c[a]=arguments.length>1?d.call(arguments):e,c===i?g.notifyWith(b,c):--f||g.resolveWith(b,c)}},i,j,k;if(e>1)for(i=new Array(e),j=new Array(e),k=new Array(e);e>b;b++)c[b]&&m.isFunction(c[b].promise)?c[b].promise().done(h(b,k,c)).fail(g.reject).progress(h(b,j,i)):--f;return f||g.resolveWith(k,c),g.promise()}});var H;m.fn.ready=function(a){return m.ready.promise().done(a),this},m.extend({isReady:!1,readyWait:1,holdReady:function(a){a?m.readyWait++:m.ready(!0)},ready:function(a){if(a===!0?!--m.readyWait:!m.isReady){if(!y.body)return setTimeout(m.ready);m.isReady=!0,a!==!0&&--m.readyWait>0||(H.resolveWith(y,[m]),m.fn.triggerHandler&&(m(y).triggerHandler("ready"),m(y).off("ready")))}}});function I(){y.addEventListener?(y.removeEventListener("DOMContentLoaded",J,!1),a.removeEventListener("load",J,!1)):(y.detachEvent("onreadystatechange",J),a.detachEvent("onload",J))}function J(){(y.addEventListener||"load"===event.type||"complete"===y.readyState)&&(I(),m.ready())}m.ready.promise=function(b){if(!H)if(H=m.Deferred(),"complete"===y.readyState)setTimeout(m.ready);else if(y.addEventListener)y.addEventListener("DOMContentLoaded",J,!1),a.addEventListener("load",J,!1);else{y.attachEvent("onreadystatechange",J),a.attachEvent("onload",J);var c=!1;try{c=null==a.frameElement&&y.documentElement}catch(d){}c&&c.doScroll&&!function e(){if(!m.isReady){try{c.doScroll("left")}catch(a){return setTimeout(e,50)}I(),m.ready()}}()}return H.promise(b)};var K="undefined",L;for(L in m(k))break;k.ownLast="0"!==L,k.inlineBlockNeedsLayout=!1,m(function(){var a,b,c,d;c=y.getElementsByTagName("body")[0],c&&c.style&&(b=y.createElement("div"),d=y.createElement("div"),d.style.cssText="position:absolute;border:0;width:0;height:0;top:0;left:-9999px",c.appendChild(d).appendChild(b),typeof b.style.zoom!==K&&(b.style.cssText="display:inline;margin:0;border:0;padding:1px;width:1px;zoom:1",k.inlineBlockNeedsLayout=a=3===b.offsetWidth,a&&(c.style.zoom=1)),c.removeChild(d))}),function(){var a=y.createElement("div");if(null==k.deleteExpando){k.deleteExpando=!0;try{delete a.test}catch(b){k.deleteExpando=!1}}a=null}(),m.acceptData=function(a){var b=m.noData[(a.nodeName+" ").toLowerCase()],c=+a.nodeType||1;return 1!==c&&9!==c?!1:!b||b!==!0&&a.getAttribute("classid")===b};var M=/^(?:\{[\w\W]*\}|\[[\w\W]*\])$/,N=/([A-Z])/g;function O(a,b,c){if(void 0===c&&1===a.nodeType){var d="data-"+b.replace(N,"-$1").toLowerCase();if(c=a.getAttribute(d),"string"==typeof c){try{c="true"===c?!0:"false"===c?!1:"null"===c?null:+c+""===c?+c:M.test(c)?m.parseJSON(c):c}catch(e){}m.data(a,b,c)}else c=void 0}return c}function P(a){var b;for(b in a)if(("data"!==b||!m.isEmptyObject(a[b]))&&"toJSON"!==b)return!1;
@@ -362,9 +362,9 @@ summary {
 
 
 
-<h1 class="title toc-ignore">Tópico 3 - Exercicio</h1>
+<h1 class="title toc-ignore">Tópico 4 - exercicios</h1>
 <h4 class="author">Marcelo Tonon e Felipe Cornelio</h4>
-<h4 class="date">21/06/2020</h4>
+<h4 class="date">30/06/2020</h4>
 
 </div>
 
@@ -373,7 +373,8 @@ summary {
 <h2>Pacotes necessários para esse exercício.</h2>
 <pre class="r"><code>library(tidyverse)
 library(magrittr)
-library(readxl)</code></pre>
+library(readxl)
+library(tictoc)</code></pre>
 </div>
 <div id="the-seviration-enfrentando-os-seus-erros." class="section level2">
 <h2><strong><em>The SeViration:</em></strong> Enfrentando os seus erros.</h2>
@@ -420,320 +421,295 @@ vignette(&quot;tidy-data&quot;)</code></pre>
 </div>
 <div id="exercicios" class="section level2">
 <h2>Exercicios</h2>
-<div id="lendo-a-niot-2016-para-a-italia-wiod-pela-primeira-vez" class="section level3">
-<h3>1. Lendo a NIOT 2016 para a Italia (WIOD) pela primeira vez</h3>
-<p>Vamos agora usar a base de dados NIOT para praticar o que foi passado nos últimos tópicos. As NIOT (em inglês National Input Output Tables) estão disponíveis no <a href="http://www.wiod.org/">site da WIOD</a>. Para acessar a página de download das NIOT’, clique na aba <code>Release 2016</code> opção <code>Input-Output Tables</code> e numa coluna na parte direita da tela escrito <code>Related Tables</code> clique na opção <code>National Tables</code>(<a href="http://www.wiod.org/database/niots16">Clique aqui</a> para acessar a página). Lá terá a opção <code>Italy NIOT</code> para baixar, ou <a href="http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx">clique aqui</a>.</p>
-<p>Porém vamos agora mostrar uma outra forma de baixar, os dados sem precisar sair do Rstudio. (E sem gravar no disco rígido esse arquivo, usando apenas um arquivo temporário)</p>
-<pre class="r"><code>library(readxl)
+<div id="conceito-da-aula" class="section level3">
+<h3>1. Conceito da aula</h3>
+<div id="q.1.1---o-que-é-uma-função-vetorizada" class="section level4">
+<h4>Q.1.1 - O que é uma função vetorizada?</h4>
+<pre class="r"><code>&quot;Uma função vetorizada é uma função que opera sobre todos os elementos de um vetor de uma vez só.&quot;</code></pre>
+<pre><code>## [1] &quot;Uma função vetorizada é uma função que opera sobre todos os elementos de um vetor de uma vez só.&quot;</code></pre>
+</div>
+<div id="q.1.2---descubra-quais-das-funções-abaixo-são-funções-vetorizadas-e-quais-não-são." class="section level4">
+<h4>Q.1.2 - Descubra quais das funções abaixo são funções vetorizadas e quais não são.</h4>
+<pre class="r"><code>==
+!=
++
+-
+%*%
+paste0
+sum
+mean
+ifelse</code></pre>
+</div>
+<div id="q.1.3-quais-os-dois-motivos-principais-para-fazer-um-código-de-forma-automática-e-não-manualmente" class="section level4">
+<h4>Q.1.3 Quais os dois motivos principais para fazer um código de forma automática e não manualmente?</h4>
+<pre class="r"><code>&quot;Praticidade e Evitar erros&quot;</code></pre>
+<pre><code>## [1] &quot;Praticidade e Evitar erros&quot;</code></pre>
+</div>
+</div>
+<div id="automatizando-tarefas-e-o-pacote-tictoc-enfase-nos-exercicios-do-tópico-3." class="section level3">
+<h3>2. Automatizando tarefas e o pacote <code>tictoc</code>: enfase nos exercicios do Tópico 3.</h3>
+<p>Uma forma inteligente para se automatizar um código é primeiro criar uma versão para apenas um caso e então buscar generalizar. Vejamos o seguinte exemplo, usando <code>for</code>:</p>
+<pre class="r"><code>#Temos uma lista com diversos elementos
+lista_exemplo &lt;-list(&quot;a&quot;, 1.1, 2L, TRUE, data.frame(c(1:3), letters[1:3]), matrix(c(1:4), nrow=2))
+
+#Queremos os valores de typeof de cada elemento dela. Porém, antes de automatizar fazemos para o 1o elemento.
+
+# Passo 1: Criamos uma lista vazia
+lst_typeof &lt;- list()
+
+# Passo 2: Fazendo para o primeiro valor
+lst_typeof[[1]] &lt;- typeof(lista_exemplo[[1]])
+
+# Dando certo, podemos então automatizar.
+# Passo 3: Podemos definir um objeto &quot;i&quot; e usar ele ao inves de 1.
+
+i &lt;- 1
+lst_typeof[[i]] &lt;- typeof(lista_exemplo[[i]])
+
+# Passo 4: Agora basta criar um for com i definido numa sequência
+
+for(i in 1:length(lista_exemplo)){
+lst_typeof[[1]] &lt;- typeof(lista_exemplo[[1]])
+}</code></pre>
+<p>O passo 3 no exemplo acima pode ser considerado supérfluo e você provavelmente vai apaga-lo ao escrever o passo 4. No entanto, especialmente quando você tiver fazendo automatizações mais complexas (que podem envolver não só um <code>&quot;i&quot;</code> mas também um <code>&quot;j&quot;</code>, <code>&quot;h&quot;</code> e etc), fazer o passo 3 pode dar uma maior clareza no que você está fazendo.</p>
+<div id="q.2.1---crie-um-vetor-atômico-paisesq2.1-contendo-os-seguintes-valores-aus-hun-esp." class="section level4">
+<h4>Q.2.1 - Crie um vetor atômico <code>paisesQ2.1</code> contendo os seguintes valores: <code>&quot;AUS&quot;, &quot;HUN&quot;, &quot;ESP&quot;</code>.</h4>
+<pre class="r"><code>paisesQ2.1 &lt;- c(&quot;AUS&quot;, &quot;HUN&quot;, &quot;ESP&quot;)</code></pre>
+</div>
+<div id="q.2.2---no-exercicio-do-tópico-2-foi-realizado-o-download-dos-dados-da-niot-para-a-italia-cujo-código-era-ita.-naquele-caso-a-url-era" class="section level4">
+<h4>Q.2.2 - No exercicio do Tópico 2 foi realizado o download dos dados da niot para a Italia, cujo código era <code>ITA</code>. Naquele caso a url era:</h4>
+<pre class="r"><code>&quot;http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx&quot;</code></pre>
+<p>Sabendo que todos os links da niot seguem o mesmo padrão, crie um vetor <code>urlsQ2.2</code> usando os valores de <code>paisesQ2.1</code> para criar um vetor com os links dos países de <code>paisesQ2.1</code>.</p>
+<pre class="r"><code>urlsQ2.2 &lt;- paste0(&quot;http://www.wiod.org/protected3/data16/niot/&quot;, paisesQ2.1,&quot;_niot_nov16.xlsx&quot;)</code></pre>
+</div>
+<div id="q.2.3---é-necessário-usar-for-neste-caso-por-que" class="section level4">
+<h4>Q.2.3 - É necessário usar <code>for</code> neste caso? Por que?</h4>
+<pre class="r"><code>&quot;Não, pois paste0() é uma função vetorizada&quot;</code></pre>
+<pre><code>## [1] &quot;Não, pois paste0() é uma função vetorizada&quot;</code></pre>
+</div>
+<div id="q.2.4---crie-uma-lista-vazia-chamada-niotq2" class="section level4">
+<h4>Q.2.4 - Crie uma lista vazia chamada <code>niotQ2</code></h4>
+</div>
+<div id="q.2.5---extraia-apenas-o-primeiro-valor-de-urlsq2.2-e-use-o-para-importar-a-base-de-dados-a-partir-dessa-url-tal-qual-foi-feito-para-niotita-no-inicio-do-exercicio-do-tópico-3.-aloque-esse-tibble-como-o-primeiro-elemento-de-niotq2" class="section level4">
+<h4>Q.2.5 - Extraia apenas o primeiro valor de <code>urlsQ2.2</code> e use-o para importar a base de dados a partir dessa url tal qual foi feito para <code>niotITA</code> no inicio do exercicio do Tópico 3. Aloque esse tibble como o primeiro elemento de <code>niotQ2</code></h4>
+<pre class="r"><code>niotQ2 &lt;- list()
+library(readxl)
 #Criando um arquivo temporário
 arq_temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)
 #Baixando o arquivo
 # Usamos &#39;mode = &quot;wb&quot;&#39; porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
-download.file(url = &quot;http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx&quot;, destfile = arq_temp, mode = &quot;wb&quot;)
+download.file(url = urlsQ2.2[1], destfile = arq_temp, mode = &quot;wb&quot;)
 
 # Importando a NIOT para o R:
-niotITA &lt;- read_xlsx(arq_temp, sheet = 2)
+niotQ2 &lt;- list()
+niotQ2[[1]] &lt;- read_xlsx(arq_temp, sheet = 2)
 
 # Excluindo arq_temp
 unlink(arq_temp)</code></pre>
-<p>Existem vantagens e desvantagens de você baixar as coisas diretamente do seu terminal. Uma desvantagem é que pode ser mais lento baixar pelo R do que pelo brownser. Além disso, se sua conexão for instável, pode dar tudo errado no meio do caminho. Além disso nem sempre dá certo o download pelo R. Por outro lado, você ter até o download no seu código aumenta bastante a reprodutibilidade dele, fazendo que com que não seja necessário nada além do código para baixar ele. A sugestão dada é na primeira vez, baixar o arquivo manualmente, e então ver como você pode tratar o(s) arquivo(s) e então buscar automatizar no código o download.</p>
-<p>Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter problemas. Rode o código acima para seguir no exercicio a seguir.</p>
 </div>
-<div id="tidyverse" class="section level3">
-<h3>Tidyverse</h3>
-<div id="q.1.0-vizualize-niotita.-qual-é-o-problema-com-os-valores" class="section level4">
-<h4>Q.1.0 Vizualize <code>niotITA</code>. Qual é o problema com os valores?</h4>
-</div>
-<div id="q.1.1-crie-um-arquivo-q11niotita.rdata-com-os-dados-da-niotita" class="section level4">
-<h4>Q.1.1 Crie um arquivo <code>Q11niotITA.Rdata</code> com os dados da <code>niotITA</code></h4>
-</div>
-<div id="q.1.2-qual-é-a-class-e-type-de-niotita" class="section level4">
-<h4>Q.1.2 Qual é a <code>class</code> e <code>type</code> de <code>niotITA</code>?</h4>
-</div>
-<div id="q.1.3-usando-o-pacote-dplyr-crie-um-objeto-itaq1.3-que-exclui-de-niotita-as-linhas-que-possuem-na." class="section level4">
-<h4>Q.1.3 Usando o pacote <code>dplyr</code>, crie um objeto <code>ItaQ1.3</code> que exclui de <code>niotITA</code> as linhas que possuem NA.</h4>
-</div>
-<div id="q.1.4-usando-o-pacote-tidyr-crie-um-objeto-itaq1.4-que-exclui-de-niotita-as-linhas-que-possuem-na." class="section level4">
-<h4>Q.1.4 Usando o pacote <code>tidyr</code>, crie um objeto <code>ItaQ1.4</code> que exclui de <code>niotITA</code> as linhas que possuem NA.</h4>
-</div>
-<div id="q.1.5-confira-se-itaq1.4-e-itaq1.3-são-iguais." class="section level4">
-<h4>Q.1.5 Confira se <code>ItaQ1.4</code> e <code>ItaQ1.3</code> são iguais.</h4>
-</div>
-<div id="q.1.6-crie-um-data.frame-vecq1.6-com-a-linha-de-niotita-que-possui-na." class="section level4">
-<h4>Q.1.6 Crie um data.frame <code>vecQ1.6</code> com a linha de <code>niotITA</code> que possui <code>NA</code>.</h4>
-</div>
-<div id="q.1.7-crie-um-vetor-atômico-vecq1.7-de-tal-modo-que-os-valores-de-vecq1.6-que-contém-na-fiquem-com-os-nomes-das-suas-respectivas-colunas." class="section level4">
-<h4>Q.1.7 Crie um <strong>vetor atômico</strong> <code>vecQ1.7</code>, de tal modo que os valores de <code>vecQ1.6</code> que contém <code>NA</code> fiquem com os nomes das suas respectivas colunas.</h4>
-<p><em>Dica 1:</em> Crie <code>vecQ1.7</code> como cópia de <code>vecQ1.6</code> (<code>vecQ1.7 &lt;- vecQ1.6</code>) para iniciar a resolução. Porém, fique atento, pois tem não uma, mas duas pegadinhas.</p>
-</div>
-<div id="d.1.1-desafio-complicado-crie-a-partir-de-vecq1.6-um-vetor-atómico-vecd1.1-que-fique-igual-à-vecq1.6.-porém-o-faça-sem-escrever-arbitrariamente-o-índice-das-colunas.-ou-seja-não-escreva-número-algum-para-além-dos-usados-nos-nomes-dos-objetos." class="section level4">
-<h4>D.1.1 <strong>DESAFIO COMPLICADO:</strong> Crie, <strong>a partir de <code>vecQ1.6</code></strong>, um vetor atómico <code>vecD1.1</code> que fique igual à <code>vecQ1.6</code>. <strong>PORÉM</strong>, o faça sem escrever arbitrariamente o índice das colunas. Ou seja, não escreva número algum para além dos usados nos nomes dos objetos.</h4>
-</div>
-<div id="q.1.8-coloque-vecq1.7-como-os-colnames-de-itaq1.4." class="section level4">
-<h4>Q.1.8 Coloque <code>vecQ1.7</code> como os <code>colnames</code> de <code>ItaQ1.4</code>.</h4>
-</div>
-<div id="d.1.2-confira-o-tipo-de-dados-presentes-da-5a-coluna-de-itaq1.3.-list-não-é-a-resposta-que-você-quer." class="section level4">
-<h4>D.1.2 Confira o tipo de dados presentes da 5a coluna de ItaQ1.3. <code>list</code> não é a resposta que você quer.</h4>
-</div>
-<div id="q.1.9-converta-em-double-todas-as-colunas-de-itaq1.3-que-são-pássiveis-de-serem-convertidas.-faça-isso-com-apenas-um-comando.-nomeie-de-itaq1.9" class="section level4">
-<h4>Q.1.9 Converta em <code>double</code> todas as colunas de <code>ItaQ1.3</code> que são pássiveis de serem convertidas. Faça isso com apenas um comando. Nomeie de <code>ItaQ1.9</code></h4>
-</div>
-</div>
-<div id="separando-as-varíaves-de-demanda-final." class="section level3">
-<h3>2. Separando as varíaves de demanda final.</h3>
-<p>Vamos agora separar as varíaveis de demanda final da tabela <code>ItaQ1.3</code> do restante delas.</p>
-<div id="q.2.1-crie-um-objeto-itaq2.1-a-partir-de-itaq1.9-em-que-as-linhas-da-coluna-origin-que-tem-os-valores-tot-são-excluidas.-você-consegue-fazer-tanto-pelo-base-r-quanto-pelo-tidyverse" class="section level4">
-<h4>Q.2.1 Crie um objeto <code>ItaQ2.1</code> a partir de <code>ItaQ1.9</code> em que as linhas da coluna <code>Origin</code> que tem os valores <code>&quot;TOT&quot;</code> são excluidas. Você consegue fazer tanto pelo Base R quanto pelo tidyverse?</h4>
-</div>
-<div id="q.2.2-crie-o-objeto-codeq2.2-a-partir-da-coluna-code-de-itaq2.1-de-modo-que-esta-não-tenha-nenhum-valor-repetido.-pense-no-máximo-de-formas-possíveis-que-você-consegue-fazer-isso." class="section level4">
-<h4>Q.2.2 Crie o objeto <code>CodeQ2.2</code> a partir da coluna <code>Code</code> de <code>ItaQ2.1</code> de modo que esta não tenha nenhum valor repetido. Pense no máximo de formas possíveis que você consegue fazer isso.</h4>
-<p>Repare que esses codes são os mesmos que os nomes das colunas de <code>ItaQ2.1</code>. E que a Demanda Final está apenas nas colunas.</p>
-</div>
-<div id="q.2.3-crie-um-vetor-atômico-vecq2.3que-inclua-os-nomes-das-quatro-primeiras-colunas-de-itaq2.1-e-todos-os-valores-de-code." class="section level4">
-<h4>Q.2.3 Crie um vetor atômico <code>vecQ2.3</code>que inclua os nomes das quatro primeiras colunas de <code>ItaQ2.1</code> e todos os valores de Code.</h4>
-</div>
-<div id="q.2.4-crie-uma-base-de-dados-itaq2.4-selecionando-os-dados-de-itaq1.9-que-são-da-demanda-intersetorial-ou-seja-não-são-da-demanda-final.-não-use-nenhum-número-arbitrário.-de-quantas-formas-você-consegue-fazer-isso-não-deixe-de-selecionar-as-4-primeiras-colunas-com-as-informações-dos-dados." class="section level4">
-<h4>Q.2.4 Crie uma base de dados <code>ItaQ2.4</code> selecionando os dados de <code>ItaQ1.9</code> que são da demanda intersetorial (ou seja, não são da demanda final). <strong>Não use nenhum número arbitrário</strong>. De quantas formas você consegue fazer isso? Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.</h4>
-</div>
-<div id="q.2.5-crie-uma-base-de-dados-itaq2.5-selecionando-as-colunas-de-itaq1.9-que-são-da-demanda-final-ou-seja-não-são-da-demanda-intersetorial.-não-use-nenhum-número-arbitrário.-não-deixe-de-selecionar-as-4-primeiras-colunas-com-as-informações-dos-dados." class="section level4">
-<h4>Q.2.5 Crie uma base de dados <code>ItaQ2.5</code> selecionando as colunas de <code>ItaQ1.9</code> que são da demanda final (ou seja, não são da demanda intersetorial). <strong>Não use nenhum número arbitrário</strong>. Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.</h4>
-</div>
-<div id="q.2.7-quantas-são-as-colunas-da-demanda-final-calcule-pela-de-itaq1.9-diferença-em-relação-à-itaq2.4.-nomeie-o-valor-de-q2.7" class="section level4">
-<h4>Q.2.7 Quantas são as colunas da demanda final? Calcule pela de <code>ItaQ1.9</code> diferença em relação à <code>ItaQ2.4</code>. Nomeie o valor de <code>Q2.7</code></h4>
-</div>
-<div id="d.2.1-provido-do-número-de-colunas-de-itaq1.9-e-do-valor-q2.7-crie-um-objeto-chamado-itad2.1-que-seja-igual-à-itaq2.4.-não-use-nenhum-número-arbitrário." class="section level4">
-<h4>D.2.1 Provido do número de colunas de <code>ItaQ1.9</code> e do valor <code>Q2.7</code>, crie um objeto chamado <code>ItaD2.1</code> que seja igual à <code>ItaQ2.4</code>. <em>Não use nenhum número arbitrário</em>.</h4>
-</div>
-</div>
-<div id="treinando-subsetting-de-linhas" class="section level3">
-<h3>3. Treinando subsetting de linhas</h3>
-<p>Nas questões a seguir, exceto se indicado, a tabela <code>ItaQ1.9</code> será a base de dados a ser manipulada.</p>
-<div id="q.3.1-crie-um-objeto-itaq3.1-que-contenha-apenas-os-valores-imports-do-ano-de-2000.-de-quais-formas-você-consegue-fazer-isso" class="section level4">
-<h4>Q.3.1 Crie um objeto <code>ItaQ3.1</code>, que contenha apenas os valores <code>&quot;Imports&quot;</code> do ano de 2000. De quais formas você consegue fazer isso?</h4>
-</div>
-<div id="q.3.2-crie-um-objeto-itaq3.2-contendo-os-valores-domestic-do-setor-b-para-os-anos-entre-2000-e-2005." class="section level4">
-<h4>Q.3.2 Crie um objeto <code>ItaQ3.2</code>, contendo os valores <code>&quot;Domestic&quot;</code> do setor <code>B</code> para os anos entre 2000 e 2005.</h4>
-</div>
-<div id="q.3.3-crie-itaq3.3-de-modo-que-tenha-apenas-os-valores-para-o-ano-2000-e-que-os-valores-do-gross-output-código-go-sejam-maiores-ou-iguais-a-média-de-go." class="section level4">
-<h4>Q.3.3 Crie <code>ItaQ3.3</code> de modo que tenha apenas os valores para o ano 2000 e que os valores do <em>Gross Output</em> (código <code>GO</code>) sejam maiores ou iguais a média de <code>GO</code>.</h4>
-</div>
-<div id="q.3.4-crie-itaq3.4-com-os-valores-do-coluna-go-pertos-de-20000-com-uma-tolerância-de-15000." class="section level4">
-<h4>Q.3.4 Crie <code>ItaQ3.4</code> com os valores do coluna <code>GO</code> pertos de <code>20000</code> com uma tolerância de <code>15000</code>.</h4>
-</div>
-<div id="q.3.5-some-os-valores-de-todas-as-linhas-da-base-filtrada-com-as-seguintes-caracteristicas-origin-domestic-year-2000.-chame-o-objeto-de-vecq3.5" class="section level4">
-<h4>Q.3.5 Some os valores de todas as linhas da base filtrada com as seguintes caracteristicas: <code>Origin = Domestic</code>; <code>Year = 2000</code>. Chame o objeto de <code>vecQ3.5</code></h4>
-</div>
-</div>
-<div id="treinando-join-e-arrange" class="section level3">
-<h3>4. Treinando join e arrange</h3>
-<p>Vamos praticar os verbos da familia <code>join</code> do pacote <code>dplyr</code> agora. Tenha certeza que leu a parte referente a ela no Tópico 3! Qualquer coisa use o <code>help()</code> ou veja as partes <strong><em>Mutating joins</em></strong> e <strong><em>Types of join</em></strong> em <code>vignette(&quot;two-table&quot;)</code>.</p>
-<p>Não se sinta acanhado de recorrer a eles em nenhum momento.</p>
-<div id="q.4.1-crie-uma-tabela-dfq4.1-unindo-as-tabelas-americadosul-e-ganhadores-mantendo-a-coluna-participações." class="section level4">
-<h4>Q.4.1 Crie uma tabela <code>dfQ4.1</code> unindo as tabelas <code>americadoSul</code> e <code>ganhadores</code> mantendo a coluna <code>Participações</code>.</h4>
-<pre class="r"><code>americadoSul &lt;- data.frame(&quot;Países&quot; = c(&quot;Chile&quot;, &quot;Argentina&quot;, &quot;Uruguai&quot;, &quot;Brasil&quot;), &quot;Titulos&quot; = c(0,2,2,5), &quot;Participações&quot; = c(9, 17, 13, 21))
+<div id="q.2.6-faça-o-passo-3-do-exemplo-dado-no-inicio-da-questão-e-substitua-1-por-i-onde-é-necessário." class="section level4">
+<h4>Q.2.6 Faça o “Passo 3” do exemplo dado no inicio da questão e substitua 1 por i onde é necessário.</h4>
+<pre class="r"><code>i &lt;- 1
+niotQ2 &lt;- list()
+#Criando um arquivo temporário
+arq_temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)
+#Baixando o arquivo
+# Usamos &#39;mode = &quot;wb&quot;&#39; porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
+download.file(url = as.character(urlsQ2.2[i]), destfile = arq_temp, mode = &quot;wb&quot;)
 
-ganhadores &lt;- data.frame(&quot;Países&quot; = c( &quot;Alemanha&quot;, &quot;Argentina&quot;,&quot;Itália&quot;, &quot;França&quot;, &quot;Uruguai&quot;, &quot;Espanha&quot;,&quot;Brasil&quot;, &quot;Inglaterra&quot;), &quot;Titulos&quot; = c( 4,2,4,2,2,1,5,1))</code></pre>
-</div>
-<div id="q.4.1-crie" class="section level4">
-<h4>Q.4.1 Crie:</h4>
-<ul>
-<li><code>dfQ4.2a</code>: <code>americadoSul</code> países ordenados por número de participações em ordem crescente.</li>
-</ul>
-<p>-<code>dfQ4.2b</code>: <code>americadoSul</code> ordenados por número de titulos, em ordem decrescente.</p>
-<p>-<code>dfQ4.2c</code>: <code>ganhadores</code> ordenada por número de títulos em ordem decrescente.</p>
-</div>
-<div id="q.4.3-usando-uma-função-da-família-join-crie-uma-tabela-da-dfq4.3-contendo-apenas-os-integrantes-de-americadosul-que-já-ganharam-um-copa." class="section level4">
-<h4>Q.4.3 Usando uma função da família <code>join</code>, crie uma tabela da <code>dfQ4.3</code> contendo apenas os integrantes de <code>americadoSul</code> que já ganharam um copa.</h4>
-<p>Considere agora a base de dados <code>edicoes</code>:</p>
-<pre class="r"><code>edicoes &lt;- data.frame(&quot;Copa&quot;=c(2018, 2014, 2010, 2006, 2002, 1998,1994, 1990, 1986), &quot;Ganhador&quot;= c(&quot;França&quot;, &quot;Alemanha&quot;, &quot;Espanha&quot;, &quot;Itália&quot;, &quot;Brasil&quot;, &quot;França&quot;, &quot;Brasil&quot;, &quot;Alemanha&quot;, &quot;Argentina&quot;), &quot;Vice&quot; = c(&quot;Croácia&quot;, &quot;Argentina&quot;, &quot;Holanda&quot;, &quot;França&quot;, &quot;Alemanha&quot;, &quot;Brasil&quot;, &quot;Itália&quot;, &quot;Argentina&quot;, &quot;Alemanha&quot;))</code></pre>
-</div>
-<div id="q.4.4-usando-o-dplyr-exclua-a-coluna-vice-e-filtre-apenas-a-as-edições-depois-de-1990-em-diante.-nomeie-essa-tabela-de-dfq4.4." class="section level4">
-<h4>Q.4.4 Usando o <code>dplyr</code> Exclua a coluna <code>Vice</code> e filtre apenas a as edições depois de 1990 em diante. Nomeie essa tabela de <code>dfQ4.4</code>.</h4>
-</div>
-<div id="q.4.5-crie-uma-tabela-chamada-ganhadores_30anos-juntando-as-tabelas-dfq4.4-e-ganhadores-mantendo-apenas-os-países-que-ganharam-de-1990-em-diante.-faça-de-modo-que-dfq4.4-não-tenha-mais-de-duas-linhas-por-país-e-mantenha-as-duas-." class="section level4">
-<h4>Q.4.5 Crie uma tabela chamada <code>ganhadores_30anos</code>, juntando as tabelas <code>dfQ4.4</code> e <code>ganhadores</code>, mantendo apenas os países que ganharam de 1990 em diante. Faça de modo que <code>dfQ4.4</code> não tenha mais de duas linhas por país e mantenha as duas .</h4>
-<p><strong>Dica 1:</strong> Lembre do argumento <code>by</code></p>
-<p><strong>Dica 2:</strong> Sem usar <code>distinc</code>, há uma função da familia <code>join</code> de fazer isso. Usando <code>distinct</code> com algumas alterações nos seus argumentos, há mais <code>três</code> funções da familia <code>join</code> que podem fazer isso.</p>
-</div>
-<div id="q.4.6-crie-uma-tabela-dfq4.6-com-apenas-os-países-da-americadosul-que-ganharam-a-copa-do-mundo-desde-1986.-mantenha-as-linhas-duplicadas-e-todas-as-colunas.-deixe-o-mais-recente-nas-primeiras-linhas." class="section level4">
-<h4>Q.4.6 Crie uma tabela <code>dfQ4.6</code> com apenas os países da <code>americadoSul</code> que ganharam a Copa do Mundo desde 1986. Mantenha as linhas duplicadas e todas as colunas. Deixe o mais recente nas primeiras linhas.</h4>
-</div>
-<div id="q.4.7-crie-uma-tabela-dfq4.7-dos-países-da-américa-do-sul-que-não-foram-para-vice-desde-1986." class="section level4">
-<h4>Q.4.7 Crie uma tabela <code>dfQ4.7</code> dos países da América do Sul que não foram para <code>Vice</code> desde 1986.</h4>
-</div>
-</div>
-<div id="entendendo-melhor-estruturas-de-dados" class="section level3">
-<h3>5. Entendendo melhor Estruturas de dados</h3>
-<p>No material expositivo do Tópico 3, especificamente na questão <code>3.5.1</code>, foi falado sobre <code>data.frame</code> compartilhar estruturas tanto com <code>list</code> quanto com <code>matrix</code>. Vamos usar a questão 5 para mostrar o que isso quer dizer, e as suas consequências práticas.</p>
-<p>Vamos começar definindo os elementos abaixo:</p>
-<pre class="r"><code>dfQ5 &lt;- data.frame(&quot;A&quot;= c(1,2,4), &quot;B&quot; = c(2,3,5), row.names = c(&quot;J&quot;, &quot;H&quot;, &quot;L&quot;))
-lstQ5 &lt;- list(&quot;A&quot; = c(1,2,4), &quot;B&quot; = c(2,3,5))
-matQ5 &lt;- matrix(c(1,2,4,2,3,5), ncol = 2, dimnames = list(c(&quot;J&quot;, &quot;H&quot;, &quot;L&quot;), c(&quot;A&quot;, &quot;B&quot;)))
+# Importando a NIOT para o R:
+niotQ2[[i]] &lt;- read_xlsx(arq_temp, sheet = 2)
 
-atmQ5 &lt;- c(1,2,4,2,3,5)</code></pre>
-<div id="q.5.1-diga-quais-das-afirmações-abaixo-seriam-possíveis-e-quais-não-seriam.-se-tiver-dificuldades-revisite-o-tópico-1." class="section level4">
-<h4>Q.5.1 Diga quais das afirmações abaixo seriam possíveis e quais não seriam. Se tiver dificuldades revisite o Tópico 1.</h4>
-<div id="q.5.1.a-criar-uma-list-com-elementos-de-tipos-diferentes." class="section level5">
-<h5>Q.5.1.a Criar uma <code>list</code> com elementos de tipos diferentes.</h5>
+# Excluindo arq_temp
+unlink(arq_temp)</code></pre>
 </div>
-<div id="q.5.1.b-criar-um-data.frame-com-colunas-de-tipos-diferentes." class="section level5">
-<h5>Q.5.1.b Criar um <code>data.frame</code> com colunas de tipos diferentes.</h5>
-</div>
-<div id="q.5.1.c-criar-um-data.frame-com-linhas-de-tipos-diferentes." class="section level5">
-<h5>Q.5.1.c Criar um <code>data.frame</code> com linhas de tipos diferentes.</h5>
-</div>
-<div id="q.5.1.d-criar-uma-matrix-com-colunas-de-tipos-diferentes." class="section level5">
-<h5>Q.5.1.d Criar uma <code>matrix</code> com colunas de tipos diferentes.</h5>
-</div>
-<div id="q.5.1.e-criar-uma-matrix-com-linhas-de-tipos-diferentes." class="section level5">
-<h5>Q.5.1.e Criar uma <code>matrix</code> com linhas de tipos diferentes.</h5>
-</div>
-<div id="q.5.1.f-criar-um-vetor-atômico-com-elementos-de-tipos-diferentes." class="section level5">
-<h5>Q.5.1.f Criar um vetor atômico com elementos de tipos diferentes.</h5>
-<pre class="r"><code>Q51 &lt;- list(T, T, F, F, F, F)
-names(Q51) &lt;-letters[1:6]</code></pre>
-</div>
-</div>
-<div id="q.5.2-use-typeof-em-dfq5-lstq5-matq5-atmq5.-como-isso-se-relaciona-com-as-afirmações-q.5.1.aq.5.1.b-q.5.1.d-q.5.1.e-e-q.5.1.f" class="section level4">
-<h4>Q.5.2 Use <code>typeof</code> em <code>dfQ5</code>, <code>lstQ5</code>, <code>matQ5</code>, <code>atmQ5</code>. Como isso se relaciona com as afirmações <code>Q.5.1.a</code>,<code>Q.5.1.b</code>, <code>Q.5.1.d</code>, <code>Q.5.1.e</code> e <code>Q.5.1.f</code>?</h4>
-</div>
-<div id="q.5.3-a-partir-de-q.5.2-e-analisando-o-código-abaixo-você-consegue-dizer-como-eles-ajudam-a-explicar-a-resposta-para-a-afirmação-q.5.1.c" class="section level4">
-<h4>Q.5.3 A partir de <code>Q.5.2</code> e analisando o código abaixo, você consegue dizer como eles ajudam a explicar a resposta para a afirmação <code>Q.5.1.c</code>?</h4>
-<pre class="r"><code>lstQ53_a &lt;- list(&quot;A&quot; = list(TRUE, &quot;2&quot;), &quot;B&quot; = list(2, 3))
+<div id="q.2.7-meça-o-tempo-que-o-r-demora-para-realizar-a-tarefa-de-q.2.6" class="section level4">
+<h4>Q.2.7 Meça o tempo que o R demora para realizar a tarefa de <code>Q.2.6</code></h4>
+<pre class="r"><code>tic()
+i &lt;- 1
+#Criando um arquivo temporário
+arq_temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)
+#Baixando o arquivo
+# Usamos &#39;mode = &quot;wb&quot;&#39; porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
+download.file(url = urlsQ2.2[i], destfile = arq_temp, mode = &quot;wb&quot;)
 
-as.data.frame(lstQ53_a)</code></pre>
-<pre><code>##   A.TRUE A..2. B.2 B.3
-## 1   TRUE     2   2   3</code></pre>
-<pre class="r"><code>lstQ53_b &lt;-list(&quot;A&quot; = c(TRUE, &quot;2&quot;), &quot;B&quot; = c(2, 3))
+# Importando a NIOT para o R:
+niotQ2[[i]] &lt;- read_xlsx(arq_temp, sheet = 2)
 
-as.data.frame(lstQ53_b)</code></pre>
-<pre><code>##      A B
-## 1 TRUE 2
-## 2    2 3</code></pre>
+# Excluindo arq_temp
+unlink(arq_temp)
+toc()</code></pre>
+<pre><code>## 21.23 sec elapsed</code></pre>
 </div>
-<div id="q.5.4-use-a-função-class-em-dfq5-lstq5-matq5-atmq5." class="section level4">
-<h4>Q.5.4 Use a função <code>class()</code> em <code>dfQ5</code>, <code>lstQ5</code>, <code>matQ5</code>, <code>atmQ5</code>.</h4>
-</div>
-<div id="q.5.5-use-a-função-length-em-dfq5-lstq5-matq5-atmq5.-o-que-ela-mede-em-cada-um" class="section level4">
-<h4>Q.5.5 Use a função <code>length()</code> em <code>dfQ5</code>, <code>lstQ5</code>, <code>matQ5</code>, <code>atmQ5</code>. O que ela mede em cada um?</h4>
-</div>
-<div id="q.5.6-use-typeof-e-class-em-dfq51-dfq51-dfq5jdfq511-dfq51-dfq5a-dfq5a-dfq51-dfq5a-dfa." class="section level4">
-<h4>Q.5.6 Use <code>typeof</code> e <code>class</code> em <code>dfQ5[1,]</code>, <code>dfQ5[,1]</code>, <code>dfQ5[&quot;J&quot;,]</code>,<code>dfQ5[1,1]</code>, <code>dfQ5[1]</code>, <code>dfQ5[&quot;A&quot;]</code>, <code>dfQ5[,&quot;A&quot;]</code> <code>dfQ5[[1]]</code>, <code>dfQ5[[&quot;A&quot;]]</code>, <code>df$A</code>.</h4>
-</div>
-<div id="q.5.7-como-os-resultados-de-q.5.6-podem-ser-entendidos-a-luz-das-funções-pull-e-select-do-dplyr" class="section level4">
-<h4>Q.5.7 Como os resultados de <code>Q.5.6</code> podem ser entendidos a luz das funções <code>pull</code> e <code>select</code> do <code>dplyr</code>?</h4>
-</div>
-<div id="q.5.8-investigue-porque-os-valores-de-class-e-typeof-para-dfq51-e-dfq51-são-diferentes.-pense-na-relação-disso-com-as-afirmações-q.5.1.b-e-q.5.1.c." class="section level4">
-<h4>Q.5.8 Investigue porque os valores de <code>class</code> e <code>typeof</code> para <code>dfQ5[1,]</code> e <code>dfQ5[,1]</code> são diferentes. Pense na relação disso com as afirmações <code>Q.5.1.b</code> e <code>Q.5.1.c</code>.</h4>
-</div>
-<div id="d.5.1-qual-o-motivo-pelo-qual-lsta-e-dfq5a-funcionam-enquanto-matq5a-não-por-que-então-matq5a-funciona-bem-como-dfq5a" class="section level4">
-<h4>D.5.1 Qual o motivo pelo qual <code>lst$A</code> e <code>dfQ5$A</code> funcionam enquanto <code>matQ5$A</code> não? Por que então <code>matQ5[,&quot;A&quot;]</code> funciona bem como <code>dfQ5[,&quot;A&quot;]</code>?</h4>
-</div>
-<div id="q.5.9-dado-tudo-que-já-vimos-até-agora-procure-falar-o-motivo-pelo-qual-e-são-sempre-usados-em-data.frames-em-conjunto-com-o-nome-de-uma-coluna-e-não-pelo-da-linha." class="section level4">
-<h4>Q.5.9 Dado tudo que já vimos até agora, procure falar o motivo pelo qual <code>$</code> e <code>[[]]</code> são sempre usados em data.frames em conjunto com o nome de uma coluna e não pelo da linha.</h4>
-</div>
-<div id="q.5.10-verifique-o-tipo-e-classe-de-tdfq5.-sendo-que-dfq5-tem-3-linhas-e-2-colunas-você-consegue-deduzir-sem-rodar-a-função-o-length-de-tdfq5-e-o-de-as.data.frametdfq5" class="section level4">
-<h4>Q.5.10 Verifique o tipo e classe de <code>t(dfQ5)</code>. Sendo que <code>dfQ5</code> tem 3 linhas e 2 colunas, você consegue deduzir, <strong>sem rodar a função</strong>, o <code>length</code> de <code>t(dfQ5)</code> ? E o de <code>as.data.frame(t(dfQ5))</code></h4>
-</div>
-<div id="q.5.11-sejam-df.nomes-df.nomes2-df.nomes3-e-dfq5.11-definidos-como" class="section level4">
-<h4>Q.5.11 Sejam <code>df.nomes</code>, <code>df.nomes2</code>, <code>df.nomes3</code> e <code>dfQ5.11</code> definidos como:</h4>
-<pre class="r"><code>df.nomes &lt;- data.frame(&quot;Nomes&quot; = c(&quot;D&quot;, &quot;F&quot;, &quot;E&quot;), &quot;Nomes_B&quot; = c(&quot;W&quot;, &quot;X&quot;, &quot;Y&quot;))
+<div id="q.2.8-automatize-com-o-for-a-questão-q.2.5-e-meça-o-tempo-total-requerido." class="section level4">
+<h4>Q.2.8 Automatize com o for a questão <code>Q.2.5</code> e meça o tempo total requerido.</h4>
+<pre class="r"><code>tic()
+for(i in 1:length(urlsQ2.2)){
+  #Criando um arquivo temporário
+arq_temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)
+#Baixando o arquivo
+# Usamos &#39;mode = &quot;wb&quot;&#39; porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
+download.file(url = urlsQ2.2[i], destfile = arq_temp, mode = &quot;wb&quot;)
 
-df.nomes2 &lt;- as.data.frame(t(df.nomes))
+# Importando a NIOT para o R:
+niotQ2[[i]] &lt;- read_xlsx(arq_temp, sheet = 2)
 
-dfQ5.11 &lt;- dfQ5</code></pre>
-<p>E seja a definição do <em>Argument</em> <code>row.names</code> da função <code>data.frame</code> a seguinte:</p>
-<p>NULL or a single integer or character string specifying a column to be used as row names, <strong><em>or a character or integer vector giving the row names for the data frame.</em></strong></p>
-<p>O que irá ocorrer em cada uma dessas situações? Você consegue dizer o porquê? Tente dizer antes de rodar o código.</p>
-<div id="q.5.11.1" class="section level5">
-<h5>Q.5.11.1</h5>
-<pre class="r"><code>dfQ5.11.1 &lt;- data.frame(dfQ5.11, row.names = df.nomes[&quot;Nomes&quot;])</code></pre>
+# Excluindo arq_temp
+unlink(arq_temp)
+}
+toc()</code></pre>
+<pre><code>## 81.41 sec elapsed</code></pre>
 </div>
-<div id="q.5.11.2" class="section level5">
-<h5>Q.5.11.2</h5>
-<pre class="r"><code>dfQ5.11.2 &lt;- data.frame(dfQ5.11, row.names = df.nomes[[&quot;Nomes&quot;]])</code></pre>
+<div id="q.2.9---confira-de-forma-automatizada-se-todos-os-elementos-de-niotq2-são-tibble.-aloque-os-valores-lógicos-retornados-numa-lista-denominada-lst_q2.9.-faça-isso-usando-tanto-a-função-map-quanto-a-função-for-e-meça-o-tempo-levada-por-cada-uma." class="section level4">
+<h4>Q.2.9 - Confira de forma automatizada se todos os elementos de <code>niotQ2</code> são <code>tibble</code>. Aloque os valores lógicos retornados numa lista denominada <code>lst_Q2.9</code>. Faça isso usando tanto a função <code>map()</code> quanto a função <code>for()</code> e meça o tempo levada por cada uma.</h4>
+<pre class="r"><code>#Usando map:
+tic()
+lst_Q2.9 &lt;- map(niotQ2, is_tibble)
+
+toc()</code></pre>
+<pre><code>## 0.02 sec elapsed</code></pre>
+<pre class="r"><code>#Usando for:
+tic()
+for (i in seq_along(niotQ2)){
+  lst_Q2.9[[i]] &lt;- is_tibble(niotQ2[[i]])
+}
+toc()</code></pre>
+<pre><code>## 0 sec elapsed</code></pre>
 </div>
-<div id="q.5.11.3" class="section level5">
-<h5>Q.5.11.3</h5>
-<pre class="r"><code>dfQ5.11.3 &lt;- data.frame(dfQ5.11, row.names = df.nomes[,&quot;Nomes&quot;])</code></pre>
+<div id="d.2.1---desafio-crie-uma-função-lst.type.class-que-retorna-uma-lista-com-type-e-class-de-um-elemento." class="section level4">
+<h4>D.2.1 - <strong>DESAFIO</strong>: Crie uma função <code>lst.type.class</code>, que retorna uma lista com <code>type</code> e <code>class</code> de um elemento.</h4>
+<pre class="r"><code>lst.type.class &lt;- function(x) list(typeof(x), class(x))</code></pre>
 </div>
-<div id="q.5.11.4" class="section level5">
-<h5>Q.5.11.4</h5>
-<pre class="r"><code>dfQ5.11.4 &lt;- data.frame(dfQ5.11, row.names = df.nomes$Nomes)</code></pre>
+<div id="d.2.2---crie-uma-lista-lstd2.2-aplicando-lst.type.class-sobre-niotq2.-faça-tanto-via-for-quanto-para-map." class="section level4">
+<h4>D.2.2 - Crie uma lista <code>lstD2.2</code> aplicando <code>lst.type.class</code> sobre <code>niotQ2</code>. Faça tanto via <code>for</code> quanto para <code>map</code>.</h4>
+<pre class="r"><code>#map
+tic()
+lstD2.2 &lt;- niotQ2 %&gt;%
+           map(lst.type.class)
+toc()</code></pre>
+<pre><code>## 0.01 sec elapsed</code></pre>
+<pre class="r"><code>#for
+tic()
+for(i in seq_along(niotQ2))
+lstD2.2[[i]] &lt;- lst.type.class(niotQ2[[i]])
+toc()</code></pre>
+<pre><code>## 0.02 sec elapsed</code></pre>
 </div>
-<div id="q.5.11.5" class="section level5">
-<h5>Q.5.11.5</h5>
-<pre class="r"><code>dfQ5.11.5 &lt;- data.frame(dfQ5.11, row.names = t(df.nomes[,1]))</code></pre>
+<div id="q.2.10-crie-uma-list-lstq2.10-excluindo-de-niotq2-as-linhas-com-os-valores-na.-não-esqueça-de-medir-o-tempo." class="section level4">
+<h4>Q.2.10 Crie uma list <code>lstQ2.10</code> excluindo de <code>niotQ2</code> as linhas com os valores <code>NA</code>. Não esqueça de medir o tempo.</h4>
+<pre class="r"><code>#map
+#usando map com filter
+tic()
+lstQ2.10 &lt;- map(niotQ2, function(x) filter(x, !is.na(Year)))
+toc()</code></pre>
+<pre><code>## 0.07 sec elapsed</code></pre>
+<pre class="r"><code>#usando map com filter_all
+tic()
+lstQ2.10 &lt;- map(niotQ2, ~ filter_all(.x, all_vars(!is.na(.))))
+toc()</code></pre>
+<pre><code>## 0.07 sec elapsed</code></pre>
+<pre class="r"><code>rm(lstQ2.10)
+
+#usando map com drop_na
+tic()
+lstQ2.10 &lt;- map(niotQ2, drop_na)
+toc()</code></pre>
+<pre><code>## 0.06 sec elapsed</code></pre>
+<pre class="r"><code>#usando for
+
+#usando for com filter
+tic()
+lstQ2.10 &lt;- list()
+for(i in seq_along(niotQ2)){
+  lstQ2.10[[i]] &lt;- niotQ2[[i]] %&gt;% filter(!is.na(Year))
+}
+toc()</code></pre>
+<pre><code>## 0.06 sec elapsed</code></pre>
+<pre class="r"><code>rm(lstQ2.10)
+#usando for com filter_all
+tic()
+lstQ2.10 &lt;- list()
+for(i in seq_along(niotQ2)){
+  lstQ2.10[[i]] &lt;- niotQ2[[i]] %&gt;% filter_all(all_vars(!is.na(.)))
+}
+toc()</code></pre>
+<pre><code>## 0.1 sec elapsed</code></pre>
+<pre class="r"><code>rm(lstQ2.10)
+#usando for com drop_na
+tic()
+lstQ2.10 &lt;- list()
+for(i in seq_along(niotQ2)){
+  lstQ2.10[[i]] &lt;- drop_na(niotQ2[[i]])
+}
+toc()</code></pre>
+<pre><code>## 0.08 sec elapsed</code></pre>
 </div>
-<div id="q.5.11.6" class="section level5">
-<h5>Q.5.11.6</h5>
-<pre class="r"><code>dfQ5.11.6 &lt;- data.frame(dfQ5.11, row.names = df.nomes2[1,])</code></pre>
+<div id="q.2.11-crie-uma-lista-lstq2.11-com-os-tibbles-de-lstq2.10-tendo-as-colunas-convertidas-por-double." class="section level4">
+<h4>Q.2.11 Crie uma lista <code>lstQ2.11</code> com os tibbles de <code>lstQ2.10</code> tendo as colunas convertidas por double.</h4>
+<pre class="r"><code>lstQ2.11 &lt;- map(lstQ2.10, type_convert)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
 </div>
-<div id="q.5.11.7" class="section level5">
-<h5>Q.5.11.7</h5>
-<pre class="r"><code>dfQ5.11.7 &lt;- data.frame(dfQ5.11, row.names = t(df.nomes2[1,]))</code></pre>
+<div id="q.2.12---crie-um-objeto-lstq2.12-a-partir-de-lstq2.11-em-que-as-linhas-da-coluna-origin-que-tem-os-valores-tot-são-excluidas." class="section level4">
+<h4>Q.2.12 - Crie um objeto <code>lstQ2.12</code> a partir de <code>lstQ2.11</code> em que as linhas da coluna <code>Origin</code> que tem os valores <code>&quot;TOT&quot;</code> são excluidas.</h4>
+<pre class="r"><code>lstQ2.12 &lt;- lstQ2.11 %&gt;% map(function(x) filter(x, Origin != &quot;TOT&quot;))</code></pre>
+</div>
+<div id="q.2.13---crie-um-objeto-lstq2.13-apenas-com-a-coluna-code-dos-tibbles-de-lstq2.12-excluindo-todos-os-valores-repetidos." class="section level4">
+<h4>Q.2.13 - Crie um objeto <code>lstQ2.13</code> apenas com a coluna <code>Code</code> dos tibbles de <code>lstQ2.12</code>, excluindo todos os valores repetidos.</h4>
+<pre class="r"><code>lstQ2.13 &lt;- lstQ2.12 %&gt;%
+  map(select, Code) %&gt;%
+  map(distinct)</code></pre>
+</div>
+<div id="q.2.14---crie-uma-lista-lstq2.14-criando-um-vetor-com-os-4-primeiros-colnames-dos-tibbles-de-lstq.12-e-os-valores-de-lstq2.13.-tente-fazer-via-alguma-variação-de-map." class="section level4">
+<h4>Q.2.14 - Crie uma lista <code>lstQ2.14</code> criando um vetor com os 4 primeiros <code>colnames</code> dos tibbles de <code>lstQ.12</code> e os valores de <code>lstQ2.13</code>. Tente fazer via alguma variação de map.</h4>
+<pre class="r"><code>lstQ2.14 &lt;- map2(lstQ2.12, lstQ2.13, function(x,y) c(colnames(x)[1:4], y$Code))</code></pre>
+</div>
+<div id="q.2.15---crie-uma-lista-lstq2.15-apenas-com-os-valores-da-demanda-intermediaria-mantenha-as-4-primeiras-colunas.-use-a-variação-map-e-veja-se-consegue-fazer-isso-tanto-pelo-tidyverse-quanto-pelo-baser." class="section level4">
+<h4>Q.2.15 - Crie uma lista <code>lstQ2.15</code> apenas com os valores da demanda intermediaria (mantenha as 4 primeiras colunas). Use a variação map e veja se consegue fazer isso tanto pelo <code>tidyverse</code> quanto pelo <code>baseR</code>.</h4>
+<pre class="r"><code>tic()
+lstQ2.15 &lt;- map2(lstQ2.12, lstQ2.14, function(x,y) select(x, all_of(y)))
+toc()</code></pre>
+<pre><code>## 0.02 sec elapsed</code></pre>
+<pre class="r"><code>tic()
+lstQ2.15 &lt;- map2(lstQ2.12, lstQ2.14, function(x,y) select(x, unlist(y)))
+toc()</code></pre>
+<pre><code>## 0.03 sec elapsed</code></pre>
+<pre class="r"><code>tic()
+lstQ2.15 &lt;- map2(lstQ2.12, lstQ2.14, function(x,y) x[,y])
+toc()</code></pre>
+<pre><code>## 0.02 sec elapsed</code></pre>
+</div>
+<div id="q.2.16---crie-uma-lista-lstq2.16-com-os-tibbles-de-lstq2.12-apenas-sem-os-valores-da-demanda-intermediaria" class="section level4">
+<h4>Q.2.16 - Crie uma lista <code>lstQ2.16</code> com os <code>tibbles</code> de <code>lstQ2.12</code> apenas sem os valores da demanda intermediaria</h4>
+<pre class="r"><code>lstQ2.16 &lt;- map(lstQ2.12, function(x) select(x, -x$Code))</code></pre>
 </div>
 </div>
-</div>
-<div id="operadores-lógicos-e-booleanos" class="section level3">
-<h3>Operadores Lógicos e Booleanos</h3>
-<div id="q.6.1---revise-a-table-7.1-do-hopr-para-deixar-claro-como-funciona-cada-operador-lógico." class="section level4">
-<h4>Q.6.1 - Revise a <a href="https://rstudio-education.github.io/hopr/modify.html#tab:logop">Table 7.1</a> do <strong>HOPR</strong> para deixar claro como funciona cada operador lógico.</h4>
-</div>
-<div id="q.6.2---faça-o-mesmo-para-os-operadores-booleanos-na-table-7.2." class="section level4">
-<h4>Q.6.2 - Faça o mesmo para os Operadores Booleanos na <a href="https://rstudio-education.github.io/hopr/modify.html#tab:boole">Table 7.2</a>.</h4>
-</div>
-<div id="q.6.3---atribua-valores-arbitrários-para-a-b-e-c-na-table-7.1-e-explique-com-suas-palavras-o-resultado-de-cada-teste." class="section level4">
-<h4>Q.6.3 - Atribua valores arbitrários para “a”, “b” e “c” na Table 7.1 e explique com suas palavras o resultado de cada teste.</h4>
-</div>
-<div id="q.6.4---explique-as-diferenças-entre-e" class="section level4">
-<h4>Q.6.4 - Explique as diferenças entre <code>&amp;</code>, <code>&amp;&amp;</code>, <code>|</code> e <code>||</code></h4>
-</div>
-<div id="q.6.5---teste-a-condição-x-5-10.-por-que-ela-não-funciona-como-você-resolveria" class="section level4">
-<h4>Q.6.5 - Teste a condição (x &gt; 5 &amp; &lt; 10). Por que ela não funciona? Como você resolveria?</h4>
-</div>
-</div>
-<div id="if-else" class="section level3">
-<h3>If Else</h3>
-<div id="q.7.1---quais-as-diferenças-entre-usar-if-else-e-ifelse-quais-as-melhores-situações-para-usar-cada-uma-delas" class="section level4">
-<h4>Q.7.1 - Quais as diferenças entre usar if, else e ifelse? Quais as melhores situações para usar cada uma delas?</h4>
-</div>
-<div id="desafio-7.1---crie-uma-função-para-saber-se-um-número-inteiro-é-par-ou-ímpar.-dica-pensar-no-resto-da-divisão-operador-no-r." class="section level4">
-<h4>Desafio 7.1 - Crie uma função para saber se um número inteiro é par ou ímpar. <strong>Dica</strong> pensar no resto da divisão (Operador %% no R).</h4>
-</div>
-<div id="q.7.2---no-material-de-algebra-linear-discutimos-que-para-uma-matriz-ser-invertível-é-necessário-que-ela-atenda-à-algumas-condições.-escreva-uma-função-que-diga-se-as-matrizes-abaixo-são-invertíveis-ou-não-e-diga-se-as-matrizes-abaixo-tem-inversa." class="section level4">
-<h4>Q.7.2 - No material de Algebra Linear, discutimos que para uma matriz ser invertível é necessário que ela atenda à algumas condições. Escreva uma função que diga se as matrizes abaixo são invertíveis ou não, e diga se as matrizes abaixo tem inversa.</h4>
-<pre class="r"><code>a &lt;- matrix(c(5,3,7,8,5,0,1,2,7), 3, 3)
-b &lt;- matrix(c(4,3,0,6,2,0,5,1,0), 3, 3)</code></pre>
-</div>
-</div>
-<div id="subsetting-base-r" class="section level3">
-<h3>Subsetting Base R</h3>
-<p>Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em matrizes insumo-produto dado que sua estrutura de dados são mais “quadradas”, no máximo retangulares. Esse é o caso, por exemplo, da MIP extraída diretamente do IBGE. No entanto, tabelas mais amplas, como a própria base da “WIOD”, traz uma série temporal de matrizes empilhadas. Usaremos a mesma base para a manipulação no base R e pelo tidyverse, de forma que fique mais clara as alternativas.</p>
-<div id="q.8.1---visualize-niotita-e-perceba-que-existem-valores-na-por-conta-do-cabeçalho-da-base-de-dados.-ajuste-o-cabeçalho-de-acordo-com-o-conhecimento-adquirido-no-tópico-anterior-criando-uma-lista-com-o-nome-das-variáveis." class="section level4">
-<h4>Q.8.1 - Visualize <code>niotITA</code> e perceba que existem valores <code>NA</code> por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando uma lista com o nome das variáveis.</h4>
-</div>
-<div id="q.8.2---elimine-a-linha-que-contém-na-e-renomeie-as-colunas-de-niotita.-salve-como-niotita_8.2." class="section level4">
-<h4>Q.8.2 - Elimine a linha que contém <code>NA</code> e renomeie as colunas de <code>niotITA</code>. Salve como <code>niotITA_8.2</code>.</h4>
-</div>
-<div id="q.8.3---extraia-da-sua-base-valores-somente-para-o-ano-de-2008.-salve-como-niotita_8.3" class="section level4">
-<h4>Q.8.3 - Extraia da sua base valores somente para o ano de 2008. Salve como <code>niotITA_8.3</code></h4>
-</div>
-<div id="q.8.4---agora-pegue-apenas-os-valores-que-tem-origem-doméstica-e-salve-no-arquivo-nitoita_8.4." class="section level4">
-<h4>Q.8.4 - Agora pegue apenas os valores que tem origem doméstica e salve no arquivo <code>nitoITA_8.4</code>.</h4>
-</div>
-<div id="q.8.5---caso-você-quisesse-fazer-as-duas-últimas-questões-em-só-uma-linha-de-comando-como-você-faria-dica-lembrar-dos-operadores-booleanos.-não-esqueça-de-comparar-com-a-base-gerada-na-questão-anterior-e-se-elas-são-idênticas." class="section level4">
-<h4>Q.8.5 - Caso você quisesse fazer as duas últimas questões em só uma linha de comando, como você faria? (<strong>Dica</strong>: lembrar dos operadores Booleanos). Não esqueça de comparar com a base gerada na questão anterior e se elas são idênticas.</h4>
-</div>
-<div id="q.8.6---crie-um-novo-conjunto-de-dados-somente-com-as-informações-da-demanda-intermediária-i.e-faça-um-subsetting-para-eliminar-as-colunas-a-partir-de-final-consumption-expenditure-by-households." class="section level4">
-<h4>Q.8.6 - Crie um novo conjunto de dados somente com as informações da Demanda Intermediária (i.e faça um subsetting para eliminar as colunas a partir de “Final Consumption Expenditure by Households”).</h4>
-</div>
-<div id="desafio-8.1-monte-uma-matriz-de-coeficientes-técnicos-a-partir-das-informaçoes-extraídas.-lembrando-que-os-coeficientes-são-a-divisão-de-um-elemento-da-matriz-de-demanda-intermediária-em-relação-ao-setor-que-está-na-coluna." class="section level4">
-<h4><strong>Desafio 8.1</strong>: Monte uma matriz de coeficientes técnicos a partir das informaçoes extraídas. Lembrando que os coeficientes são a divisão de um elemento da matriz de demanda intermediária em relação ao setor (que está na coluna).</h4>
-<p><strong>Dica</strong>: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.</p>
-</div>
-<div id="q.8.7---vamos-criar-um-novo-conjunto-de-dados-composto-apenas-pela-soma-da-demanda-intemediária-soma-da-demanda-final-e-a-demanda-total.-não-esqueça-de-nomear-as-colunas." class="section level4">
-<h4>Q.8.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.</h4>
+<div id="subdividindo-listas-pelo-purrr" class="section level3">
+<h3>3. Subdividindo listas pelo purrr</h3>
+<div id="q.3.1-crie" class="section level4">
+<h4>Q.3.1 Crie</h4>
 </div>
 </div>
 </div>

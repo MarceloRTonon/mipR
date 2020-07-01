@@ -237,7 +237,7 @@ ItaQ2.4 <- ItaQ1.9 %>% select(all_of(vecQ2.3))
 ItaQ2.4 <- ItaQ1.9[, vecQ2.3]
 ```
 
-#### Q.2.5 Crie uma base de dados `ItaQ2.5` selecionando as colunas de `ItaQ1.9` que são da demadna final (ou seja, não são da demanda intersetorial). **Não use nenhum número arbitrário**. Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.
+#### Q.2.5 Crie uma base de dados `ItaQ2.5` selecionando as colunas de `ItaQ1.9` que são da demanda final (ou seja, não são da demanda intersetorial). **Não use nenhum número arbitrário**. Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.
 
 ```{r, include=FALSE}
 ItaQ2.5 <- ItaQ1.9 %>% select(-CodeQ2.2$Code)
@@ -448,7 +448,9 @@ as.data.frame(lstQ53_a)
 lstQ53_b <-list("A" = c(TRUE, "2"), "B" = c(2, 3))
 
 as.data.frame(lstQ53_b)
+```
 
+```{r, include = FALSE}
 "Um data.frame é uma junção de vetores atômicos. Ou seja, uma junção de vetores que podem ser de tipos diferentes entre eles, porém cada vetor é de um mesmo tipo."
 ```
 
