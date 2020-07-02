@@ -539,7 +539,7 @@ niotQ2[[i]] &lt;- read_xlsx(arq_temp, sheet = 2)
 # Excluindo arq_temp
 unlink(arq_temp)
 toc()</code></pre>
-<pre><code>## 21.23 sec elapsed</code></pre>
+<pre><code>## 11.87 sec elapsed</code></pre>
 </div>
 <div id="q.2.8-automatize-com-o-for-a-questão-q.2.5-e-meça-o-tempo-total-requerido." class="section level4">
 <h4>Q.2.8 Automatize com o for a questão <code>Q.2.5</code> e meça o tempo total requerido.</h4>
@@ -558,7 +558,7 @@ niotQ2[[i]] &lt;- read_xlsx(arq_temp, sheet = 2)
 unlink(arq_temp)
 }
 toc()</code></pre>
-<pre><code>## 81.41 sec elapsed</code></pre>
+<pre><code>## 32.56 sec elapsed</code></pre>
 </div>
 <div id="q.2.9---confira-de-forma-automatizada-se-todos-os-elementos-de-niotq2-são-tibble.-aloque-os-valores-lógicos-retornados-numa-lista-denominada-lst_q2.9.-faça-isso-usando-tanto-a-função-map-quanto-a-função-for-e-meça-o-tempo-levada-por-cada-uma." class="section level4">
 <h4>Q.2.9 - Confira de forma automatizada se todos os elementos de <code>niotQ2</code> são <code>tibble</code>. Aloque os valores lógicos retornados numa lista denominada <code>lst_Q2.9</code>. Faça isso usando tanto a função <code>map()</code> quanto a função <code>for()</code> e meça o tempo levada por cada uma.</h4>
@@ -567,14 +567,14 @@ tic()
 lst_Q2.9 &lt;- map(niotQ2, is_tibble)
 
 toc()</code></pre>
-<pre><code>## 0.02 sec elapsed</code></pre>
+<pre><code>## 0.01 sec elapsed</code></pre>
 <pre class="r"><code>#Usando for:
 tic()
 for (i in seq_along(niotQ2)){
   lst_Q2.9[[i]] &lt;- is_tibble(niotQ2[[i]])
 }
 toc()</code></pre>
-<pre><code>## 0 sec elapsed</code></pre>
+<pre><code>## 0.02 sec elapsed</code></pre>
 </div>
 <div id="d.2.1---desafio-crie-uma-função-lst.type.class-que-retorna-uma-lista-com-type-e-class-de-um-elemento." class="section level4">
 <h4>D.2.1 - <strong>DESAFIO</strong>: Crie uma função <code>lst.type.class</code>, que retorna uma lista com <code>type</code> e <code>class</code> de um elemento.</h4>
@@ -587,13 +587,13 @@ tic()
 lstD2.2 &lt;- niotQ2 %&gt;%
            map(lst.type.class)
 toc()</code></pre>
-<pre><code>## 0.01 sec elapsed</code></pre>
+<pre><code>## 0.02 sec elapsed</code></pre>
 <pre class="r"><code>#for
 tic()
 for(i in seq_along(niotQ2))
 lstD2.2[[i]] &lt;- lst.type.class(niotQ2[[i]])
 toc()</code></pre>
-<pre><code>## 0.02 sec elapsed</code></pre>
+<pre><code>## 0.01 sec elapsed</code></pre>
 </div>
 <div id="q.2.10-crie-uma-list-lstq2.10-excluindo-de-niotq2-as-linhas-com-os-valores-na.-não-esqueça-de-medir-o-tempo." class="section level4">
 <h4>Q.2.10 Crie uma list <code>lstQ2.10</code> excluindo de <code>niotQ2</code> as linhas com os valores <code>NA</code>. Não esqueça de medir o tempo.</h4>
@@ -602,19 +602,19 @@ toc()</code></pre>
 tic()
 lstQ2.10 &lt;- map(niotQ2, function(x) filter(x, !is.na(Year)))
 toc()</code></pre>
-<pre><code>## 0.07 sec elapsed</code></pre>
+<pre><code>## 0.05 sec elapsed</code></pre>
 <pre class="r"><code>#usando map com filter_all
 tic()
 lstQ2.10 &lt;- map(niotQ2, ~ filter_all(.x, all_vars(!is.na(.))))
 toc()</code></pre>
-<pre><code>## 0.07 sec elapsed</code></pre>
+<pre><code>## 0.05 sec elapsed</code></pre>
 <pre class="r"><code>rm(lstQ2.10)
 
 #usando map com drop_na
 tic()
 lstQ2.10 &lt;- map(niotQ2, drop_na)
 toc()</code></pre>
-<pre><code>## 0.06 sec elapsed</code></pre>
+<pre><code>## 0.05 sec elapsed</code></pre>
 <pre class="r"><code>#usando for
 
 #usando for com filter
@@ -624,7 +624,7 @@ for(i in seq_along(niotQ2)){
   lstQ2.10[[i]] &lt;- niotQ2[[i]] %&gt;% filter(!is.na(Year))
 }
 toc()</code></pre>
-<pre><code>## 0.06 sec elapsed</code></pre>
+<pre><code>## 0.05 sec elapsed</code></pre>
 <pre class="r"><code>rm(lstQ2.10)
 #usando for com filter_all
 tic()
@@ -633,7 +633,7 @@ for(i in seq_along(niotQ2)){
   lstQ2.10[[i]] &lt;- niotQ2[[i]] %&gt;% filter_all(all_vars(!is.na(.)))
 }
 toc()</code></pre>
-<pre><code>## 0.1 sec elapsed</code></pre>
+<pre><code>## 0.05 sec elapsed</code></pre>
 <pre class="r"><code>rm(lstQ2.10)
 #usando for com drop_na
 tic()
@@ -642,7 +642,7 @@ for(i in seq_along(niotQ2)){
   lstQ2.10[[i]] &lt;- drop_na(niotQ2[[i]])
 }
 toc()</code></pre>
-<pre><code>## 0.08 sec elapsed</code></pre>
+<pre><code>## 0.07 sec elapsed</code></pre>
 </div>
 <div id="q.2.11-crie-uma-lista-lstq2.11-com-os-tibbles-de-lstq2.10-tendo-as-colunas-convertidas-por-double." class="section level4">
 <h4>Q.2.11 Crie uma lista <code>lstQ2.11</code> com os tibbles de <code>lstQ2.10</code> tendo as colunas convertidas por double.</h4>
@@ -691,15 +691,15 @@ toc()</code></pre>
 <pre class="r"><code>tic()
 lstQ2.15 &lt;- map2(lstQ2.12, lstQ2.14, function(x,y) select(x, all_of(y)))
 toc()</code></pre>
-<pre><code>## 0.02 sec elapsed</code></pre>
+<pre><code>## 0.03 sec elapsed</code></pre>
 <pre class="r"><code>tic()
 lstQ2.15 &lt;- map2(lstQ2.12, lstQ2.14, function(x,y) select(x, unlist(y)))
 toc()</code></pre>
-<pre><code>## 0.03 sec elapsed</code></pre>
+<pre><code>## 0.01 sec elapsed</code></pre>
 <pre class="r"><code>tic()
 lstQ2.15 &lt;- map2(lstQ2.12, lstQ2.14, function(x,y) x[,y])
 toc()</code></pre>
-<pre><code>## 0.02 sec elapsed</code></pre>
+<pre><code>## 0 sec elapsed</code></pre>
 </div>
 <div id="q.2.16---crie-uma-lista-lstq2.16-com-os-tibbles-de-lstq2.12-apenas-sem-os-valores-da-demanda-intermediaria" class="section level4">
 <h4>Q.2.16 - Crie uma lista <code>lstQ2.16</code> com os <code>tibbles</code> de <code>lstQ2.12</code> apenas sem os valores da demanda intermediaria</h4>
@@ -708,9 +708,1188 @@ toc()</code></pre>
 </div>
 <div id="subdividindo-listas-pelo-purrr" class="section level3">
 <h3>3. Subdividindo listas pelo purrr</h3>
-<div id="q.3.1-crie" class="section level4">
-<h4>Q.3.1 Crie</h4>
+<div id="q.3.1-nomeie-os-objetos-da-lista-lstq2.10-de-acordo-com-o-código-deles-de-paísesq2.1.-veja-se-você-consegue-fazer-isso-tanto-pela-função-setnames-quanto-pela-função-names--" class="section level4">
+<h4>Q.3.1 Nomeie os objetos da lista <code>lstQ2.10</code> de acordo com o código deles de <code>paísesQ2.1</code>. Veja se você consegue fazer isso, tanto pela função <code>setNames</code> quanto pela função <code>names &lt;-</code></h4>
+<pre class="r"><code>lstQ2.10 &lt;- lstQ2.10 %&gt;% setNames(paisesQ2.1)
+
+names(lstQ2.10) &lt;- paisesQ2.1</code></pre>
 </div>
+<div id="q.3.2-a-partir-de-um-dos-tibbles-da-lista-lstq2.10-crie-um-vetor-atômico-years-contendo-todos-os-anos-que-a-niot-engloba." class="section level4">
+<h4>Q.3.2 A partir de um dos <code>tibbles</code> da lista <code>lstQ2.10</code>, crie um vetor atômico <code>years</code> contendo todos os anos que a NIOT engloba.</h4>
+<p>Importante: exclua os valores duplicados e não use nenhum valor arbitrário.</p>
+<pre class="r"><code>years &lt;- lstQ2.10$AUS %&gt;% .[&quot;Year&quot;] %&gt;% distinct() %&gt;% unlist()</code></pre>
+</div>
+<div id="q.3.3-a-partir-dos-dados-de-aus-de-lstq2.10-crie-uma-lista-ausyear-com-um-tibble-para-cada-ano.-ou-seja-um-tibble-para-os-dados-de-aus-para-o-ano-2000-um-tibble-para-o-ano-2001-e-etc-nomeie-os-elementos-de-ausyear-com-o-ano-referente-a-cada-um.-use-o-pacote-tictoc-para-medir-a-perfomance-e-tente-usar-a-função-map." class="section level4">
+<h4>Q.3.3 A partir dos dados de <code>AUS</code> de <code>lstQ2.10</code>, crie uma lista <code>ausYear</code> com um tibble para cada ano. Ou seja, um <code>tibble</code> para os dados de <code>AUS</code> para o ano 2000, um <code>tibble</code> para o ano 2001 e etc… Nomeie os elementos de <code>ausYear</code> com o ano referente a cada um. Use o pacote <code>tictoc</code> para medir a perfomance e tente usar a função map.</h4>
+<pre class="r"><code>ausYear &lt;- as.list(years) %&gt;% map(function(x) filter(lstQ2.10$AUS, Year == x)) %&gt;% setNames(years)</code></pre>
+</div>
+<div id="q.3.4-faça-o-mesmo-que-em-q.3.3-porém-agora-criando-uma-lista-niotq3-com-todos-os-países." class="section level4">
+<h4>Q.3.4 Faça o mesmo que em Q.3.3, porém agora criando uma lista <code>niotQ3</code> com todos os países.</h4>
+<p>Use o pacote <code>tictac</code> e veja se consegue fazer por <code>map</code></p>
+<p>Considere que fazer usando <code>map()</code> é um desafio. Se não conseguir desse modo faça via <code>for</code> mesmo. Se você conseguir fazer via <code>map()</code> faça via <code>for</code> para comparar a diferença de perfomance!</p>
+<p>Dica: Para fazer com <code>map</code> crie uma função antes que tem dentro dela um <code>map</code>.</p>
+<p>Dica da dica: Ao criar uma função antes, não use a mesma letra dentro de <code>function()</code> na definição da função que você for usar na função anônima a ser criada dentro dela.</p>
+<pre class="r"><code>#Usando for
+tic()
+niotQ3 &lt;- list()
+for(i in seq_along(lstQ2.10)){
+  niotQ3[[i]] &lt;- list()
+  for(j in seq_along(years)){
+    niotQ3[[i]][[j]] &lt;- filter(lstQ2.10[[i]], Year == years[j])
+
+  }
+    names(niotQ3[[i]]) &lt;- years
+}
+names(niotQ3) &lt;- names(lstQ2.10)
+toc()</code></pre>
+<pre><code>## 0.11 sec elapsed</code></pre>
+<pre class="r"><code>rm(niotQ3)
+
+#Definindo a função antes
+tic()
+filter_year &lt;- function(Y){
+  as.list(years) %&gt;% map(function(x) filter(Y, Year == x)) %&gt;% setNames(years)
+}
+niotQ3 &lt;- lstQ2.10 %&gt;% map(filter_year)
+toc()</code></pre>
+<pre><code>## 0.08 sec elapsed</code></pre>
+<pre class="r"><code>rm(niotQ3)
+# Usando map com função anônima
+
+tic()
+niotQ3 &lt;- lstQ2.10 %&gt;% map(function(Y) map(as.list(years), function(x) filter(Y, Year == x))) %&gt;% map(function(x) setNames(x,years))
+toc()</code></pre>
+<pre><code>## 0.06 sec elapsed</code></pre>
+</div>
+<div id="q.3.5--crie-agora-uma-lista-niotq3dom-a-partir-de-niotq3-tenha-apenas-os-dados-com-a-produção-doméstica-coluna-origin." class="section level4">
+<h4>Q.3.5- Crie agora uma lista <code>niotQ3Dom</code> a partir de <code>niotQ3</code> tenha apenas os dados com a produção doméstica (coluna <code>Origin</code>).</h4>
+<pre class="r"><code>niotQ3Dom &lt;- niotQ3 %&gt;% map(map, function(x) filter(x, Origin == &quot;Domestic&quot;))</code></pre>
+</div>
+<div id="q.3.6---crie-uma-lista-lstq3.6-mantendo-de-niotq3dom-apenas-os-valores-da-demanda-intermediaria." class="section level4">
+<h4>Q.3.6 - Crie uma lista <code>lstQ3.6</code> mantendo de <code>niotQ3Dom</code> apenas os valores da demanda intermediaria.</h4>
+<pre class="r"><code>names_intermediaria &lt;- lstQ2.14[[1]]
+
+lstQ3.6 &lt;- niotQ3Dom %&gt;% map(map, function(x) select(x, all_of(names_intermediaria)))</code></pre>
+</div>
+<div id="q.3.7---some-os-valores-das-linhas-de-lstq3.6-e-aloque-essa-soma-numa-lista-lstq3.7" class="section level4">
+<h4>Q.3.7 - Some os valores das linhas de <code>lstQ3.6</code> e aloque essa soma numa lista <code>lstQ3.7</code></h4>
+<pre class="r"><code>lstQ3.7 &lt;- lstQ3.6 %&gt;% map(map, function(x) colSums(type_convert(x)[,-c(1:4)]))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+</div>
+<div id="q.3.8---eleve-a--1-todos-os-elementos-de-lstq3.7.-aloque-em-lstq3.8" class="section level4">
+<h4>Q.3.8 - Eleve a <code>-1</code> todos os elementos de <code>lstQ3.7</code>. Aloque em <code>lstQ3.8</code></h4>
+<pre class="r"><code>lstQ3.8 &lt;- lstQ3.7 %&gt;% map(map, function(x) x^(-1))</code></pre>
+</div>
+<div id="q.3.9---crie-uma-lista-lstq3.8-em-que-os-valores-de-lstq3.9-sejam-a-diagonal-principal-de-matriz-quadrada." class="section level4">
+<h4>Q.3.9 - Crie uma lista <code>lstQ3.8</code> em que os valores de <code>lstQ3.9</code> sejam a diagonal principal de matriz quadrada.</h4>
+<pre class="r"><code>lstQ3.9 &lt;- lstQ3.8 %&gt;% map(map, diag)</code></pre>
+</div>
+<div id="q.3.10---crie-uma-lista-aq3-com-os-resultados-de-uma-multiplicação-da-matrizes-lstq3.6-pelas-da-lstq3.9.-essa-é-a-matriz-de-coeficientes-técnicos." class="section level4">
+<h4>Q.3.10 - Crie uma lista <code>AQ3</code> com os resultados de uma multiplicação da matrizes <code>lstQ3.6</code> pelas da <code>lstQ3.9</code>. Essa é a Matriz de Coeficientes Técnicos.</h4>
+<pre class="r"><code>tic()
+AQ3 &lt;- lstQ3.6 %&gt;% map2(lstQ3.9, map2, function(x,y) as.matrix(type_convert(x)[,-c(1:4)]) %*% as.matrix(y))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre class="r"><code>toc()</code></pre>
+<pre><code>## 1.8 sec elapsed</code></pre>
+<pre class="r"><code>tic()
+AQ3 &lt;- lstQ3.6 %&gt;% map(map, function(x) type_convert(x)[,-c(1:4)]) %&gt;%
+  map(map, as.matrix) %&gt;%
+  map2(lstQ3.9, map2, function(x,y) x %*% as.matrix(y))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )
+## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   Code = col_character(),
+##   Description = col_character(),
+##   Origin = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre class="r"><code>toc()</code></pre>
+<pre><code>## 1.67 sec elapsed</code></pre>
+</div>
+<div id="q.3.11---crie-uma-lista-invleontief-com-a-inversa-de-leontieff-obtidas-a-partir-de-aq3" class="section level4">
+<h4>Q.3.11 - Crie uma lista <code>InvLeontief</code> com a Inversa de Leontieff obtidas a partir de <code>AQ3</code></h4>
+<pre class="r"><code>InvLeontief &lt;- map(AQ3, map ,function(x) solve(diag(nrow(x))- x))</code></pre>
+</div>
+<div id="q.3.12-junte-os-valores-obtidos-em-invleontief-com-as-colunas-code-e-description." class="section level4">
+<h4>Q.3.12 Junte os valores obtidos em <code>InvLeontief</code> com as colunas <code>Code</code> e <code>Description</code>.</h4>
+<p>Dica: <code>lstQ3.6</code> pode lhe ser utíl.</p>
+<pre class="r"><code>desc_vars &lt;- lstQ3.6$AUS$`2000`[c(&quot;Code&quot;, &quot;Description&quot;)]
+
+InvLeontief &lt;- InvLeontief %&gt;% map(map, function(x) data.frame(desc_vars, InvLeontief))</code></pre>
+</div>
+</div>
+<div id="section" class="section level3">
+<h3>4 -</h3>
 </div>
 </div>
 <div class="footnotes">
