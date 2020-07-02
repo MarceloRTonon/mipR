@@ -1,5 +1,5 @@
 ---
-title: "Aula 4 - Automatizando tarefas"
+title: "Tópico 4 - Automatizando tarefas"
 author: "Marcelo Tonon e Felipe Cornelio"
 date: "07/06/2020"
 output: html_document
