@@ -673,9 +673,9 @@ niotITA_8.6 <- niotITA_8.5[,-c(61:67)]
 
 ```{r, include=FALSE}
 total_output <- niotITA_8.2[niotITA_8.2$Year == "2008" & niotITA_8.2$Description == "Output at basic prices",]
-total_output_diag <- diag(as.data.frame(total_output)[,5:60])
-Dem_Int_matrix <- as.matrix(as.data.frame(niotITA_8.6)[,5:60])
-coef_tec <- total_output_diag%*%Dem_Int_matrix
+total_output_diag <- diag(1/total_output[,5:60])
+Dem_Int_matrix <- as.matrix(niotITA_8.6[,5:60])
+coef_tec <- Dem_Int_matrix%*%total_output_diag
   
 ```
 
