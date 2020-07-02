@@ -299,7 +299,7 @@ ItaQ3.4 <- ItaQ1.9 %>% filter(near(GO, 20000, tol= 15000))
 #### Q.3.5 Some os valores de todas as linhas da base filtrada com as seguintes caracteristicas:  `Origin = Domestic`; `Year = 2000`. Chame o objeto de `vecQ3.5`
 
 ```{r, include=FALSE}
-vecQ3.5 <- ItaQ1.9 %>% filter(Origin == "Domestic", Year == 2000) %>%
+vecQ3.5 <- ItaQ1.9 %>% filter(Origin == "Domestic", Year == 2000)%>%
   .[,-c(1:4)] %>% rowSums()
 ```
 
@@ -351,7 +351,7 @@ dfQ4.3 <- americadoSul %>% inner_join(ganhadores)
 
 Considere agora a base de dados `edicoes`:
 
-```{r, TRUE}
+```{r, include = TRUE}
 edicoes <- data.frame("Copa"=c(2018, 2014, 2010, 2006, 2002, 1998,1994, 1990, 1986), "Ganhador"= c("França", "Alemanha", "Espanha", "Itália", "Brasil", "França", "Brasil", "Alemanha", "Argentina"), "Vice" = c("Croácia", "Argentina", "Holanda", "França", "Alemanha", "Brasil", "Itália", "Argentina", "Alemanha"))
 ```
 
@@ -387,7 +387,7 @@ dfQ4.6 <- americadoSul %>% inner_join(edicoes, by = c("Países" = "Ganhador")) %
 #### Q.4.7 Crie uma tabela `dfQ4.7` dos países da América do Sul que não foram para `Vice` desde 1986.
 
 ```{r, include=FALSE}
-dfQ4.7 <- americadoSul %>% anti_join(edicoes, by = c("Países" = "Ganhador"))
+dfQ4.7 <- americadoSul %>% anti_join(edicoes, by = c("Países" = "Vice"))
 ```
 
 ### 5. Entendendo melhor Estruturas de dados
@@ -419,7 +419,7 @@ atmQ5 <- c(1,2,4,2,3,5)
 
 ##### Q.5.1.f Criar um vetor atômico com elementos de tipos diferentes.
 
-```{r, eval= FALSE}
+```{r, eval= FALSE, include = FALSE}
 Q51 <- list(T, T, F, F, F, F)
 names(Q51) <-letters[1:6]
 ```
@@ -505,7 +505,7 @@ df.nomes2 <- as.data.frame(t(df.nomes))
 dfQ5.11 <- dfQ5
 ```
 
-E seja a definição do *Argument* `row.names` da função `data.frame` a seguinte:
+E seja a definição do *Argument* `row.names` da função `data.frame` (veja o R Documentation) a seguinte:
 
 NULL or a single integer or character string specifying a column to be used as row names, ***or a character or integer vector giving the row names for the data frame.***
 
@@ -513,7 +513,7 @@ O que irá ocorrer em cada uma dessas situações? Você consegue dizer o porqu�
 
 ##### Q.5.11.1
 ```{r, include = TRUE, eval = FALSE}
-dfQ5.11.1 <- data.frame(dfQ5.11, row.names = df.nomes["Nomes"])
+dfQ5.11.1 <- data.frame(dfQ5.11, row.names = t(df.nomes["Nomes"]))
 ```
 
 ##### Q.5.11.2
@@ -548,7 +548,7 @@ dfQ5.11.6 <- data.frame(dfQ5.11, row.names = df.nomes2[1,])
 
 ##### Q.5.11.7
 
-```{r}
+```{r, include = TRUE, eval = FALSE}
 dfQ5.11.7 <- data.frame(dfQ5.11, row.names = t(df.nomes2[1,]))
 ```
 
@@ -572,7 +572,7 @@ Já && e || irão avaliar as condições (da esquerda para direita) e caso algum
 
 ```
 
-#### Q.6.5 - Teste a condição (x > 5 & < 10). Por que ela não funciona? Como você resolveria?
+#### Q.6.5 - Teste a condição (`x > 5 & < 10`). Por que ela não funciona? Como você resolveria?
 
 ```{r, include=FALSE}
 x <- 7
@@ -613,7 +613,7 @@ b <- matrix(c(4,3,0,6,2,0,5,1,0), 3, 3)
 
 ```{r, include=FALSE}
 tem_inversa <- function(x){
-  ifelse(det(x) != 0, "Tem Inversa", "Não tem Inversa")
+  ifelse(det(x) != 0 & nrow(x) == ncol(x), "Tem Inversa", "Não tem Inversa")
 }
 ```
 
@@ -669,23 +669,46 @@ niotITA_8.6 <- niotITA_8.5[,-c(61:67)]
 
 #### **Desafio 8.1**: Monte uma matriz de coeficientes técnicos a partir das informaçoes extraídas. Lembrando que os coeficientes são a divisão de um elemento da matriz de demanda intermediária em relação ao setor (que está na coluna).
 
-**Dica**: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.
+**Dica**: Usar a matriz criada na questão 8.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.
 
 ```{r, include=FALSE}
+
 total_output <- niotITA_8.2[niotITA_8.2$Year == "2008" & niotITA_8.2$Description == "Output at basic prices",]
+
 total_output_diag <- diag(1/total_output[,5:60])
+
 Dem_Int_matrix <- as.matrix(niotITA_8.6[,5:60])
+
 coef_tec <- Dem_Int_matrix%*%total_output_diag
   
 ```
 
 #### Q.8.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.
 
+```{r, eval = FALSE, include = FALSE}
+#exemplo sala
+matrix_a <- matrix(c(1:4), nrow = 2)
+
+sum(matrix_a)
+
+colSums(matrix_a)
+
+rowSums(matrix_a)
+
+
+A <- c(TRUE, "A")
+
+as.logical(A[-2])
+
+```
 
 ```{r, include=FALSE}
 Dem_Int <-rowSums((as.data.frame(niotITA_8.5))[,5:60])
+
 Dem_Fin <-rowSums((as.data.frame(niotITA_8.5))[,61:66])
+
 Dem_Tot <-Dem_Int+Dem_Fin
+
 niotITA_8.7 <- cbind(niotITA_8.5[,1:4],Dem_Int,Dem_Fin,Dem_Tot) 
 ```
 

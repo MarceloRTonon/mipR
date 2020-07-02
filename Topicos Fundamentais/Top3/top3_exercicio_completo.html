@@ -590,8 +590,6 @@ atmQ5 &lt;- c(1,2,4,2,3,5)</code></pre>
 </div>
 <div id="q.5.1.f-criar-um-vetor-atômico-com-elementos-de-tipos-diferentes." class="section level5">
 <h5>Q.5.1.f Criar um vetor atômico com elementos de tipos diferentes.</h5>
-<pre class="r"><code>Q51 &lt;- list(T, T, F, F, F, F)
-names(Q51) &lt;-letters[1:6]</code></pre>
 </div>
 </div>
 <div id="q.5.2-use-typeof-em-dfq5-lstq5-matq5-atmq5.-como-isso-se-relaciona-com-as-afirmações-q.5.1.aq.5.1.b-q.5.1.d-q.5.1.e-e-q.5.1.f" class="section level4">
@@ -642,12 +640,12 @@ as.data.frame(lstQ53_b)</code></pre>
 df.nomes2 &lt;- as.data.frame(t(df.nomes))
 
 dfQ5.11 &lt;- dfQ5</code></pre>
-<p>E seja a definição do <em>Argument</em> <code>row.names</code> da função <code>data.frame</code> a seguinte:</p>
+<p>E seja a definição do <em>Argument</em> <code>row.names</code> da função <code>data.frame</code> (veja o R Documentation) a seguinte:</p>
 <p>NULL or a single integer or character string specifying a column to be used as row names, <strong><em>or a character or integer vector giving the row names for the data frame.</em></strong></p>
 <p>O que irá ocorrer em cada uma dessas situações? Você consegue dizer o porquê? Tente dizer antes de rodar o código.</p>
 <div id="q.5.11.1" class="section level5">
 <h5>Q.5.11.1</h5>
-<pre class="r"><code>dfQ5.11.1 &lt;- data.frame(dfQ5.11, row.names = df.nomes[&quot;Nomes&quot;])</code></pre>
+<pre class="r"><code>dfQ5.11.1 &lt;- data.frame(dfQ5.11, row.names = t(df.nomes[&quot;Nomes&quot;]))</code></pre>
 </div>
 <div id="q.5.11.2" class="section level5">
 <h5>Q.5.11.2</h5>
@@ -690,7 +688,7 @@ dfQ5.11 &lt;- dfQ5</code></pre>
 <h4>Q.6.4 - Explique as diferenças entre <code>&amp;</code>, <code>&amp;&amp;</code>, <code>|</code> e <code>||</code></h4>
 </div>
 <div id="q.6.5---teste-a-condição-x-5-10.-por-que-ela-não-funciona-como-você-resolveria" class="section level4">
-<h4>Q.6.5 - Teste a condição (x &gt; 5 &amp; &lt; 10). Por que ela não funciona? Como você resolveria?</h4>
+<h4>Q.6.5 - Teste a condição (<code>x &gt; 5 &amp; &lt; 10</code>). Por que ela não funciona? Como você resolveria?</h4>
 </div>
 </div>
 <div id="if-else" class="section level3">
@@ -730,7 +728,7 @@ b &lt;- matrix(c(4,3,0,6,2,0,5,1,0), 3, 3)</code></pre>
 </div>
 <div id="desafio-8.1-monte-uma-matriz-de-coeficientes-técnicos-a-partir-das-informaçoes-extraídas.-lembrando-que-os-coeficientes-são-a-divisão-de-um-elemento-da-matriz-de-demanda-intermediária-em-relação-ao-setor-que-está-na-coluna." class="section level4">
 <h4><strong>Desafio 8.1</strong>: Monte uma matriz de coeficientes técnicos a partir das informaçoes extraídas. Lembrando que os coeficientes são a divisão de um elemento da matriz de demanda intermediária em relação ao setor (que está na coluna).</h4>
-<p><strong>Dica</strong>: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.</p>
+<p><strong>Dica</strong>: Usar a matriz criada na questão 8.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.</p>
 </div>
 <div id="q.8.7---vamos-criar-um-novo-conjunto-de-dados-composto-apenas-pela-soma-da-demanda-intemediária-soma-da-demanda-final-e-a-demanda-total.-não-esqueça-de-nomear-as-colunas." class="section level4">
 <h4>Q.8.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.</h4>
