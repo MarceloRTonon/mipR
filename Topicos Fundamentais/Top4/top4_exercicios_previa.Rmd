@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(include = FALSE, eval = FALSE)
 ```
 
-O que esta aqui é **PREVIA** dos exercicios. Estes são os exercicios para até quinta-feira dia 9/07/2020.
+O que esta aqui é **PRÈVIA** dos exercicios. Estes são os exercicios para até quinta-feira dia 9/07/2020.
 
 **HAVERÁ MAIS QUESTÕES NO FUTURO.**
 
@@ -33,7 +33,7 @@ library(tictoc)
 
 Talvez você fique com dúvidas e dificuldades. É normal. Especialmente quando você está aprendendo uma coisa nova. Assim, tente seguir o roteiro abaixo para resolver suas questões:
 
-1. É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma virgula, parentêses, aspas... 
+1. É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma vírgula, parentêses, aspas... 
 
 2. Dedique um tempo tentando elaborar esse erro ou dúvida. Organizar a sua dúvida na sua cabeça, muitas vezes já resolve o problema por si só.
 
