@@ -1,0 +1,125 @@
+---
+title: "Tópico 5 - Lendo dados de forma automatizada"
+author: "Marcelo Tonon"
+date: "02/05/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE, include = TRUE)
+# Todos os chunks em que estiver escrito "MT" quer dizer = Mensagem do Tonon. É um quadro dando dicas e etc... Use MF = Mensagem do Felipe.
+```
+
+## Pacotes Necessários
+
+O pacote `stringr` a ser usado faz parte do núcleo do `tidyverse`.^[A essa altura do campeonato já consideramos que quem está lendo esse tópico já tem os pacotes do `tidyverse` instalados ou sabe como instalar caso não esteja. Ou seja, simplesmente fazer `install.packages("NomeDoPacote")`.]
+
+```{r libraries, warning=FALSE}
+library(tidyverse)
+library(readxl)
+```
+
+
+## Objetivos do Tópico
+
+Feitas a introdução de R, iremos neste capítulo do curso apresentar as diferentes formas possíveis em que se pode ler uma base de dados a partir do R.
+
+## Entrando a fundo nas funções paste e paste0
+
+Se você deseja escrever uma frase no R a partir objetos, você pode usar a função `paste` ou a função `paste0`. Veja abaixo quando usamos a isso junto as funções `Sys.Date()` e `Sys.Time()`. que retornam, respectivamente, a data atual e o hórario atual. `paste` e `paste0` fazem no R o que `concatenar` faz no Excel.
+
+```{r sysdate}
+x <- "A data de hoje: "
+data <- Sys.Date()
+paste(x, data, sep = " ")
+hora <- format(Sys.time(), "%X")
+paste0("A hora é ", hora)
+```
+
+Repare que quando usamos `paste()` precisamos especificar qual será o separador entre os objetos concatenados com `sep = `. No caso de `paste(x, data, sep = " ")`, o separador é um dois pontos seguindo de um espaço, `": "`, como indicado entre as aspas. Importante dizer que o separador deve ser sempre um character. Assim sendo, uma função como `paste(x, data, sep = 2)` retornaria um erro.
+
+No caso de `paste0()`, não há separador entre os objetos. Assim sendo, não há necessidade de estabelecer qual é o separador como `sep = ""`. Podemos pensar em `paste0()` como um subconjunto de `paste()`.
+
+Aqui vale notar uma questão relevante, e de certo modo auto evidente, para as funções `Sys.time()` e `Sys.date`: ambas retornam valores diferentes quando executadas em diferentes momentos. Vamos ver as implicações então, quando criaremos o objeto `hora.1` e a função `hora()`:
+
+```{r hora}
+
+hora1 <-  paste0("A hora é: ", Sys.time())
+
+# Pedindo para o R esperar 2 segundos.
+Sys.sleep(2)
+
+
+hora <- function() paste0("A hora é: ", Sys.time())
+
+# Testando se o resultado de hora.1 e de hora.2() é a mesma coisa.
+hora1 == hora()
+```
+
+Você pode perceber que quando perguntamos ao ``R`` se `hora.1()` e `hora.2()` são a mesma coisa, usando `==`, ele nos retorna `FALSE`. Isso porque, sempre que chamamos `hora.1` o sistema irá retornar o então 
+
+Você pode perceber que quando perguntamos ao ``R`` se `hora1` e `hora()` são a mesma coisa, usando `==`, ele nos retorna `FALSE`. Isso porque, sempre que chamarmos `hora.1` no sistema, este irá retornar um mesmo valor, que foi gravado pela função `Sys.time()` no momento em que `hora1` foi definido. Por outro lado, a função `hora()` irá sempre retornar um valor novo toda vez que foi executada. Desse modo, ao usar funções ou objetos que tenham como insumo  funções como `paste` e `paste0`, temos que ter em mente se o valor do objeto é definido ou dinâmico.
+
+```{r MT_note, eval = FALSE, include = FALSE}
+Na lista de  exercicios 4, em questões para depois do dia 9/07/2020, vamos usar Sys.time() junto com map() e for() para deixar ainda mais claro o contexto do que é uma função vetorizada.
+```
+
+
+## Strings no geral e no R
+
+```{r MT_str_def, eval= FALSE, include = FALSE}
+#Defina o que é uma string em termos gerais de programação. Procura na internet uma definição e tenta deixar ela mastigada, mas também sem dar muitas voltas. Não precisa definir string no contexto do R não logo de cara não, a definição pode ser ampla (e é até melhor se você conseguir). Um paragrafo falando disso. É melhor você definir primeiro num contexto geral, para então falar no R.
+
+#Depois que você definir, fale no contexto do R (que não tem um tipo de dados chamados de strings por si só). Seria interessante você falar (mesmo que numa nota de rodapé) que existe uma função is.string() do pacote xtable (para produzir tabelas em tex) porém que na própria seção de Details da função diz que ela não deve ser usada em outro contexto. Assim, vale falar que no R não tem uma distinção entre strings e character. Que em outras linguagens é que há essa diferença (em muitas linguagens character se refere a letras individuais, enquanto string é um conjunto de characters).
+
+#https://stackoverflow.com/questions/18513200/what-is-the-difference-between-string-and-character-in-r
+
+#https://pediaa.com/what-is-the-difference-between-character-and-string/
+```
+
+### Quote com `"` e `'`
+
+```{r MT_quote, eval = FALSE, include = FALSE}
+#Falar de "" e ''.
+
+#Faça algo similar ao Strings Basics do R4DS ( https://r4ds.had.co.nz/strings.html#string-basics) sobre a necessidade de usar "" e '' e etc...
+
+#Olhe em ?Quotes também.
+```
+
+### Nomes reservados e fora do padrão usando `\\u0060` 
+
+```{r MT_reserved, eval = FALSE, include = FALSE}
+#Falar dos nomes reservados e sobre os nomes não convencionais. Importante você deixar claro que não é para sair definindo objetos com esses nomes, mesmo tendo como fazer isso. Fale que é para deixar reservado isso para nomes de elementos listas. Exemplo:
+
+# `2000` <- "PESSIMO"
+#"df$`2000`$AUS" <- "ACEITÁVEL"
+
+# `x y` <- "dez anos de gulag"
+# T <- "passível de fuzilamento"
+# TRUE
+
+# Para te ajudar nisso tudo , vale você dar uma olhada no R Documentation "?Reserved", 
+
+```
+
+### Criando nomes legitimos
+
+```{r MT_makenames, eval = FALSE, include = FALSE}
+#mostre os exemplos de você transformando nomes ruins em nomes legitimos com a função make.names
+
+
+
+```
+
+
+## O pacote stringr
+
+
+```{r MT_stringr, eval = FALSE, include = FALSE}
+#Procure uma base de dados que tenha muitos nomes... Os exemplos de stringr na cheatsheet do RStudio (está na pasta Top5) são todos usando a base fruit. Vale você usar ela para você aprender o que cada função do pacote faz e funciona, PORÈM lembre que não é para usar ela para evitar problemas de copyright. 
+
+#Dica: Na falta de algo melhor, dentro do próprio pacote datasets tem uma base de dados que pode ser interessante: "USJudgeRatings". Apresenta a função "tibble::rownames_to_column()" para transformar os nomes das linhas numa coluna. .
+  
+
+```
