@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(include = FALSE, eval = FALSE)
 ```
 
-O que esta aqui é **PRÈVIA** dos exercicios. Estes são os exercicios para até quinta-feira dia 9/07/2020.
+O que esta aqui é **PRÉVIA** dos exercicios. Estes são os exercicios para até quinta-feira dia 9/07/2020.
 
 **HAVERÁ MAIS QUESTÕES NO FUTURO.**
 
