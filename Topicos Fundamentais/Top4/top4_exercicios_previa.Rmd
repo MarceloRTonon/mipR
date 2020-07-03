@@ -1,7 +1,7 @@
 ---
-title: "Tópico 4 - exercicios (Previa)"
+title: "Tópico 4 - exercicios (Prévia)"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "30/06/2020"
+date: "03/07/2020"
 output: html_document
 ---
 
@@ -88,7 +88,7 @@ Se você quer acessar essa documentação de um pacote que você ainda não inst
 ### 1. Conceito da aula
 
 #### Q.1.1 - O que é uma função vetorizada?
-```{r}
+```{r, include=FALSE}
 "Uma função vetorizada é uma função que opera sobre todos os elementos de um vetor de uma vez só."
 ```
 
@@ -107,7 +107,7 @@ ifelse
 ```
 
 #### Q.1.3 Quais os dois motivos principais para fazer um código de forma automática e não manualmente?
-```{r}
+```{r, include=FALSE}
 "Praticidade e Evitar erros"
 ```
 
@@ -138,15 +138,15 @@ lst_typeof[[i]] <- typeof(lista_exemplo[[i]])
 # Passo 4: Agora basta criar um for com i definido numa sequência
 
 for(i in 1:length(lista_exemplo)){
-lst_typeof[[1]] <- typeof(lista_exemplo[[1]])
+lst_typeof[[i]] <- typeof(lista_exemplo[[i]])
 }
 ```
 
-O passo 3 no exemplo acima pode ser considerado supérfluo e você provavelmente vai apaga-lo ao escrever o passo 4. No entanto, especialmente quando você tiver fazendo automatizações mais complexas (que podem envolver não só um `"i"` mas também um `"j"`, `"h"` e etc), fazer o passo 3 pode dar uma maior clareza no que você está fazendo.
+O passo 3 no exemplo acima pode ser considerado supérfluo e você provavelmente vai apagá-lo ao escrever o passo 4. No entanto, especialmente quando você tiver fazendo automatizações mais complexas (que podem envolver não só um `"i"` mas também um `"j"`, `"h"` e etc), fazer o passo 3 pode dar uma maior clareza no que você está fazendo.
 
 #### Q.2.1 - Crie um vetor atômico `paisesQ2.1`  contendo os seguintes valores: `"AUS", "HUN", "ESP"`.
 
-```{r}
+```{r, include=FALSE}
 paisesQ2.1 <- c("AUS", "HUN", "ESP")
 ```
 
@@ -157,7 +157,7 @@ paisesQ2.1 <- c("AUS", "HUN", "ESP")
 
 Sabendo que todos os links da niot seguem o mesmo padrão, crie um vetor `urlsQ2.2` usando os valores de `paisesQ2.1` para criar um vetor com os links dos países de `paisesQ2.1`.
 
-```{r}
+```{r, include=FALSE}
 urlsQ2.2 <- paste0("http://www.wiod.org/protected3/data16/niot/", paisesQ2.1,"_niot_nov16.xlsx")
 ```
 
@@ -352,7 +352,7 @@ lstQ2.13 <- lstQ2.12 %>%
 lstQ2.14 <- map2(lstQ2.12, lstQ2.13, function(x,y) c(colnames(x)[1:4], y$Code))
 ```
 
-#### Q.2.15 - Crie uma lista `lstQ2.15` apenas com os valores da demanda intermediaria (mantenha as 4 primeiras colunas). Use a variação map e veja se consegue fazer isso tanto pelo `tidyverse` quanto pelo `baseR`.
+#### Q.2.15 - Crie uma lista `lstQ2.15` apenas com os valores da demanda intermediária (mantenha as 4 primeiras colunas). Use a variação map e veja se consegue fazer isso tanto pelo `tidyverse` quanto pelo `baseR`.
 
 ```{r}
 tic()
@@ -487,7 +487,7 @@ AQ3 <- lstQ3.6 %>% map(map, function(x) type_convert(x)[,-c(1:4)]) %>%
 toc()
 ```
 
-#### Q.3.11 - Crie uma lista `InvLeontief` com a Inversa de Leontieff obtidas a partir de `AQ3`
+#### Q.3.11 - Crie uma lista `InvLeontief` com a Inversa de Leontief obtidas a partir de `AQ3`
 
 ```{r}
 InvLeontief <- map(AQ3, map ,function(x) solve(diag(nrow(x))- x))
