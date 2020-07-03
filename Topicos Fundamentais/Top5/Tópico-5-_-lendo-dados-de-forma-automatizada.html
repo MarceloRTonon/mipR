@@ -374,7 +374,8 @@ summary {
 <h2>Pacotes Necessários</h2>
 <p>O pacote <code>stringr</code> a ser usado faz parte do núcleo do <code>tidyverse</code>.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <pre class="r"><code>library(tidyverse)
-library(readxl)</code></pre>
+library(readxl)
+library(openxlsx)</code></pre>
 </div>
 <div id="objetivos-do-tópico" class="section level2">
 <h2>Objetivos do Tópico</h2>
@@ -409,8 +410,12 @@ hora1 == hora()</code></pre>
 <div id="quote-com-e" class="section level3">
 <h3>Quote com <code>&quot;</code> e <code>&#39;</code></h3>
 </div>
-<div id="nomes-reservados-e-fora-do-padrão-usando-u0060" class="section level3">
-<h3>Nomes reservados e fora do padrão usando <code>\\u0060</code></h3>
+<div id="nomes-reservados-e-fora-do-padrão-e-u0060" class="section level3">
+<h3>Nomes reservados e fora do padrão e <code>\\u0060</code></h3>
+<p>Lista de nomes reservados</p>
+<pre class="r"><code>if else repeat while function for in next break
+
+TRUE FALSE NULL Inf NaN NA NA_integer_ NA_real_ NA_complex_ NA_character_</code></pre>
 </div>
 <div id="criando-nomes-legitimos" class="section level3">
 <h3>Criando nomes legitimos</h3>
@@ -418,6 +423,41 @@ hora1 == hora()</code></pre>
 </div>
 <div id="o-pacote-stringr" class="section level2">
 <h2>O pacote stringr</h2>
+<div id="usando-stringr-para-detectar-padrões" class="section level4">
+<h4>Usando `<code>stringr</code> para detectar padrões</h4>
+<p>O pacote <code>stringr</code> pode te ajudar a encontrar padrões em strings e blá blá blá.</p>
+<p>A função <code>str_detect</code> serve para <strong><em>isso</em></strong>. Ela devolve um vetor de tipo <strong><em>aquilo</em></strong>.</p>
+<pre class="r"><code>str_detect(string, pattern, negate = FALSE)</code></pre>
+<p>O argumento <code>string</code> se refere à string que você vai usar. <code>pattern</code> se refere a qual padrão a ser analisado pela função. Já <code>negate</code> <strong><em>diz tal coisa</em></strong> e tem como valor padrão <code>FALSE</code>. Se for <code>TRUE</code>, acontece <strong><em>sei lá oque</em></strong>.</p>
+<pre class="r"><code># Supondo que vamos usar df_vignette
+dfvignette &lt;- vignette() %&gt;% .[[4]] %&gt;% as.data.frame()
+
+#Queremos saber que linhas da 4 coluna tem ou não um arquivo em html.
+
+htmlDetect &lt;- str_detect(dfvignette[,4], pattern = &quot;html&quot;)
+
+# Usando negate = TRUE
+
+htmlReject &lt;-  str_detect(dfvignette[,4], pattern = &quot;html&quot;, negate = TRUE)</code></pre>
+<p>Isso pode ser util se quisermos fazer um subsetting tal qual:</p>
+<pre class="r"><code>dfvignette_html &lt;- dfvignette[htmlDetect,]</code></pre>
+</div>
+</div>
+<div id="lendo-vários-arquivos-usando-função-list.files" class="section level2">
+<h2>Lendo vários arquivos usando função <code>list.files</code></h2>
+<p>Coloque então na pasta um arquivo em csv. Dê um exemplo usando <code>list.files()</code> com <code>str_subset(negate = TRUE)</code>para tirar esse arquivo do vetor.</p>
+<p>Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com <code>$</code> na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de <code>\\$</code>! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)</p>
+</div>
+<div id="descompactando-arquivos." class="section level2">
+<h2>Descompactando arquivos.</h2>
+<p>Funções <code>zip</code>, <code>unz</code>, <code>unzip</code>, <code>unzip(..., list = TRUE)</code> e <code>unzip(..., files = c(&quot;&quot;, &quot;&quot;))</code>.</p>
+<p>Brinca com os arquivos que você criou para lidar com isso e etc… Mostra como fazer uma sequência para importar arquivos pro R e etc… Usa <code>str_sub()</code> para criar o nome dos objetos e etc…</p>
+</div>
+<div id="abordando-download.file" class="section level2">
+<h2>Abordando download.file</h2>
+<p>Isso daqui no futuro a gente coloca no Tópico 2.</p>
+<p>Fala da função download.file. Fala da questão de dados binários ou não precisa ser <code>mode= wb</code> e etc…</p>
+<p>Já que o ibge é um porre conseguir o link direto para o download, faz pra NIOT mesmo… Não precisa baixar o zip de todos os páises via o R (já que ele é imenso e só faz em primeiro plano). Baixa algum outro, mas explica a função por parte. Fala também da questão dos arquivos e diretórios temporarios e etc…</p>
 </div>
 <div class="footnotes">
 <hr />

@@ -17,6 +17,7 @@ O pacote `stringr` a ser usado faz parte do núcleo do `tidyverse`.^[A essa altu
 ```{r libraries, warning=FALSE}
 library(tidyverse)
 library(readxl)
+library(openxlsx)
 ```
 
 
@@ -87,28 +88,68 @@ Na lista de  exercicios 4, em questões para depois do dia 9/07/2020, vamos usar
 #Olhe em ?Quotes também.
 ```
 
-### Nomes reservados e fora do padrão usando `\\u0060` 
+### Nomes reservados e fora do padrão e `\\u0060` 
 
 ```{r MT_reserved, eval = FALSE, include = FALSE}
-#Falar dos nomes reservados e sobre os nomes não convencionais. Importante você deixar claro que não é para sair definindo objetos com esses nomes, mesmo tendo como fazer isso. Fale que é para deixar reservado isso para nomes de elementos listas. Exemplo:
+#Falar dos nomes reservados e sobre os nomes não convencionais. Importante você deixar claro que não é para sair definindo objetos com esses nomes, mesmo tendo como fazer isso. Fale que é para deixar reservado isso para nomes de elementos listas. 
 
+# Para te ajudar nisso tudo , vale você dar uma olhada no R Documentation "?Reserved", 
+
+
+#Exemplos:
+
+# TRUE <- "impossível pois o R não deixa"
+# Fale como F e T são "apelidos" de FALSE e TRUE.
+
+# Coloque no meio disso tudo o chunck lista_reservados.
+
+# Fale do que deixa nome impossível (espaço, parenteses, aspas e etc) Veja mais sobre em: https://adv-r.hadley.nz/names-values.html#non-syntactic
+
+
+
+# Fale como se pode burlar as impossibilidades
+# `TRUE` <- paste("truly", "chaotic", "evil", sep = " ")
 # `2000` <- "PESSIMO"
 #"df$`2000`$AUS" <- "ACEITÁVEL"
 
 # `x y` <- "dez anos de gulag"
 # T <- "passível de fuzilamento"
-# TRUE
 
-# Para te ajudar nisso tudo , vale você dar uma olhada no R Documentation "?Reserved", 
 
+#Fale também sobre as boas práticas de não criar objetos com nomes já usados. 
+
+#c <- c(1:4)
+#matrix <- matrix(c(1:4), nrow = 2)
+#t <- t(matrix(c(1:4), nrow =2))
+# sum <- function(x,y) rbind(x,y)
+
+# Fale do risco disso criar uma mega confusão ao longo do código e para o computador.
 ```
+
+Lista de nomes reservados
+```{r lista_reservados, eval= FALSE, include = TRUE}
+if else repeat while function for in next break
+
+TRUE FALSE NULL Inf NaN NA NA_integer_ NA_real_ NA_complex_ NA_character_
+```
+
 
 ### Criando nomes legitimos
 
 ```{r MT_makenames, eval = FALSE, include = FALSE}
-#mostre os exemplos de você transformando nomes ruins em nomes legitimos com a função make.names
+#mostre os exemplos de você transformando nomes ruins em nomes legitimos com a função make.names (veja ?make.names)
 
+# make.names(TRUE)
+# make.names(NA)
+# make.names("NA")
+# make.names(2000)
+# make.names("_A")
+# make.names("x y")
 
+## Em suma oque acontece com cada um:
+# make.names("nomevalido")
+# make.names("_nome invalido")
+# Mas chame a atenção para o fato de que podendo, é sempre melhor evitar dar nomes a objetos do Global Environment que precise de make.names(). Mas fale, que em data.frame(..., check.names = TRUE) os nomes das colunas passam por make.names()
 
 ```
 
@@ -116,10 +157,109 @@ Na lista de  exercicios 4, em questões para depois do dia 9/07/2020, vamos usar
 ## O pacote stringr
 
 
-```{r MT_stringr, eval = FALSE, include = FALSE}
+```{r MT_base_de_dados, eval = FALSE, include = FALSE}
 #Procure uma base de dados que tenha muitos nomes... Os exemplos de stringr na cheatsheet do RStudio (está na pasta Top5) são todos usando a base fruit. Vale você usar ela para você aprender o que cada função do pacote faz e funciona, PORÈM lembre que não é para usar ela para evitar problemas de copyright. 
 
 #Dica: Na falta de algo melhor, dentro do próprio pacote datasets tem uma base de dados que pode ser interessante: "USJudgeRatings". Apresenta a função "tibble::rownames_to_column()" para transformar os nomes das linhas numa coluna. .
   
+# Se você quiser, pode fazer uma base própria usando paste e paste0.
 
+# Dica: Se você fizer:
+
+#df_vignette <- vignette(all= TRUE)[[4]] %>% as.data.frame
+
+#você tem aí um belo data.frame só com strings para você brincar. Se você não quiser fazer isso na parte expositiva, é uma boa ideia para a lista de exercicios. Só vale dizer que vai ser diferente para cada usuário, uma vez que cada um instalou pacotes diferentes.
 ```
+
+```{r MT_stringr, eval = FALSE, include = FALSE}
+# Decidida a base de dados que você vai usar, aplique nela os exemplos presentes na página 1 do cheatsheet. 
+
+# Dica, use o help em todas as funções. Explique na primeira os argumentos que aparecem nela "str_detect(string, pattern, negate = FALSE)" (sempre mostra a função assim como tá em usage)  e explica o que cada um quer dizer. Aí você segue nas seguintes funções só falando os argumentos que mudarem.
+
+#Veja o exemplo abaixo na seção "#### Usando ``stringr` para detectar padrões"
+```
+
+#### Usando ``stringr` para detectar padrões
+
+O pacote `stringr` pode te ajudar a encontrar padrões em strings e blá blá blá. 
+
+A função `str_detect` serve para ***isso***. Ela devolve um vetor de tipo ***aquilo***.
+
+```{r MT_str_detect_formals, eval = FALSE}
+str_detect(string, pattern, negate = FALSE)
+```
+
+O argumento `string` se refere à string que você vai usar. `pattern` se refere a qual padrão a ser analisado pela função. Já `negate` ***diz tal coisa*** e tem como valor padrão `FALSE`. Se for `TRUE`, acontece ***sei lá oque***.
+
+```{r str_detect_uso}
+# Supondo que vamos usar df_vignette
+dfvignette <- vignette() %>% .[[4]] %>% as.data.frame()
+
+#Queremos saber que linhas da 4 coluna tem ou não um arquivo em html.
+
+htmlDetect <- str_detect(dfvignette[,4], pattern = "html")
+
+# Usando negate = TRUE
+
+htmlReject <-  str_detect(dfvignette[,4], pattern = "html", negate = TRUE)
+```
+
+Isso pode ser util se quisermos fazer um subsetting tal qual:
+
+```{r str_detect_utilidade}
+dfvignette_html <- dfvignette[htmlDetect,]
+```
+
+
+
+```{r MT_stringr_final, eval = FALSE, include =FALSE}
+#Vá falando das funções de `stringr` nesse nível. Se você precisar de inspiração nas explicações pega o capítulo disso no R4DS e as vignettes de R.
+
+#Da segunda página do cheatsheet fala só a parte que tem "need to know".
+
+#### MUITO RELEVANTE: Fale de "$", que quando você quando for usar str_subset e um dos valores tiver "$" no meio do nome, não bastará usar pattern = "$", nem "\$". Deve ser "\\$".
+```
+
+```{r MT_stringi, eval = FALSE, include =FALSE}
+#Não precisa entrar em nada de regex ou nada especifico do stringi. Vamos deixar isso para um tópico suplementar mais a frente se necessário.
+```
+
+
+## Lendo vários arquivos usando função `list.files`
+
+
+```{r MT_listfiles, eval = FALSE, include = FALSE}
+#Fale da função list.files primeiro em abstrato.
+
+#Depois, crie, a partir das bases dentro datasets do R, uma série de arquivos xlsx com openxlsx::write.xlsx. Coloque todos numa pasta x.
+
+#Usa list.files() na pasta.
+
+xfiles <- list.files("x")
+
+#Leia então usando map. Importante o as.list()
+
+arquivos <- xfiles %>%
+  as.list() %>%
+  map(read_xls)
+```
+
+Coloque então na pasta um arquivo em csv. Dê um exemplo usando `list.files()` com `str_subset(negate = TRUE)`para tirar esse arquivo do vetor.
+
+Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com `$` na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de `\\$`! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)
+
+## Descompactando arquivos.
+
+Funções `zip`, `unz`, `unzip`, `unzip(..., list = TRUE)` e `unzip(..., files = c("", ""))`.
+
+Brinca com os arquivos que você criou para lidar com isso e etc... Mostra como fazer uma sequência para importar arquivos pro R e etc... Usa `str_sub()` para criar o nome dos objetos e etc... 
+
+
+## Abordando download.file
+
+Isso daqui no futuro a gente coloca no Tópico 2.
+
+Fala da função download.file. Fala da questão de dados binários ou não precisa ser `mode= wb` e etc...
+
+Já que o ibge é um porre conseguir o link direto para o download, faz pra NIOT mesmo... Não precisa baixar o zip de todos os páises via o R (já que ele é imenso e só faz em primeiro plano). Baixa algum outro, mas explica a função por parte. Fala também da questão dos arquivos e diretórios temporarios e etc...
+
