@@ -488,7 +488,7 @@ Z = \begin{pmatrix}
 \end{pmatrix}
 \end{equation*}
 
-#### Q.7.2 Use `diag()` em cada um dos elementos dessa matriz. O que foi retornado em cada caso?
+#### Q.7.2 Use `diag()` em cada um dos elementos dessa lista. O que foi retornado em cada caso?
 
 #### Q.7.3 Você consegue entender o que aconteceu em cada caso? Entendeu o papel do argumento usado no resultado?
 #### Q.7.4 Acesse a documentação de `diag`.
