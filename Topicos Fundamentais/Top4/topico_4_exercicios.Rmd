@@ -503,5 +503,159 @@ Dica: `lstQ3.6` pode lhe ser utíl.
 desc_vars <- lstQ3.6$AUS$`2000`[c("Code", "Description")]
 
 InvLeontief <- InvLeontief %>% map(map, function(x) data.frame(desc_vars, InvLeontief))
+```
+
+### 4 - Usando variantes de map
+
+#### D.4.1 - Você deve trocar a função de tipo `map()` se você passar a usar como _input_ 4 e não 3 listas? 
+
+
+#### Q.4.1 - Crie as três listas contendo os três periodos $t_1$, $t_2$ e $t_3$.
+
+- Uma lista chamada `l_vetor`, $l$, com os vetores dos coeficientes de trabalho de cada setor:
+
+$$t_1 = \begin{pmatrix}
+3.1 \\
+2.2
+\end{pmatrix};
+t_2 = \begin{pmatrix}
+3.3 \\
+2.0
+\end{pmatrix};
+t_3 = \begin{pmatrix}
+3.2 \\
+2.4
+\end{pmatrix}
+$$
+
+```{r}
+l_vetor <- list(t1 = matrix(c(3.1, 2.2)),
+                t2 = matrix(c(3.3, 2.0)),
+                t3 = matrix(c(3.3, 2.4))
+                )
+```
+
+
+- Uma lista `A_matrixes` com as matrizes de coeficientes técnicos $A$:
+
+$$t_1 = \begin{pmatrix}
+0.3&0.2 \\
+0.1&0.4
+\end{pmatrix};
+t_2 = \begin{pmatrix}
+0.35&0.25 \\
+0.12&0.30
+\end{pmatrix};
+t_3 = \begin{pmatrix}
+0.33&0.22 \\
+0.09&0.25
+\end{pmatrix}
+$$
+
+```{r}
+A_matrixes <- list(
+     t1 = matrix(c(0.3,0.1,.2,.4), nrow =2), 
+     t2 = matrix(c(0.35,0.12,.25,.30), nrow =2),
+     t3 = matrix(c(0.33,0.9,.22,.25), nrow =2)
+     )
+```
+
+- Uma lista chamada `finalDemand`, com os vetores de demanda final a seguir:
+
+$$t_1 = \begin{pmatrix}
+50 \\
+20
+\end{pmatrix};
+t_2 = \begin{pmatrix}
+60 \\
+15
+\end{pmatrix};
+t_3 = \begin{pmatrix}
+80 \\
+30
+\end{pmatrix}
+$$
+
+```{r}
+finalDemand <- list(t1 = matrix(c(50,20)),
+                    t2 = matrix(c(60,15)),
+                    t3 = matrix(c(80,30))
+                    )
+```
+
+
+#### Q.4.2 - Confira o determinante de todas as matrizes em `A_matrixes`.
+
+```{r}
+map(A_matrixes, det)
+```
+#### Q.4.3 - Crie uma lista `Q4.Leontief`, com a inversa de Leontief $[I-A]^{-1}$ de `A_matrixes`
+
+```{r}
+Q4.Leontief <- map(A_matrixes, function(x) solve(diag(nrow(x)) - x))
+```
+
+#### Q.4.4 - Crie uma lista `x_VBP` com os vetores do valor bruto da produção obtido pela Inversa de Leontief (`Q4.Leontief`) multiplicada pelo vetor da demanda final (`finalDemand`)
+
+```{r}
+x_VBP <- map2(Q4.Leontief, finalDemand, function(x,y) x %*% y)
+x_VBP <- map2(Q4.Leontief, finalDemand, function(.x,.y) .x %*% .y)
+x_VBP <- map2(Q4.Leontief, finalDemand, ~ .x %*% .y)
+# crossprod é mais rápido do que %*%!
+x_VBP <- map2(Q4.Leontief, finalDemand, crossprod)
+```
+
+#### Q.4.5 - Crie uma lista `l_matrixes`, com as matrizes de impacto do trabalho $ \hat{l} %*% [I-A]^-1$. 
+Faça tanto usando a lista `Q4.Lentief` quanto direto da lista `A_matrixes`.^[Lembrando que $\hat{x}$ significa que o vetor $x$ foi diagonalizado. Se você tiver problemas com a função `diag()`, lembre-se do que falamos sobre ela e como ela funciona de forma diferente a depender do input que você fornece.]
+
+```{r}
+l_matrixes <- map2(l_vetor, Q4.Leontief, function(x,y) crossprod(diag(c(x)), y))
+
+create_lA <- function(x,y) crossprod(diag(c(x)), solve(diag(nrow(y))- y)) 
+
+l_matrixes <- map2(l_vetor, A_matrixes, create_lA)
+```
+
+#### Q.4.6- Crie uma lista  `L_setor`, contendo os vetores com a quantidade de trabalho por setor.
+
+##### A. Faça a questão `Q.4.6` usando `l_vetor` e `l_matrixes`
+
+```{r}
+L_setor <- map2(l_vetor, finalDemand, crossprod)
+```
+
+##### B. Faça a questão `Q.4.6` usando `l_vetor`, `Q4.Leontief` e `finalDemand`
+
+```{r}
+L_setor <- list(l_vetor, Q4.Leontief, finalDemand) %>%
+  pmap(function(x,y,z) crossprod(diag(c(x)), crossprod(y, z)))
+```
+
+
+#### 5 - Descobrindo outros membros da familia map
+
+Até aqui foram passados três funções da familia `map`: `map`, `map2` e `pmap`. Elas servem para lidar com os diferentes números de  _input_ que você irá usar. Há porém uma variação para o _output_. Ao longo da questão 5, nós iremos apresentar alguns destes (todos podem ser conferidos no cheatsheet do `purrr`)
+
+##### D.5.1 - Qual o tipo de objeto que `map`, `map2` e `pmap` retornam?
+
+##### Q.5.1 - Faça a questão `Q.4.2` novamente, porém, usando `map_dbl`. Compare os dois resultados e veja o que cada um retorna. Cheque o tipo e a classe do _output_ de `map_dbl` em comparação com o de `map`.
+
+```{r}
+map_dbl(A_matrixes, det) %>% class() 
+map_dbl(A_matrixes, det) %>% typeof()
+
+map(A_matrixes, det) %>% class() 
+map(A_matrixes, det) %>% typeof()
+
 
 ```
+
+
+#### Q.5.3 - Dado o _output_ retornado por `map_dbl`, você consegue dizer qual deve ser o tipo retornado por `map_chr`, `map_int` e `map_lgl`?
+
+#### Q.5.4 - Refaça a questão `Q.4.4`, porém ao invés de usar `map2`, use `map2_df`. chame de `x_df`. O que ele retorna?
+
+```{r}
+x_df <- map2_df(Q4.Leontief, finalDemand, function(x,y) x %*% y)
+```
+
