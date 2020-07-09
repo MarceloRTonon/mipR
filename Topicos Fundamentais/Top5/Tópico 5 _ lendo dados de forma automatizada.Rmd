@@ -1,7 +1,7 @@
 ---
 title: "Tópico 5 - Lendo dados de forma automatizada"
-author: "Marcelo Tonon"
-date: "02/05/2020"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "08/07/2020"
 output: html_document
 ---
 
@@ -23,8 +23,13 @@ library(openxlsx)
 
 ## Objetivos do Tópico
 
-Feitas a introdução de R, iremos neste capítulo do curso apresentar as diferentes formas possíveis em que se pode ler uma base de dados a partir do R.
+Feitas a introdução de R, iremos neste tópico do curso apresentar as diferentes formas possíveis em que se pode ler uma base de dados a partir do R.
 
+Para quem deseja se aprofundar mais no tema, o material desenvolvido aqui tem como principais referências os seguintes trabalhos:
+
+ -  
+ - 
+ 
 ## Entrando a fundo nas funções paste e paste0
 
 Se você deseja escrever uma frase no R a partir objetos, você pode usar a função `paste` ou a função `paste0`. Veja abaixo quando usamos a isso junto as funções `Sys.Date()` e `Sys.Time()`. que retornam, respectivamente, a data atual e o hórario atual. `paste` e `paste0` fazem no R o que `concatenar` faz no Excel.
