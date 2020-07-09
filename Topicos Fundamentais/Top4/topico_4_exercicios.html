@@ -441,8 +441,26 @@ sum
 mean
 ifelse</code></pre>
 </div>
-<div id="q.1.3-quais-os-dois-motivos-principais-para-fazer-um-código-de-forma-automática-e-não-manualmente" class="section level4">
-<h4>Q.1.3 Quais os dois motivos principais para fazer um código de forma automática e não manualmente?</h4>
+<div id="q.1.3---quais-os-dois-motivos-principais-para-fazer-um-código-de-forma-automática-e-não-manualmente" class="section level4">
+<h4>Q.1.3 - Quais os dois motivos principais para fazer um código de forma automática e não manualmente?</h4>
+</div>
+<div id="q.1.4---o-que-é-uma-função-anônima" class="section level4">
+<h4>Q.1.4 - O que é uma função anônima?</h4>
+</div>
+<div id="q.1.5---qual-a-diferença-entre-as-funções-paste-e-paste0" class="section level4">
+<h4>Q.1.5 - Qual a diferença entre as funções <code>paste</code> e <code>paste0</code>?</h4>
+</div>
+<div id="q.1.6---o-que-fazem-as-funções-sys.time-e-sys.sleep" class="section level4">
+<h4>Q.1.6 - O que fazem as funções <code>Sys.time</code> e <code>Sys.sleep</code>?<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></h4>
+</div>
+<div id="q.1.7---o-que-faz-o-pacote-tictoc" class="section level4">
+<h4>Q.1.7 - O que faz o pacote <code>tictoc</code>?</h4>
+</div>
+<div id="q.1.8---qual-a-diferença-entre-usar-for-ou-map" class="section level4">
+<h4>Q.1.8 - Qual a diferença entre usar <code>for</code> ou <code>map</code>?</h4>
+</div>
+<div id="q.1.9---quais-são-as-três-variações-de-map-que-você-viu-durante-a-parte-expositiva" class="section level4">
+<h4>Q.1.9 - Quais são as três variações de <code>map</code> que você viu durante a parte expositiva?</h4>
 </div>
 </div>
 <div id="automatizando-tarefas-e-o-pacote-tictoc-enfase-nos-exercicios-do-tópico-3." class="section level3">
@@ -641,7 +659,7 @@ t_3 = \begin{pmatrix}
 <div id="q.4.5---crie-uma-lista-l_matrixes-com-as-matrizes-de-impacto-do-trabalho." class="section level4">
 <h4>Q.4.5 - Crie uma lista <code>l_matrixes</code>, com as matrizes de impacto do trabalho.</h4>
 <p>As matrizes de impacto de trabalho são dadas pela seguinte fórmula: <span class="math inline">\(\hat{l}[I-A]^-1\)</span></p>
-<p>Faça tanto usando a lista <code>Q4.Lentief</code> quanto direto da lista <code>A_matrixes</code>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>Faça tanto usando a lista <code>Q4.Lentief</code> quanto direto da lista <code>A_matrixes</code>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 </div>
 <div id="q.4.6--crie-uma-lista-l_setor-contendo-os-vetores-com-a-quantidade-de-trabalho-por-setor." class="section level4">
 <h4>Q.4.6- Crie uma lista <code>L_setor</code>, contendo os vetores com a quantidade de trabalho por setor.</h4>
@@ -668,13 +686,31 @@ t_3 = \begin{pmatrix}
 <div id="q.5.4---refaça-a-questão-q.4.4-porém-ao-invés-de-usar-map2-use-map2_df.-chame-de-x_df.-o-que-ele-retorna" class="section level4">
 <h4>Q.5.4 - Refaça a questão <code>Q.4.4</code>, porém ao invés de usar <code>map2</code>, use <code>map2_df</code>. chame de <code>x_df</code>. O que ele retorna?</h4>
 </div>
+<div id="q.5.5---seja-listaq55-definida-como" class="section level4">
+<h4>Q.5.5 - Seja <code>listaQ55</code> definida como:</h4>
+<pre class="r"><code>listaQ55 &lt;- list(&quot;A&quot;,2,FALSE,3L)</code></pre>
+<p>O que ocorre quando aplicamos nela <code>map_dfc</code> em conjunto de uma função anônima <code>function(x) c(x)</code>?</p>
+</div>
+</div>
+<div id="loop-sequencial" class="section level3">
+<h3>6 - Loop sequencial</h3>
+<div id="q.6.1---suponha-que-você-quer-fazer-um-loop-que-seja-a-sequência-de-fibronacci" class="section level4">
+<h4>Q.6.1 - Suponha que você quer fazer um loop que seja a sequência de Fibronacci:<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></h4>
+<p><span class="math display">\[t = t_{-1} + t_{-2}\]</span></p>
+<p><span class="math display">\[1,1,2,3,5,8,13,21\]</span></p>
+<p>Vamos definir, <code>frib</code> inicialemnte como:</p>
+<pre class="r"><code>frib &lt;- c(1,1)</code></pre>
+<p>Sabendo que o terceiro elemento de <code>frib</code> se dará por <code>frib[1]+ frib[2]</code>, como você definiria os próximos 10 elementos (ou seja do 3° ao 13°) da sequência de forma automatizada?</p>
+</div>
 </div>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto <a href="https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more">1.6</a> do <em>R for Data Science</em>.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Lembrando que <span class="math inline">\(\hat{x}\)</span> significa que o vetor <span class="math inline">\(x\)</span> foi diagonalizado. Se você tiver problemas com a função <code>diag()</code>, lembre-se do que falamos sobre ela e como ela funciona de forma diferente a depender do input que você fornece.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Veja na parte expositiva o seu uso na seção “Usando Loops para automatizar”.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Lembrando que <span class="math inline">\(\hat{x}\)</span> significa que o vetor <span class="math inline">\(x\)</span> foi diagonalizado. Se você tiver problemas com a função <code>diag()</code>, lembre-se do que falamos sobre ela e como ela funciona de forma diferente a depender do input que você fornece.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Usando aqui um exemplo do Felipe Cardoso na monitoria do dia 09/07/2020<a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

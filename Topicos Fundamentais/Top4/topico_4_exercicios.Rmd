@@ -106,11 +106,25 @@ mean
 ifelse
 ```
 
-#### Q.1.3 Quais os dois motivos principais para fazer um código de forma automática e não manualmente?
+#### Q.1.3 - Quais os dois motivos principais para fazer um código de forma automática e não manualmente?
 ```{r, include=FALSE}
 "Praticidade e Evitar erros"
 ```
 
+
+#### Q.1.4 - O que é uma função anônima?
+
+
+#### Q.1.5 - Qual a diferença entre as funções `paste` e `paste0`?
+
+
+#### Q.1.6 - O que fazem as funções `Sys.time` e `Sys.sleep`?^[Veja na parte expositiva o seu uso na seção "Usando Loops para automatizar".]
+
+#### Q.1.7 - O que faz o pacote `tictoc`?
+
+#### Q.1.8 - Qual a diferença entre usar `for` ou `map`?
+
+#### Q.1.9 - Quais são as três variações de `map` que você viu durante a parte expositiva?
 
 ### 2. Automatizando tarefas e o pacote `tictoc`: enfase nos exercicios do Tópico 3.
 
@@ -662,3 +676,36 @@ map(A_matrixes, det) %>% typeof()
 x_df <- map2_df(Q4.Leontief, finalDemand, function(x,y) x %*% y)
 ```
 
+#### Q.5.5 - Seja `listaQ55` definida como:
+
+```{r, include = TRUE}
+listaQ55 <- list("A",2,FALSE,3L)
+```
+
+O que ocorre quando aplicamos nela `map_dfc` em conjunto de uma função anônima `function(x) c(x)`?
+
+```{r}
+"Junta todos os valores em diferentes colunas de um data.frame"
+```
+
+### 6 - Loop sequencial
+
+
+#### Q.6.1 - Suponha que você quer fazer um loop que seja a sequência de Fibronacci:^[Usando aqui um exemplo do Felipe Cardoso na monitoria do dia 09/07/2020]
+
+$$t = t_{-1} + t_{-2}$$
+
+$$1,1,2,3,5,8,13,21$$
+
+Vamos definir, `frib` inicialemnte como:
+
+```{r, include = TRUE}
+frib <- c(1,1)
+```
+
+ Sabendo que o terceiro elemento de `frib` se dará por `frib[1]+ frib[2]`, como você definiria os próximos 10  elementos (ou seja do 3° ao 13°) da sequência de forma automatizada?
+ 
+```{r}
+for(i in 3:13) frib[i] <- frib[i-2] + frib[i-1]
+```
+ 
