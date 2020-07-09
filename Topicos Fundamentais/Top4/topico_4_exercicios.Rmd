@@ -346,7 +346,7 @@ lstQ2.13 <- lstQ2.12 %>%
   map(distinct)
 ```
 
-#### Q.2.14 - Crie uma lista `lstQ2.14` criando um vetor com os 4 primeiros `colnames` dos tibbles de `lstQ.12` e os valores de `lstQ2.13`. Tente fazer via alguma variação de map.
+#### Q.2.14 - Crie uma lista `lstQ2.14` contendo vetores atômicos cada um com os 4 primeiros `colnames` dos tibbles de `lstQ.12` e os valores de `lstQ2.13`. Tente fazer via alguma variação de map.
 
 ```{r}
 lstQ2.14 <- map2(lstQ2.12, lstQ2.13, function(x,y) c(colnames(x)[1:4], y$Code))
@@ -605,7 +605,10 @@ x_VBP <- map2(Q4.Leontief, finalDemand, ~ .x %*% .y)
 x_VBP <- map2(Q4.Leontief, finalDemand, crossprod)
 ```
 
-#### Q.4.5 - Crie uma lista `l_matrixes`, com as matrizes de impacto do trabalho $ \hat{l} %*% [I-A]^-1$. 
+#### Q.4.5 - Crie uma lista `l_matrixes`, com as matrizes de impacto do trabalho.
+
+As matrizes de impacto de trabalho são dadas pela seguinte fórmula: $\hat{l}[I-A]^-1$
+
 Faça tanto usando a lista `Q4.Lentief` quanto direto da lista `A_matrixes`.^[Lembrando que $\hat{x}$ significa que o vetor $x$ foi diagonalizado. Se você tiver problemas com a função `diag()`, lembre-se do que falamos sobre ela e como ela funciona de forma diferente a depender do input que você fornece.]
 
 ```{r}
