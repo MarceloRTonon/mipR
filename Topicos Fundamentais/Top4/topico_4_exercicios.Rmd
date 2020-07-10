@@ -358,6 +358,8 @@ lstQ2.12 <- lstQ2.11 %>% map(function(x) filter(x, Origin != "TOT"))
 lstQ2.13 <- lstQ2.12 %>%
   map(select, Code) %>%
   map(distinct)
+
+
 ```
 
 #### Q.2.14 - Crie uma lista `lstQ2.14` contendo vetores atômicos cada um com os 4 primeiros `colnames` dos tibbles de `lstQ.12` e os valores de `lstQ2.13`. Tente fazer via alguma variação de map.
