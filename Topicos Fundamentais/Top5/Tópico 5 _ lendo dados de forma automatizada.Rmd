@@ -23,12 +23,12 @@ library(openxlsx)
 
 ## Objetivos do Tópico
 
-Feitas a introdução de R, iremos neste tópico do curso apresentar as diferentes formas possíveis em que se pode ler uma base de dados a partir do R.
+Feita a introdução de R, iremos neste tópico do curso apresentar as diferentes formas possíveis em que se pode ler uma base de dados a partir do R.
 
 Para quem deseja se aprofundar mais no tema, o material desenvolvido aqui tem como principais referências os seguintes trabalhos:
 
- -  
- - 
+ - Os tópicos [11](https://r4ds.had.co.nz/data-import.html) e [14](https://r4ds.had.co.nz/strings.html) do R for Data Science (R4DS).
+ - O tópico [13](https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/index.html) do SW.
  
 ## Entrando a fundo nas funções paste e paste0
 
@@ -62,16 +62,19 @@ hora <- function() paste0("A hora é: ", Sys.time())
 hora1 == hora()
 ```
 
-Você pode perceber que quando perguntamos ao ``R`` se `hora.1()` e `hora.2()` são a mesma coisa, usando `==`, ele nos retorna `FALSE`. Isso porque, sempre que chamamos `hora.1` o sistema irá retornar o então 
-
 Você pode perceber que quando perguntamos ao ``R`` se `hora1` e `hora()` são a mesma coisa, usando `==`, ele nos retorna `FALSE`. Isso porque, sempre que chamarmos `hora.1` no sistema, este irá retornar um mesmo valor, que foi gravado pela função `Sys.time()` no momento em que `hora1` foi definido. Por outro lado, a função `hora()` irá sempre retornar um valor novo toda vez que foi executada. Desse modo, ao usar funções ou objetos que tenham como insumo  funções como `paste` e `paste0`, temos que ter em mente se o valor do objeto é definido ou dinâmico.
 
 ```{r MT_note, eval = FALSE, include = FALSE}
-Na lista de  exercicios 4, em questões para depois do dia 9/07/2020, vamos usar Sys.time() junto com map() e for() para deixar ainda mais claro o contexto do que é uma função vetorizada.
+Na lista de  exercicios 4, em questões para depois do dia 09/07/2020, vamos usamos Sys.time() junto com map() e for() para deixar ainda mais claro o contexto do que é uma função vetorizada.
 ```
 
 
 ## Strings no geral e no R
+
+Vamos agora apresentar o que seria uma "string" e como isso se difere de um "character". Em programação de modo geral, um "character" é somente o caracter isolado, por exemplo, a letra "a", enquanto uma "string" é um conjunto de caracteres que podem, por exemplo formar uma palavra ou uma frase. Dentro de uma string podemos ter diversos caracteres (inclusive numéricos ou símbolos)
+
+
+No caso específico do R, não há diferenciação entre `character` e `string`, sendo todos objetos desse tipo sendo tratados como `character`. 
 
 ```{r MT_str_def, eval= FALSE, include = FALSE}
 #Defina o que é uma string em termos gerais de programação. Procura na internet uma definição e tenta deixar ela mastigada, mas também sem dar muitas voltas. Não precisa definir string no contexto do R não logo de cara não, a definição pode ser ampla (e é até melhor se você conseguir). Um paragrafo falando disso. É melhor você definir primeiro num contexto geral, para então falar no R.
@@ -84,6 +87,30 @@ Na lista de  exercicios 4, em questões para depois do dia 9/07/2020, vamos usar
 ```
 
 ### Quote com `"` e `'`
+
+Para inserir uma string ou character no R podemos usar tanto aspas duplas " quanto aspas simples '. Ambos irão retornar o mesmo resultado, mas pode ser interessante você manter um padrão para separar o que são citações dentro de uma `string` do que a criação de uma `string`. No caso, conforme sugerido pelo Wickham no [R4DS](https://r4ds.had.co.nz/strings.html#string-basics), quando precisar inserir uma citação dentro de uma string é melhor criar a string com `'` e definir a citação com `"`: 
+
+```{r, eval=FALSE}
+
+string1 <- "Exemplo de String"
+string2 <- 'Caso eu eu queira inserir uma "quote" usar aspas simples'
+
+```
+
+Caso você precise inserir uma aspas (simples ou dupla) sozinha dentro de uma string, é necessário incluir um `\` para que o R leia corretamente (caso contrário, ele vai tratar a terceira aspas como o início de uma nova `quote`). Outra opção é diferenciar aspas  simples e duplas:
+
+```{r, eval=FALSE}
+
+aspas_simples <- '\''
+aspas_simples <- "'"
+aspas_duplas <- "\""
+aspas_duplas <- '"'
+
+```
+
+
+Dentro das quotes existem comandos para realizar operações especificas. Imagine que, por exemplo, você precise inserir uma quebra de linha dentro de uma string. Para fazer isso vc pode usar  o comando "newline": `\n`.
+
 
 ```{r MT_quote, eval = FALSE, include = FALSE}
 #Falar de "" e ''.
