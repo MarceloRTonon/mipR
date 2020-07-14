@@ -71,10 +71,36 @@ Na lista de  exercicios 4, em questões para depois do dia 09/07/2020, vamos usa
 
 ## Strings no geral e no R
 
-Vamos agora apresentar o que seria uma "string" e como isso se difere de um "character". Em programação de modo geral, um "character" é somente o caracter isolado, por exemplo, a letra "a", enquanto uma "string" é um conjunto de caracteres que podem, por exemplo formar uma palavra ou uma frase. Dentro de uma string podemos ter diversos caracteres (inclusive numéricos ou símbolos)
+Vamos agora apresentar o que seria uma `string` e como isso se difere de um `character`. Em programação de modo geral, um "character" é somente o caracter isolado, por exemplo, a letra, um número, um símbolos, etc. Por sua vez, uma "string" é um conjunto de caracteres que podem, por exemplo formar uma palavra ou uma frase. Dentro de uma string podemos ter diversos caracteres (inclusive uma combinação de letras, numéricos ou símbolos). Uma forma comum de diferenciar `character` e `string` é usando aspas simples para caracteres (por exemplo, 'a') e aspas duplas para strings ("palavra ou frase").
+
+No caso específico do R, não há diferenciação entre `character` e `string`, sendo todos objetos desse tipo sendo tratados como `character`. Ainda assim, é importante ter essa diferenciação na sua cabeça, para realizar tarefas que envolvam frases ou palavras.
+
+```{r, eval=T}
+# Se definirmos o que seria um character e string:
+
+x <- 'a'
+typeof(x)
+
+```
+```{r, eval=T}
+
+y <- "Palavra ou Frase"
+typeof(y)
+
+```
+
+Percebe-se que para ambos o tipo de é "character". Isso não traz nenhum problemas em específico, mas difere o R de alguma outras linguagens de programação. O R lê basicamente o que seria uma `string` como um conjunto de caracteres, o que não demandaria a criação de um novo tipo do objeto. Podemos, por exemplo, usar a função `nchar()` para contar quantos caracteres existem em um dado objeto.
+
+```{r}
+nchar(x)
+```
+```{r}
+nchar(y)
+```
+Perceba que, o número de caracteres do que seria nossa `string` leva em conta o espaço entre as palavras. Qualquer elemento dentro das aspas será contabilizado como um caracter (exceto alguns especificos como a `/` não contam).
 
 
-No caso específico do R, não há diferenciação entre `character` e `string`, sendo todos objetos desse tipo sendo tratados como `character`. 
+Uma observação importante é, ainda que não exista a distinção entre `character` e `string` no R, dentro do pacote `xtable` há uma função chamada `is.string()`, que é usada apenas no contexto de criação de tabelas tex a partir do R, mas que não tem influência no funcionamento geral da linguagem.
 
 ```{r MT_str_def, eval= FALSE, include = FALSE}
 #Defina o que é uma string em termos gerais de programação. Procura na internet uma definição e tenta deixar ela mastigada, mas também sem dar muitas voltas. Não precisa definir string no contexto do R não logo de cara não, a definição pode ser ampla (e é até melhor se você conseguir). Um paragrafo falando disso. É melhor você definir primeiro num contexto geral, para então falar no R.
@@ -109,8 +135,15 @@ aspas_duplas <- '"'
 ```
 
 
-Dentro das quotes existem comandos para realizar operações especificas. Imagine que, por exemplo, você precise inserir uma quebra de linha dentro de uma string. Para fazer isso vc pode usar  o comando "newline": `\n`.
+Dentro das quotes existem comandos para realizar operações especificas. Imagine que, por exemplo, você precise inserir uma quebra de linha dentro de uma string. Para fazer isso vc pode usar  o comando "newline" `\n` ou também dar um tab `\t`. Ou talvez, vc necessite de uma aspas interna para uma palavra do inglês (por exemplo, It's). Para ver uma lista com diversas operações dentro de quotes, basta analisar o help de `?quotes`. Por exemplo, temos:
 
+```{r, eval=TRUE}
+z <- '\tIt\'s important to study R in order to develop your\nskills in Input-Output Analysis\n\n\n(and also help you to get a job, if you need.)'
+writeLines(z)
+  
+```
+
+Para que o R leia corretamente o que vc deseja na frase, é necessário usar a função `writeLines()`.
 
 ```{r MT_quote, eval = FALSE, include = FALSE}
 #Falar de "" e ''.
@@ -120,7 +153,28 @@ Dentro das quotes existem comandos para realizar operações especificas. Imagin
 #Olhe em ?Quotes também.
 ```
 
-### Nomes reservados e fora do padrão e `\\u0060` 
+Aqui entra um importante tema quando trabalhando com `strings` e `characters`: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego.
+
+```{r}
+mi <- "\u03bc"
+mi
+```
+```{r}
+theta <- "\u03b8"
+theta
+```
+```{r}
+Delta <- "\u0394"
+Delta
+```
+
+Você pode buscar as correspondências do `unicodes` para cada letra grega que desejar. Essa lista está acessível na internet e os códigos, em geral, são universais.
+
+### Nomes Impossíveis e Nomes Reservados
+
+
+
+Outra importante questão são os nomes reservados e que não podem ser usados como nomes de objetos. 
 
 ```{r MT_reserved, eval = FALSE, include = FALSE}
 #Falar dos nomes reservados e sobre os nomes não convencionais. Importante você deixar claro que não é para sair definindo objetos com esses nomes, mesmo tendo como fazer isso. Fale que é para deixar reservado isso para nomes de elementos listas. 

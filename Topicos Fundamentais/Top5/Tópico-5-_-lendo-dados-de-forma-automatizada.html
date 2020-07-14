@@ -407,16 +407,38 @@ hora &lt;- function() paste0(&quot;A hora é: &quot;, Sys.time())
 
 # Testando se o resultado de hora.1 e de hora.2() é a mesma coisa.
 hora1 == hora()</code></pre>
-<p>Você pode perceber que quando perguntamos ao <code>R</code> se <code>hora.1()</code> e <code>hora.2()</code> são a mesma coisa, usando <code>==</code>, ele nos retorna <code>FALSE</code>. Isso porque, sempre que chamamos <code>hora.1</code> o sistema irá retornar o então</p>
 <p>Você pode perceber que quando perguntamos ao <code>R</code> se <code>hora1</code> e <code>hora()</code> são a mesma coisa, usando <code>==</code>, ele nos retorna <code>FALSE</code>. Isso porque, sempre que chamarmos <code>hora.1</code> no sistema, este irá retornar um mesmo valor, que foi gravado pela função <code>Sys.time()</code> no momento em que <code>hora1</code> foi definido. Por outro lado, a função <code>hora()</code> irá sempre retornar um valor novo toda vez que foi executada. Desse modo, ao usar funções ou objetos que tenham como insumo funções como <code>paste</code> e <code>paste0</code>, temos que ter em mente se o valor do objeto é definido ou dinâmico.</p>
 </div>
 <div id="strings-no-geral-e-no-r" class="section level2">
 <h2>Strings no geral e no R</h2>
+<p>Vamos agora apresentar o que seria uma <code>string</code> e como isso se difere de um <code>character</code>. Em programação de modo geral, um “character” é somente o caracter isolado, por exemplo, a letra, um número, um símbolos, etc. Por sua vez, uma “string” é um conjunto de caracteres que podem, por exemplo formar uma palavra ou uma frase. Dentro de uma string podemos ter diversos caracteres (inclusive uma combinação de letras, numéricos ou símbolos). Uma forma comum de diferenciar <code>character</code> e <code>string</code> é usando aspas simples para caracteres (por exemplo, ‘a’) e aspas duplas para strings (“palavra ou frase”).</p>
+<p>No caso específico do R, não há diferenciação entre <code>character</code> e <code>string</code>, sendo todos objetos desse tipo sendo tratados como <code>character</code>. Ainda assim, é importante ter essa diferenciação na sua cabeça, para realizar tarefas que envolvam frases ou palavras.</p>
+<pre class="r"><code># Se definirmos o que seria um character e string:
+
+x &lt;- &#39;a&#39;
+typeof(x)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>y &lt;- &quot;Palavra ou Frase&quot;
+typeof(y)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>Percebe-se que ambos</p>
+<p>Uma observação importante é que dentro do pacote <code>xtable</code> existe a função is.string(), que é usada apenas no contexto de criação de tabelas tex a partir do R.</p>
 <div id="quote-com-e" class="section level3">
 <h3>Quote com <code>&quot;</code> e <code>&#39;</code></h3>
+<p>Para inserir uma string ou character no R podemos usar tanto aspas duplas &quot; quanto aspas simples ’. Ambos irão retornar o mesmo resultado, mas pode ser interessante você manter um padrão para separar o que são citações dentro de uma <code>string</code> do que a criação de uma <code>string</code>. No caso, conforme sugerido pelo Wickham no <a href="https://r4ds.had.co.nz/strings.html#string-basics">R4DS</a>, quando precisar inserir uma citação dentro de uma string é melhor criar a string com <code>&#39;</code> e definir a citação com <code>&quot;</code>:</p>
+<pre class="r"><code>string1 &lt;- &quot;Exemplo de String&quot;
+string2 &lt;- &#39;Caso eu eu queira inserir uma &quot;quote&quot; usar aspas simples&#39;</code></pre>
+<p>Caso você precise inserir uma aspas (simples ou dupla) sozinha dentro de uma string, é necessário incluir um <code>\</code> para que o R leia corretamente (caso contrário, ele vai tratar a terceira aspas como o início de uma nova <code>quote</code>). Outra opção é diferenciar aspas simples e duplas:</p>
+<pre class="r"><code>aspas_simples &lt;- &#39;\&#39;&#39;
+aspas_simples &lt;- &quot;&#39;&quot;
+aspas_duplas &lt;- &quot;\&quot;&quot;
+aspas_duplas &lt;- &#39;&quot;&#39;</code></pre>
+<p>Dentro das quotes existem comandos para realizar operações especificas. Imagine que, por exemplo, você precise inserir uma quebra de linha dentro de uma string. Para fazer isso vc pode usar o comando “newline”: <code>\n</code>.</p>
 </div>
 <div id="nomes-reservados-e-fora-do-padrão-e-u0060" class="section level3">
-<h3>Nomes reservados e fora do padrão e <code>\\u0060</code></h3>
+<h3>Nomes reservados e fora do padrão e <code>\u0060</code></h3>
+<p>Aqui entre um importante tema quando trabalhando com <code>strings</code> e <code>characters</code>: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego.</p>
+<p>FALAR AQUI SOBRE OS NOMES RESERVADOS</p>
 <p>Lista de nomes reservados</p>
 <pre class="r"><code>if else repeat while function for in next break
 
