@@ -375,7 +375,8 @@ summary {
 <p>O pacote <code>stringr</code> a ser usado faz parte do núcleo do <code>tidyverse</code>.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <pre class="r"><code>library(tidyverse)
 library(readxl)
-library(openxlsx)</code></pre>
+library(openxlsx)
+library(purrr)</code></pre>
 </div>
 <div id="objetivos-do-tópico" class="section level2">
 <h2>Objetivos do Tópico</h2>
@@ -421,8 +422,13 @@ typeof(x)</code></pre>
 <pre class="r"><code>y &lt;- &quot;Palavra ou Frase&quot;
 typeof(y)</code></pre>
 <pre><code>## [1] &quot;character&quot;</code></pre>
-<p>Percebe-se que ambos</p>
-<p>Uma observação importante é que dentro do pacote <code>xtable</code> existe a função is.string(), que é usada apenas no contexto de criação de tabelas tex a partir do R.</p>
+<p>Percebe-se que para ambos o tipo de é “character”. Isso não traz nenhum problemas em específico, mas difere o R de alguma outras linguagens de programação. O R lê basicamente o que seria uma <code>string</code> como um conjunto de caracteres, o que não demandaria a criação de um novo tipo do objeto. Podemos, por exemplo, usar a função <code>nchar()</code> para contar quantos caracteres existem em um dado objeto.</p>
+<pre class="r"><code>nchar(x)</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>nchar(y)</code></pre>
+<pre><code>## [1] 16</code></pre>
+<p>Perceba que, o número de caracteres do que seria nossa <code>string</code> leva em conta o espaço entre as palavras. Qualquer elemento dentro das aspas será contabilizado como um caracter (exceto alguns especificos como a <code>/</code> não contam).</p>
+<p>Uma observação importante é, ainda que não exista a distinção entre <code>character</code> e <code>string</code> no R, dentro do pacote <code>xtable</code> há uma função chamada <code>is.string()</code>, que é usada apenas no contexto de criação de tabelas tex a partir do R, mas que não tem influência no funcionamento geral da linguagem.</p>
 <div id="quote-com-e" class="section level3">
 <h3>Quote com <code>&quot;</code> e <code>&#39;</code></h3>
 <p>Para inserir uma string ou character no R podemos usar tanto aspas duplas &quot; quanto aspas simples ’. Ambos irão retornar o mesmo resultado, mas pode ser interessante você manter um padrão para separar o que são citações dentro de uma <code>string</code> do que a criação de uma <code>string</code>. No caso, conforme sugerido pelo Wickham no <a href="https://r4ds.had.co.nz/strings.html#string-basics">R4DS</a>, quando precisar inserir uma citação dentro de uma string é melhor criar a string com <code>&#39;</code> e definir a citação com <code>&quot;</code>:</p>
@@ -433,39 +439,107 @@ string2 &lt;- &#39;Caso eu eu queira inserir uma &quot;quote&quot; usar aspas si
 aspas_simples &lt;- &quot;&#39;&quot;
 aspas_duplas &lt;- &quot;\&quot;&quot;
 aspas_duplas &lt;- &#39;&quot;&#39;</code></pre>
-<p>Dentro das quotes existem comandos para realizar operações especificas. Imagine que, por exemplo, você precise inserir uma quebra de linha dentro de uma string. Para fazer isso vc pode usar o comando “newline”: <code>\n</code>.</p>
+<p>Dentro das quotes existem comandos para realizar operações especificas. Imagine que, por exemplo, você precise inserir uma quebra de linha dentro de uma string. Para fazer isso vc pode usar o comando “newline” <code>\n</code> ou também dar um tab <code>\t</code>. Ou talvez, vc necessite de uma aspas interna para uma palavra do inglês (por exemplo, It’s). Para ver uma lista com diversas operações dentro de quotes, basta analisar o help de <code>?quotes</code>. Por exemplo, temos:</p>
+<pre class="r"><code>z &lt;- &#39;\tIt\&#39;s important to study R in order to develop your\nskills in Input-Output Analysis\n\n\n(and also helps you to get a job, if you need.)&#39;
+writeLines(z)</code></pre>
+<pre><code>##  It&#39;s important to study R in order to develop your
+## skills in Input-Output Analysis
+## 
+## 
+## (and also helps you to get a job, if you need.)</code></pre>
+<p>Para que o R leia corretamente o que vc deseja na frase, é necessário usar a função <code>writeLines()</code>.</p>
+<p>Aqui entra um importante tema quando trabalhando com <code>strings</code> e <code>characters</code>: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego.</p>
+<pre class="r"><code>mi &lt;- &quot;\u03bc&quot;
+mi</code></pre>
+<pre><code>## [1] &quot;µ&quot;</code></pre>
+<pre class="r"><code>theta &lt;- &quot;\u03b8&quot;
+theta</code></pre>
+<pre><code>## [1] &quot;&lt;U+03B8&gt;&quot;</code></pre>
+<pre class="r"><code>Delta &lt;- &quot;\u0394&quot;
+Delta</code></pre>
+<pre><code>## [1] &quot;&lt;U+0394&gt;&quot;</code></pre>
+<p>Você pode buscar as correspondências do <code>unicodes</code> para cada letra grega que desejar. Essa lista está acessível na internet e os códigos, em geral, são universais.</p>
 </div>
-<div id="nomes-reservados-e-fora-do-padrão-e-u0060" class="section level3">
-<h3>Nomes reservados e fora do padrão e <code>\u0060</code></h3>
-<p>Aqui entre um importante tema quando trabalhando com <code>strings</code> e <code>characters</code>: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego.</p>
-<p>FALAR AQUI SOBRE OS NOMES RESERVADOS</p>
-<p>Lista de nomes reservados</p>
-<pre class="r"><code>if else repeat while function for in next break
+<div id="nomes-impossíveis-e-nomes-reservados" class="section level3">
+<h3>Nomes Impossíveis e Nomes Reservados</h3>
+<p>Outra importante questão são os nomes reservados e que não podem ser usados como nomes de objetos. Tratam-se de nomes que exercem alguma função essencial para o funcionamento da sua programação. Imagine que você queira nomear um objeto com a palavra “TRUE”, nesse caso, o R trará uma mensagem de erro pois a palavra exerce uma papel fundamental nas operações lógicas. No próprio R existe uma lista com os nomes reservados, para isso basta colocar no console <code>?Reserved</code>. A lista é a seguinte:</p>
+<pre class="r"><code># Lista de nomes reservados
+
+if else repeat while function for in next break
 
 TRUE FALSE NULL Inf NaN NA NA_integer_ NA_real_ NA_complex_ NA_character_</code></pre>
+<p>Se você tentar, por exemplo, nomear um objeto como TRUE (e o mesmo para a simplificações de TRUE e FALSE - T e F), o R retornará um erro.</p>
+<pre class="r"><code>TRUE &lt;- &quot;impossível pois o R não deixa&quot;</code></pre>
+<p>A criação de um nome deve ser composto por letras, números, <code>.</code> ou <code>_</code>, no entanto não pode começar nem por números nem por <code>_</code>. Não é possível inserir espaços, símbolos ou pontuações (exceto o ponto) no nome de um objeto.</p>
+<pre class="r"><code>_abc &lt;- &quot;Retornará erro&quot;
+a_b_c &lt;- &quot;ok&quot;
+a.b.c &lt;- &quot;ok&quot;
+2abc &lt;- &quot;Retornará erro&quot;
+abc2 &lt;- &quot;ok&quot;
+a b c &lt;- &quot;Retornará erro&quot;</code></pre>
+<p>Essa problema ocorrerá para qualquer um dos nomes reservados ou nomes impossiveis. Caso você realmente precise usar um desses nomes (o que seria uma situação bem peculiar), há uma forma de você burlar essa restrição. No entanto, reforçamos que isso não é recomendado pois pode causar uma bela confusão no seu código. Para isso basta você colocar a palavra entre crases:</p>
+<pre class="r"><code>`TRUE` &lt;- paste(&quot;evitar&quot;, &quot;fazer&quot;, &quot;isso&quot;, sep = &quot; &quot;)
+`2000` &lt;- paste(&quot;também&quot;, &quot;evitar&quot;, sep= &quot; &quot;)
+&quot;df$`2000`$AUS&quot; &lt;- &quot;Possível, mas existe alguma maneira mais simples&quot;
+df_2000_AUS &lt;- &quot;Uma melhor maneira de apresentar&quot;
+`x y` &lt;- &quot;Possível, mas um . ou _ é uma melhor opção&quot;
+`T` &lt;- &quot;Representa o TRUE, também é bom evitar&quot;</code></pre>
+<p>Uma boa prática nesse mesmo sentido é evitar nomear objetos com nomes de funções frequentemente usadas, para evitar confusões ao longo do código. Vamos a alguns exemplos:</p>
+<pre class="r"><code>c &lt;- c(1:4)
+matrix &lt;- matrix(c(1:4), nrow = 2)
+matrix &lt;- matrix(c[1:4], nrow=2)
+t &lt;- t(matrix(c(1:4), nrow =2))
+sum &lt;- function(x,y) rbind(x,y)</code></pre>
+<p>Agora, é possível ter diversas confusões com a função c() e a extração de um elemento de c[], confundir a operação de transposição com a própria transposta em si, e assim por diante.</p>
 </div>
 <div id="criando-nomes-legitimos" class="section level3">
 <h3>Criando nomes legitimos</h3>
+<p>Caso você queira fazer uma nomeação semelhante a algum nome reservado ou impossível, existe uma função do R que irá te sugerir um nome possível e semelhante ao que você colocar como input:</p>
+<pre class="r"><code>make.names(TRUE)</code></pre>
+<pre><code>## [1] &quot;TRUE.&quot;</code></pre>
+<pre class="r"><code>make.names(NA)</code></pre>
+<pre><code>## [1] &quot;NA.&quot;</code></pre>
+<pre class="r"><code>make.names(&quot;NA&quot;)</code></pre>
+<pre><code>## [1] &quot;NA.&quot;</code></pre>
+<pre class="r"><code>make.names(2000)</code></pre>
+<pre><code>## [1] &quot;X2000&quot;</code></pre>
+<pre class="r"><code>make.names(&quot;_A&quot;)</code></pre>
+<pre><code>## [1] &quot;X_A&quot;</code></pre>
+<pre class="r"><code>make.names(&quot;x y&quot;)</code></pre>
+<pre><code>## [1] &quot;x.y&quot;</code></pre>
+<p>São nomes semelhantes mas que possuem uma sintaxe possível de ser usada diretamente no R. No entanto, reforçamos que mesmo os nomes criados por ‘make.names()’ devem ser evitados, principalmente para objetos que serão incluídos no seu global environment. De um modo geral, se está sendo necessário usar a função <code>make.names()</code>, é preferível repensar a nomeclatura das variáveis, de forma que não seja usada a <code>make.names()</code>.</p>
+<p>Uma observação importante é que para elementos dentro de algum objeto, em especial algum <code>data.frame</code>, a função <code>make.names()</code> exerce um papel relevante. Um dos inputs da função <code>data.frame</code> é <code>checknames</code>, em que ao se ter <code>TRUE</code> o R aplica <code>make.names()</code> sobre os nomes das colunas, forçando a criação de nomes possíveis para todas as colunas. Essa é uma das situações em que o uso de <code>make.names()</code> é menos problemático, que seria dentro de algum objeto e não no seu global environment.</p>
 </div>
 </div>
 <div id="o-pacote-stringr" class="section level2">
 <h2>O pacote stringr</h2>
+<p>O pacote <code>stringr</code> nos fornece a possibilidade de manipular informações que estão organizadas no que seriam as <code>strings</code>. Isso é particulamente útil caso sua base de dados não seja númerica ou talvez uma mescla entre informações escritas e númericas.</p>
+<p>Vamos usar como exemplo uma base de dados que já foi apresentada no lista de exercícios do tópico 3, a <code>vignette</code> que apresenta descrições mais detalhes sobre os pacotes instalados. Essa base vai mudar de acordo com os pacotes instalados no R, mas apresentam strings em sua base, principalmente na quarta lista interna. Vamos criar uam data.frame com esses elementos:</p>
+<pre class="r"><code>df_vignette &lt;- vignette(all= TRUE)[[4]] %&gt;% as.data.frame
+# Vamos eliminar a coluna com o diretório dos pacotes, para simplificar a exposição
+df_vignette &lt;- df_vignette %&gt;% select(-LibPath)
+head(df_vignette)</code></pre>
+<pre><code>##   Package              Item                                      Title
+## 1   broom    adding-tidiers     Adding tidiers to broom (source, html)
+## 2   broom available-methods           Available methods (source, html)
+## 3   broom   broom_and_dplyr             broom and dplyr (source, html)
+## 4   broom             broom       Introduction to broom (source, html)
+## 5   broom            kmeans kmeans with dplyr and broom (source, html)
+## 6   broom     bootstrapping          Tidy bootstrapping (source, html)</code></pre>
+<p>Nesse caso temos uma lista com três variáveis com informações que são character</p>
 <div id="usando-stringr-para-detectar-padrões" class="section level4">
 <h4>Usando `<code>stringr</code> para detectar padrões</h4>
 <p>O pacote <code>stringr</code> pode te ajudar a encontrar padrões em strings e blá blá blá.</p>
 <p>A função <code>str_detect</code> serve para <strong><em>isso</em></strong>. Ela devolve um vetor de tipo <strong><em>aquilo</em></strong>.</p>
 <pre class="r"><code>str_detect(string, pattern, negate = FALSE)</code></pre>
 <p>O argumento <code>string</code> se refere à string que você vai usar. <code>pattern</code> se refere a qual padrão a ser analisado pela função. Já <code>negate</code> <strong><em>diz tal coisa</em></strong> e tem como valor padrão <code>FALSE</code>. Se for <code>TRUE</code>, acontece <strong><em>sei lá oque</em></strong>.</p>
-<pre class="r"><code># Supondo que vamos usar df_vignette
-dfvignette &lt;- vignette() %&gt;% .[[4]] %&gt;% as.data.frame()
+<pre class="r"><code>#Queremos saber que linhas da 4 coluna tem ou não um arquivo em html.
 
-#Queremos saber que linhas da 4 coluna tem ou não um arquivo em html.
-
-htmlDetect &lt;- str_detect(dfvignette[,4], pattern = &quot;html&quot;)
+htmlDetect &lt;- str_detect(df_vignette[,3], pattern = &quot;html&quot;)
 
 # Usando negate = TRUE
 
-htmlReject &lt;-  str_detect(dfvignette[,4], pattern = &quot;html&quot;, negate = TRUE)</code></pre>
+htmlReject &lt;-  str_detect(df_vignette[,3], pattern = &quot;html&quot;, negate = TRUE)</code></pre>
 <p>Isso pode ser util se quisermos fazer um subsetting tal qual:</p>
 <pre class="r"><code>dfvignette_html &lt;- dfvignette[htmlDetect,]</code></pre>
 </div>

@@ -18,8 +18,15 @@ O pacote `stringr` a ser usado faz parte do núcleo do `tidyverse`.^[A essa altu
 library(tidyverse)
 library(readxl)
 library(openxlsx)
+library(purrr)
 ```
 
+```{r,eval=T,include=F}
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+library(purrr)
+```
 
 ## Objetivos do Tópico
 
@@ -81,9 +88,6 @@ No caso específico do R, não há diferenciação entre `character` e `string`,
 x <- 'a'
 typeof(x)
 
-```
-```{r, eval=T}
-
 y <- "Palavra ou Frase"
 typeof(y)
 
@@ -91,10 +95,9 @@ typeof(y)
 
 Percebe-se que para ambos o tipo de é "character". Isso não traz nenhum problemas em específico, mas difere o R de alguma outras linguagens de programação. O R lê basicamente o que seria uma `string` como um conjunto de caracteres, o que não demandaria a criação de um novo tipo do objeto. Podemos, por exemplo, usar a função `nchar()` para contar quantos caracteres existem em um dado objeto.
 
-```{r}
+```{r, eval=T}
 nchar(x)
-```
-```{r}
+
 nchar(y)
 ```
 Perceba que, o número de caracteres do que seria nossa `string` leva em conta o espaço entre as palavras. Qualquer elemento dentro das aspas será contabilizado como um caracter (exceto alguns especificos como a `/` não contam).
@@ -138,7 +141,7 @@ aspas_duplas <- '"'
 Dentro das quotes existem comandos para realizar operações especificas. Imagine que, por exemplo, você precise inserir uma quebra de linha dentro de uma string. Para fazer isso vc pode usar  o comando "newline" `\n` ou também dar um tab `\t`. Ou talvez, vc necessite de uma aspas interna para uma palavra do inglês (por exemplo, It's). Para ver uma lista com diversas operações dentro de quotes, basta analisar o help de `?quotes`. Por exemplo, temos:
 
 ```{r, eval=TRUE}
-z <- '\tIt\'s important to study R in order to develop your\nskills in Input-Output Analysis\n\n\n(and also help you to get a job, if you need.)'
+z <- '\tIt\'s important to study R in order to develop your\nskills in Input-Output Analysis\n\n\n(and also helps you to get a job, if you need.)'
 writeLines(z)
   
 ```
@@ -155,15 +158,13 @@ Para que o R leia corretamente o que vc deseja na frase, é necessário usar a f
 
 Aqui entra um importante tema quando trabalhando com `strings` e `characters`: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego.
 
-```{r}
+```{r, eval=T}
 mi <- "\u03bc"
 mi
-```
-```{r}
+
 theta <- "\u03b8"
 theta
-```
-```{r}
+
 Delta <- "\u0394"
 Delta
 ```
@@ -172,9 +173,59 @@ Você pode buscar as correspondências do `unicodes` para cada letra grega que d
 
 ### Nomes Impossíveis e Nomes Reservados
 
+Outra importante questão são os nomes reservados e que não podem ser usados como nomes de objetos. Tratam-se de nomes que exercem alguma função essencial para o funcionamento da sua programação. Imagine que você queira nomear um objeto com a palavra "TRUE", nesse caso, o R trará uma mensagem de erro pois a palavra exerce uma papel fundamental nas operações lógicas. No próprio R existe uma lista com os nomes reservados, para isso basta colocar no console `?Reserved`. A lista é a seguinte:
 
 
-Outra importante questão são os nomes reservados e que não podem ser usados como nomes de objetos. 
+```{r lista_reservados, eval= FALSE, include = TRUE}
+# Lista de nomes reservados
+
+if else repeat while function for in next break
+
+TRUE FALSE NULL Inf NaN NA NA_integer_ NA_real_ NA_complex_ NA_character_
+```
+
+Se você tentar, por exemplo, nomear um objeto como TRUE (e o mesmo para a simplificações de TRUE e FALSE - T e F), o R retornará um erro.
+
+```{r}
+TRUE <- "impossível pois o R não deixa"
+```
+
+A criação de um nome deve ser composto por letras, números, `.` ou `_`, no entanto não pode começar nem por números nem por `_`. Não é possível inserir espaços, símbolos ou pontuações (exceto o ponto) no nome de um objeto.
+
+```{r, eval=FALSE}
+_abc <- "Retornará erro"
+a_b_c <- "ok"
+a.b.c <- "ok"
+2abc <- "Retornará erro"
+abc2 <- "ok"
+a b c <- "Retornará erro"
+```
+
+Essa problema ocorrerá para qualquer um dos nomes reservados ou nomes impossiveis. Caso você realmente precise usar um desses nomes (o que seria uma situação bem peculiar), há uma forma de você burlar essa restrição. No entanto, reforçamos que isso não é recomendado pois pode causar uma bela confusão no seu código. Para isso basta você colocar a palavra entre crases:
+
+
+```{r}
+`TRUE` <- paste("evitar", "fazer", "isso", sep = " ")
+`2000` <- paste("também", "evitar", sep= " ")
+"df$`2000`$AUS" <- "Possível, mas existe alguma maneira mais simples"
+df_2000_AUS <- "Uma melhor maneira de apresentar"
+`x y` <- "Possível, mas um . ou _ é uma melhor opção"
+`T` <- "Representa o TRUE, também é bom evitar"
+```
+
+Uma boa prática nesse mesmo sentido é evitar nomear objetos com nomes de funções frequentemente usadas, para evitar confusões ao longo do código. Vamos a alguns exemplos:
+
+
+```{r}
+c <- c(1:4)
+matrix <- matrix(c(1:4), nrow = 2)
+matrix <- matrix(c[1:4], nrow=2)
+t <- t(matrix(c(1:4), nrow =2))
+sum <- function(x,y) rbind(x,y)
+```
+
+Agora, é possível ter diversas confusões com a função c() e a extração de um elemento de c[], confundir a operação de transposição com a própria transposta em si, e assim por diante.
+
 
 ```{r MT_reserved, eval = FALSE, include = FALSE}
 #Falar dos nomes reservados e sobre os nomes não convencionais. Importante você deixar claro que não é para sair definindo objetos com esses nomes, mesmo tendo como fazer isso. Fale que é para deixar reservado isso para nomes de elementos listas. 
@@ -212,15 +263,25 @@ Outra importante questão são os nomes reservados e que não podem ser usados c
 # Fale do risco disso criar uma mega confusão ao longo do código e para o computador.
 ```
 
-Lista de nomes reservados
-```{r lista_reservados, eval= FALSE, include = TRUE}
-if else repeat while function for in next break
-
-TRUE FALSE NULL Inf NaN NA NA_integer_ NA_real_ NA_complex_ NA_character_
-```
-
 
 ### Criando nomes legitimos
+
+Caso você queira fazer uma nomeação semelhante a algum nome reservado ou impossível, existe uma função do R que irá te sugerir um nome possível e semelhante ao que você colocar como input:
+
+```{r, eval=T}
+make.names(TRUE)
+make.names(NA)
+make.names("NA")
+make.names(2000)
+make.names("_A")
+make.names("x y")
+```
+
+São nomes semelhantes mas que possuem uma sintaxe possível de ser usada diretamente no R. No entanto, reforçamos que mesmo os nomes criados por 'make.names()' devem ser evitados, principalmente para objetos que serão incluídos no seu global environment. De um modo geral, se está sendo necessário usar a função `make.names()`, é preferível repensar a nomeclatura das variáveis, de forma que não seja usada a `make.names()`.
+
+Uma observação importante é que para elementos dentro de algum objeto, em especial algum `data.frame`, a função `make.names()` exerce um papel relevante. Um dos inputs da função `data.frame` é `checknames`, em que ao se ter `TRUE` o R aplica `make.names()` sobre os nomes das colunas, forçando a criação de nomes possíveis para todas as colunas. Essa é uma das situações em que o uso de `make.names()` é menos problemático, que seria dentro de algum objeto e não no seu global environment.
+
+
 
 ```{r MT_makenames, eval = FALSE, include = FALSE}
 #mostre os exemplos de você transformando nomes ruins em nomes legitimos com a função make.names (veja ?make.names)
@@ -242,7 +303,20 @@ TRUE FALSE NULL Inf NaN NA NA_integer_ NA_real_ NA_complex_ NA_character_
 
 ## O pacote stringr
 
+O pacote `stringr` nos fornece a possibilidade de manipular informações que estão organizadas no que seriam as `strings`. Isso é particulamente útil caso sua base de dados não seja númerica ou talvez uma mescla entre informações escritas e númericas.
 
+Vamos usar como exemplo uma base de dados que já foi apresentada no lista de exercícios do tópico 3, a `vignette` que apresenta descrições mais detalhes sobre os pacotes instalados. Essa base vai mudar de acordo com os pacotes instalados no R, mas apresentam strings em sua base, principalmente na quarta lista interna. Vamos criar uam data.frame com esses elementos:
+
+```{r,eval=T}
+
+df_vignette <- vignette(all= TRUE)[[4]] %>% as.data.frame
+# Vamos eliminar a coluna com o diretório dos pacotes, para simplificar a exposição
+df_vignette <- df_vignette %>% select(-LibPath)
+head(df_vignette)
+
+```
+
+Nesse caso temos uma lista com três variáveis com informações que são character
 ```{r MT_base_de_dados, eval = FALSE, include = FALSE}
 #Procure uma base de dados que tenha muitos nomes... Os exemplos de stringr na cheatsheet do RStudio (está na pasta Top5) são todos usando a base fruit. Vale você usar ela para você aprender o que cada função do pacote faz e funciona, PORÈM lembre que não é para usar ela para evitar problemas de copyright. 
 
@@ -278,16 +352,14 @@ str_detect(string, pattern, negate = FALSE)
 O argumento `string` se refere à string que você vai usar. `pattern` se refere a qual padrão a ser analisado pela função. Já `negate` ***diz tal coisa*** e tem como valor padrão `FALSE`. Se for `TRUE`, acontece ***sei lá oque***.
 
 ```{r str_detect_uso}
-# Supondo que vamos usar df_vignette
-dfvignette <- vignette() %>% .[[4]] %>% as.data.frame()
 
 #Queremos saber que linhas da 4 coluna tem ou não um arquivo em html.
 
-htmlDetect <- str_detect(dfvignette[,4], pattern = "html")
+htmlDetect <- str_detect(df_vignette[,3], pattern = "html")
 
 # Usando negate = TRUE
 
-htmlReject <-  str_detect(dfvignette[,4], pattern = "html", negate = TRUE)
+htmlReject <-  str_detect(df_vignette[,3], pattern = "html", negate = TRUE)
 ```
 
 Isso pode ser util se quisermos fazer um subsetting tal qual:
