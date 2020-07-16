@@ -1,0 +1,57 @@
+---
+title: "Calculando as matrizes derivadas"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "16/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = TRUE, eval = TRUE, warning = FALSE, message = FALSE)
+```
+
+O objetivo desse texto é calcular as tabelas derivadas a partir das matrizes básicas. Faremos isso tudo usando o R. Aqui se pressupõe que os conhecimentos passados nos Tópicos 0,1,2 e 3 das monitorias de R foram absorvidos. Além disso, os seguintes pacotes devem estar instalados no R^[Use ```install.packages("nomedopacote")``` para instalar os pacotes.].
+
+```{r message=FALSE, warning=FALSE}
+library(readxl)
+library(tidyverse)
+```
+
+
+Vamos usar como referência a material do [IBGE(2018)](https://biblioteca.ibge.gov.br/visualizacao/livros/liv101604.pdf). Muitas partes aqui são inclusive transcrições integrais de lá. Vamos também usar o arquivo^[ [Clique aqui](ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls) para baixar o arquivo fora do R.] de Excel para a [Matriz Insumo Produto de 2015](https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9085-matriz-de-insumo-produto.html).
+ 
+## Baixando o arquivo pelo R.
+
+Primeiramente iremos baixar o arquivo pelo R. Se você enfrentar problemas com este passo^[O que muito provavelmente por conta do sistema operacional que você esteja usando. Em especifico, a parte abaixo do código foi feita pensando em quem tem Windows.], baixe o arquivo manualmente e coloque ele no diretório de trabalho faça e associe ele ao objeto `arquivo_2015`.
+
+```{r download}
+download.file("ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", destfile = "Matriz_de_Insumo_Produto_2015_Nivel_67.xls", mode = "wb")
+
+arquivo_2015 <- "Matriz_de_Insumo_Produto_2015_Nivel_67.xls"
+```
+
+Neste 
+
+## Tabelas do Arquivo
+
+O arquivo `.xls` que acabamos de baixar, contém 15 abas. As abas de 1 a 10 são as ditas tabelas básicas, e da 11 à 15 temos as tabelas derivadas.
+
+
+
+
+#### Quadro 1 -  Composição das informações das Tabelas de Recursos e Usos - TRU
+|                               | Produtos<br><br>Nacionais | Atividades | Demanda<br><br>Final | Valor da <br><br>Produção |
+|-------------------------------|---------------------------|------------|----------------------|---------------------------|
+| Produtos<br>Nacionais         |                           | $U_n$      | $F_n$                | $q$                       |
+| Produtos<br>Importados        |                           | $U_m$      | $F_m$                |                           |
+| Atividades                    | $V$                       |            | $E$                  | $g$                       |
+| Impostos                      |                           | $T_P$      | $T_E$                |                           |
+| Valor Adicionado<br><br>Bruto |                           | $y'$       |                      |                           |
+| Valor Bruto<br>da Produção    | $q'$                      | $g'$       |                      |                           |
+**Fonte:** IBGE(2018, p. 13)   '
+
+
+
+
+## Referências:
+
+IBGE. **Matriz de insumo-produto: Brasil: 2015**. Rio de Janeiro: IBGE, Coordenação de Contas Nacionais, 2018.

@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(include = FALSE, eval = FALSE)
+knitr::opts_chunk$set(include = FALSE, eval = TRUE)
 ```
 
 O que esta aqui é **PRÉVIA** dos exercicios. Estes são os exercicios para até quinta-feira dia 9/07/2020.
@@ -397,6 +397,7 @@ lstQ2.16 <- map(lstQ2.12, function(x) select(x, -x$Code))
 ```{r}
 lstQ2.10 <- lstQ2.10 %>% setNames(paisesQ2.1)
 
+
 names(lstQ2.10) <- paisesQ2.1
 ```
 
@@ -412,7 +413,10 @@ years <- lstQ2.10$AUS %>% .["Year"] %>% distinct() %>% unlist()
 #### Q.3.3 A partir dos dados de `AUS` de `lstQ2.10`, crie uma lista `ausYear` com um tibble para cada ano. Ou seja, um `tibble` para os dados de `AUS` para o ano 2000, um `tibble` para o ano 2001 e etc... Nomeie os elementos de `ausYear` com o ano referente a cada um. Use o pacote `tictoc` para medir a perfomance e tente usar a função map.
 
 ```{r}
-ausYear <- as.list(years) %>% map(function(x) filter(lstQ2.10$AUS, Year == x)) %>% setNames(years)
+ausYear <- as.list(years) %>%
+  map(function(x) filter(lstQ2.10$AUS, Year == x)) %>%
+  setNames(years)
+
 ```
 
 #### Q.3.4 Faça o mesmo que em Q.3.3, porém agora criando uma lista `niotQ3` com todos os países.
@@ -460,7 +464,7 @@ toc()
 #### Q.3.5- Crie agora uma lista `niotQ3Dom` a partir de `niotQ3` tenha apenas os dados com a produção doméstica (coluna `Origin`).
 
 ```{r}
-niotQ3Dom <- niotQ3 %>% map(map, function(x) filter(x, Origin == "Domestic"))
+niotQ3Dom <- niotQ3 %>% map( map, function(x) filter(x, Origin == "Domestic"))
 ```
 
 #### Q.3.6 - Crie uma lista `lstQ3.6` mantendo de `niotQ3Dom` apenas os valores da demanda intermediaria.
@@ -639,14 +643,19 @@ l_matrixes <- map2(l_vetor, A_matrixes, create_lA)
 
 ##### A. Faça a questão `Q.4.6` usando `l_vetor` e `l_matrixes`
 
+Dica: no caso de `l_vetor` extraia a coluna usando `[,1]`.
+
 ```{r}
-L_setor <- map2(l_vetor, finalDemand, crossprod)
+L_setor1 <- map2(l_matrixes, finalDemand, crossprod)
+
+L_setor2 <- map2(l_vetor, x_VBP, function(x,y) diag(x[,1]) %*% y)
+
 ```
 
 ##### B. Faça a questão `Q.4.6` usando `l_vetor`, `Q4.Leontief` e `finalDemand`
 
 ```{r}
-L_setor <- list(l_vetor, Q4.Leontief, finalDemand) %>%
+L_setor3 <- list(l_vetor, Q4.Leontief, finalDemand) %>%
   pmap(function(x,y,z) crossprod(diag(c(x)), crossprod(y, z)))
 ```
 
