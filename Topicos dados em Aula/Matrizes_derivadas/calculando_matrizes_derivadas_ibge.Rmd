@@ -229,7 +229,7 @@ Para calcular a Matriz de Leontief fazemos
 $$L = [I-A]^{-1}$$
 
 ```{r}
-Lentief <- solve(diag(nrow(A_n)) - A_n)
+Leontief <- solve(diag(nrow(A_n)) - A_n)
 ```
 
 
@@ -260,11 +260,30 @@ A_Tot <- A_n + A_m
 Para calcular os vetores de Demanda Final à nível de Atividade, $E$, basta:
 
 $$E = D F$$
-
+ 
+ De modo que para ter $E_n$ usasse $F_n$ e para ter $E_m$ usasse $F_m$.
+ 
 ```{r}
 E_n <- D_MS %*% as.matrix(F_n)
 
 E_n <- D_MS %*% as.matrix(F_m)
+```
+
+
+#### Calculando $y$
+
+$$y = [I-A_{Tot}'] [I-A]^{-1} E_ni $$
+
+```{r}
+
+y <- (diag(nrow(A_Tot)) -t(A_Tot)) %*% solve(diag(nrow(A_n))-A_n) %*% rowSums(E_n)
+```
+
+
+```{r}
+Leontief2 <- read_excel(arquivo_2015, sheet = "15", range = "C6:BQ72", col_names = atividades) %>% as.matrix
+
+
 ```
 
 

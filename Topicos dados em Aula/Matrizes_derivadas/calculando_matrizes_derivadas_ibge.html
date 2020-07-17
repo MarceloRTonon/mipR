@@ -565,7 +565,7 @@ B_m &lt;- U_m %&gt;% as.matrix %*% solve(diag(c(g)))</code></pre>
 <h4>Calculando <span class="math inline">\(L\)</span></h4>
 <p>Para calcular a Matriz de Leontief fazemos</p>
 <p><span class="math display">\[L = [I-A]^{-1}\]</span></p>
-<pre class="r"><code>Lentief &lt;- solve(diag(nrow(A_n)) - A_n)</code></pre>
+<pre class="r"><code>Leontief &lt;- solve(diag(nrow(A_n)) - A_n)</code></pre>
 </div>
 <div id="calculando-a_m" class="section level4">
 <h4>Calculando <span class="math inline">\(A_m\)</span></h4>
@@ -583,9 +583,16 @@ B_m &lt;- U_m %&gt;% as.matrix %*% solve(diag(c(g)))</code></pre>
 <h4>Calculando <span class="math inline">\(E\)</span></h4>
 <p>Para calcular os vetores de Demanda Final à nível de Atividade, <span class="math inline">\(E\)</span>, basta:</p>
 <p><span class="math display">\[E = D F\]</span></p>
+<p>De modo que para ter <span class="math inline">\(E_n\)</span> usasse <span class="math inline">\(F_n\)</span> e para ter <span class="math inline">\(E_m\)</span> usasse <span class="math inline">\(F_m\)</span>.</p>
 <pre class="r"><code>E_n &lt;- D_MS %*% as.matrix(F_n)
 
 E_n &lt;- D_MS %*% as.matrix(F_m)</code></pre>
+</div>
+<div id="calculando-y" class="section level4">
+<h4>Calculando <span class="math inline">\(y\)</span></h4>
+<p><span class="math display">\[y = [I-A_{Tot}&#39;] [I-A]^{-1} E_ni \]</span></p>
+<pre class="r"><code>y &lt;- (diag(nrow(A_Tot)) -t(A_Tot)) %*% solve(diag(nrow(A_n))-A_n) %*% rowSums(E_n)</code></pre>
+<pre class="r"><code>Leontief2 &lt;- read_excel(arquivo_2015, sheet = &quot;15&quot;, range = &quot;C6:BQ72&quot;, col_names = atividades) %&gt;% as.matrix</code></pre>
 </div>
 </div>
 <div id="referências" class="section level2">
