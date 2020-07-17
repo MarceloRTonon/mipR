@@ -302,10 +302,3 @@ Por enquanto, vamos realizar a leitura das abas que de fato são necessárias pa
 
 Conforme desenvolvido na apostilado curso, uma das maiores dificuldades em se trabalhar com os arquivos baixados diretamente no IBGE é lidar com o cabeçalho. Para lidar com isso, vamos criar vetores padrões com os nomes mais fundamentais, a saber: os produtos e as atividades.
 
-```{r}
-#Lendo o arquivo que baixamos no início do tópico, vamos extrair os nomes das atividades:
-arquivo_2015 <- read_excel("Matriz_de_Insumo_Produto_2015_Nivel_67.xls")
-
-```
-
-
