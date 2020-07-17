@@ -369,80 +369,111 @@ summary {
 </div>
 
 
-<p>O objetivo desse texto é calcular as tabelas derivadas a partir das matrizes básicas. Faremos isso tudo usando o R. Aqui se pressupõe que os conhecimentos passados nos Tópicos 0,1,2 e 3 das monitorias de R foram absorvidos. Além disso, os seguintes pacotes devem estar instalados no R<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<p>O objetivo desse texto é calcular as tabelas derivadas a partir das matrizes básicas. Faremos isso tudo usando o R. Aqui se pressupõe que os conhecimentos passados nos Tópicos 0, 1, 2 e 3 das monitorias de R foram absorvidos. Além disso, os seguintes pacotes devem estar instalados no R<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 <pre class="r"><code>library(readxl)
 library(tidyverse)</code></pre>
 <p>Vamos usar como referência a material do <a href="https://biblioteca.ibge.gov.br/visualizacao/livros/liv101604.pdf">IBGE(2018)</a>. Muitas partes aqui são inclusive transcrições integrais de lá. Vamos também usar o arquivo<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> de Excel para a <a href="https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9085-matriz-de-insumo-produto.html">Matriz Insumo Produto de 2015</a>.</p>
 <div id="baixando-o-arquivo-pelo-r." class="section level2">
 <h2>Baixando o arquivo pelo R.</h2>
 <p>Primeiramente iremos baixar o arquivo pelo R. Se você enfrentar problemas com este passo<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>, baixe o arquivo manualmente e coloque ele no diretório de trabalho faça e associe ele ao objeto <code>arquivo_2015</code>.</p>
-<pre class="r"><code>download.file(&quot;ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;, destfile = &quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;, mode = &quot;wb&quot;)
-
-arquivo_2015 &lt;- &quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;</code></pre>
-<p>Neste</p>
-</div>
-<div id="tabelas-do-arquivo" class="section level2">
-<h2>Tabelas do Arquivo</h2>
-<p>O arquivo <code>.xls</code> que acabamos de baixar, contém 15 abas. As abas de 1 a 10 são as ditas tabelas básicas, e da 11 à 15 temos as tabelas derivadas.</p>
+<pre class="r"><code>download.file(&quot;ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;, destfile = &quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;, mode = &quot;wb&quot;)</code></pre>
+<p>Nas abas deste arquivo estão dispostas todas as tabelas necessários para o cálculo de uma matriz de coeficiente técnicos e de uma inversa de Leontief. Mas antes de ler propriamente os dados, vamos dar uma rápida passada sobre a estrutura da matriz.</p>
 <div id="quadro-1---composição-das-informações-das-tabelas-de-recursos-e-usos---tru" class="section level4">
 <h4>Quadro 1 - Composição das informações das Tabelas de Recursos e Usos - TRU</h4>
 <table>
 <thead>
 <tr class="header">
-<th></th>
-<th>Produtos<br><br>Nacionais</th>
-<th>Atividades</th>
-<th>Demanda<br><br>Final</th>
-<th>Valor da <br><br>Produção</th>
+<th align="left"></th>
+<th align="center">Produtos<br>Nacionais</th>
+<th align="center">Atividades</th>
+<th align="center">Demanda<br>Final</th>
+<th align="center">Valor da <br>Produção</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Produtos<br>Nacionais</td>
-<td></td>
-<td><span class="math inline">\(U_n\)</span></td>
-<td><span class="math inline">\(F_n\)</span></td>
-<td><span class="math inline">\(q\)</span></td>
+<td align="left">Produtos Nacionais</td>
+<td align="center"></td>
+<td align="center"><span class="math inline">\(U_n\)</span></td>
+<td align="center"><span class="math inline">\(F_n\)</span></td>
+<td align="center"><span class="math inline">\(q\)</span></td>
 </tr>
 <tr class="even">
-<td>Produtos<br>Importados</td>
-<td></td>
-<td><span class="math inline">\(U_m\)</span></td>
-<td><span class="math inline">\(F_m\)</span></td>
-<td></td>
+<td align="left">Produtos Importados</td>
+<td align="center"></td>
+<td align="center"><span class="math inline">\(U_m\)</span></td>
+<td align="center"><span class="math inline">\(F_m\)</span></td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
-<td>Atividades</td>
-<td><span class="math inline">\(V\)</span></td>
-<td></td>
-<td><span class="math inline">\(E\)</span></td>
-<td><span class="math inline">\(g\)</span></td>
+<td align="left">Atividades</td>
+<td align="center"><span class="math inline">\(V\)</span></td>
+<td align="center"></td>
+<td align="center"><span class="math inline">\(E\)</span></td>
+<td align="center"><span class="math inline">\(g\)</span></td>
 </tr>
 <tr class="even">
-<td>Impostos</td>
-<td></td>
-<td><span class="math inline">\(T_P\)</span></td>
-<td><span class="math inline">\(T_E\)</span></td>
-<td></td>
+<td align="left">Impostos</td>
+<td align="center"></td>
+<td align="center"><span class="math inline">\(T_P\)</span></td>
+<td align="center"><span class="math inline">\(T_E\)</span></td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
-<td>Valor Adicionado<br><br>Bruto</td>
-<td></td>
-<td><span class="math inline">\(y&#39;\)</span></td>
-<td></td>
-<td></td>
+<td align="left">Valor Adicionado Bruto</td>
+<td align="center"></td>
+<td align="center"><span class="math inline">\(y&#39;\)</span></td>
+<td align="center"></td>
+<td align="center"></td>
 </tr>
 <tr class="even">
-<td>Valor Bruto<br>da Produção</td>
-<td><span class="math inline">\(q&#39;\)</span></td>
-<td><span class="math inline">\(g&#39;\)</span></td>
-<td></td>
-<td></td>
+<td align="left">Valor Bruto da Produção</td>
+<td align="center"><span class="math inline">\(q&#39;\)</span></td>
+<td align="center"><span class="math inline">\(g&#39;\)</span></td>
+<td align="center"></td>
+<td align="center"></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Fonte:</strong> IBGE(2018, p. 13) ’</p>
+<p>O exercício busca calcular as seguintes matrizes:</p>
+<ol style="list-style-type: lower-alpha">
+<li><span class="math inline">\(B_n\)</span></li>
+<li><span class="math inline">\(B_m\)</span></li>
+<li><span class="math inline">\(D\)</span></li>
+<li><span class="math inline">\(A_n\)</span></li>
+<li><span class="math inline">\((I - A_n)^(-1)\)</span></li>
+<li><span class="math inline">\(A_m\)</span></li>
+<li><span class="math inline">\(A_tot= A_n + A_m\)</span></li>
+</ol>
 </div>
+</div>
+<div id="tabelas-do-arquivo" class="section level2">
+<h2>Tabelas do Arquivo</h2>
+<p>O arquivo <code>.xls</code> que acabamos de baixar, contém 15 abas. As abas de 1 a 10 são as ditas tabelas básicas, e da 11 à 15 temos as tabelas derivadas. Conforme o nome sugere, as cinco últimas tabelas derivam do conjunto de informações básicas expostas nas primeiras tabelas.</p>
+<p>O conjunto de Tabelas são:</p>
+<ul>
+<li>Tabela 01 - Recursos de bens e serviços</li>
+<li>Tabela 02 - Usos de bens e serviços</li>
+<li>Tabela 03 - Oferta e demanda da produção nacional a preço básico</li>
+<li>Tabela 04 - Oferta e demanda de produtos importados a preço básico</li>
+<li>Tabela 05 - Destino dos impostos sobre produtos nacionais</li>
+<li>Tabela 06 - Destino dos impostos sobre produtos importados</li>
+<li>Tabela 07 - Destino da margem de comércio sobre produtos nacionais</li>
+<li>Tabela 08 - Destino da margem de comércio sobre produtos importados</li>
+<li>Tabela 09 - Destino da margem de transporte sobre produtos nacionais</li>
+<li>Tabela 10 - Destino da margem de transporte sobre produtos importados</li>
+<li>Tabela 11 - Matriz dos coeficientes técnicos dos insumos nacionais - Matriz Bn</li>
+<li>Tabela 12 - Matriz dos coeficientes técnicos dos insumos importados - Matriz Bm</li>
+<li>Tabela 13 - Matriz de participação setorial na produção dos produtos nacionais - Matriz D - Market Share</li>
+<li>Tabela 14 - Matriz dos coeficientes técnicos intersetoriais - Matriz D.Bn</li>
+<li>Tabela 15 - Matriz de impacto intersetorial - Matriz de Leontief</li>
+</ul>
+<p>Para o exercício que vamos realizar aqui, vamos precisar apenas das quatro primeiras tabelas, de forma que iremos focar nas especificidades de cada uma delas. No entanto, é bem provável que o conhecimento adquirido aqui seja suficiente para vocês realizarem a leitura dos demais arquivos.</p>
+<p>Por enquanto, vamos realizar a leitura das abas que de fato são necessárias para o exercicio. Seriam as quatro primeiras abas, com as tabelas de recursos e as tabelas de usos (doméstico e importado).</p>
+<p>Conforme desenvolvido na apostilado curso, uma das maiores dificuldades em se trabalhar com os arquivos baixados diretamente no IBGE é lidar com o cabeçalho. Para lidar com isso, vamos criar vetores padrões com os nomes mais fundamentais, a saber: os produtos e as atividades.</p>
+<pre class="r"><code>#Lendo o arquivo que baixamos no início do tópico, vamos extrair os nomes das atividades:
+arquivo_2015 &lt;- read_excel(&quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;)</code></pre>
 </div>
 <div id="referências" class="section level2">
 <h2>Referências:</h2>

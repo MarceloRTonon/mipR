@@ -316,28 +316,7 @@ head(df_vignette)
 
 ```
 
-Nesse caso temos uma lista com três variáveis com informações que são character
-```{r MT_base_de_dados, eval = FALSE, include = FALSE}
-#Procure uma base de dados que tenha muitos nomes... Os exemplos de stringr na cheatsheet do RStudio (está na pasta Top5) são todos usando a base fruit. Vale você usar ela para você aprender o que cada função do pacote faz e funciona, PORÈM lembre que não é para usar ela para evitar problemas de copyright. 
-
-#Dica: Na falta de algo melhor, dentro do próprio pacote datasets tem uma base de dados que pode ser interessante: "USJudgeRatings". Apresenta a função "tibble::rownames_to_column()" para transformar os nomes das linhas numa coluna. .
-  
-# Se você quiser, pode fazer uma base própria usando paste e paste0.
-
-# Dica: Se você fizer:
-
-#df_vignette <- vignette(all= TRUE)[[4]] %>% as.data.frame
-
-#você tem aí um belo data.frame só com strings para você brincar. Se você não quiser fazer isso na parte expositiva, é uma boa ideia para a lista de exercicios. Só vale dizer que vai ser diferente para cada usuário, uma vez que cada um instalou pacotes diferentes.
-```
-
-```{r MT_stringr, eval = FALSE, include = FALSE}
-# Decidida a base de dados que você vai usar, aplique nela os exemplos presentes na página 1 do cheatsheet. 
-
-# Dica, use o help em todas as funções. Explique na primeira os argumentos que aparecem nela "str_detect(string, pattern, negate = FALSE)" (sempre mostra a função assim como tá em usage)  e explica o que cada um quer dizer. Aí você segue nas seguintes funções só falando os argumentos que mudarem.
-
-#Veja o exemplo abaixo na seção "#### Usando ``stringr` para detectar padrões"
-```
+Nesse caso temos uma lista com três variáveis com informações que são nomes. 
 
 #### Usando ``stringr` para detectar padrões
 
@@ -369,6 +348,27 @@ dfvignette_html <- dfvignette[htmlDetect,]
 ```
 
 
+```{r MT_base_de_dados, eval = FALSE, include = FALSE}
+#Procure uma base de dados que tenha muitos nomes... Os exemplos de stringr na cheatsheet do RStudio (está na pasta Top5) são todos usando a base fruit. Vale você usar ela para você aprender o que cada função do pacote faz e funciona, PORÈM lembre que não é para usar ela para evitar problemas de copyright. 
+
+#Dica: Na falta de algo melhor, dentro do próprio pacote datasets tem uma base de dados que pode ser interessante: "USJudgeRatings". Apresenta a função "tibble::rownames_to_column()" para transformar os nomes das linhas numa coluna. .
+  
+# Se você quiser, pode fazer uma base própria usando paste e paste0.
+
+# Dica: Se você fizer:
+
+#df_vignette <- vignette(all= TRUE)[[4]] %>% as.data.frame
+
+#você tem aí um belo data.frame só com strings para você brincar. Se você não quiser fazer isso na parte expositiva, é uma boa ideia para a lista de exercicios. Só vale dizer que vai ser diferente para cada usuário, uma vez que cada um instalou pacotes diferentes.
+```
+
+```{r MT_stringr, eval = FALSE, include = FALSE}
+# Decidida a base de dados que você vai usar, aplique nela os exemplos presentes na página 1 do cheatsheet. 
+
+# Dica, use o help em todas as funções. Explique na primeira os argumentos que aparecem nela "str_detect(string, pattern, negate = FALSE)" (sempre mostra a função assim como tá em usage)  e explica o que cada um quer dizer. Aí você segue nas seguintes funções só falando os argumentos que mudarem.
+
+#Veja o exemplo abaixo na seção "#### Usando ``stringr` para detectar padrões"
+```
 
 ```{r MT_stringr_final, eval = FALSE, include =FALSE}
 #Vá falando das funções de `stringr` nesse nível. Se você precisar de inspiração nas explicações pega o capítulo disso no R4DS e as vignettes de R.

@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(include = TRUE, eval = TRUE, warning = FALSE, message = FALSE)
 ```
 
-O objetivo desse texto é calcular as tabelas derivadas a partir das matrizes básicas. Faremos isso tudo usando o R. Aqui se pressupõe que os conhecimentos passados nos Tópicos 0,1,2 e 3 das monitorias de R foram absorvidos. Além disso, os seguintes pacotes devem estar instalados no R^[Use ```install.packages("nomedopacote")``` para instalar os pacotes.].
+O objetivo desse texto é calcular as tabelas derivadas a partir das matrizes básicas. Faremos isso tudo usando o R. Aqui se pressupõe que os conhecimentos passados nos Tópicos 0, 1, 2 e 3 das monitorias de R foram absorvidos. Além disso, os seguintes pacotes devem estar instalados no R^[Use ```install.packages("nomedopacote")``` para instalar os pacotes.].
 
 ```{r message=FALSE, warning=FALSE}
 library(readxl)
@@ -25,30 +25,65 @@ Primeiramente iremos baixar o arquivo pelo R. Se você enfrentar problemas com e
 
 ```{r download}
 download.file("ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", destfile = "Matriz_de_Insumo_Produto_2015_Nivel_67.xls", mode = "wb")
-
-arquivo_2015 <- "Matriz_de_Insumo_Produto_2015_Nivel_67.xls"
 ```
 
-Neste 
+Nas abas deste arquivo estão dispostas todas as tabelas necessários para o cálculo de uma matriz de coeficiente técnicos e de uma inversa de Leontief. Mas antes de ler propriamente os dados, vamos dar uma rápida passada sobre a estrutura da matriz.
+
+#### Quadro 1 -  Composição das informações das Tabelas de Recursos e Usos - TRU
+|                         | Produtos<br>Nacionais | Atividades | Demanda<br>Final | Valor da <br>Produção |
+|:------------------------|:---------------------:|:----------:|:--------------------:|:-------------------------:|
+| Produtos Nacionais      |                       | $U_n$      | $F_n$                | $q$                       |
+| Produtos Importados     |                           | $U_m$      | $F_m$                |                           |
+| Atividades              | $V$                       |            | $E$                  | $g$                       |
+| Impostos                |                           | $T_P$      | $T_E$                |                           |
+| Valor Adicionado Bruto  |                           | $y'$       |                      |                           |
+| Valor Bruto da Produção | $q'$                      | $g'$       |                      |                           |
+**Fonte:** IBGE(2018, p. 13)   '
+
+O exercício busca calcular as seguintes matrizes:
+
+a) $B_n$
+b) $B_m$
+c) $D$
+d) $A_n$
+e) $(I - A_n)^{-1}$
+f) $A_m$
+g) $A_{tot}= A_n + A_m$
+
 
 ## Tabelas do Arquivo
 
-O arquivo `.xls` que acabamos de baixar, contém 15 abas. As abas de 1 a 10 são as ditas tabelas básicas, e da 11 à 15 temos as tabelas derivadas.
+O arquivo `.xls` que acabamos de baixar, contém 15 abas. As abas de 1 a 10 são as ditas tabelas básicas, e da 11 à 15 temos as tabelas derivadas. Conforme o nome sugere, as cinco últimas tabelas derivam do conjunto de informações básicas expostas nas primeiras tabelas.
 
+O conjunto de Tabelas são:
 
+ - Tabela 01 - Recursos de bens e serviços 
+ - Tabela 02 - Usos de bens e serviços 
+ - Tabela 03 - Oferta e demanda da produção nacional a preço básico 
+ - Tabela 04 - Oferta e demanda de produtos importados a preço básico 
+ - Tabela 05 - Destino dos impostos sobre produtos nacionais 
+ - Tabela 06 - Destino dos impostos sobre produtos importados 
+ - Tabela 07 - Destino da margem de comércio sobre produtos nacionais 
+ - Tabela 08 - Destino da margem de comércio sobre produtos importados 
+ - Tabela 09 - Destino da margem de transporte sobre produtos nacionais 
+ - Tabela 10 - Destino da margem de transporte sobre produtos importados 
+ - Tabela 11 - Matriz dos coeficientes técnicos dos insumos nacionais - Matriz Bn 
+ - Tabela 12 - Matriz dos coeficientes técnicos dos insumos importados - Matriz Bm 
+ - Tabela 13 - Matriz de participação setorial na produção dos produtos nacionais - Matriz D - Market Share 
+ - Tabela 14 - Matriz dos coeficientes técnicos intersetoriais - Matriz D.Bn 
+ - Tabela 15 - Matriz de impacto intersetorial - Matriz de Leontief 
 
+Para o exercício que vamos realizar aqui, vamos precisar apenas das quatro primeiras tabelas, de forma que iremos focar nas especificidades de cada uma delas. No entanto, é bem provável que o conhecimento adquirido aqui seja suficiente para vocês realizarem a leitura dos demais arquivos.
 
-#### Quadro 1 -  Composição das informações das Tabelas de Recursos e Usos - TRU
-|                               | Produtos<br><br>Nacionais | Atividades | Demanda<br><br>Final | Valor da <br><br>Produção |
-|-------------------------------|---------------------------|------------|----------------------|---------------------------|
-| Produtos<br>Nacionais         |                           | $U_n$      | $F_n$                | $q$                       |
-| Produtos<br>Importados        |                           | $U_m$      | $F_m$                |                           |
-| Atividades                    | $V$                       |            | $E$                  | $g$                       |
-| Impostos                      |                           | $T_P$      | $T_E$                |                           |
-| Valor Adicionado<br><br>Bruto |                           | $y'$       |                      |                           |
-| Valor Bruto<br>da Produção    | $q'$                      | $g'$       |                      |                           |
-**Fonte:** IBGE(2018, p. 13)   '
+Por enquanto, vamos realizar a leitura das abas que de fato são necessárias para o exercicio. Seriam as quatro primeiras abas, com as tabelas de recursos e as tabelas de usos (doméstico e importado). 
 
+Conforme desenvolvido na apostilado curso, uma das maiores dificuldades em se trabalhar com os arquivos baixados diretamente no IBGE é lidar com o cabeçalho. Para lidar com isso, vamos criar vetores padrões com os nomes mais fundamentais, a saber: os produtos e as atividades.
+
+```{r}
+#Lendo o arquivo que baixamos no início do tópico, vamos extrair os nomes das atividades:
+arquivo_2015 <- read_excel("Matriz_de_Insumo_Produto_2015_Nivel_67.xls")
+
+```
 
 
 
