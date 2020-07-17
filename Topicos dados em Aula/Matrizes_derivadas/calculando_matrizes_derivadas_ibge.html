@@ -376,8 +376,43 @@ library(tidyverse)</code></pre>
 <div id="baixando-o-arquivo-pelo-r." class="section level2">
 <h2>Baixando o arquivo pelo R.</h2>
 <p>Primeiramente iremos baixar o arquivo pelo R. Se você enfrentar problemas com este passo<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>, baixe o arquivo manualmente e coloque ele no diretório de trabalho faça e associe ele ao objeto <code>arquivo_2015</code>.</p>
-<pre class="r"><code>download.file(&quot;ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;, destfile = &quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;, mode = &quot;wb&quot;)</code></pre>
+<pre class="r"><code>#download.file(&quot;ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;, destfile = &quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;, mode = &quot;wb&quot;)
+
+arquivo_2015 &lt;- &quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;</code></pre>
+<p>Vamos estabelecer também os nomes para os vetores de produto, de atividade e de demanda final:</p>
+<pre class="r"><code>atividades &lt;- read_excel(arquivo_2015, sheet = 1, &quot;H4:BV4&quot;, col_names = FALSE) %&gt;%
+        as.character() 
+
+produtos &lt;- read_excel(arquivo_2015, sheet = 1, &quot;B64:B132&quot;, col_names = FALSE) %&gt;%
+        as.character()
+
+demanda_final &lt;- read_excel(arquivo_2015, sheet = 3, &quot;BT4:BY4&quot;, col_names = FALSE)%&gt;%
+        as.character()</code></pre>
 <p>Nas abas deste arquivo estão dispostas todas as tabelas necessários para o cálculo de uma matriz de coeficiente técnicos e de uma inversa de Leontief. Mas antes de ler propriamente os dados, vamos dar uma rápida passada sobre a estrutura da matriz.</p>
+</div>
+<div id="tabelas-do-arquivo" class="section level2">
+<h2>Tabelas do Arquivo</h2>
+<p>O arquivo <code>.xls</code> que acabamos de baixar, contém 15 abas. As abas de 1 a 10 são as ditas tabelas básicas, e da 11 à 15 temos as tabelas derivadas. Conforme o nome sugere, as cinco últimas tabelas derivam do conjunto de informações básicas expostas nas primeiras tabelas.</p>
+<p>O conjunto de Tabelas são:</p>
+<ul>
+<li>Tabela 01 - Recursos de bens e serviços</li>
+<li>Tabela 02 - Usos de bens e serviços</li>
+<li>Tabela 03 - Oferta e demanda da produção nacional a preço básico</li>
+<li>Tabela 04 - Oferta e demanda de produtos importados a preço básico</li>
+<li>Tabela 05 - Destino dos impostos sobre produtos nacionais</li>
+<li>Tabela 06 - Destino dos impostos sobre produtos importados</li>
+<li>Tabela 07 - Destino da margem de comércio sobre produtos nacionais</li>
+<li>Tabela 08 - Destino da margem de comércio sobre produtos importados</li>
+<li>Tabela 09 - Destino da margem de transporte sobre produtos nacionais</li>
+<li>Tabela 10 - Destino da margem de transporte sobre produtos importados</li>
+<li>Tabela 11 - Matriz dos coeficientes técnicos dos insumos nacionais - Matriz Bn</li>
+<li>Tabela 12 - Matriz dos coeficientes técnicos dos insumos importados - Matriz Bm</li>
+<li>Tabela 13 - Matriz de participação setorial na produção dos produtos nacionais - Matriz D - Market Share</li>
+<li>Tabela 14 - Matriz dos coeficientes técnicos intersetoriais - Matriz D.Bn</li>
+<li>Tabela 15 - Matriz de impacto intersetorial - Matriz de Leontief</li>
+</ul>
+<p>No arquivo de excel, as abas de cada Tabela está nomeada de acordo com o seu número, de modo que a aba da Tabela 1 se chama <code>&quot;1&quot;</code>. Para fazer a derivação das tabelas 11-15 nós iremos precisar apenas das Tabelas 1,2,3 e 4.</p>
+<p>Para entendermos a composição das infromações das Tabelas de Recursos e Usos, vejamos o Quadro 1 (IBGE, 2018) abaixo:</p>
 <div id="quadro-1---composição-das-informações-das-tabelas-de-recursos-e-usos---tru" class="section level4">
 <h4>Quadro 1 - Composição das informações das Tabelas de Recursos e Usos - TRU</h4>
 <table>
@@ -435,49 +470,135 @@ library(tidyverse)</code></pre>
 </tr>
 </tbody>
 </table>
-<p><strong>Fonte:</strong> IBGE(2018, p. 13) ’</p>
-<p>O exercício busca calcular as seguintes matrizes:</p>
-<ol style="list-style-type: lower-alpha">
-<li><span class="math inline">\(B_n\)</span></li>
-<li><span class="math inline">\(B_m\)</span></li>
-<li><span class="math inline">\(D\)</span></li>
-<li><span class="math inline">\(A_n\)</span></li>
-<li><span class="math inline">\((I - A_n)^(-1)\)</span></li>
-<li><span class="math inline">\(A_m\)</span></li>
-<li><span class="math inline">\(A_tot= A_n + A_m\)</span></li>
-</ol>
-</div>
-</div>
-<div id="tabelas-do-arquivo" class="section level2">
-<h2>Tabelas do Arquivo</h2>
-<p>O arquivo <code>.xls</code> que acabamos de baixar, contém 15 abas. As abas de 1 a 10 são as ditas tabelas básicas, e da 11 à 15 temos as tabelas derivadas. Conforme o nome sugere, as cinco últimas tabelas derivam do conjunto de informações básicas expostas nas primeiras tabelas.</p>
-<p>O conjunto de Tabelas são:</p>
+<p><strong>Fonte:</strong> IBGE(2018, p. 13)</p>
+<p>As informações do Quadro 1 acima podem ser explicados e importados ao R pela seguinte forma:</p>
 <ul>
-<li>Tabela 01 - Recursos de bens e serviços</li>
-<li>Tabela 02 - Usos de bens e serviços</li>
-<li>Tabela 03 - Oferta e demanda da produção nacional a preço básico</li>
-<li>Tabela 04 - Oferta e demanda de produtos importados a preço básico</li>
-<li>Tabela 05 - Destino dos impostos sobre produtos nacionais</li>
-<li>Tabela 06 - Destino dos impostos sobre produtos importados</li>
-<li>Tabela 07 - Destino da margem de comércio sobre produtos nacionais</li>
-<li>Tabela 08 - Destino da margem de comércio sobre produtos importados</li>
-<li>Tabela 09 - Destino da margem de transporte sobre produtos nacionais</li>
-<li>Tabela 10 - Destino da margem de transporte sobre produtos importados</li>
-<li>Tabela 11 - Matriz dos coeficientes técnicos dos insumos nacionais - Matriz Bn</li>
-<li>Tabela 12 - Matriz dos coeficientes técnicos dos insumos importados - Matriz Bm</li>
-<li>Tabela 13 - Matriz de participação setorial na produção dos produtos nacionais - Matriz D - Market Share</li>
-<li>Tabela 14 - Matriz dos coeficientes técnicos intersetoriais - Matriz D.Bn</li>
-<li>Tabela 15 - Matriz de impacto intersetorial - Matriz de Leontief</li>
+<li><span class="math inline">\(V\)</span> Matriz de Produção - apresenta para cada atividade o valor bruto da produção de cada um dos produtos. Pode ser encontrada na Tabela 1, entre <code>H6:BV132</code>.</li>
 </ul>
+<pre class="r"><code>V &lt;- read_excel(arquivo_2015, sheet =1, range = &quot;H6:BV132&quot;, col_names = atividades)</code></pre>
+<ul>
+<li><span class="math inline">\(U_n\)</span> - Matriz de Consumo Intermediário Nacional - apresenta para cada atividade o valor consumido de produtos de origem interna; Pode ser encontrada na Tabela 3, entre <code>D6:BR132</code>.</li>
+</ul>
+<pre class="r"><code>U_n &lt;- read_excel(arquivo_2015, sheet =3, range = &quot;D6:BR132&quot;, col_names = atividades)</code></pre>
+<ul>
+<li><span class="math inline">\(U_m\)</span> - matriz de consumo intermediário importado - apresenta para cada atividade o valor consumido de produtos de origem externa; Pode ser encontrada na Tabela 4, entre <code>D6:BR132</code>.</li>
+</ul>
+<pre class="r"><code>U_m &lt;- read_excel(arquivo_2015, sheet =4, range = &quot;D6:BR132&quot;, col_names = atividades)</code></pre>
+<ul>
+<li><span class="math inline">\(F_n\)</span> - matriz da demanda final por produtos nacionais - apresenta o valor consumido de produtos de origem interna por categoria da demanda final (consumo final do governo, consumo final das Instituições sem fins de lucro a serviço das famílias, consumo final das famílias, exportações, formação bruta de capital fixo e variação de estoques); Pode ser encontrada na Tabela 3, entre <code>BT6:BY132</code>.</li>
+</ul>
+<pre class="r"><code>F_n &lt;- read_excel(arquivo_2015, sheet =3, range = &quot;BT6:BY132&quot;, col_names = demanda_final)</code></pre>
+<ul>
+<li><span class="math inline">\(F_m\)</span> - matriz da demanda final por produtos importados - apresenta o valor dos produtos de origem externa consumidos pelas categorias da demanda final. Pode ser encontrada na Tabela 4, entre <code>BT6:BY132</code>.</li>
+</ul>
+<pre class="r"><code>F_m &lt;- read_excel(arquivo_2015, sheet =4, range = &quot;BT6:BY132&quot;, col_names = demanda_final)</code></pre>
+<ul>
+<li><span class="math inline">\(q\)</span> - vetor com o valor bruto da produção total por produto. Pode ser calculado a partir de <span class="math inline">\(q = Vi\)</span> ou <span class="math inline">\(q = U_ni + F_ni\)</span>.</li>
+</ul>
+<pre class="r"><code>q &lt;- V %&gt;% rowSums()
+
+#Ou
+
+# q2 &lt;- rowSums(U_n) + rowSums(F_n)</code></pre>
+<ul>
+<li><p><span class="math inline">\(E\)</span> - matriz da demanda final por atividade - representa a parcela do valor bruto da produção de uma atividade destinada à demanda final. Pode ser calculando usando a <span class="math inline">\(F_n\)</span> (ou <span class="math inline">\(F_M\)</span>) e a Matriz de Market Share (falaremos desta mais a frente).</p></li>
+<li><p><span class="math inline">\(T_p\)</span> - matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos (insumos) pelas atividades produtivas. Pode ser encontrada na Tabela 5, entre <code>D6:BR132</code>.</p></li>
+</ul>
+<pre class="r"><code>T_p &lt;- read_excel(arquivo_2015, sheet = 5, range = &quot;D6:BR132&quot;, col_names = atividades)</code></pre>
+<ul>
+<li><span class="math inline">\(T_e\)</span> - matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos pela demanda final. Pode ser encontrada na Tabela 4, entre <code>BT6:BY132</code>.</li>
+</ul>
+<pre class="r"><code>T_e &lt;- read_excel(arquivo_2015, sheet = 5, range = &quot;BT6:BY132&quot;, col_names = demanda_final)</code></pre>
+<ul>
+<li><span class="math inline">\(g\)</span> - vetor coluna com o valor bruto da produção total por atividade. Pode ser calculada a partir de <span class="math inline">\(g = V&#39;i\)</span></li>
+</ul>
+<pre class="r"><code>g &lt;- colSums(V)</code></pre>
+<ul>
+<li><span class="math inline">\(y\)</span> - vetor coluna com o valor adicionado total gerado pelas atividades produtivas - é considerado como um vetor por medida de simplificação, na prática é uma matriz por atividade com o valor adicionado bruto a preços básicos, as remu-nerações (salários e contribuições sociais), o excedente bruto operacional (obtido por saldo) e os impostos e subsídios incidentes sobre as atividades. Esses valores podem ser encontrados nas Tabelas de Recursos e Usos do IBGE<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></li>
+</ul>
+<p>Além dessas presentes na tabela, podemos também já calcular os vetores <span class="math inline">\(f_n = F_ni\)</span> e <span class="math inline">\(f_m=F_mi\)</span></p>
+<pre class="r"><code>f_n &lt;- rowSums(F_n)
+
+f_m &lt;- rowSums(F_m)</code></pre>
+</div>
+</div>
+<div id="tabelas-derivadas" class="section level2">
+<h2>Tabelas Derivadas</h2>
+<p>Com as matrizes importadas, podemos então calcular as seguintes tabelas derivadas</p>
+<ul>
+<li><p><span class="math inline">\(B_n\)</span> - Matriz dos coeficientes técnicos dos insumos nacionais (Tabela 11)</p></li>
+<li><p><span class="math inline">\(B_m\)</span> - Matriz dos coeficientes técnicos dos insumos importados (Tabela 12)</p></li>
+<li><p><span class="math inline">\(D\)</span> - Matriz de participação setorial na produção dos produtos nacionais - Market Share (Tabela 13)</p></li>
+<li><p><span class="math inline">\(A_n\)</span> - Matriz dos coeficientes técnicos intersetoriais nacionais (Tabela 14)</p></li>
+<li><p><span class="math inline">\(L\)</span> - Matriz de impacto intersetorial - Matriz de Leontief (Tabela 14)</p></li>
+</ul>
+<p>Além das cinco matrizes derivadas que podem ser encontradas no arquivo baixado, podemos também estimar as duas matrizes abaixo:</p>
+<ul>
+<li><p><span class="math inline">\(A_m\)</span> - Matriz dos coeficientes técnicos intersetoriais importados</p></li>
+<li><p><span class="math inline">\(A_{Tot}\)</span> - Matriz dos coeficientes técnicos intersetoriais totais</p></li>
+<li><p><span class="math inline">\(E\)</span> - Vetores de Demanda Final a nível de atividad</p></li>
+</ul>
+<div id="calculando-b_n-e-b_m" class="section level4">
+<h4>Calculando <span class="math inline">\(B_n\)</span> e <span class="math inline">\(B_m\)</span></h4>
+<p>Para calcularmos as matrizes de coeficientes técnicos dos insumos nacionais e dos importados, fazemos:</p>
+<p><span class="math display">\[\begin{align}
+B_n &amp;= U_n (\hat{q}^{-1}) \\
+B_m &amp;= U_m (\hat{q}^{-1})
+\end{align}\]</span></p>
+<pre class="r"><code>B_n &lt;- U_n %&gt;% as.matrix %*% solve(diag(c(g)))
+
+B_m &lt;- U_m %&gt;% as.matrix %*% solve(diag(c(g)))</code></pre>
+</div>
+<div id="calculando-d" class="section level4">
+<h4>Calculando <span class="math inline">\(D\)</span></h4>
+<p>Para calcular a Matriz de Market Share fazemos:</p>
+<p><span class="math display">\[D = V&#39; (\hat{q}^{-1})\]</span></p>
+<pre class="r"><code>D_MS &lt;- t(V) %*% solve(diag(c(q)))</code></pre>
+</div>
+<div id="calculando-a_n" class="section level4">
+<h4>Calculando <span class="math inline">\(A_n\)</span></h4>
+<p>Para calcular a Matriz de Coeficientes técnicos intersetorias nacionais fazemos:</p>
+<p><span class="math display">\[A_n = D B_n\]</span></p>
+<pre class="r"><code>A_n &lt;- as.matrix(D_MS) %*% B_n</code></pre>
+</div>
+<div id="calculando-l" class="section level4">
+<h4>Calculando <span class="math inline">\(L\)</span></h4>
+<p>Para calcular a Matriz de Leontief fazemos</p>
+<p><span class="math display">\[L = [I-A]^{-1}\]</span></p>
+<pre class="r"><code>Lentief &lt;- solve(diag(nrow(A_n)) - A_n)</code></pre>
+</div>
+<div id="calculando-a_m" class="section level4">
+<h4>Calculando <span class="math inline">\(A_m\)</span></h4>
+<p>Para calcular a Matriz de Coeficientes técnicos intersetorias importados fazemos:</p>
+<p><span class="math display">\[A_m = D B_m\]</span></p>
+<pre class="r"><code>A_m &lt;- D_MS %*% as.matrix(B_m)</code></pre>
+</div>
+<div id="calculando-a_tot" class="section level4">
+<h4>Calculando <span class="math inline">\(A_{Tot}\)</span></h4>
+<p>Para calcular a Matriz dos Coeficientes Técnicos Totais, <span class="math inline">\(A_{Tot}\)</span>, fazemos:</p>
+<p><span class="math display">\[A_{Tot} = A_n + A_m\]</span></p>
+<pre class="r"><code>A_Tot &lt;- A_n + A_m</code></pre>
+</div>
+<div id="calculando-e" class="section level4">
+<h4>Calculando <span class="math inline">\(E\)</span></h4>
+<p>Para calcular os vetores de Demanda Final à nível de Atividade, <span class="math inline">\(E\)</span>, basta:</p>
+<p><span class="math display">\[E = D F\]</span></p>
+<pre class="r"><code>E_n &lt;- D_MS %*% as.matrix(F_n)
+
+E_n &lt;- D_MS %*% as.matrix(F_m)</code></pre>
+</div>
+</div>
+<div id="referências" class="section level2">
+<h2>Referências:</h2>
+<p>IBGE. <strong>Matriz de insumo-produto: Brasil: 2015</strong>. Rio de Janeiro: IBGE, Coordenação de Contas Nacionais, 2018.</p>
+</div>
+<div id="descarte" class="section level1">
+<h1>Descarte?</h1>
 <p>Para o exercício que vamos realizar aqui, vamos precisar apenas das quatro primeiras tabelas, de forma que iremos focar nas especificidades de cada uma delas. No entanto, é bem provável que o conhecimento adquirido aqui seja suficiente para vocês realizarem a leitura dos demais arquivos.</p>
 <p>Por enquanto, vamos realizar a leitura das abas que de fato são necessárias para o exercicio. Seriam as quatro primeiras abas, com as tabelas de recursos e as tabelas de usos (doméstico e importado).</p>
 <p>Conforme desenvolvido na apostilado curso, uma das maiores dificuldades em se trabalhar com os arquivos baixados diretamente no IBGE é lidar com o cabeçalho. Para lidar com isso, vamos criar vetores padrões com os nomes mais fundamentais, a saber: os produtos e as atividades.</p>
 <pre class="r"><code>#Lendo o arquivo que baixamos no início do tópico, vamos extrair os nomes das atividades:
 arquivo_2015 &lt;- read_excel(&quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;)</code></pre>
-</div>
-<div id="referências" class="section level2">
-<h2>Referências:</h2>
-<p>IBGE. <strong>Matriz de insumo-produto: Brasil: 2015</strong>. Rio de Janeiro: IBGE, Coordenação de Contas Nacionais, 2018.</p>
 </div>
 <div class="footnotes">
 <hr />
@@ -485,6 +606,7 @@ arquivo_2015 &lt;- read_excel(&quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&q
 <li id="fn1"><p>Use <code>install.packages(&quot;nomedopacote&quot;)</code> para instalar os pacotes.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 <li id="fn2"><p> <a href="ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls">Clique aqui</a> para baixar o arquivo fora do R.<a href="#fnref2" class="footnote-back">↩</a></p></li>
 <li id="fn3"><p>O que muito provavelmente por conta do sistema operacional que você esteja usando. Em especifico, a parte abaixo do código foi feita pensando em quem tem Windows.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>porém podem também ser calculados a partir das matrizes derivadas.<a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 
