@@ -128,17 +128,24 @@ q <- V %>% rowSums()
 
  - $E$ - matriz da demanda final por atividade - representa a parcela do valor bruto da produção de uma atividade destinada à demanda final. Pode ser calculando usando a $F_n$ (ou $F_M$) e a Matriz de Market Share (falaremos desta mais a frente).
 
- - $T_p$ - matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos (insumos) pelas atividades produtivas. Pode ser encontrada na Tabela 5, entre `D6:BR132`.
+ - $T_p$ - matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos (insumos) pelas atividades produtivas. Pode ser encontrada na Tabela 5 (nacionais) e Tabela 6 (importados), entre `D6:BR132`.
  
 ```{r}
-T_p <- read_excel(arquivo_2015, sheet = 5, range = "D6:BR132", col_names = atividades)
+T_p_n <- read_excel(arquivo_2015, sheet = 5, range = "D6:BR132", col_names = atividades)
+T_p_m <- read_excel(arquivo_2015, sheet = 6, range = "D6:BR132", col_names = atividades)
+
+T_p <- T_p_n + T_p_m
 ```
  
 
  - $T_e$  -  matriz  dos  valores  dos  impostos  e  subsídios  associados  a  produtos,  incidentes  sobre  bens  e  serviços  absorvidos  pela demanda final. Pode ser encontrada na Tabela 4, entre `BT6:BY132`.
 
 ```{r}
-T_e <- read_excel(arquivo_2015, sheet = 5, range = "BT6:BY132", col_names = demanda_final)
+T_e_n <- read_excel(arquivo_2015, sheet = 5, range = "BT6:BY132", col_names = demanda_final)
+
+T_e_m <-  read_excel(arquivo_2015, sheet = 6, range = "BT6:BY132", col_names = demanda_final)
+
+T_e <- T_e_n + T_e_m
 ```
 
 
@@ -272,20 +279,22 @@ E_n <- D_MS %*% as.matrix(F_m)
 
 #### Calculando $y$
 
-$$y = [I-A_{Tot}'] [I-A]^{-1} E_ni $$
+Para calcular o valor adicionado da produção a preços básicos $y$, precisamos identificar o Consumo intermediário a preços do consumidor
+
+
+\begin{align}
+CI &= U_n + U_m \\
+y &= g - i'(CI +T_p)
+\end{align}
+
+
 
 ```{r}
 
-y <- (diag(nrow(A_Tot)) -t(A_Tot)) %*% solve(diag(nrow(A_n))-A_n) %*% rowSums(E_n)
+CI <- U_n + U_m
+
+y <- g - colSums(CI + T_p) 
 ```
-
-
-```{r}
-Leontief2 <- read_excel(arquivo_2015, sheet = "15", range = "C6:BQ72", col_names = atividades) %>% as.matrix
-
-
-```
-
 
 
 ## Referências:

@@ -502,13 +502,20 @@ demanda_final &lt;- read_excel(arquivo_2015, sheet = 3, &quot;BT4:BY4&quot;, col
 # q2 &lt;- rowSums(U_n) + rowSums(F_n)</code></pre>
 <ul>
 <li><p><span class="math inline">\(E\)</span> - matriz da demanda final por atividade - representa a parcela do valor bruto da produção de uma atividade destinada à demanda final. Pode ser calculando usando a <span class="math inline">\(F_n\)</span> (ou <span class="math inline">\(F_M\)</span>) e a Matriz de Market Share (falaremos desta mais a frente).</p></li>
-<li><p><span class="math inline">\(T_p\)</span> - matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos (insumos) pelas atividades produtivas. Pode ser encontrada na Tabela 5, entre <code>D6:BR132</code>.</p></li>
+<li><p><span class="math inline">\(T_p\)</span> - matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos (insumos) pelas atividades produtivas. Pode ser encontrada na Tabela 5 (nacionais) e Tabela 6 (importados), entre <code>D6:BR132</code>.</p></li>
 </ul>
-<pre class="r"><code>T_p &lt;- read_excel(arquivo_2015, sheet = 5, range = &quot;D6:BR132&quot;, col_names = atividades)</code></pre>
+<pre class="r"><code>T_p_n &lt;- read_excel(arquivo_2015, sheet = 5, range = &quot;D6:BR132&quot;, col_names = atividades)
+T_p_m &lt;- read_excel(arquivo_2015, sheet = 6, range = &quot;D6:BR132&quot;, col_names = atividades)
+
+T_p &lt;- T_p_n + T_p_m</code></pre>
 <ul>
 <li><span class="math inline">\(T_e\)</span> - matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos pela demanda final. Pode ser encontrada na Tabela 4, entre <code>BT6:BY132</code>.</li>
 </ul>
-<pre class="r"><code>T_e &lt;- read_excel(arquivo_2015, sheet = 5, range = &quot;BT6:BY132&quot;, col_names = demanda_final)</code></pre>
+<pre class="r"><code>T_e_n &lt;- read_excel(arquivo_2015, sheet = 5, range = &quot;BT6:BY132&quot;, col_names = demanda_final)
+
+T_e_m &lt;-  read_excel(arquivo_2015, sheet = 6, range = &quot;BT6:BY132&quot;, col_names = demanda_final)
+
+T_e &lt;- T_e_n + T_e_m</code></pre>
 <ul>
 <li><span class="math inline">\(g\)</span> - vetor coluna com o valor bruto da produção total por atividade. Pode ser calculada a partir de <span class="math inline">\(g = V&#39;i\)</span></li>
 </ul>
@@ -590,9 +597,14 @@ E_n &lt;- D_MS %*% as.matrix(F_m)</code></pre>
 </div>
 <div id="calculando-y" class="section level4">
 <h4>Calculando <span class="math inline">\(y\)</span></h4>
-<p><span class="math display">\[y = [I-A_{Tot}&#39;] [I-A]^{-1} E_ni \]</span></p>
-<pre class="r"><code>y &lt;- (diag(nrow(A_Tot)) -t(A_Tot)) %*% solve(diag(nrow(A_n))-A_n) %*% rowSums(E_n)</code></pre>
-<pre class="r"><code>Leontief2 &lt;- read_excel(arquivo_2015, sheet = &quot;15&quot;, range = &quot;C6:BQ72&quot;, col_names = atividades) %&gt;% as.matrix</code></pre>
+<p>Para calcular o valor adicionado da produção a preços básicos <span class="math inline">\(y\)</span>, precisamos identificar o Consumo intermediário a preços do consumidor</p>
+<p><span class="math display">\[\begin{align}
+CI &amp;= U_n + U_m \\
+y &amp;= g - i&#39;(CI +T_p)
+\end{align}\]</span></p>
+<pre class="r"><code>CI &lt;- U_n + U_m
+
+y &lt;- g - colSums(CI + T_p) </code></pre>
 </div>
 </div>
 <div id="referências" class="section level2">
