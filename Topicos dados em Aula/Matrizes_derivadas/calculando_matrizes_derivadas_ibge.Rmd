@@ -1,12 +1,13 @@
 ---
 title: "Calculando as matrizes derivadas"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "16/07/2020"
+date: "18/07/2020"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(include = TRUE, eval = TRUE, warning = FALSE, message = FALSE)
+options(scipen=999999999)
 ```
 
 O objetivo desse texto é calcular as tabelas derivadas a partir das matrizes básicas. Faremos isso tudo usando o R. Aqui se pressupõe que os conhecimentos passados nos Tópicos 0, 1, 2 e 3 das monitorias de R foram absorvidos. Além disso, os seguintes pacotes devem estar instalados no R^[Use ```install.packages("nomedopacote")``` para instalar os pacotes.].
@@ -122,7 +123,7 @@ F_m <- read_excel(arquivo_2015, sheet =4, range = "BT6:BY132", col_names = deman
 row.names(F_m) <- produtos
 ```
 
- - $q$ - Vetor com o valor bruto da produção total por produto: Pode ser calculado a partir de $q = Vi_{127}$ ou $q = U_ni_{127} + F_ni_{127}$.
+ - $q$ - Vetor com o valor bruto da produção total por produto: Pode ser calculado a partir de $q = Vi_{67}$ ou $q = U_ni_{67} + F_ni_{6}$.
 
 ```{r}
 q <- V %>% rowSums()
@@ -148,7 +149,7 @@ T_p <- T_p_n + T_p_m
 ```
  
 
- - $T_e$  -  Matriz  dos  valores  dos  impostos  e  subsídios  associados  a  produtos,  incidentes  sobre  bens  e  serviços  absorvidos  pela demanda final. Pode ser encontrada na Tabela 4, entre `BT6:BY132`.
+ - $T_e$  -  Matriz  dos  valores  dos  impostos  e  subsídios  associados  a  produtos,  incidentes  sobre  bens  e  serviços  absorvidos  pela demanda final. Pode ser encontrada nas Tabelas 5 e 6, entre `BT6:BY132`.
 
 ```{r}
 T_e_n <- read_excel(arquivo_2015, sheet = 5, range = "BT6:BY132", col_names = demanda_final)
@@ -161,7 +162,7 @@ T_e <- T_e_n + T_e_m
 ```
 
 
- - $g$ - Vetor coluna com o valor bruto da produção total por atividade. Pode ser calculada a partir de $g = V'i_{67}$
+ - $g$ - Vetor coluna com o valor bruto da produção total por atividade. Pode ser calculada a partir de $g = V'i_{127}$
 
 ```{r}
 g <- colSums(V)
@@ -169,7 +170,7 @@ g <- colSums(V)
 
  - $y$ - Vetor  coluna  com  o  valor  adicionado  total  gerado  pelas  atividades  produtivas: é  considerado  como  um  vetor  por  medida de simplificação, na prática é uma matriz por atividade com o valor adicionado bruto a preços básicos, as remu-nerações (salários e contribuições sociais), o excedente bruto operacional (obtido por saldo) e os impostos e subsídios incidentes sobre as atividades. Esses valores podem ser encontrados nas Tabelas de Recursos e Usos do IBGE^[porém podem também ser calculados a partir das matrizes derivadas.]
 
-Além dessas presentes na tabela, podemos também já calcular os vetores $f_n = F_ni_{127}$ e $f_m=F_mi_{127}$
+Além dessas presentes na tabela, podemos também já calcular os vetores $f_n = F_ni_{6}$ e $f_m=F_mi_{6}$
 
 ```{r}
 f_n <- rowSums(F_n)
@@ -207,8 +208,8 @@ Além das cinco matrizes derivadas que podem ser encontradas no arquivo baixado,
 Para calcularmos as matrizes de coeficientes técnicos dos insumos nacionais e dos importados, fazemos:
 
 \begin{align}
-B_n &= U_n (\hat{q}^{-1}) \\
-B_m &= U_m (\hat{q}^{-1})
+B_n &= U_n (\hat{g}^{-1}) \\
+B_m &= U_m (\hat{g}^{-1})
 \end{align}
 
 
@@ -243,9 +244,9 @@ A_n <- as.matrix(D_MS) %*% B_n
 
 #### Calculando $L$
 
-Para calcular a Matriz de Leontief fazemos
+Para calcular a Inversa de Leontief fazemos
 
-$$L = (I-A)^{-1}$$
+$$L = (I-A_n)^{-1}$$
 
 ```{r}
 Leontief <- solve(diag(nrow(A_n)) - A_n)
@@ -288,7 +289,7 @@ E_n <- D_MS %*% as.matrix(F_n)
 E_m <- D_MS %*% as.matrix(F_m)
 ```
 
-Podemos também tranformar essa matriz em um vetor de demanda final (assim como fizemos para $f_n$ e $f_m$). Teríamos então $e_n=E_ni_{67}$ e $e_m=E_mi_{67}$:
+Podemos também tranformar essa matriz em um vetor de demanda final (assim como fizemos para $f_n$ e $f_m$). Teríamos então $e_n=E_ni_{6}$ e $e_m=E_mi_{6}$:
 
 ```{r}
 e_n <- rowSums(E_n)
@@ -314,7 +315,7 @@ Se no seu código sair a resposta `TRUE`, é um bom indício de que tudo ocorreu
 
 #### Calculando $y$
 
-Para calcular o valor adicionado da produção a preços básicos $y$, precisamos identificar o Consumo intermediário a preços do consumidor
+Para calcular o valor adicionado da produção a preços básicos $y$, precisamos identificar o Consumo intermediário a preços do consumidor e subtrair do valor da produção ao nível de atividades:
 
 
 \begin{align}

@@ -11,7 +11,6 @@
 
 <meta name="author" content="Marcelo Tonon e Felipe Cornelio" />
 
-<meta name="date" content="2020-08-07" />
 
 <title>Tópico 5 - Lendo dados de forma automatizada</title>
 
@@ -365,7 +364,7 @@ summary {
 
 <h1 class="title toc-ignore">Tópico 5 - Lendo dados de forma automatizada</h1>
 <h4 class="author">Marcelo Tonon e Felipe Cornelio</h4>
-<h4 class="date">08/07/2020</h4>
+<h4 class="date">19/07/2020</h4>
 
 </div>
 
@@ -448,16 +447,10 @@ writeLines(z)</code></pre>
 ## 
 ## (and also helps you to get a job, if you need.)</code></pre>
 <p>Para que o R leia corretamente o que vc deseja na frase, é necessário usar a função <code>writeLines()</code>.</p>
-<p>Aqui entra um importante tema quando trabalhando com <code>strings</code> e <code>characters</code>: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego.</p>
-<pre class="r"><code>mi &lt;- &quot;\u03bc&quot;
-mi</code></pre>
-<pre><code>## [1] &quot;µ&quot;</code></pre>
-<pre class="r"><code>theta &lt;- &quot;\u03b8&quot;
-theta</code></pre>
-<pre><code>## [1] &quot;&lt;U+03B8&gt;&quot;</code></pre>
-<pre class="r"><code>Delta &lt;- &quot;\u0394&quot;
-Delta</code></pre>
-<pre><code>## [1] &quot;&lt;U+0394&gt;&quot;</code></pre>
+<p>Aqui entra um importante tema quando trabalhando com <code>strings</code> e <code>characters</code>: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
+<pre class="r"><code>letras_gregas_exemplo &lt;- paste(&quot;\u3bc&quot;,&quot;\u3b1&quot;,&quot;\u3b2&quot;)
+letras_gregas_exemplo</code></pre>
+<pre><code>## [1] &quot;µ a ß&quot;</code></pre>
 <p>Você pode buscar as correspondências do <code>unicodes</code> para cada letra grega que desejar. Essa lista está acessível na internet e os códigos, em geral, são universais.</p>
 </div>
 <div id="nomes-impossíveis-e-nomes-reservados" class="section level3">
@@ -516,7 +509,7 @@ sum &lt;- function(x,y) rbind(x,y)</code></pre>
 <p>O pacote <code>stringr</code> nos fornece a possibilidade de manipular informações que estão organizadas no que seriam as <code>strings</code>. Isso é particulamente útil caso sua base de dados não seja númerica ou talvez uma mescla entre informações escritas e númericas.</p>
 <p>Vamos usar como exemplo uma base de dados que já foi apresentada no lista de exercícios do tópico 3, a <code>vignette</code> que apresenta descrições mais detalhes sobre os pacotes instalados. Essa base vai mudar de acordo com os pacotes instalados no R, mas apresentam strings em sua base, principalmente na quarta lista interna. Vamos criar uam data.frame com esses elementos:</p>
 <pre class="r"><code>df_vignette &lt;- vignette(all= TRUE)[[4]] %&gt;% as.data.frame
-# Vamos eliminar a coluna com o diretório dos pacotes, para simplificar a exposição
+# Vamos eliminar a coluna com o diretório dos pacotes, para simplificar a exposição.
 df_vignette &lt;- df_vignette %&gt;% select(-LibPath)
 head(df_vignette)</code></pre>
 <pre><code>##   Package              Item                                      Title
@@ -526,44 +519,127 @@ head(df_vignette)</code></pre>
 ## 4   broom             broom       Introduction to broom (source, html)
 ## 5   broom            kmeans kmeans with dplyr and broom (source, html)
 ## 6   broom     bootstrapping          Tidy bootstrapping (source, html)</code></pre>
-<p>Nesse caso temos uma lista com três variáveis com informações que são character</p>
+<p>Nesse caso temos uma lista com três variáveis com informações que são um conjunto de caracteres.</p>
 <div id="usando-stringr-para-detectar-padrões" class="section level4">
 <h4>Usando `<code>stringr</code> para detectar padrões</h4>
-<p>O pacote <code>stringr</code> pode te ajudar a encontrar padrões em strings e blá blá blá.</p>
-<p>A função <code>str_detect</code> serve para <strong><em>isso</em></strong>. Ela devolve um vetor de tipo <strong><em>aquilo</em></strong>.</p>
+<p>O pacote <code>stringr</code> pode te ajudar a encontrar padrões em strings e ser uma outra maneira de realizar uma manipulação em sua base dados. Isso é particulamente útil se você deseja encontrar palavras ou frases específicas nas strings, mas até mesmo buscar partes de palavras. Vamos então entrar mais a fundo nas funções que compõem o pacote.</p>
+<p>Uma primeira função é <code>str_length</code> que se comporta de forma semelhante a <code>nchar()</code>. Podemos, então, aplicar à nossa base de dados, na coluna “Title”:</p>
+<pre class="r"><code>str_length(df_vignette$Title)</code></pre>
+<p>Há também a possibilidade de você combinar strings usando a função <code>str_c()</code>. Além dos vetores que você deseja combinar, há também a possibilidade de colocar um separador entre as strings (sep) e também <code>collapse</code> em que para valores diferentes de NULL cria-se uma única string com todos os elementos.</p>
+<pre class="r"><code># Unindo as três colunas de strings:
+str_c(df_vignette[,1],df_vignette[,2],df_vignette[,3])
+
+# Unindo as três colunas de strings e separando as partes por &quot;;&quot;
+str_c(df_vignette[,1],df_vignette[,2],df_vignette[,3], sep = &#39; ; &#39;)
+
+# Criando uma única string com TODAS as informações separando-as por &quot;;&quot;:
+str_c(df_vignette[,1],df_vignette[,2],df_vignette[,3], collapse = &quot; ; &quot;)</code></pre>
+<p>Uma forma de manipulação é mediante <code>str_sub()</code>, que retornará partes das strings que você escolher. Os argumentos da função são <code>str_sub(objeto, start = , end=)</code>. O objeto é a base que você escolher, o start é a posição que você analisará (o 1 representaria o primeiro caractere da string) e end é onde você acabará.</p>
+<pre class="r"><code># Vamos extrair somente as primeira 3 letras de uma das colunas:
+
+siglas_pacote &lt;- str_sub(df_vignette$Package, start=1, end=3) %&gt;% as.data.frame()
+siglas_pacote_resumo &lt;- siglas_pacote  %&gt;% distinct()
+head(siglas_pacote_resumo)</code></pre>
+<pre><code>##     .
+## 1 bro
+## 2 car
+## 3 cel
+## 4 che
+## 5 cli
+## 6 col</code></pre>
+<p>Podemos também usar as funçãos <code>str_to_upper()</code> e <code>str_to_lower()</code> para transformar algumas letras em maiúsculas ou minúsculas.</p>
+<pre class="r"><code># Voltando a um vetor atômico e criando um novo objeto
+SIGLAS &lt;- unlist(siglas_pacote_resumo)
+
+# Vamos colocar todas as siglas em maiúscula:
+str_sub(SIGLAS, 1, 3) &lt;- SIGLAS %&gt;% str_sub(.,1,3) %&gt;% str_to_upper()
+# Que é o mesmo que:
+#str_sub(SIGLAS, 1, 3) &lt;- str_to_upper(str_sub(SIGLAS, 1, 3))
+
+head(SIGLAS)</code></pre>
+<pre><code>## [1] &quot;BRO&quot; &quot;CAR&quot; &quot;CEL&quot; &quot;CHE&quot; &quot;CLI&quot; &quot;COL&quot;</code></pre>
+<pre class="r"><code># Agora somente a primeira letra em maiúsculo
+Siglas &lt;- SIGLAS
+str_sub(Siglas, 2, 3) &lt;- str_to_lower(str_sub(SIGLAS, 2, 3))
+head(Siglas)</code></pre>
+<pre><code>## [1] &quot;Bro&quot; &quot;Car&quot; &quot;Cel&quot; &quot;Che&quot; &quot;Cli&quot; &quot;Col&quot;</code></pre>
+<p>A função <code>str_detect</code> serve para detectar padrões dentro de vetores compostos por strings. Ela devolve um vetor de tipo logical com <code>TRUE</code> caso o padrão seja atendido e <code>FALSE</code> caso contrário.</p>
 <pre class="r"><code>str_detect(string, pattern, negate = FALSE)</code></pre>
-<p>O argumento <code>string</code> se refere à string que você vai usar. <code>pattern</code> se refere a qual padrão a ser analisado pela função. Já <code>negate</code> <strong><em>diz tal coisa</em></strong> e tem como valor padrão <code>FALSE</code>. Se for <code>TRUE</code>, acontece <strong><em>sei lá oque</em></strong>.</p>
-<pre class="r"><code>#Queremos saber que linhas da 4 coluna tem ou não um arquivo em html.
+<p>O argumento <code>string</code> se refere à string que você vai usar. <code>pattern</code> se refere a qual padrão a ser analisado pela função. Já <code>negate</code> é usado para indicar se você quer buscar os valores que atendem ou não a condição. Tem como valor padrão <code>FALSE</code>, que seria as strings que apresentam o padrão, já se for <code>TRUE</code> retornará um vetor lógico com as strings que não atendem ao padrão.</p>
+<pre class="r"><code>#Queremos saber que linhas da terceira coluna tem ou não um arquivo em html.
 
 htmlDetect &lt;- str_detect(df_vignette[,3], pattern = &quot;html&quot;)
 
 # Usando negate = TRUE
 
 htmlReject &lt;-  str_detect(df_vignette[,3], pattern = &quot;html&quot;, negate = TRUE)</code></pre>
-<p>Isso pode ser util se quisermos fazer um subsetting tal qual:</p>
-<pre class="r"><code>dfvignette_html &lt;- dfvignette[htmlDetect,]</code></pre>
+<p>Isso pode ser útil se quisermos fazer um subsetting tal qual:</p>
+<pre class="r"><code>dfvignette_html &lt;- df_vignette[htmlDetect,]</code></pre>
+<p>Caso você queira extrair informações especificas de dentro das strings, é possível adotar as funções <code>str_extract()</code> e <code>str_extract_all()</code>, que são compostas por:</p>
+<pre class="r"><code>str_extract(string, pattern)
+str_extract_all(string, pattern, simplify)</code></pre>
+<p>A diferença entre os dois é que o <code>str_extract()</code> retorna somente o primeiro valor do padrão, enquanto o <code>str_extract_all()</code> também retorna os casos em que o padrão é atendido mais de uma vez dentro de uma string.</p>
+<pre class="r"><code># Vamos buscar as seguintes infos nas strings:
+infos &lt;- c(&quot;source&quot;,&quot;html&quot;,&quot;pdf&quot;)
+infos_match &lt;- str_c(infos, collapse = &quot;|&quot;)
+
+# Agora vamos selecionar as strings que tem as infos escolhidas
+
+tem_infos &lt;- str_subset(df_vignette[,3],infos_match)
+
+# Em seguida podemos identificar e extrair as informações nas strings:
+
+dfvignette_html_extract &lt;- str_extract(tem_infos, infos_match)
+head(dfvignette_html_extract)</code></pre>
+<pre><code>## [1] &quot;source&quot; &quot;source&quot; &quot;source&quot; &quot;source&quot; &quot;source&quot; &quot;source&quot;</code></pre>
+<p>Perceba que a <code>str_extract()</code> retornou somente um resultado, mesmo para para aqueles que tinham mais de um resultado na suas strings. Agora se usarmos a <code>str_extract_all()</code> todas as correspondências aparecerão:</p>
+<pre class="r"><code>dfvignette_html_extract_all &lt;- str_extract_all(tem_infos, infos_match)
+head(dfvignette_html_extract_all)</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;source&quot; &quot;html&quot;  
+## 
+## [[2]]
+## [1] &quot;source&quot; &quot;html&quot;  
+## 
+## [[3]]
+## [1] &quot;source&quot; &quot;html&quot;  
+## 
+## [[4]]
+## [1] &quot;source&quot; &quot;html&quot;  
+## 
+## [[5]]
+## [1] &quot;source&quot; &quot;html&quot;  
+## 
+## [[6]]
+## [1] &quot;source&quot; &quot;html&quot;</code></pre>
 </div>
-</div>
-<div id="lendo-vários-arquivos-usando-função-list.files" class="section level2">
-<h2>Lendo vários arquivos usando função <code>list.files</code></h2>
-<p>Coloque então na pasta um arquivo em csv. Dê um exemplo usando <code>list.files()</code> com <code>str_subset(negate = TRUE)</code>para tirar esse arquivo do vetor.</p>
-<p>Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com <code>$</code> na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de <code>\\$</code>! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)</p>
-</div>
-<div id="descompactando-arquivos." class="section level2">
-<h2>Descompactando arquivos.</h2>
-<p>Funções <code>zip</code>, <code>unz</code>, <code>unzip</code>, <code>unzip(..., list = TRUE)</code> e <code>unzip(..., files = c(&quot;&quot;, &quot;&quot;))</code>.</p>
-<p>Brinca com os arquivos que você criou para lidar com isso e etc… Mostra como fazer uma sequência para importar arquivos pro R e etc… Usa <code>str_sub()</code> para criar o nome dos objetos e etc…</p>
 </div>
 <div id="abordando-download.file" class="section level2">
 <h2>Abordando download.file</h2>
-<p>Isso daqui no futuro a gente coloca no Tópico 2.</p>
-<p>Fala da função download.file. Fala da questão de dados binários ou não precisa ser <code>mode= wb</code> e etc…</p>
-<p>Já que o ibge é um porre conseguir o link direto para o download, faz pra NIOT mesmo… Não precisa baixar o zip de todos os páises via o R (já que ele é imenso e só faz em primeiro plano). Baixa algum outro, mas explica a função por parte. Fala também da questão dos arquivos e diretórios temporarios e etc…</p>
+<p>Uma função que já foi abordada nos exercícios, mas que ainda não fio devidamente apresentada é a <code>download.file()</code>. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumenta mais comuns da função, ela é estruturada da seguinte forma:</p>
+<pre class="r"><code>download.file(url, destfile, method, mode = &quot;w&quot;, headers = NULL)</code></pre>
+<p>Vamos usar como exemplo, o download de informações que podem a vir serem necessárias para o nosso curso, as Tabelas de Recursos e Usos.</p>
+<pre class="r"><code>download.file(&quot;ftp://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2017/tabelas_xls/tabelas_de_recursos_e_usos/nivel_68_2010_2017_xls.zip&quot;, destfile = &quot;Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip&quot;, mode = &quot;wb&quot;)
+TRU_2010_2017 &lt;- &quot;Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip&quot;</code></pre>
+<p>Se tudo ocorreu bem, o arquivo solicitado estará no seu working directory (wd). Uma particularidade do arquivo escolhido aqui é que de trata de uma arquivo compactado e necessita de mais alguns passos. Caso fosse algum arquivo com os dados já expostos (um csv, xls, xlsx, txt, Rdata, entre outros) a leitura já poderia ser feita.</p>
+</div>
+<div id="descompactando-arquivos." class="section level2">
+<h2>Descompactando arquivos.</h2>
+<p>Existe também a possibilidade de se descompactar automaticamente arquivos compactados.</p>
+<pre class="r"><code>unzip(TRU_2010_2017,exdir = &quot;TRU&quot;)</code></pre>
+<p>Com isso temos nossas fontes de dados já acessíveis, mas que ainda falta realizar a leitura delas. São várias tabelas cada uma representando informações distintas e para diferentes anos.</p>
+</div>
+<div id="lendo-vários-arquivos-usando-função-list.files" class="section level2">
+<h2>Lendo vários arquivos usando função <code>list.files</code></h2>
+<p>Tal como no nosso exemplo em que existe uma quantidade razoável de arquivos a sereim lidos, casp fosse realizada a leitura individual de cada arquivo poderíamos ter um código longo e repetitivo. Uma alternativa é realizar a leitura silmultânea de várias arquivos, usando a função <code>list.files()</code>.</p>
+<p>Coloque então na pasta um arquivo em csv. Dê um exemplo usando <code>list.files()</code> com <code>str_subset(negate = TRUE)</code>para tirar esse arquivo do vetor.</p>
+<p>Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com <code>$</code> na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de <code>\\$</code>! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)</p>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>A essa altura do campeonato já consideramos que quem está lendo esse tópico já tem os pacotes do <code>tidyverse</code> instalados ou sabe como instalar caso não esteja. Ou seja, simplesmente fazer <code>install.packages(&quot;NomeDoPacote&quot;)</code>.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>No próprio wikipedia é possível encontrar uma lista com os unicodes (<a href="https://en.wikipedia.org/wiki/Greek_and_Coptic">link</a>)<a href="#fnref2" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

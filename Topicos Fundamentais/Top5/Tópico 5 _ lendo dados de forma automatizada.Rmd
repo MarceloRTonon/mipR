@@ -1,7 +1,7 @@
 ---
 title: "Tópico 5 - Lendo dados de forma automatizada"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "08/07/2020"
+date: "19/07/2020"
 output: html_document
 ---
 
@@ -105,15 +105,6 @@ Perceba que, o número de caracteres do que seria nossa `string` leva em conta o
 
 Uma observação importante é, ainda que não exista a distinção entre `character` e `string` no R, dentro do pacote `xtable` há uma função chamada `is.string()`, que é usada apenas no contexto de criação de tabelas tex a partir do R, mas que não tem influência no funcionamento geral da linguagem.
 
-```{r MT_str_def, eval= FALSE, include = FALSE}
-#Defina o que é uma string em termos gerais de programação. Procura na internet uma definição e tenta deixar ela mastigada, mas também sem dar muitas voltas. Não precisa definir string no contexto do R não logo de cara não, a definição pode ser ampla (e é até melhor se você conseguir). Um paragrafo falando disso. É melhor você definir primeiro num contexto geral, para então falar no R.
-
-#Depois que você definir, fale no contexto do R (que não tem um tipo de dados chamados de strings por si só). Seria interessante você falar (mesmo que numa nota de rodapé) que existe uma função is.string() do pacote xtable (para produzir tabelas em tex) porém que na própria seção de Details da função diz que ela não deve ser usada em outro contexto. Assim, vale falar que no R não tem uma distinção entre strings e character. Que em outras linguagens é que há essa diferença (em muitas linguagens character se refere a letras individuais, enquanto string é um conjunto de characters).
-
-#https://stackoverflow.com/questions/18513200/what-is-the-difference-between-string-and-character-in-r
-
-#https://pediaa.com/what-is-the-difference-between-character-and-string/
-```
 
 ### Quote com `"` e `'`
 
@@ -156,17 +147,11 @@ Para que o R leia corretamente o que vc deseja na frase, é necessário usar a f
 #Olhe em ?Quotes também.
 ```
 
-Aqui entra um importante tema quando trabalhando com `strings` e `characters`: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego.
+Aqui entra um importante tema quando trabalhando com `strings` e `characters`: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego^[No próprio wikipedia é possível encontrar uma lista com os unicodes ([link](https://en.wikipedia.org/wiki/Greek_and_Coptic))].
 
 ```{r, eval=T}
-mi <- "\u03bc"
-mi
-
-theta <- "\u03b8"
-theta
-
-Delta <- "\u0394"
-Delta
+letras_gregas_exemplo <- paste("\u3bc","\u3b1","\u3b2")
+letras_gregas_exemplo
 ```
 
 Você pode buscar as correspondências do `unicodes` para cada letra grega que desejar. Essa lista está acessível na internet e os códigos, em geral, são universais.
@@ -310,29 +295,87 @@ Vamos usar como exemplo uma base de dados que já foi apresentada no lista de ex
 ```{r,eval=T}
 
 df_vignette <- vignette(all= TRUE)[[4]] %>% as.data.frame
-# Vamos eliminar a coluna com o diretório dos pacotes, para simplificar a exposição
+# Vamos eliminar a coluna com o diretório dos pacotes, para simplificar a exposição.
 df_vignette <- df_vignette %>% select(-LibPath)
 head(df_vignette)
 
 ```
 
-Nesse caso temos uma lista com três variáveis com informações que são nomes. 
+Nesse caso temos uma lista com três variáveis com informações que são um conjunto de caracteres. 
 
 #### Usando ``stringr` para detectar padrões
 
-O pacote `stringr` pode te ajudar a encontrar padrões em strings e blá blá blá. 
+O pacote `stringr` pode te ajudar a encontrar padrões em strings e ser uma outra maneira de realizar uma manipulação em sua base dados. Isso é particulamente útil se você deseja encontrar palavras ou frases específicas nas strings, mas até mesmo buscar partes de palavras. Vamos então entrar mais a fundo nas funções que compõem o pacote.
 
-A função `str_detect` serve para ***isso***. Ela devolve um vetor de tipo ***aquilo***.
+
+Uma primeira função é `str_length` que se comporta de forma semelhante a `nchar()`. Podemos, então, aplicar à nossa base de dados, na coluna "Title":
+
+```{r}
+str_length(df_vignette$Title)
+```
+
+Há também a possibilidade de você combinar strings usando a função `str_c()`. Além dos vetores que você deseja combinar, há também a possibilidade de colocar um separador entre as strings (sep) e também `collapse` em que para valores diferentes de NULL cria-se uma única string com todos os elementos.
+
+```{r}
+# Unindo as três colunas de strings:
+str_c(df_vignette[,1],df_vignette[,2],df_vignette[,3])
+
+# Unindo as três colunas de strings e separando as partes por ";"
+str_c(df_vignette[,1],df_vignette[,2],df_vignette[,3], sep = ' ; ')
+
+# Criando uma única string com TODAS as informações separando-as por ";":
+str_c(df_vignette[,1],df_vignette[,2],df_vignette[,3], collapse = " ; ")
+```
+
+Uma forma de manipulação é mediante `str_sub()`, que retornará partes das strings que você escolher. Os argumentos da função são `str_sub(objeto, start = , end=)`. O objeto é a base que você escolher, o start é a posição que você analisará (o 1 representaria o primeiro caractere da string) e end é onde você acabará.
+
+```{r, eval=T}
+# Vamos extrair somente as primeira 3 letras de uma das colunas:
+
+siglas_pacote <- str_sub(df_vignette$Package, start=1, end=3) %>% as.data.frame()
+siglas_pacote_resumo <- siglas_pacote  %>% distinct()
+head(siglas_pacote_resumo)
+```
+
+
+```{r, include=F}
+
+# FALTA AINDA FALAR DE str_subset
+
+```
+
+
+Podemos também usar as funçãos `str_to_upper()` e `str_to_lower()` para transformar algumas letras em maiúsculas ou minúsculas.
+
+```{r, eval=T}
+# Voltando a um vetor atômico e criando um novo objeto
+SIGLAS <- unlist(siglas_pacote_resumo)
+
+# Vamos colocar todas as siglas em maiúscula:
+str_sub(SIGLAS, 1, 3) <- SIGLAS %>% str_sub(.,1,3) %>% str_to_upper()
+# Que é o mesmo que:
+#str_sub(SIGLAS, 1, 3) <- str_to_upper(str_sub(SIGLAS, 1, 3))
+
+head(SIGLAS)
+
+# Agora somente a primeira letra em maiúsculo
+Siglas <- SIGLAS
+str_sub(Siglas, 2, 3) <- str_to_lower(str_sub(SIGLAS, 2, 3))
+head(Siglas)
+```
+
+
+A função `str_detect` serve para detectar padrões dentro de vetores compostos por strings. Ela devolve um vetor de tipo logical com `TRUE` caso o padrão seja atendido e `FALSE` caso contrário.
 
 ```{r MT_str_detect_formals, eval = FALSE}
 str_detect(string, pattern, negate = FALSE)
 ```
 
-O argumento `string` se refere à string que você vai usar. `pattern` se refere a qual padrão a ser analisado pela função. Já `negate` ***diz tal coisa*** e tem como valor padrão `FALSE`. Se for `TRUE`, acontece ***sei lá oque***.
+O argumento `string` se refere à string que você vai usar. `pattern` se refere a qual padrão a ser analisado pela função. Já `negate` é usado para indicar se você quer buscar os valores que atendem ou não a condição. Tem como valor padrão `FALSE`, que seria as strings que apresentam o padrão, já se for `TRUE` retornará um vetor lógico com as strings que não atendem ao padrão.
 
 ```{r str_detect_uso}
 
-#Queremos saber que linhas da 4 coluna tem ou não um arquivo em html.
+#Queremos saber que linhas da terceira coluna tem ou não um arquivo em html.
 
 htmlDetect <- str_detect(df_vignette[,3], pattern = "html")
 
@@ -341,10 +384,135 @@ htmlDetect <- str_detect(df_vignette[,3], pattern = "html")
 htmlReject <-  str_detect(df_vignette[,3], pattern = "html", negate = TRUE)
 ```
 
-Isso pode ser util se quisermos fazer um subsetting tal qual:
+Isso pode ser útil se quisermos fazer um subsetting tal qual:
 
 ```{r str_detect_utilidade}
-dfvignette_html <- dfvignette[htmlDetect,]
+dfvignette_html <- df_vignette[htmlDetect,]
+```
+
+Caso você queira extrair informações especificas de dentro das strings, é possível adotar as funções `str_extract()` e `str_extract_all()`, que  são compostas por:
+
+```{r, eval=F}
+str_extract(string, pattern)
+str_extract_all(string, pattern, simplify)
+```
+
+A diferença entre os dois é que o `str_extract()` retorna somente o primeiro valor do padrão, enquanto o `str_extract_all()` também retorna os casos em que o padrão é atendido mais de uma vez dentro de uma string. 
+
+```{r, eval=T}
+# Vamos buscar as seguintes infos nas strings:
+infos <- c("source","html","pdf")
+infos_match <- str_c(infos, collapse = "|")
+
+# Agora vamos selecionar as strings que tem as infos escolhidas
+
+tem_infos <- str_subset(df_vignette[,3],infos_match)
+
+# Em seguida podemos identificar e extrair as informações nas strings:
+
+dfvignette_html_extract <- str_extract(tem_infos, infos_match)
+head(dfvignette_html_extract)
+
+```
+
+Perceba que a `str_extract()` retornou somente um resultado, mesmo para para aqueles que tinham mais de um resultado na suas strings. Agora se usarmos a `str_extract_all()` todas as correspondências aparecerão:
+
+```{r, eval=T}
+dfvignette_html_extract_all <- str_extract_all(tem_infos, infos_match)
+head(dfvignette_html_extract_all)
+```
+
+## Abordando download.file
+
+Uma função que já foi abordada nos exercícios, mas que ainda não fio devidamente apresentada é a `download.file()`. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumenta mais comuns da função, ela é estruturada da seguinte forma:
+
+```{r,eval=F}
+download.file(url, destfile, method, mode = "w", headers = NULL)
+```
+
+
+```{r, MT_download, include=F, eval=F}
+
+#Fala da função download.file. Fala da questão de dados binários ou não precisa ser `mode= wb` e etc...
+
+#Já que o ibge é um porre conseguir o link direto para o download, faz pra NIOT mesmo... Não precisa baixar o zip de todos os páises via o R (já que ele é imenso e só faz em primeiro plano). Baixa algum outro, mas explica a função por parte. Fala também da questão dos arquivos e diretórios temporarios e etc...
+
+```
+
+Vamos usar como exemplo, o download de informações que podem a vir serem necessárias para o nosso curso, as Tabelas de Recursos e Usos. 
+
+```{r}
+
+download.file("ftp://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2017/tabelas_xls/tabelas_de_recursos_e_usos/nivel_68_2010_2017_xls.zip", destfile = "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip", mode = "wb")
+TRU_2010_2017 <- "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip"
+
+```
+
+Se tudo ocorreu bem, o arquivo solicitado estará no seu working directory (wd). Uma particularidade do arquivo escolhido aqui é que de trata de uma arquivo compactado e necessita de mais alguns passos. Caso fosse algum arquivo com os dados já expostos (um csv, xls, xlsx, txt, Rdata, entre outros) a leitura já poderia ser feita.
+
+## Descompactando arquivos.
+
+Existe também a possibilidade de se descompactar automaticamente arquivos compactados.
+
+```{r}
+unzip(TRU_2010_2017,exdir = "TRU")
+```
+
+
+```{r, MT_decode, include=F, eval=F}
+
+#Funções `zip`, `unz`, `unzip`, `unzip(..., list = TRUE)` e `unzip(..., files = c("", ""))`.
+
+#Brinca com os arquivos que você criou para lidar com isso e etc... Mostra como fazer uma sequência para importar arquivos pro R e etc... Usa `str_sub()` para criar o nome dos objetos e etc... 
+
+```
+
+Com isso temos nossas fontes de dados já acessíveis, mas que ainda falta realizar a leitura delas. São várias tabelas cada uma representando informações distintas e para diferentes anos.
+
+
+## Lendo vários arquivos usando função `list.files`
+
+Tal como no nosso exemplo em que existe uma quantidade razoável de arquivos a sereim lidos, casp fosse realizada a leitura individual de cada arquivo poderíamos ter um código longo e repetitivo. Uma alternativa é realizar a leitura silmultânea de várias arquivos, usando a função `list.files()`.
+
+```{r MT_listfiles, eval = FALSE, include = FALSE}
+#Fale da função list.files primeiro em abstrato.
+
+#Depois, crie, a partir das bases dentro datasets do R, uma série de arquivos xlsx com openxlsx::write.xlsx. Coloque todos numa pasta x.
+
+#Usa list.files() na pasta.
+
+xfiles <- list.files("\TRU")
+
+#Leia então usando map. Importante o as.list()
+
+arquivos <- xfiles %>%
+  as.list() %>%
+  map(read_xls)
+```
+
+Coloque então na pasta um arquivo em csv. Dê um exemplo usando `list.files()` com `str_subset(negate = TRUE)`para tirar esse arquivo do vetor.
+
+Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com `$` na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de `\\$`! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)
+
+
+
+
+```{r, include=F}
+
+# Comentários do MT
+
+
+```
+
+
+```{r MT_str_def, eval= FALSE, include = FALSE}
+#Defina o que é uma string em termos gerais de programação. Procura na internet uma definição e tenta deixar ela mastigada, mas também sem dar muitas voltas. Não precisa definir string no contexto do R não logo de cara não, a definição pode ser ampla (e é até melhor se você conseguir). Um paragrafo falando disso. É melhor você definir primeiro num contexto geral, para então falar no R.
+
+#Depois que você definir, fale no contexto do R (que não tem um tipo de dados chamados de strings por si só). Seria interessante você falar (mesmo que numa nota de rodapé) que existe uma função is.string() do pacote xtable (para produzir tabelas em tex) porém que na própria seção de Details da função diz que ela não deve ser usada em outro contexto. Assim, vale falar que no R não tem uma distinção entre strings e character. Que em outras linguagens é que há essa diferença (em muitas linguagens character se refere a letras individuais, enquanto string é um conjunto de characters).
+
+#https://stackoverflow.com/questions/18513200/what-is-the-difference-between-string-and-character-in-r
+
+#https://pediaa.com/what-is-the-difference-between-character-and-string/
 ```
 
 
@@ -381,43 +549,3 @@ dfvignette_html <- dfvignette[htmlDetect,]
 ```{r MT_stringi, eval = FALSE, include =FALSE}
 #Não precisa entrar em nada de regex ou nada especifico do stringi. Vamos deixar isso para um tópico suplementar mais a frente se necessário.
 ```
-
-
-## Lendo vários arquivos usando função `list.files`
-
-
-```{r MT_listfiles, eval = FALSE, include = FALSE}
-#Fale da função list.files primeiro em abstrato.
-
-#Depois, crie, a partir das bases dentro datasets do R, uma série de arquivos xlsx com openxlsx::write.xlsx. Coloque todos numa pasta x.
-
-#Usa list.files() na pasta.
-
-xfiles <- list.files("x")
-
-#Leia então usando map. Importante o as.list()
-
-arquivos <- xfiles %>%
-  as.list() %>%
-  map(read_xls)
-```
-
-Coloque então na pasta um arquivo em csv. Dê um exemplo usando `list.files()` com `str_subset(negate = TRUE)`para tirar esse arquivo do vetor.
-
-Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com `$` na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de `\\$`! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)
-
-## Descompactando arquivos.
-
-Funções `zip`, `unz`, `unzip`, `unzip(..., list = TRUE)` e `unzip(..., files = c("", ""))`.
-
-Brinca com os arquivos que você criou para lidar com isso e etc... Mostra como fazer uma sequência para importar arquivos pro R e etc... Usa `str_sub()` para criar o nome dos objetos e etc... 
-
-
-## Abordando download.file
-
-Isso daqui no futuro a gente coloca no Tópico 2.
-
-Fala da função download.file. Fala da questão de dados binários ou não precisa ser `mode= wb` e etc...
-
-Já que o ibge é um porre conseguir o link direto para o download, faz pra NIOT mesmo... Não precisa baixar o zip de todos os páises via o R (já que ele é imenso e só faz em primeiro plano). Baixa algum outro, mas explica a função por parte. Fala também da questão dos arquivos e diretórios temporarios e etc...
-
