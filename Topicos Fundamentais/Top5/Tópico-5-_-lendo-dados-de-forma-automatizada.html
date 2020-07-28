@@ -458,7 +458,7 @@ theta</code></pre>
 <pre class="r"><code>Delta &lt;- &quot;\u0394&quot;
 Delta</code></pre>
 <pre><code>## [1] &quot;&lt;U+0394&gt;&quot;</code></pre>
-<p>Você pode buscar as correspondências do <code>unicodes</code> para cada letra grega que desejar. Essa lista está acessível na internet e os códigos, em geral, são universais.</p>
+<p>Você pode buscar as correspondências do <code>unicodes</code> para cada letra grega que desejar. Essa <a href="https://www.fileformat.info/info/unicode/block/greek_and_coptic/list.htm">lista está acessível na internet</a> e os códigos, em geral, são universais.</p>
 </div>
 <div id="nomes-impossíveis-e-nomes-reservados" class="section level3">
 <h3>Nomes Impossíveis e Nomes Reservados</h3>
@@ -477,7 +477,7 @@ a.b.c &lt;- &quot;ok&quot;
 2abc &lt;- &quot;Retornará erro&quot;
 abc2 &lt;- &quot;ok&quot;
 a b c &lt;- &quot;Retornará erro&quot;</code></pre>
-<p>Essa problema ocorrerá para qualquer um dos nomes reservados ou nomes impossiveis. Caso você realmente precise usar um desses nomes (o que seria uma situação bem peculiar), há uma forma de você burlar essa restrição. No entanto, reforçamos que isso não é recomendado pois pode causar uma bela confusão no seu código. Para isso basta você colocar a palavra entre crases:</p>
+<p>Essa problema ocorrerá para qualquer um dos nomes reservados ou nomes impossiveis. Caso você realmente precise usar um desses nomes (o que seria uma situação bem peculiar), há uma forma de você burlar essa restrição. No entanto, <strong>reforçamos que isso não é recomendado</strong> pois pode causar uma bela confusão no seu código. Para isso basta você colocar a palavra entre crases:</p>
 <pre class="r"><code>`TRUE` &lt;- paste(&quot;evitar&quot;, &quot;fazer&quot;, &quot;isso&quot;, sep = &quot; &quot;)
 `2000` &lt;- paste(&quot;também&quot;, &quot;evitar&quot;, sep= &quot; &quot;)
 &quot;df$`2000`$AUS&quot; &lt;- &quot;Possível, mas existe alguma maneira mais simples&quot;
@@ -519,14 +519,14 @@ sum &lt;- function(x,y) rbind(x,y)</code></pre>
 # Vamos eliminar a coluna com o diretório dos pacotes, para simplificar a exposição
 df_vignette &lt;- df_vignette %&gt;% select(-LibPath)
 head(df_vignette)</code></pre>
-<pre><code>##   Package              Item                                      Title
-## 1   broom    adding-tidiers     Adding tidiers to broom (source, html)
-## 2   broom available-methods           Available methods (source, html)
-## 3   broom   broom_and_dplyr             broom and dplyr (source, html)
-## 4   broom             broom       Introduction to broom (source, html)
-## 5   broom            kmeans kmeans with dplyr and broom (source, html)
-## 6   broom     bootstrapping          Tidy bootstrapping (source, html)</code></pre>
-<p>Nesse caso temos uma lista com três variáveis com informações que são character</p>
+<pre><code>##       Package              Item                                      Title
+## 1 benchmarkme    a_introduction    Crowd sourced benchmarks (source, html)
+## 2       broom    adding-tidiers     Adding tidiers to broom (source, html)
+## 3       broom available-methods           Available methods (source, html)
+## 4       broom   broom_and_dplyr             broom and dplyr (source, html)
+## 5       broom             broom       Introduction to broom (source, html)
+## 6       broom            kmeans kmeans with dplyr and broom (source, html)</code></pre>
+<p>Nesse caso temos uma lista com três variáveis com informações que são nomes.</p>
 <div id="usando-stringr-para-detectar-padrões" class="section level4">
 <h4>Usando `<code>stringr</code> para detectar padrões</h4>
 <p>O pacote <code>stringr</code> pode te ajudar a encontrar padrões em strings e blá blá blá.</p>

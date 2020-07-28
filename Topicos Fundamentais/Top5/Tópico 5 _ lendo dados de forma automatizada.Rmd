@@ -169,7 +169,7 @@ Delta <- "\u0394"
 Delta
 ```
 
-Você pode buscar as correspondências do `unicodes` para cada letra grega que desejar. Essa lista está acessível na internet e os códigos, em geral, são universais.
+Você pode buscar as correspondências do `unicodes` para cada letra grega que desejar. Essa [lista está acessível na internet](https://www.fileformat.info/info/unicode/block/greek_and_coptic/list.htm) e os códigos, em geral, são universais.
 
 ### Nomes Impossíveis e Nomes Reservados
 
@@ -201,7 +201,7 @@ abc2 <- "ok"
 a b c <- "Retornará erro"
 ```
 
-Essa problema ocorrerá para qualquer um dos nomes reservados ou nomes impossiveis. Caso você realmente precise usar um desses nomes (o que seria uma situação bem peculiar), há uma forma de você burlar essa restrição. No entanto, reforçamos que isso não é recomendado pois pode causar uma bela confusão no seu código. Para isso basta você colocar a palavra entre crases:
+Essa problema ocorrerá para qualquer um dos nomes reservados ou nomes impossiveis. Caso você realmente precise usar um desses nomes (o que seria uma situação bem peculiar), há uma forma de você burlar essa restrição. No entanto, **reforçamos que isso não é recomendado** pois pode causar uma bela confusão no seu código. Para isso basta você colocar a palavra entre crases:
 
 
 ```{r}
@@ -216,7 +216,7 @@ df_2000_AUS <- "Uma melhor maneira de apresentar"
 Uma boa prática nesse mesmo sentido é evitar nomear objetos com nomes de funções frequentemente usadas, para evitar confusões ao longo do código. Vamos a alguns exemplos:
 
 
-```{r}
+```{r, eval = FALSE}
 c <- c(1:4)
 matrix <- matrix(c(1:4), nrow = 2)
 matrix <- matrix(c[1:4], nrow=2)
