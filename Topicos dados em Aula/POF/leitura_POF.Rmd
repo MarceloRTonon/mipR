@@ -1,0 +1,32 @@
+---
+title: "POF 2010 - Leitura"
+author: "Marcelo Tonon"
+date: "28/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Por uma questão de exemplificação iremos tratar a principio aqui da POF feita entre 2008 e 2009. Numa outra ocasião podemos passar para a POF feita entre 2017 e 2018.
+
+## Pacotes Necessários
+
+```{r}
+library(tidyverse)
+```
+
+
+## Baixando os arquivos
+
+Como os arquivos da POF são **muito pesados**, não iremos baixar ele diretamente pelo *R*, uma vez que isso seria complicado demais para quem tem uma conexão com a internet mais instável. Para baixar eles, basta ir no site do [IBGE](https://www.ibge.gov.br/estatisticas/sociais/rendimento-despesa-e-consumo/9050-pesquisa-de-orcamentos-familiares.html?=&t=downloads) de Downloads da POF, escolher a versão da pesquisa que você deseja baixar, clicar em `Microdados` e então em `Dados.zip`.
+
+No nosso caso temos: 
+
+`Pesquisa_de_Orçamentos_Familiares_2008_2009`
+    `Microdados`
+        `Dados.zip`
+
+Um detalhe que pode ser útil a quem quiser baixar pelo `R` (para fins de automatização), para conseguir o link do download do arquivo, vá na parte de downloads do seu navegador^[Funciona para o Firefox.], clique com o botão direito do mouse sobre o arquivo baixado e depois clique em algo como: `Copiar link do Download`e você terá então o link do download^[No caso, o link do download de `Dados.zip` é: "ftp://ftp.ibge.gov.br/Orcamentos_Familiares/Pesquisa_de_Orcamentos_Familiares_2008_2009/Microdados/Dados.zip"].
+
