@@ -9,9 +9,64 @@ output: html_document
 knitr::opts_chunk$set(include = FALSE, eval = FALSE)
 ```
 
-Q.? - Verifique se `nchar()` é uma função vetorizada. Se positivo, qual a utilidade dela?
 
-```{r}
-#é uma função vetorizada, é pode ser útil para saber o tamanho das "strings" existentes num objeto.
+```{r, inlcude = TRUE}
+library(purrr)
+library(stringr)
 ```
+
+
+### Questão X
+
+#### Q.X.1 Qual a diferença entre `paste0` e `paste`?
+
+#### Q.X.2 O que faz `Sys.date`, `Sys.time` e `Sys.sleep`?
+
+#### Q.X.3 Explique por que os resultados das operações abaixo retornam questões diferentes (reveja o Tópico 4 se necessário)?
+
+```{r, include=T}
+
+horario <- function(x){
+  Sys.sleep(1)
+  paste0("Elemento ", x, ". O horário atual é ", Sys.time())
+  }
+
+modo1 <-  horario(1:10)
+
+modo2 <- 1:10 %>% as.list() %>% map(horario)
+
+modo3 <- list()
+
+for(i in 1:10) modo3[[i]] <- horario(i)
+```
+
+### Questão W
+
+#### Q.W.1 Qual é a definição de `strings` e `character` na **programação em geral**?
+
+#### Q.W.2 Qual é a definição de `strings` e `character` no `R`?
+
+#### Q.W.3 Para o que serve a função `nchar`?
+
+#### D.W.1 - **Desafio**: Descubra se a função `nchar` é uma função vetorizada.
+
+### Questão J
+
+#### Q.J.1 Quais são as formas de `quote` do `R`?
+
+#### Q.J.2 Para que usamos `'` ao invés de `"`?
+
+#### Q.J.3 O que fazem `\n` e `\t`?
+
+#### Q.J.4 Qual a diferença entre `print` e `writeLines`?
+
+### Questão Y
+
+#### Q.Y.1 O que são os nomes impossíveis?
+
+#### Q.Y.2 Quais são os nomes reservados?
+
+#### Q.Y.3 Para o quê serve a função `make.names`?
+
+
 
