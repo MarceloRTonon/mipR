@@ -364,7 +364,7 @@ summary {
 
 <h1 class="title toc-ignore">Calculando as matrizes derivadas</h1>
 <h4 class="author">Marcelo Tonon e Felipe Cornelio</h4>
-<h4 class="date">16/07/2020</h4>
+<h4 class="date">18/07/2020</h4>
 
 </div>
 
@@ -501,7 +501,11 @@ row.names(F_n) &lt;- produtos</code></pre>
 <pre class="r"><code>F_m &lt;- read_excel(arquivo_2015, sheet =4, range = &quot;BT6:BY132&quot;, col_names = demanda_final)
 row.names(F_m) &lt;- produtos</code></pre>
 <ul>
+<<<<<<< HEAD
 <li><span class="math inline">\(q\)</span> - Vetor com o valor bruto da produção total por produto: Pode ser calculado a partir de <span class="math inline">\(q = Vi_{127}\)</span> ou <span class="math inline">\(q = U_ni_{127} + F_ni_{127}\)</span>.</li>
+=======
+<li><span class="math inline">\(q\)</span> - Vetor com o valor bruto da produção total por produto: Pode ser calculado a partir de <span class="math inline">\(q = Vi_{67}\)</span> ou <span class="math inline">\(q = U_ni_{67} + F_ni_{6}\)</span>.</li>
+>>>>>>> 24d102ee15b6187fec86ca00c72f91cb9e6bed82
 </ul>
 <pre class="r"><code>q &lt;- V %&gt;% rowSums()
 
@@ -520,7 +524,11 @@ row.names(T_p_m) &lt;- produtos
 
 T_p &lt;- T_p_n + T_p_m</code></pre>
 <ul>
+<<<<<<< HEAD
 <li><span class="math inline">\(T_e\)</span> - Matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos pela demanda final. Pode ser encontrada na Tabela 4, entre <code>BT6:BY132</code>.</li>
+=======
+<li><span class="math inline">\(T_e\)</span> - Matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos pela demanda final. Pode ser encontrada nas Tabelas 5 e 6, entre <code>BT6:BY132</code>.</li>
+>>>>>>> 24d102ee15b6187fec86ca00c72f91cb9e6bed82
 </ul>
 <pre class="r"><code>T_e_n &lt;- read_excel(arquivo_2015, sheet = 5, range = &quot;BT6:BY132&quot;, col_names = demanda_final)
 row.names(T_e_n) &lt;- produtos
@@ -530,13 +538,21 @@ row.names(T_e_m) &lt;- produtos
 
 T_e &lt;- T_e_n + T_e_m</code></pre>
 <ul>
+<<<<<<< HEAD
 <li><span class="math inline">\(g\)</span> - Vetor coluna com o valor bruto da produção total por atividade. Pode ser calculada a partir de <span class="math inline">\(g = V&#39;i_{67}\)</span></li>
+=======
+<li><span class="math inline">\(g\)</span> - Vetor coluna com o valor bruto da produção total por atividade. Pode ser calculada a partir de <span class="math inline">\(g = V&#39;i_{127}\)</span></li>
+>>>>>>> 24d102ee15b6187fec86ca00c72f91cb9e6bed82
 </ul>
 <pre class="r"><code>g &lt;- colSums(V)</code></pre>
 <ul>
 <li><span class="math inline">\(y\)</span> - Vetor coluna com o valor adicionado total gerado pelas atividades produtivas: é considerado como um vetor por medida de simplificação, na prática é uma matriz por atividade com o valor adicionado bruto a preços básicos, as remu-nerações (salários e contribuições sociais), o excedente bruto operacional (obtido por saldo) e os impostos e subsídios incidentes sobre as atividades. Esses valores podem ser encontrados nas Tabelas de Recursos e Usos do IBGE<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></li>
 </ul>
+<<<<<<< HEAD
 <p>Além dessas presentes na tabela, podemos também já calcular os vetores <span class="math inline">\(f_n = F_ni_{127}\)</span> e <span class="math inline">\(f_m=F_mi_{127}\)</span></p>
+=======
+<p>Além dessas presentes na tabela, podemos também já calcular os vetores <span class="math inline">\(f_n = F_ni_{6}\)</span> e <span class="math inline">\(f_m=F_mi_{6}\)</span></p>
+>>>>>>> 24d102ee15b6187fec86ca00c72f91cb9e6bed82
 <pre class="r"><code>f_n &lt;- rowSums(F_n)
 
 f_m &lt;- rowSums(F_m)</code></pre>
@@ -562,8 +578,8 @@ f_m &lt;- rowSums(F_m)</code></pre>
 <h4>Calculando <span class="math inline">\(B_n\)</span> e <span class="math inline">\(B_m\)</span></h4>
 <p>Para calcularmos as matrizes de coeficientes técnicos dos insumos nacionais e dos importados, fazemos:</p>
 <p><span class="math display">\[\begin{align}
-B_n &amp;= U_n (\hat{q}^{-1}) \\
-B_m &amp;= U_m (\hat{q}^{-1})
+B_n &amp;= U_n (\hat{g}^{-1}) \\
+B_m &amp;= U_m (\hat{g}^{-1})
 \end{align}\]</span></p>
 <pre class="r"><code>B_n &lt;- U_n %&gt;% as.matrix %*% solve(diag(c(g)))
 
@@ -583,8 +599,13 @@ B_m &lt;- U_m %&gt;% as.matrix %*% solve(diag(c(g)))</code></pre>
 </div>
 <div id="calculando-l" class="section level4">
 <h4>Calculando <span class="math inline">\(L\)</span></h4>
+<<<<<<< HEAD
 <p>Para calcular a Matriz de Leontief fazemos</p>
 <p><span class="math display">\[L = (I-A)^{-1}\]</span></p>
+=======
+<p>Para calcular a Inversa de Leontief fazemos</p>
+<p><span class="math display">\[L = (I-A_n)^{-1}\]</span></p>
+>>>>>>> 24d102ee15b6187fec86ca00c72f91cb9e6bed82
 <pre class="r"><code>Leontief &lt;- solve(diag(nrow(A_n)) - A_n)</code></pre>
 </div>
 <div id="calculando-a_m" class="section level4">
@@ -607,7 +628,11 @@ B_m &lt;- U_m %&gt;% as.matrix %*% solve(diag(c(g)))</code></pre>
 <pre class="r"><code>E_n &lt;- D_MS %*% as.matrix(F_n)
 
 E_m &lt;- D_MS %*% as.matrix(F_m)</code></pre>
+<<<<<<< HEAD
 <p>Podemos também tranformar essa matriz em um vetor de demanda final (assim como fizemos para <span class="math inline">\(f_n\)</span> e <span class="math inline">\(f_m\)</span>). Teríamos então <span class="math inline">\(e_n=E_ni_{67}\)</span> e <span class="math inline">\(e_m=E_mi_{67}\)</span>:</p>
+=======
+<p>Podemos também tranformar essa matriz em um vetor de demanda final (assim como fizemos para <span class="math inline">\(f_n\)</span> e <span class="math inline">\(f_m\)</span>). Teríamos então <span class="math inline">\(e_n=E_ni_{6}\)</span> e <span class="math inline">\(e_m=E_mi_{6}\)</span>:</p>
+>>>>>>> 24d102ee15b6187fec86ca00c72f91cb9e6bed82
 <pre class="r"><code>e_n &lt;- rowSums(E_n)
 e_m &lt;- rowSums(E_m)</code></pre>
 </div>
@@ -625,7 +650,7 @@ all.equal(as.matrix(g),g_leontief, check.attributes = F)</code></pre>
 </div>
 <div id="calculando-y" class="section level4">
 <h4>Calculando <span class="math inline">\(y\)</span></h4>
-<p>Para calcular o valor adicionado da produção a preços básicos <span class="math inline">\(y\)</span>, precisamos identificar o Consumo intermediário a preços do consumidor</p>
+<p>Para calcular o valor adicionado da produção a preços básicos <span class="math inline">\(y\)</span>, precisamos identificar o Consumo intermediário a preços do consumidor e subtrair do valor da produção ao nível de atividades:</p>
 <p><span class="math display">\[\begin{align}
 CI &amp;= U_n + U_m \\
 y &amp;= g - i&#39;(CI +T_p)

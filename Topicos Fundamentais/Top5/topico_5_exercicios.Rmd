@@ -1,0 +1,17 @@
+---
+title: "Tópico 5 - exercicios"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "13/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = FALSE, eval = FALSE)
+```
+
+Q.? - Verifique se `nchar()` é uma função vetorizada. Se positivo, qual a utilidade dela?
+
+```{r}
+#é uma função vetorizada, é pode ser útil para saber o tamanho das "strings" existentes num objeto.
+```
+
