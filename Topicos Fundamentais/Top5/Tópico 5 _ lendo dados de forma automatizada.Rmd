@@ -171,7 +171,7 @@ TRUE FALSE NULL Inf NaN NA NA_integer_ NA_real_ NA_complex_ NA_character_
 
 Se você tentar, por exemplo, nomear um objeto como TRUE (e o mesmo para a simplificações de TRUE e FALSE - T e F), o R retornará um erro.
 
-```{r}
+```{r, eval=F}
 TRUE <- "impossível pois o R não deixa"
 ```
 
@@ -455,6 +455,7 @@ Se tudo ocorreu bem, o arquivo solicitado estará no seu working directory (wd).
 Existe também a possibilidade de se descompactar automaticamente arquivos compactados.
 
 ```{r}
+Encoding(TRU_2010_2017) <- "UTF-8"
 unzip(TRU_2010_2017,exdir = "TRU")
 ```
 
@@ -481,7 +482,7 @@ Tal como no nosso exemplo em que existe uma quantidade razoável de arquivos a s
 
 #Usa list.files() na pasta.
 
-xfiles <- list.files("\TRU")
+xfiles <- list.files("/TRU/Nível68")
 
 #Leia então usando map. Importante o as.list()
 
