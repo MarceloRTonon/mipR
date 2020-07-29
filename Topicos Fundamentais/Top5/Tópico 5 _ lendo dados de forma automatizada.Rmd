@@ -7,7 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE, include = TRUE)
-# Todos os chunks em que estiver escrito "MT" quer dizer = Mensagem do Tonon. É um quadro dando dicas e etc... Use MF = Mensagem do Felipe.
+# Todos os chunks em que estiver escrito "MT" quer dizer = Mensagem do Tonon. É um quadro dando dicas e etc... Use r = Mensagem do Felipe.
 ```
 
 ## Pacotes Necessários
@@ -424,20 +424,13 @@ head(dfvignette_html_extract_all)
 
 ## Abordando download.file
 
-Uma função que já foi abordada nos exercícios, mas que ainda não fio devidamente apresentada é a `download.file()`. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumenta mais comuns da função, ela é estruturada da seguinte forma:
+Uma função que já foi abordada nos exercícios, mas que ainda não fio devidamente apresentada é a `download.file()`. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumentos mais comuns da função, ela é estruturada da seguinte forma:
 
 ```{r,eval=F}
-download.file(url, destfile, method, mode = "w", headers = NULL)
+download.file(url, destfile, mode = "w", headers = NULL)
 ```
 
-
-```{r, MT_download, include=F, eval=F}
-
-#Fala da função download.file. Fala da questão de dados binários ou não precisa ser `mode= wb` e etc...
-
-#Já que o ibge é um porre conseguir o link direto para o download, faz pra NIOT mesmo... Não precisa baixar o zip de todos os páises via o R (já que ele é imenso e só faz em primeiro plano). Baixa algum outro, mas explica a função por parte. Fala também da questão dos arquivos e diretórios temporarios e etc...
-
-```
+A `url` vai ser o endereço da internet que você deseja realizar o download, `destfile` identifica o arquivo/diretório para onde o arquivo será baixado, `mode` identificará a forma que o arquivo será escrita, aqui é importante destacar que para uso no windows o uso de transferência binária (mode = "wb" ou "ab") é importante para separar textos, comandos e códigos binários; `headers` é para o caso de que se queira colocar as urls como header do arquivo.
 
 Vamos usar como exemplo, o download de informações que podem a vir serem necessárias para o nosso curso, as Tabelas de Recursos e Usos. 
 
@@ -448,48 +441,74 @@ TRU_2010_2017 <- "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip"
 
 ```
 
-Se tudo ocorreu bem, o arquivo solicitado estará no seu working directory (wd). Uma particularidade do arquivo escolhido aqui é que de trata de uma arquivo compactado e necessita de mais alguns passos. Caso fosse algum arquivo com os dados já expostos (um csv, xls, xlsx, txt, Rdata, entre outros) a leitura já poderia ser feita.
+Se tudo ocorreu bem, o arquivo solicitado estará no seu working directory (wd). Uma particularidade do arquivo escolhido aqui é que de trata de uma arquivo compactado e necessita de mais alguns passos. Caso fosse algum arquivo com os dados já expostos (um csv, xls, xlsx, txt, Rdata, entre outros) a leitura já poderia ser feita. Dentro desse arquivo existem quatro tipos de tabelas para diferentes anos, mas o primeiro passo é fazer com que o R descompacte e leia essas informações para você. Vamos por partes.
 
 ## Descompactando arquivos.
 
-Existe também a possibilidade de se descompactar automaticamente arquivos compactados.
+Existe também a possibilidade de se descompactar automaticamente arquivos compactados.  Existem algumas formas de se descompactar, como iremos rapidamente enumerar:
 
 ```{r}
-Encoding(TRU_2010_2017) <- "UTF-8"
-unzip(TRU_2010_2017,exdir = "TRU")
+unzip
+zip
+unz
 ```
 
+Partindo do nosso exemplo das TRUs, podemos usar a função `unzip` para realizar a leitura do arquivo.
 
-```{r, MT_decode, include=F, eval=F}
+```{r}
 
-#Funções `zip`, `unz`, `unzip`, `unzip(..., list = TRUE)` e `unzip(..., files = c("", ""))`.
-
-#Brinca com os arquivos que você criou para lidar com isso e etc... Mostra como fazer uma sequência para importar arquivos pro R e etc... Usa `str_sub()` para criar o nome dos objetos e etc... 
+unzip(TRU_2010_2017,exdir = "TRU", junkpaths = T)
 
 ```
+
 
 Com isso temos nossas fontes de dados já acessíveis, mas que ainda falta realizar a leitura delas. São várias tabelas cada uma representando informações distintas e para diferentes anos.
 
 
 ## Lendo vários arquivos usando função `list.files`
 
-Tal como no nosso exemplo em que existe uma quantidade razoável de arquivos a sereim lidos, casp fosse realizada a leitura individual de cada arquivo poderíamos ter um código longo e repetitivo. Uma alternativa é realizar a leitura silmultânea de várias arquivos, usando a função `list.files()`.
+Tal como no nosso exemplo em que existe uma quantidade razoável de arquivos a sereim lidos, casp fosse realizada a leitura individual de cada arquivo poderíamos ter um código longo e repetitivo. Uma alternativa é realizar a leitura silmultânea de várias arquivos, usando a função `list.files()`. Ela retorna um vetor de `chr` com o nome dos arquivos contidos em um diretório. Abaixo apresentamos alguns argumetnos úteis na função (não todos):
 
-```{r MT_listfiles, eval = FALSE, include = FALSE}
-#Fale da função list.files primeiro em abstrato.
+```{r, eval=F}
+list.files(path = ".", pattern = NULL, all.files = FALSE, full.names = FALSE)
+```
 
-#Depois, crie, a partir das bases dentro datasets do R, uma série de arquivos xlsx com openxlsx::write.xlsx. Coloque todos numa pasta x.
+O `path` vai indicar o diretório no qual vc deseja extrair os nomes, `pattern` é um item opcional para filtrar os resultados que satisfaçam uma determinada condição, para `all.files` caso seja positivo o resultado retornará inclusive arquivos que possam estar escondidos ou em segundo plano; e `full.names` caso seja `TRUE` retornará o nome dos arquivos e o relative path (o que pode ser particulamente útil na leitura dos dados).
 
-#Usa list.files() na pasta.
+Retornando ao nosso exemplo, vamos primeiro criar o vetor com o relative path e o nome dos arquivos da TRU:
 
-xfiles <- list.files("/TRU/Nível68")
+```{r, eval=T}
+TRUfiles <- list.files("TRU", full.names = T)
+# Lembrando que o full.names vai trazer não só o nome, mas também o diretório (relative path)
+head(TRUfiles)
+```
 
-#Leia então usando map. Importante o as.list()
+Vamos então agora fazer a leitura da aba "VA" em todos esses arquivos. Essa aba não consta em todos os arquivos listados, somente nas tab2 e tab4, então:
 
-arquivos <- xfiles %>%
+```{r}
+TRU_tab2_tab4 <- str_subset(TRUfiles, pattern = c("tab2","tab4"))#VERIFICAR ISSO!
+```
+
+
+Uma maneira simples e rápido de fazer isso é usando a função `map` que aprendemos nas aulas anteriores:
+
+```{r, eval=F}
+
+VA <- TRU_tab2_tab4 %>%
   as.list() %>%
   map(read_xls)
 ```
+
+Agora que separamos as informações podemos, por exemplo, criar um arquivo compactado com as informações já trabalhadas.
+
+```{r, eval=F, include=F}
+
+FALAR AQUI SOBRE A CRIAÇÂO DE ARQUIVOS COMPACTADOS
+
+```
+
+
+
 
 Coloque então na pasta um arquivo em csv. Dê um exemplo usando `list.files()` com `str_subset(negate = TRUE)`para tirar esse arquivo do vetor.
 
@@ -549,4 +568,34 @@ Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender
 
 ```{r MT_stringi, eval = FALSE, include =FALSE}
 #Não precisa entrar em nada de regex ou nada especifico do stringi. Vamos deixar isso para um tópico suplementar mais a frente se necessário.
+```
+
+
+```{r, MT_download, include=F, eval=F}
+
+#Fala da função download.file. Fala da questão de dados binários ou não precisa ser `mode= wb` e etc...
+
+#Já que o ibge é um porre conseguir o link direto para o download, faz pra NIOT mesmo... Não precisa baixar o zip de todos os páises via o R (já que ele é imenso e só faz em primeiro plano). Baixa algum outro, mas explica a função por parte. Fala também da questão dos arquivos e diretórios temporarios e etc...
+
+```
+
+
+```{r, MT_decode, include=F, eval=F}
+
+#Funções `zip`, `unz`, `unzip`, `unzip(..., list = TRUE)` e `unzip(..., files = c("", ""))`.
+
+#Brinca com os arquivos que você criou para lidar com isso e etc... Mostra como fazer uma sequência para importar arquivos pro R e etc... Usa `str_sub()` para criar o nome dos objetos e etc... 
+
+```
+
+```{r MT_listfiles, eval = FALSE, include = FALSE}
+#Fale da função list.files primeiro em abstrato.
+
+#Depois, crie, a partir das bases dentro datasets do R, uma série de arquivos xlsx com openxlsx::write.xlsx. Coloque todos numa pasta x.
+
+#Usa list.files() na pasta.
+
+#Leia então usando map. Importante o as.list()
+
+
 ```
