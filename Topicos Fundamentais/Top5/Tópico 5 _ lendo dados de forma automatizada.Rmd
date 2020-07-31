@@ -1,7 +1,7 @@
 ---
 title: "Tópico 5 - Lendo dados de forma automatizada"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "19/07/2020"
+date: "30/07/2020"
 output: html_document
 ---
 
@@ -337,13 +337,15 @@ siglas_pacote_resumo <- siglas_pacote  %>% distinct()
 head(siglas_pacote_resumo)
 ```
 
+Importante não confundir esta função com `str_subset()`. Ao contrário de `str_sub()`, a função `str_subset()` retornará os elementos que satisfaçam algum padrão em uma string. Isso é particulamente útil para fazer subseting em variáveis como nomes, ou até mesmo para buscar arquivos:
 
-```{r, include=F}
+```{r, eval=F}
 
-# FALTA AINDA FALAR DE str_subset
+str_subset(string, pattern, negate = FALSE)
 
 ```
 
+No argumento `string` entraremos com a base composta de strings, em `pattern` decidiremos qual o padrão a ser buscado e, por fim, `negate` dará os resultados escolhidos no pattern caso usar `FALSE` (que é o default da função) ou retornará todos os valores exceto o que atendem ao padrão para o caso de usar `TRUE` no argumento. Iremos usar essa função mais a frente em um exemplo prático.  
 
 Podemos também usar as funçãos `str_to_upper()` e `str_to_lower()` para transformar algumas letras em maiúsculas ou minúsculas.
 
@@ -449,7 +451,6 @@ Existe também a possibilidade de se descompactar automaticamente arquivos compa
 
 ```{r}
 unzip
-zip
 unz
 ```
 
@@ -461,6 +462,8 @@ unzip(TRU_2010_2017,exdir = "TRU", junkpaths = T)
 
 ```
 
+
+O argumento `junkpaths=T` extrairá apenas os arquivos ignorando os `path` delas no arquivo compactado. 
 
 Com isso temos nossas fontes de dados já acessíveis, mas que ainda falta realizar a leitura delas. São várias tabelas cada uma representando informações distintas e para diferentes anos.
 
@@ -483,38 +486,68 @@ TRUfiles <- list.files("TRU", full.names = T)
 head(TRUfiles)
 ```
 
-Vamos então agora fazer a leitura da aba "VA" em todos esses arquivos. Essa aba não consta em todos os arquivos listados, somente nas tab2 e tab4, então:
+Vamos então agora fazer a leitura da aba "VA" em todos esses arquivos. Essa aba não consta em todos os arquivos listados, somente nas tab2, então:
+
+```{r, eval=T}
+TRU_tab2 <- str_subset(TRUfiles, pattern ="tab2")
+TRU_tab2
+```
+
+
+Agora em posse dos nomes dos arquivos que queiremo fazer a leitura, o próximo passo é realizar a leitura dos dados usando o vetor de strings criado acima. Uma maneira simples e rápida de fazer isso é usando a função `map` que aprendemos nas aulas anteriores:
 
 ```{r}
-TRU_tab2_tab4 <- str_subset(TRUfiles, pattern = c("tab2","tab4"))#VERIFICAR ISSO!
-```
+# Criar Vetor com os nomes das atividades (colunas)
+Atividades_TRU <- read_xls(TRU_tab2[1],sheet='VA', range = "B4:BQ4", col_names = F) %>% as.character()
 
+# Criando o vetor com o nome das variáveis (linhas no caso) 
+Variaveis_TRU <- read_xls(TRU_tab2[1],sheet='VA', range = "A6:A19", col_names = F) %>% t() %>% as.character()
 
-Uma maneira simples e rápido de fazer isso é usando a função `map` que aprendemos nas aulas anteriores:
+# Vamos também criar um vetor com os anos da série usando str_sub:
 
-```{r, eval=F}
+Anos_Corrente <- str_sub(TRU_tab2, start = -8, end=-5)
 
-VA <- TRU_tab2_tab4 %>%
+# Agora realizando efetivamente a leitura dos dados:
+
+VA_corrente <- TRU_tab2 %>%
   as.list() %>%
-  map(read_xls)
-```
-
-Agora que separamos as informações podemos, por exemplo, criar um arquivo compactado com as informações já trabalhadas.
-
-```{r, eval=F, include=F}
-
-FALAR AQUI SOBRE A CRIAÇÂO DE ARQUIVOS COMPACTADOS
+  map(~ as.data.frame(read_xls(.x, sheet = 'VA',range="B6:BQ19",col_names = Atividades_TRU))) %>% 
+  setNames(Anos_Corrente)
 
 ```
 
+Caso você queira usar os dados para algum exercício ou tarefa, já estão prontos. Podemos também salvar esses arquivos separadamente em alguma extensão do excel (xls, xlsx, csv).
+
+```{r}
+
+escrever_xlsx <- function(dados, anos){
+  
+    write.xlsx(dados, paste0("TRU/TRU_VA_corrente_", anos, ".xlsx"))
+  
+}
+
+map2(VA_corrente,names(VA_corrente),escrever_xlsx)
+
+```
 
 
+Agora que separamos as informações podemos, por exemplo, criar um arquivo compactado com as informações já trabalhadas. Uma possibilidade é criar um arquivo separadamente juntando os arquivos a preços correntes. A função zip é uma opção para isso:
 
-Coloque então na pasta um arquivo em csv. Dê um exemplo usando `list.files()` com `str_subset(negate = TRUE)`para tirar esse arquivo do vetor.
+```{r}
+arquivos_TRU_VA <- paste0("TRU/",list.files("TRU", pattern = "VA_corrente"))
 
-Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com `$` na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de `\\$`! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)
+zip(zipfile = "TRU/TRU_VA.zip", files = arquivos_TRU_VA)
+
+```
+
+Outras possibilidades englobam usar o pacote `stringr` para reunir todos os arquivos que, por exemplo, tenham a mesma extensão. Para isso basta realizar o subset de acordo com os arquivos que deseja reunir ou listar. No próprio `list.file()` é possível escolher como padrão um ".csv" que reunirá todos os nomes de arquivos desse tipo.
 
 
+```{r MT_coment, include=F, eval=F}
+
+#Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com `$` na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de `\\$`! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)
+
+```
 
 
 ```{r, include=F}

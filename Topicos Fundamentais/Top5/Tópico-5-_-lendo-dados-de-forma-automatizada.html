@@ -364,7 +364,7 @@ summary {
 
 <h1 class="title toc-ignore">Tópico 5 - Lendo dados de forma automatizada</h1>
 <h4 class="author">Marcelo Tonon e Felipe Cornelio</h4>
-<h4 class="date">19/07/2020</h4>
+<h4 class="date">30/07/2020</h4>
 
 </div>
 
@@ -547,6 +547,9 @@ head(siglas_pacote_resumo)</code></pre>
 ## 4 che
 ## 5 cli
 ## 6 col</code></pre>
+<p>Importante não confundir esta função com <code>str_subset()</code>. Ao contrário de <code>str_sub()</code>, a função <code>str_subset()</code> retornará os elementos que satisfaçam algum padrão em uma string. Isso é particulamente útil para fazer subseting em variáveis como nomes, ou até mesmo para buscar arquivos:</p>
+<pre class="r"><code>str_subset(string, pattern, negate = FALSE)</code></pre>
+<p>No argumento <code>string</code> entraremos com a base composta de strings, em <code>pattern</code> decidiremos qual o padrão a ser buscado e, por fim, <code>negate</code> dará os resultados escolhidos no pattern caso usar <code>FALSE</code> (que é o default da função) ou retornará todos os valores exceto o que atendem ao padrão para o caso de usar <code>TRUE</code> no argumento. Iremos usar essa função mais a frente em um exemplo prático.</p>
 <p>Podemos também usar as funçãos <code>str_to_upper()</code> e <code>str_to_lower()</code> para transformar algumas letras em maiúsculas ou minúsculas.</p>
 <pre class="r"><code># Voltando a um vetor atômico e criando um novo objeto
 SIGLAS &lt;- unlist(siglas_pacote_resumo)
@@ -628,10 +631,10 @@ TRU_2010_2017 &lt;- &quot;Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip&quot
 <h2>Descompactando arquivos.</h2>
 <p>Existe também a possibilidade de se descompactar automaticamente arquivos compactados. Existem algumas formas de se descompactar, como iremos rapidamente enumerar:</p>
 <pre class="r"><code>unzip
-zip
 unz</code></pre>
 <p>Partindo do nosso exemplo das TRUs, podemos usar a função <code>unzip</code> para realizar a leitura do arquivo.</p>
 <pre class="r"><code>unzip(TRU_2010_2017,exdir = &quot;TRU&quot;, junkpaths = T)</code></pre>
+<p>O argumento <code>junkpaths=T</code> extrairá apenas os arquivos ignorando os <code>path</code> delas no arquivo compactado.</p>
 <p>Com isso temos nossas fontes de dados já acessíveis, mas que ainda falta realizar a leitura delas. São várias tabelas cada uma representando informações distintas e para diferentes anos.</p>
 </div>
 <div id="lendo-vários-arquivos-usando-função-list.files" class="section level2">
@@ -645,15 +648,42 @@ unz</code></pre>
 head(TRUfiles)</code></pre>
 <pre><code>## [1] &quot;TRU/68_tab1_2010.xls&quot; &quot;TRU/68_tab1_2011.xls&quot; &quot;TRU/68_tab1_2012.xls&quot;
 ## [4] &quot;TRU/68_tab1_2013.xls&quot; &quot;TRU/68_tab1_2014.xls&quot; &quot;TRU/68_tab1_2015.xls&quot;</code></pre>
-<p>Vamos então agora fazer a leitura da aba “VA” em todos esses arquivos. Essa aba não consta em todos os arquivos listados, somente nas tab2 e tab4, então:</p>
-<pre class="r"><code>TRU_tab2_tab4 &lt;- str_subset(TRUfiles, pattern = c(&quot;tab2&quot;,&quot;tab4&quot;))#VERIFICAR ISSO!</code></pre>
-<p>Uma maneira simples e rápido de fazer isso é usando a função <code>map</code> que aprendemos nas aulas anteriores:</p>
-<pre class="r"><code>VA &lt;- TRU_tab2_tab4 %&gt;%
+<p>Vamos então agora fazer a leitura da aba “VA” em todos esses arquivos. Essa aba não consta em todos os arquivos listados, somente nas tab2, então:</p>
+<pre class="r"><code>TRU_tab2 &lt;- str_subset(TRUfiles, pattern =&quot;tab2&quot;)
+TRU_tab2</code></pre>
+<pre><code>## [1] &quot;TRU/68_tab2_2010.xls&quot; &quot;TRU/68_tab2_2011.xls&quot; &quot;TRU/68_tab2_2012.xls&quot;
+## [4] &quot;TRU/68_tab2_2013.xls&quot; &quot;TRU/68_tab2_2014.xls&quot; &quot;TRU/68_tab2_2015.xls&quot;
+## [7] &quot;TRU/68_tab2_2016.xls&quot; &quot;TRU/68_tab2_2017.xls&quot;</code></pre>
+<p>Agora em posse dos nomes dos arquivos que queiremo fazer a leitura, o próximo passo é realizar a leitura dos dados usando o vetor de strings criado acima. Uma maneira simples e rápida de fazer isso é usando a função <code>map</code> que aprendemos nas aulas anteriores:</p>
+<pre class="r"><code># Criar Vetor com os nomes das atividades (colunas)
+Atividades_TRU &lt;- read_xls(TRU_tab2[1],sheet=&#39;VA&#39;, range = &quot;B4:BQ4&quot;, col_names = F) %&gt;% as.character()
+
+# Criando o vetor com o nome das variáveis (linhas no caso) 
+Variaveis_TRU &lt;- read_xls(TRU_tab2[1],sheet=&#39;VA&#39;, range = &quot;A6:A19&quot;, col_names = F) %&gt;% t() %&gt;% as.character()
+
+# Vamos também criar um vetor com os anos da série usando str_sub:
+
+Anos_Corrente &lt;- str_sub(TRU_tab2, start = -8, end=-5)
+
+# Agora realizando efetivamente a leitura dos dados:
+
+VA_corrente &lt;- TRU_tab2 %&gt;%
   as.list() %&gt;%
-  map(read_xls)</code></pre>
-<p>Agora que separamos as informações podemos, por exemplo, criar um arquivo compactado com as informações já trabalhadas.</p>
-<p>Coloque então na pasta um arquivo em csv. Dê um exemplo usando <code>list.files()</code> com <code>str_subset(negate = TRUE)</code>para tirar esse arquivo do vetor.</p>
-<p>Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com <code>$</code> na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de <code>\\$</code>! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)</p>
+  map(~ as.data.frame(read_xls(.x, sheet = &#39;VA&#39;,range=&quot;B6:BQ19&quot;,col_names = Atividades_TRU))) %&gt;% 
+  setNames(Anos_Corrente)</code></pre>
+<p>Caso você queira usar os dados para algum exercício ou tarefa, já estão prontos. Podemos também salvar esses arquivos separadamente em alguma extensão do excel (xls, xlsx, csv).</p>
+<pre class="r"><code>escrever_xlsx &lt;- function(dados, anos){
+  
+    write.xlsx(dados, paste0(&quot;TRU/TRU_VA_corrente_&quot;, anos, &quot;.xlsx&quot;))
+  
+}
+
+map2(VA_corrente,names(VA_corrente),escrever_xlsx)</code></pre>
+<p>Agora que separamos as informações podemos, por exemplo, criar um arquivo compactado com as informações já trabalhadas. Uma possibilidade é criar um arquivo separadamente juntando os arquivos a preços correntes. A função zip é uma opção para isso:</p>
+<pre class="r"><code>arquivos_TRU_VA &lt;- paste0(&quot;TRU/&quot;,list.files(&quot;TRU&quot;, pattern = &quot;VA_corrente&quot;))
+
+zip(zipfile = &quot;TRU/TRU_VA.zip&quot;, files = arquivos_TRU_VA)</code></pre>
+<p>Outras possibilidades englobam usar o pacote <code>stringr</code> para reunir todos os arquivos que, por exemplo, tenham a mesma extensão. Para isso basta realizar o subset de acordo com os arquivos que deseja reunir ou listar. No próprio <code>list.file()</code> é possível escolher como padrão um “.csv” que reunirá todos os nomes de arquivos desse tipo.</p>
 </div>
 <div class="footnotes">
 <hr />
