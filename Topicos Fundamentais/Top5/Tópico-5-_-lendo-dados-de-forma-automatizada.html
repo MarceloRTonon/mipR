@@ -463,6 +463,7 @@ if else repeat while function for in next break
 TRUE FALSE NULL Inf NaN NA NA_integer_ NA_real_ NA_complex_ NA_character_</code></pre>
 <p>Se você tentar, por exemplo, nomear um objeto como TRUE (e o mesmo para a simplificações de TRUE e FALSE - T e F), o R retornará um erro.</p>
 <pre class="r"><code>TRUE &lt;- &quot;impossível pois o R não deixa&quot;</code></pre>
+<pre><code>## Error in TRUE &lt;- &quot;impossível pois o R não deixa&quot;: lado esquerdo da atribuição inválida (do_set)</code></pre>
 <p>A criação de um nome deve ser composto por letras, números, <code>.</code> ou <code>_</code>, no entanto não pode começar nem por números nem por <code>_</code>. Não é possível inserir espaços, símbolos ou pontuações (exceto o ponto) no nome de um objeto.</p>
 <pre class="r"><code>_abc &lt;- &quot;Retornará erro&quot;
 a_b_c &lt;- &quot;ok&quot;
@@ -512,20 +513,20 @@ sum &lt;- function(x,y) rbind(x,y)</code></pre>
 # Vamos eliminar a coluna com o diretório dos pacotes, para simplificar a exposição.
 df_vignette &lt;- df_vignette %&gt;% select(-LibPath)
 head(df_vignette)</code></pre>
-<pre><code>##   Package              Item                                      Title
-## 1   broom    adding-tidiers     Adding tidiers to broom (source, html)
-## 2   broom available-methods           Available methods (source, html)
-## 3   broom   broom_and_dplyr             broom and dplyr (source, html)
-## 4   broom             broom       Introduction to broom (source, html)
-## 5   broom            kmeans kmeans with dplyr and broom (source, html)
-## 6   broom     bootstrapping          Tidy bootstrapping (source, html)</code></pre>
+<pre><code>##       Package              Item                                      Title
+## 1 benchmarkme    a_introduction    Crowd sourced benchmarks (source, html)
+## 2       broom    adding-tidiers     Adding tidiers to broom (source, html)
+## 3       broom available-methods           Available methods (source, html)
+## 4       broom   broom_and_dplyr             broom and dplyr (source, html)
+## 5       broom             broom       Introduction to broom (source, html)
+## 6       broom            kmeans kmeans with dplyr and broom (source, html)</code></pre>
 <p>Nesse caso temos uma lista com três variáveis com informações que são um conjunto de caracteres.</p>
 <div id="usando-stringr-para-detectar-padrões" class="section level4">
-<h4>Usando `<code>stringr</code> para detectar padrões</h4>
+<h4>Usando <code>stringr</code> para detectar padrões</h4>
 <p>O pacote <code>stringr</code> pode te ajudar a encontrar padrões em strings e ser uma outra maneira de realizar uma manipulação em sua base dados. Isso é particulamente útil se você deseja encontrar palavras ou frases específicas nas strings, mas até mesmo buscar partes de palavras. Vamos então entrar mais a fundo nas funções que compõem o pacote.</p>
 <p>Uma primeira função é <code>str_length</code> que se comporta de forma semelhante a <code>nchar()</code>. Podemos, então, aplicar à nossa base de dados, na coluna “Title”:</p>
 <pre class="r"><code>str_length(df_vignette$Title)</code></pre>
-<p>Há também a possibilidade de você combinar strings usando a função <code>str_c()</code>. Além dos vetores que você deseja combinar, há também a possibilidade de colocar um separador entre as strings (sep) e também <code>collapse</code> em que para valores diferentes de NULL cria-se uma única string com todos os elementos.</p>
+<p>Há também a possibilidade de você combinar strings usando a função <code>str_c()</code>, de forma similar a <code>paste0</code> e <code>paste</code>. Além dos vetores que você deseja combinar, há também a possibilidade de colocar um separador entre as strings (sep) e também <code>collapse</code> em que para valores diferentes de NULL cria-se uma única string com todos os elementos.</p>
 <pre class="r"><code># Unindo as três colunas de strings:
 str_c(df_vignette[,1],df_vignette[,2],df_vignette[,3])
 
@@ -541,12 +542,12 @@ siglas_pacote &lt;- str_sub(df_vignette$Package, start=1, end=3) %&gt;% as.data.
 siglas_pacote_resumo &lt;- siglas_pacote  %&gt;% distinct()
 head(siglas_pacote_resumo)</code></pre>
 <pre><code>##     .
-## 1 bro
-## 2 car
-## 3 cel
-## 4 che
-## 5 cli
-## 6 col</code></pre>
+## 1 ben
+## 2 bro
+## 3 car
+## 4 cel
+## 5 che
+## 6 cli</code></pre>
 <p>Importante não confundir esta função com <code>str_subset()</code>. Ao contrário de <code>str_sub()</code>, a função <code>str_subset()</code> retornará os elementos que satisfaçam algum padrão em uma string. Isso é particulamente útil para fazer subseting em variáveis como nomes, ou até mesmo para buscar arquivos:</p>
 <pre class="r"><code>str_subset(string, pattern, negate = FALSE)</code></pre>
 <p>No argumento <code>string</code> entraremos com a base composta de strings, em <code>pattern</code> decidiremos qual o padrão a ser buscado e, por fim, <code>negate</code> dará os resultados escolhidos no pattern caso usar <code>FALSE</code> (que é o default da função) ou retornará todos os valores exceto o que atendem ao padrão para o caso de usar <code>TRUE</code> no argumento. Iremos usar essa função mais a frente em um exemplo prático.</p>
@@ -560,12 +561,12 @@ str_sub(SIGLAS, 1, 3) &lt;- SIGLAS %&gt;% str_sub(.,1,3) %&gt;% str_to_upper()
 #str_sub(SIGLAS, 1, 3) &lt;- str_to_upper(str_sub(SIGLAS, 1, 3))
 
 head(SIGLAS)</code></pre>
-<pre><code>## [1] &quot;BRO&quot; &quot;CAR&quot; &quot;CEL&quot; &quot;CHE&quot; &quot;CLI&quot; &quot;COL&quot;</code></pre>
+<pre><code>## [1] &quot;BEN&quot; &quot;BRO&quot; &quot;CAR&quot; &quot;CEL&quot; &quot;CHE&quot; &quot;CLI&quot;</code></pre>
 <pre class="r"><code># Agora somente a primeira letra em maiúsculo
 Siglas &lt;- SIGLAS
 str_sub(Siglas, 2, 3) &lt;- str_to_lower(str_sub(SIGLAS, 2, 3))
 head(Siglas)</code></pre>
-<pre><code>## [1] &quot;Bro&quot; &quot;Car&quot; &quot;Cel&quot; &quot;Che&quot; &quot;Cli&quot; &quot;Col&quot;</code></pre>
+<pre><code>## [1] &quot;Ben&quot; &quot;Bro&quot; &quot;Car&quot; &quot;Cel&quot; &quot;Che&quot; &quot;Cli&quot;</code></pre>
 <p>A função <code>str_detect</code> serve para detectar padrões dentro de vetores compostos por strings. Ela devolve um vetor de tipo logical com <code>TRUE</code> caso o padrão seja atendido e <code>FALSE</code> caso contrário.</p>
 <pre class="r"><code>str_detect(string, pattern, negate = FALSE)</code></pre>
 <p>O argumento <code>string</code> se refere à string que você vai usar. <code>pattern</code> se refere a qual padrão a ser analisado pela função. Já <code>negate</code> é usado para indicar se você quer buscar os valores que atendem ou não a condição. Tem como valor padrão <code>FALSE</code>, que seria as strings que apresentam o padrão, já se for <code>TRUE</code> retornará um vetor lógico com as strings que não atendem ao padrão.</p>
@@ -599,7 +600,7 @@ head(dfvignette_html_extract)</code></pre>
 <pre class="r"><code>dfvignette_html_extract_all &lt;- str_extract_all(tem_infos, infos_match)
 head(dfvignette_html_extract_all)</code></pre>
 <pre><code>## [[1]]
-## [1] &quot;source&quot; &quot;html&quot;  
+## [1] &quot;source&quot; &quot;source&quot; &quot;html&quot;  
 ## 
 ## [[2]]
 ## [1] &quot;source&quot; &quot;html&quot;  

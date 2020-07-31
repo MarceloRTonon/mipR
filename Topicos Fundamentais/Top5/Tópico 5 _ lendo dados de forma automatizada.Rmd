@@ -171,13 +171,13 @@ TRUE FALSE NULL Inf NaN NA NA_integer_ NA_real_ NA_complex_ NA_character_
 
 Se você tentar, por exemplo, nomear um objeto como TRUE (e o mesmo para a simplificações de TRUE e FALSE - T e F), o R retornará um erro.
 
-```{r, eval=F}
+```{r, error=T, eval = T}
 TRUE <- "impossível pois o R não deixa"
 ```
 
 A criação de um nome deve ser composto por letras, números, `.` ou `_`, no entanto não pode começar nem por números nem por `_`. Não é possível inserir espaços, símbolos ou pontuações (exceto o ponto) no nome de um objeto.
 
-```{r, eval=FALSE}
+```{r, eval = F}
 _abc <- "Retornará erro"
 a_b_c <- "ok"
 a.b.c <- "ok"
@@ -303,7 +303,7 @@ head(df_vignette)
 
 Nesse caso temos uma lista com três variáveis com informações que são um conjunto de caracteres. 
 
-#### Usando ``stringr` para detectar padrões
+#### Usando `stringr` para detectar padrões
 
 O pacote `stringr` pode te ajudar a encontrar padrões em strings e ser uma outra maneira de realizar uma manipulação em sua base dados. Isso é particulamente útil se você deseja encontrar palavras ou frases específicas nas strings, mas até mesmo buscar partes de palavras. Vamos então entrar mais a fundo nas funções que compõem o pacote.
 
@@ -314,7 +314,7 @@ Uma primeira função é `str_length` que se comporta de forma semelhante a `nch
 str_length(df_vignette$Title)
 ```
 
-Há também a possibilidade de você combinar strings usando a função `str_c()`. Além dos vetores que você deseja combinar, há também a possibilidade de colocar um separador entre as strings (sep) e também `collapse` em que para valores diferentes de NULL cria-se uma única string com todos os elementos.
+Há também a possibilidade de você combinar strings usando a função `str_c()`, de forma similar a `paste0` e `paste`. Além dos vetores que você deseja combinar, há também a possibilidade de colocar um separador entre as strings (sep) e também `collapse` em que para valores diferentes de NULL cria-se uma única string com todos os elementos.
 
 ```{r}
 # Unindo as três colunas de strings:

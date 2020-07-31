@@ -40,6 +40,41 @@ modo3 <- list()
 for(i in 1:10) modo3[[i]] <- horario(i)
 ```
 
+### Q.X2 - Opcional
+
+#### Q.X2.1 Qual o tipo e classe dos objetos abaixos:
+
+```{r, include = T}
+obj_1 <- Sys.time()
+
+obj_2 <- Sys.Date()
+```
+
+#### Q.X2.2 Com a resposta da questão Q.X.4 em mente, diga por que é possível fazer as operações abaixo:
+
+```{r, include = T}
+## Operação 1
+a <- Sys.time()
+Sys.sleep(1)
+a - Sys.time()
+
+## Operação 2
+Sys.Date() -1
+
+## Operação 3
+Sys.Date() - Sys.Date()
+```
+
+#### Q.X2.3 Seja `a <- 1`, o que significa `a` em cada um dos dois casos abaixo?
+```{r, include = FALSE}
+a <- 1
+```
+```{r, include = T}
+Sys.time()-a
+Sys.Date()-a
+```
+
+
 ### Questão W
 
 #### Q.W.1 Qual é a definição de `strings` e `character` na **programação em geral**?
@@ -68,5 +103,7 @@ for(i in 1:10) modo3[[i]] <- horario(i)
 
 #### Q.Y.3 Para o quê serve a função `make.names`?
 
+### Questão S1 : Stringr
 
+#### Q.S1.1 Para 
 
