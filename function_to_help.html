@@ -378,8 +378,9 @@ summary {
 <div id="help" class="section level4">
 <h4>Help</h4>
 <pre class="r"><code>?, ??, help</code></pre>
-<div id="tipo-de-dados" class="section level5">
-<h5>Tipo de dados</h5>
+</div>
+<div id="tipo-de-dados" class="section level4">
+<h4>Tipo de dados</h4>
 <pre class="r"><code>#character
 character, as.character, is.character
 
@@ -398,7 +399,7 @@ numeric, as.numeric, is.numeric</code></pre>
 <p>Valores que aparecem quando lidamos com lógica e numéricos:</p>
 <pre class="r"><code>TRUE, FALSE, 
 
-NA, is.na
+NA, is.na, complete.cases
 
 NULL, is.null
 
@@ -414,16 +415,67 @@ complex, as.complex, is.complex
 #raw
 raw, as.raw, is.raw</code></pre>
 </div>
-</div>
 <div id="estrutura-de-dados" class="section level4">
 <h4>Estrutura de Dados</h4>
 <pre class="r"><code>vector, as.vector, is.vector
 
-c, matrix, array
+is.atomic, is.recursive
 
+#Vetores Atómicos
+c
+
+## Matrizes
+matrix, as.matrix, is.matrix
+
+## Arrays
+array, as.array, is.array
+
+# Vetores Recursivos
+
+## Listas
 list, is.list, as.list, unlist
 
-is.atomic, is.recursive</code></pre>
+## Data.frame
+data.frame, as.data.frame, is.data.frame</code></pre>
+<p>Informações sobre atributos</p>
+<pre class="r"><code>str
+
+names, colnames, rownames
+
+attr
+
+dim, length, ncol, nrow</code></pre>
+</div>
+<div id="operadores-básicos-e-assignment" class="section level4">
+<h4>Operadores básicos e <em>assignment</em></h4>
+<p>Nunca use <code>=</code> para criar uma variável. Pode dar n problemas.</p>
+<pre class="r"><code>#assignment
+&lt;-, assign, get, &lt;&lt;-, =
+
+#operadores relevantes
+%in%, match
+$, [, [[, head, tail, subset
+with</code></pre>
+</div>
+<div id="matemática-básica" class="section level4">
+<h4>Matemática Básica</h4>
+<pre class="r"><code>*, +, -, /, ^, %%, %/%
+abs, sign
+acos, asin, atan, atan2
+sin, cos, tan
+ceiling, floor, round, trunc, signif
+exp, log, log10, log2, sqrt
+
+max, min, prod, sum
+cummax, cummin, cumprod, cumsum, diff
+pmax, pmin
+range
+mean, median, cor, sd, var
+rle</code></pre>
+</div>
+<div id="data-e-tempo" class="section level4">
+<h4>Data e Tempo</h4>
+<pre class="r"><code>date, Sys.Date, Sys.time, Sys.timezone</code></pre>
 </div>
 </div>
 

@@ -11,7 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Por uma questão de exemplificação iremos tratar a principio aqui da POF feita entre 2008 e 2009. Numa outra ocasião podemos passar para a POF feita entre 2017 e 2018.
 
+Esse material usa muitas partes dos scripts feitos por Ana Camila e Pedro Gomes Andrade ao longo do Curso da POF fornecido por IPEA/ENCE/UFRJ/UFF.
+
+
 ## Pacotes Necessários
+
 
 ```{r}
 library(tidyverse)
@@ -29,4 +33,29 @@ No nosso caso temos:
         `Dados.zip`
 
 Um detalhe que pode ser útil a quem quiser baixar pelo `R` (para fins de automatização), para conseguir o link do download do arquivo, vá na parte de downloads do seu navegador^[Funciona para o Firefox.], clique com o botão direito do mouse sobre o arquivo baixado e depois clique em algo como: `Copiar link do Download`e você terá então o link do download^[No caso, o link do download de `Dados.zip` é: "ftp://ftp.ibge.gov.br/Orcamentos_Familiares/Pesquisa_de_Orcamentos_Familiares_2008_2009/Microdados/Dados.zip"].
+
+
+
+Estando `Dados.zip`  baixado e localizado no Diretório de Trabalho, podemos então descompacta-lo parcialmente pelo R.
+
+```{r, eval = FALSE}
+unzip("Dados.zip")
+```
+
+Infelizmente, o responsável pela compactação dos arquivos escolheu o formato `.7z` que é bem chato para vários sistemas (algumas distribuições do Linux em especial) descompactar. O mesmo vale para o R^[Existe um pacote chamado [`archive`](https://github.com/jimhester/archive), porém ainda não foi atualizado para ser usado na versão 4.0 do R.]. Assim, a descompactação vai ter que ser feita na mão mesmo.
+
+**Importante:** Extraia os arquivos no mesmo local do arquivo, de modo que o arquivo `T_ALUGUEL_ESTIMADO_S.txt` esteja em `Dados/T_ALUGUEL_ESTIMADO_S.txt` e não em `Dados/T_ALUGUEL_ESTIMADO_S/T_ALUGUEL_ESTIMADO_S.txt`.
+
+Assim, vamos usar `list.files` em conjunto com `stringr::str_subset` para criar um vetor excluindo os arquivos compactados em `7z`^[Veja]:
+
+```{r}
+arquivos_dados <- list.files("Dados", full.names = T) %>%
+  str_subset(".7z", negate = TRUE)
+```
+
+Como você pode perceber a POF está dividida em vários arquivos, dado o seu tamanho.
+
+Para ler os dados da POF iremos usar a função `read.fwf`, que serve para ler arquivos de texto, cujos valores são separados pelo comprimento (*widht*) de cada variável. Assim, precisamos dos dados que especifiquem nomes das variáveis e os seus comprimentos. Para tanto serve os dicionarios fornecidos por Ana Camila e o Pedro Lourenço no curso sobre a POF. Você pode acessa-lo na pasta da [monitoria do curso](https://drive.google.com/drive/folders/1CjlDiFpr0AWC2hwv36Up4aNp1UivjGIX?usp=sharing).
+
+Baixe a pasta `dicionarios` e coloque-a no seu diretorio de trabalho.
 

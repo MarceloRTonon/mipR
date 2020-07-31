@@ -370,18 +370,27 @@ summary {
 
 
 <p>Por uma questão de exemplificação iremos tratar a principio aqui da POF feita entre 2008 e 2009. Numa outra ocasião podemos passar para a POF feita entre 2017 e 2018.</p>
+<p>Esse material usa muitas partes dos scripts feitos por Ana Camila e Pedro Gomes Andrade ao longo do Curso da POF fornecido por IPEA/ENCE/UFRJ/UFF.</p>
 <div id="pacotes-necessários" class="section level2">
 <h2>Pacotes Necessários</h2>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.0.2</code></pre>
-<pre><code>## -- Attaching packages ------------------------------------------- tidyverse 1.3.0 --</code></pre>
-<pre><code>## v ggplot2 3.3.0     v purrr   0.3.4
-## v tibble  3.0.1     v dplyr   0.8.5
-## v tidyr   1.0.2     v stringr 1.4.0
-## v readr   1.3.1     v forcats 0.5.0</code></pre>
-<pre><code>## -- Conflicts ---------------------------------------------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code># install.packages(&quot;devtools&quot;)
+#library(devtools)
+#devtools::install_github(&quot;jimhester/archive&quot;)
+#library(archive)
+
+library(stringr)
+library(purrr)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(tidyr)
+library(readr)</code></pre>
 </div>
 <div id="baixando-os-arquivos" class="section level2">
 <h2>Baixando os arquivos</h2>
@@ -389,12 +398,21 @@ summary {
 <p>No nosso caso temos:</p>
 <p><code>Pesquisa_de_Orçamentos_Familiares_2008_2009</code> <code>Microdados</code> <code>Dados.zip</code></p>
 <p>Um detalhe que pode ser útil a quem quiser baixar pelo <code>R</code> (para fins de automatização), para conseguir o link do download do arquivo, vá na parte de downloads do seu navegador<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, clique com o botão direito do mouse sobre o arquivo baixado e depois clique em algo como: <code>Copiar link do Download</code>e você terá então o link do download<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
+<p>Estando <code>Dados.zip</code> baixado e localizado no Diretório de Trabalho, podemos então descompacta-los parcialmente pelo R.</p>
+<pre class="r"><code>unzip(&quot;Dados.zip&quot;)</code></pre>
+<p>Infelizmente, o responsável pela compactação dos arquivos escolheu o formato <code>.7z</code> que é bem chato para vários sistemas (algumas distribuições do Linux em especial) descompactar. O mesmo vale para o R<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. Assim, a descompactação vai ter que ser feita na mão mesmo.</p>
+<p><strong>Importante:</strong> Extraia os arquivos no mesmo local do arquivo, de modo que o arquivo <code>T_ALUGUEL_ESTIMADO_S.txt</code> esteja em <code>Dados/T_ALUGUEL_ESTIMADO_S.txt</code> e não em <code>Dados/T_ALUGUEL_ESTIMADO_S/T_ALUGUEL_ESTIMADO_S.txt</code>.</p>
+<p>Assim, vamos usar <code>list.files</code> em conjunto com <code>stringr::str_subset</code> para criar um vetor excluindo os arquivos compactados em <code>7z</code><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>:</p>
+<pre class="r"><code>arquivos_dados &lt;- list.files(&quot;Dados&quot;, full.names = T) %&gt;%
+  str_subset(&quot;.7z&quot;, negate = TRUE)</code></pre>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>Funciona para o Firefox.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 <li id="fn2"><p>No caso, o link do download de <code>Dados.zip</code> é: “<a href="ftp://ftp.ibge.gov.br/Orcamentos_Familiares/Pesquisa_de_Orcamentos_Familiares_2008_2009/Microdados/Dados.zip" class="uri">ftp://ftp.ibge.gov.br/Orcamentos_Familiares/Pesquisa_de_Orcamentos_Familiares_2008_2009/Microdados/Dados.zip</a>”<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Existe um pacote chamado <a href="https://github.com/jimhester/archive"><code>archive</code></a>, porém ainda não foi atualizado para ser usado na versão 4.0 do R.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Veja<a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 
