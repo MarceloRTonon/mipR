@@ -364,7 +364,7 @@ summary {
 
 <h1 class="title toc-ignore">Tópico 5 - Lendo dados de forma automatizada</h1>
 <h4 class="author">Marcelo Tonon e Felipe Cornelio</h4>
-<h4 class="date">30/07/2020</h4>
+<h4 class="date">31/07/2020</h4>
 
 </div>
 
@@ -514,13 +514,13 @@ sum &lt;- function(x,y) rbind(x,y)</code></pre>
 # Vamos eliminar a coluna com o diretório dos pacotes, para simplificar a exposição.
 df_vignette &lt;- df_vignette %&gt;% select(-LibPath)
 head(df_vignette)</code></pre>
-<pre><code>##       Package              Item                                      Title
-## 1 benchmarkme    a_introduction    Crowd sourced benchmarks (source, html)
-## 2       broom    adding-tidiers     Adding tidiers to broom (source, html)
-## 3       broom available-methods           Available methods (source, html)
-## 4       broom   broom_and_dplyr             broom and dplyr (source, html)
-## 5       broom             broom       Introduction to broom (source, html)
-## 6       broom            kmeans kmeans with dplyr and broom (source, html)</code></pre>
+<pre><code>##   Package              Item                                      Title
+## 1   broom    adding-tidiers     Adding tidiers to broom (source, html)
+## 2   broom available-methods           Available methods (source, html)
+## 3   broom   broom_and_dplyr             broom and dplyr (source, html)
+## 4   broom             broom       Introduction to broom (source, html)
+## 5   broom            kmeans kmeans with dplyr and broom (source, html)
+## 6   broom     bootstrapping          Tidy bootstrapping (source, html)</code></pre>
 <p>Nesse caso temos uma lista com três variáveis com informações que são um conjunto de caracteres.</p>
 <div id="usando-stringr-para-detectar-padrões" class="section level4">
 <h4>Usando <code>stringr</code> para detectar padrões</h4>
@@ -543,12 +543,12 @@ siglas_pacote &lt;- str_sub(df_vignette$Package, start=1, end=3) %&gt;% as.data.
 siglas_pacote_resumo &lt;- siglas_pacote  %&gt;% distinct()
 head(siglas_pacote_resumo)</code></pre>
 <pre><code>##     .
-## 1 ben
-## 2 bro
-## 3 car
-## 4 cel
-## 5 che
-## 6 cli</code></pre>
+## 1 bro
+## 2 car
+## 3 cel
+## 4 che
+## 5 cli
+## 6 col</code></pre>
 <p>Importante não confundir esta função com <code>str_subset()</code>. Ao contrário de <code>str_sub()</code>, a função <code>str_subset()</code> retornará os elementos que satisfaçam algum padrão em uma string. Isso é particulamente útil para fazer subseting em variáveis como nomes, ou até mesmo para buscar arquivos:</p>
 <pre class="r"><code>str_subset(string, pattern, negate = FALSE)</code></pre>
 <p>No argumento <code>string</code> entraremos com a base composta de strings, em <code>pattern</code> decidiremos qual o padrão a ser buscado e, por fim, <code>negate</code> dará os resultados escolhidos no pattern caso usar <code>FALSE</code> (que é o default da função) ou retornará todos os valores exceto o que atendem ao padrão para o caso de usar <code>TRUE</code> no argumento. Iremos usar essa função mais a frente em um exemplo prático.</p>
@@ -562,12 +562,12 @@ str_sub(SIGLAS, 1, 3) &lt;- SIGLAS %&gt;% str_sub(.,1,3) %&gt;% str_to_upper()
 #str_sub(SIGLAS, 1, 3) &lt;- str_to_upper(str_sub(SIGLAS, 1, 3))
 
 head(SIGLAS)</code></pre>
-<pre><code>## [1] &quot;BEN&quot; &quot;BRO&quot; &quot;CAR&quot; &quot;CEL&quot; &quot;CHE&quot; &quot;CLI&quot;</code></pre>
+<pre><code>## [1] &quot;BRO&quot; &quot;CAR&quot; &quot;CEL&quot; &quot;CHE&quot; &quot;CLI&quot; &quot;COL&quot;</code></pre>
 <pre class="r"><code># Agora somente a primeira letra em maiúsculo
 Siglas &lt;- SIGLAS
 str_sub(Siglas, 2, 3) &lt;- str_to_lower(str_sub(SIGLAS, 2, 3))
 head(Siglas)</code></pre>
-<pre><code>## [1] &quot;Ben&quot; &quot;Bro&quot; &quot;Car&quot; &quot;Cel&quot; &quot;Che&quot; &quot;Cli&quot;</code></pre>
+<pre><code>## [1] &quot;Bro&quot; &quot;Car&quot; &quot;Cel&quot; &quot;Che&quot; &quot;Cli&quot; &quot;Col&quot;</code></pre>
 <p>A função <code>str_detect</code> serve para detectar padrões dentro de vetores compostos por strings. Ela devolve um vetor de tipo logical com <code>TRUE</code> caso o padrão seja atendido e <code>FALSE</code> caso contrário.</p>
 <pre class="r"><code>str_detect(string, pattern, negate = FALSE)</code></pre>
 <p>O argumento <code>string</code> se refere à string que você vai usar. <code>pattern</code> se refere a qual padrão a ser analisado pela função. Já <code>negate</code> é usado para indicar se você quer buscar os valores que atendem ou não a condição. Tem como valor padrão <code>FALSE</code>, que seria as strings que apresentam o padrão, já se for <code>TRUE</code> retornará um vetor lógico com as strings que não atendem ao padrão.</p>
@@ -601,7 +601,7 @@ head(dfvignette_html_extract)</code></pre>
 <pre class="r"><code>dfvignette_html_extract_all &lt;- str_extract_all(tem_infos, infos_match)
 head(dfvignette_html_extract_all)</code></pre>
 <pre><code>## [[1]]
-## [1] &quot;source&quot; &quot;source&quot; &quot;html&quot;  
+## [1] &quot;source&quot; &quot;html&quot;  
 ## 
 ## [[2]]
 ## [1] &quot;source&quot; &quot;html&quot;  
@@ -621,7 +621,7 @@ head(dfvignette_html_extract_all)</code></pre>
 </div>
 <div id="abordando-download.file" class="section level2">
 <h2>Abordando download.file</h2>
-<p>Uma função que já foi abordada nos exercícios, mas que ainda não fio devidamente apresentada é a <code>download.file()</code>. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumentos mais comuns da função, ela é estruturada da seguinte forma:</p>
+<p>Uma função que já foi abordada nos exercícios, mas que ainda não foi devidamente apresentada é a <code>download.file()</code>. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumentos mais comuns da função, ela é estruturada da seguinte forma:</p>
 <pre class="r"><code>download.file(url, destfile, mode = &quot;w&quot;, headers = NULL)</code></pre>
 <p>A <code>url</code> vai ser o endereço da internet que você deseja realizar o download, <code>destfile</code> identifica o arquivo/diretório para onde o arquivo será baixado, <code>mode</code> identificará a forma que o arquivo será escrita, aqui é importante destacar que para uso no windows o uso de transferência binária (mode = “wb” ou “ab”) é importante para separar textos, comandos e códigos binários; <code>headers</code> é para o caso de que se queira colocar as urls como header do arquivo.</p>
 <p>Vamos usar como exemplo, o download de informações que podem a vir serem necessárias para o nosso curso, as Tabelas de Recursos e Usos.</p>
@@ -632,8 +632,9 @@ TRU_2010_2017 &lt;- &quot;Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip&quot
 <div id="descompactando-arquivos." class="section level2">
 <h2>Descompactando arquivos.</h2>
 <p>Existe também a possibilidade de se descompactar automaticamente arquivos compactados. Existem algumas formas de se descompactar, como iremos rapidamente enumerar:</p>
-<pre class="r"><code>unzip
-unz</code></pre>
+<pre class="r"><code>unzip(zipfile, files, list, overwrite, junkpaths, exdir, unzip, setTimes)
+
+unz(description, filename, open, encoding)</code></pre>
 <p>Partindo do nosso exemplo das TRUs, podemos usar a função <code>unzip</code> para realizar a leitura do arquivo.</p>
 <pre class="r"><code>unzip(TRU_2010_2017,exdir = &quot;TRU&quot;, junkpaths = T)</code></pre>
 <p>O argumento <code>junkpaths=T</code> extrairá apenas os arquivos ignorando os <code>path</code> delas no arquivo compactado.</p>
@@ -672,11 +673,12 @@ Anos_Corrente &lt;- str_sub(TRU_tab2, start = -8, end=-5)
 VA_corrente &lt;- TRU_tab2 %&gt;%
   as.list() %&gt;%
   map(~ as.data.frame(read_xls(.x, sheet = &#39;VA&#39;,range=&quot;B6:BQ19&quot;,col_names = Atividades_TRU))) %&gt;% 
+  map(function(x) `row.names&lt;-`(x,Variaveis_TRU)) %&gt;%
   setNames(Anos_Corrente)</code></pre>
 <p>Caso você queira usar os dados para algum exercício ou tarefa, já estão prontos. Podemos também salvar esses arquivos separadamente em alguma extensão do excel (xls, xlsx, csv).</p>
 <pre class="r"><code>escrever_xlsx &lt;- function(dados, anos){
   
-    write.xlsx(dados, paste0(&quot;TRU/TRU_VA_corrente_&quot;, anos, &quot;.xlsx&quot;))
+    write.xlsx(dados, paste0(&quot;TRU/TRU_VA_corrente_&quot;, anos, &quot;.xlsx&quot;), row.names=T)
   
 }
 

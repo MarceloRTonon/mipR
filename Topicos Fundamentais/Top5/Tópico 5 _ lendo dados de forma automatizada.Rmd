@@ -1,7 +1,7 @@
 ---
 title: "Tópico 5 - Lendo dados de forma automatizada"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "30/07/2020"
+date: "31/07/2020"
 output: html_document
 ---
 
@@ -428,7 +428,7 @@ head(dfvignette_html_extract_all)
 
 ## Abordando download.file
 
-Uma função que já foi abordada nos exercícios, mas que ainda não fio devidamente apresentada é a `download.file()`. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumentos mais comuns da função, ela é estruturada da seguinte forma:
+Uma função que já foi abordada nos exercícios, mas que ainda não foi devidamente apresentada é a `download.file()`. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumentos mais comuns da função, ela é estruturada da seguinte forma:
 
 ```{r,eval=F}
 download.file(url, destfile, mode = "w", headers = NULL)
@@ -451,9 +451,12 @@ Se tudo ocorreu bem, o arquivo solicitado estará no seu working directory (wd).
 
 Existe também a possibilidade de se descompactar automaticamente arquivos compactados.  Existem algumas formas de se descompactar, como iremos rapidamente enumerar:
 
-```{r}
-unzip
-unz
+```{r, eval=F}
+
+unzip(zipfile, files, list, overwrite, junkpaths, exdir, unzip, setTimes)
+
+unz(description, filename, open, encoding)
+
 ```
 
 Partindo do nosso exemplo das TRUs, podemos usar a função `unzip` para realizar a leitura do arquivo.
@@ -514,6 +517,7 @@ Anos_Corrente <- str_sub(TRU_tab2, start = -8, end=-5)
 VA_corrente <- TRU_tab2 %>%
   as.list() %>%
   map(~ as.data.frame(read_xls(.x, sheet = 'VA',range="B6:BQ19",col_names = Atividades_TRU))) %>% 
+  map(function(x) `row.names<-`(x,Variaveis_TRU)) %>%
   setNames(Anos_Corrente)
 
 ```
@@ -524,7 +528,7 @@ Caso você queira usar os dados para algum exercício ou tarefa, já estão pron
 
 escrever_xlsx <- function(dados, anos){
   
-    write.xlsx(dados, paste0("TRU/TRU_VA_corrente_", anos, ".xlsx"))
+    write.xlsx(dados, paste0("TRU/TRU_VA_corrente_", anos, ".xlsx"), row.names=T)
   
 }
 

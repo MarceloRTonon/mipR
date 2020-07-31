@@ -118,3 +118,9 @@ Sys.Date()-a
 #### Q.S1.6 O que faz `str_detect`? Que tipo de vetor ele retorna?
 
 #### Q.S1.7 O que faz `str_extract`? E qual a diferença dele para `str_extract_all`?
+
+
+```{r, include =F}
+#Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com `$` na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de `\\$`! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)
+```
+
