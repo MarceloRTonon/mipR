@@ -37,6 +37,8 @@ Para quem deseja se aprofundar mais no tema, o material desenvolvido aqui tem co
  - Os tópicos [11](https://r4ds.had.co.nz/data-import.html) e [14](https://r4ds.had.co.nz/strings.html) do R for Data Science (R4DS).
  - O tópico [13](https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/index.html) do SW.
  
+Para quem quer aprofundar, quase que *insanamente*, no tema de `strings`, vale ler o livro online [Handling Strings with R](https://www.gastonsanchez.com/r4strings/). 
+ 
 ## Entrando a fundo nas funções paste e paste0
 
 Se você deseja escrever uma frase no R a partir objetos, você pode usar a função `paste` ou a função `paste0`. Veja abaixo quando usamos a isso junto as funções `Sys.Date()` e `Sys.Time()`. que retornam, respectivamente, a data atual e o hórario atual. `paste` e `paste0` fazem no R o que `concatenar` faz no Excel.
