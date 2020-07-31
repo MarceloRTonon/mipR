@@ -364,7 +364,7 @@ summary {
 
 <h1 class="title toc-ignore">Tópico 5 - Lendo dados de forma automatizada</h1>
 <h4 class="author">Marcelo Tonon e Felipe Cornelio</h4>
-<h4 class="date">19/07/2020</h4>
+<h4 class="date">30/07/2020</h4>
 
 </div>
 
@@ -447,25 +447,11 @@ writeLines(z)</code></pre>
 ## 
 ## (and also helps you to get a job, if you need.)</code></pre>
 <p>Para que o R leia corretamente o que vc deseja na frase, é necessário usar a função <code>writeLines()</code>.</p>
-<<<<<<< HEAD
-<p>Aqui entra um importante tema quando trabalhando com <code>strings</code> e <code>characters</code>: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego.</p>
-<pre class="r"><code>mi &lt;- &quot;\u03bc&quot;
-mi</code></pre>
-<pre><code>## [1] &quot;µ&quot;</code></pre>
-<pre class="r"><code>theta &lt;- &quot;\u03b8&quot;
-theta</code></pre>
-<pre><code>## [1] &quot;&lt;U+03B8&gt;&quot;</code></pre>
-<pre class="r"><code>Delta &lt;- &quot;\u0394&quot;
-Delta</code></pre>
-<pre><code>## [1] &quot;&lt;U+0394&gt;&quot;</code></pre>
-<p>Você pode buscar as correspondências do <code>unicodes</code> para cada letra grega que desejar. Essa <a href="https://www.fileformat.info/info/unicode/block/greek_and_coptic/list.htm">lista está acessível na internet</a> e os códigos, em geral, são universais.</p>
-=======
 <p>Aqui entra um importante tema quando trabalhando com <code>strings</code> e <code>characters</code>: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
 <pre class="r"><code>letras_gregas_exemplo &lt;- paste(&quot;\u3bc&quot;,&quot;\u3b1&quot;,&quot;\u3b2&quot;)
 letras_gregas_exemplo</code></pre>
 <pre><code>## [1] &quot;µ a ß&quot;</code></pre>
-<p>Você pode buscar as correspondências do <code>unicodes</code> para cada letra grega que desejar. Essa lista está acessível na internet e os códigos, em geral, são universais.</p>
->>>>>>> 24d102ee15b6187fec86ca00c72f91cb9e6bed82
+<p>Você pode buscar as correspondências do <code>unicodes</code> para cada letra grega que desejar. Essa <a href="https://www.fileformat.info/info/unicode/block/greek_and_coptic/list.htm">lista está acessível na internet</a> e os códigos, em geral, são universais.</p>
 </div>
 <div id="nomes-impossíveis-e-nomes-reservados" class="section level3">
 <h3>Nomes Impossíveis e Nomes Reservados</h3>
@@ -526,16 +512,6 @@ sum &lt;- function(x,y) rbind(x,y)</code></pre>
 # Vamos eliminar a coluna com o diretório dos pacotes, para simplificar a exposição.
 df_vignette &lt;- df_vignette %&gt;% select(-LibPath)
 head(df_vignette)</code></pre>
-<<<<<<< HEAD
-<pre><code>##       Package              Item                                      Title
-## 1 benchmarkme    a_introduction    Crowd sourced benchmarks (source, html)
-## 2       broom    adding-tidiers     Adding tidiers to broom (source, html)
-## 3       broom available-methods           Available methods (source, html)
-## 4       broom   broom_and_dplyr             broom and dplyr (source, html)
-## 5       broom             broom       Introduction to broom (source, html)
-## 6       broom            kmeans kmeans with dplyr and broom (source, html)</code></pre>
-<p>Nesse caso temos uma lista com três variáveis com informações que são nomes.</p>
-=======
 <pre><code>##   Package              Item                                      Title
 ## 1   broom    adding-tidiers     Adding tidiers to broom (source, html)
 ## 2   broom available-methods           Available methods (source, html)
@@ -544,7 +520,6 @@ head(df_vignette)</code></pre>
 ## 5   broom            kmeans kmeans with dplyr and broom (source, html)
 ## 6   broom     bootstrapping          Tidy bootstrapping (source, html)</code></pre>
 <p>Nesse caso temos uma lista com três variáveis com informações que são um conjunto de caracteres.</p>
->>>>>>> 24d102ee15b6187fec86ca00c72f91cb9e6bed82
 <div id="usando-stringr-para-detectar-padrões" class="section level4">
 <h4>Usando `<code>stringr</code> para detectar padrões</h4>
 <p>O pacote <code>stringr</code> pode te ajudar a encontrar padrões em strings e ser uma outra maneira de realizar uma manipulação em sua base dados. Isso é particulamente útil se você deseja encontrar palavras ou frases específicas nas strings, mas até mesmo buscar partes de palavras. Vamos então entrar mais a fundo nas funções que compõem o pacote.</p>
@@ -572,6 +547,9 @@ head(siglas_pacote_resumo)</code></pre>
 ## 4 che
 ## 5 cli
 ## 6 col</code></pre>
+<p>Importante não confundir esta função com <code>str_subset()</code>. Ao contrário de <code>str_sub()</code>, a função <code>str_subset()</code> retornará os elementos que satisfaçam algum padrão em uma string. Isso é particulamente útil para fazer subseting em variáveis como nomes, ou até mesmo para buscar arquivos:</p>
+<pre class="r"><code>str_subset(string, pattern, negate = FALSE)</code></pre>
+<p>No argumento <code>string</code> entraremos com a base composta de strings, em <code>pattern</code> decidiremos qual o padrão a ser buscado e, por fim, <code>negate</code> dará os resultados escolhidos no pattern caso usar <code>FALSE</code> (que é o default da função) ou retornará todos os valores exceto o que atendem ao padrão para o caso de usar <code>TRUE</code> no argumento. Iremos usar essa função mais a frente em um exemplo prático.</p>
 <p>Podemos também usar as funçãos <code>str_to_upper()</code> e <code>str_to_lower()</code> para transformar algumas letras em maiúsculas ou minúsculas.</p>
 <pre class="r"><code># Voltando a um vetor atômico e criando um novo objeto
 SIGLAS &lt;- unlist(siglas_pacote_resumo)
@@ -641,24 +619,71 @@ head(dfvignette_html_extract_all)</code></pre>
 </div>
 <div id="abordando-download.file" class="section level2">
 <h2>Abordando download.file</h2>
-<p>Uma função que já foi abordada nos exercícios, mas que ainda não fio devidamente apresentada é a <code>download.file()</code>. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumenta mais comuns da função, ela é estruturada da seguinte forma:</p>
-<pre class="r"><code>download.file(url, destfile, method, mode = &quot;w&quot;, headers = NULL)</code></pre>
+<p>Uma função que já foi abordada nos exercícios, mas que ainda não fio devidamente apresentada é a <code>download.file()</code>. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumentos mais comuns da função, ela é estruturada da seguinte forma:</p>
+<pre class="r"><code>download.file(url, destfile, mode = &quot;w&quot;, headers = NULL)</code></pre>
+<p>A <code>url</code> vai ser o endereço da internet que você deseja realizar o download, <code>destfile</code> identifica o arquivo/diretório para onde o arquivo será baixado, <code>mode</code> identificará a forma que o arquivo será escrita, aqui é importante destacar que para uso no windows o uso de transferência binária (mode = “wb” ou “ab”) é importante para separar textos, comandos e códigos binários; <code>headers</code> é para o caso de que se queira colocar as urls como header do arquivo.</p>
 <p>Vamos usar como exemplo, o download de informações que podem a vir serem necessárias para o nosso curso, as Tabelas de Recursos e Usos.</p>
 <pre class="r"><code>download.file(&quot;ftp://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2017/tabelas_xls/tabelas_de_recursos_e_usos/nivel_68_2010_2017_xls.zip&quot;, destfile = &quot;Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip&quot;, mode = &quot;wb&quot;)
 TRU_2010_2017 &lt;- &quot;Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip&quot;</code></pre>
-<p>Se tudo ocorreu bem, o arquivo solicitado estará no seu working directory (wd). Uma particularidade do arquivo escolhido aqui é que de trata de uma arquivo compactado e necessita de mais alguns passos. Caso fosse algum arquivo com os dados já expostos (um csv, xls, xlsx, txt, Rdata, entre outros) a leitura já poderia ser feita.</p>
+<p>Se tudo ocorreu bem, o arquivo solicitado estará no seu working directory (wd). Uma particularidade do arquivo escolhido aqui é que de trata de uma arquivo compactado e necessita de mais alguns passos. Caso fosse algum arquivo com os dados já expostos (um csv, xls, xlsx, txt, Rdata, entre outros) a leitura já poderia ser feita. Dentro desse arquivo existem quatro tipos de tabelas para diferentes anos, mas o primeiro passo é fazer com que o R descompacte e leia essas informações para você. Vamos por partes.</p>
 </div>
 <div id="descompactando-arquivos." class="section level2">
 <h2>Descompactando arquivos.</h2>
-<p>Existe também a possibilidade de se descompactar automaticamente arquivos compactados.</p>
-<pre class="r"><code>unzip(TRU_2010_2017,exdir = &quot;TRU&quot;)</code></pre>
+<p>Existe também a possibilidade de se descompactar automaticamente arquivos compactados. Existem algumas formas de se descompactar, como iremos rapidamente enumerar:</p>
+<pre class="r"><code>unzip
+unz</code></pre>
+<p>Partindo do nosso exemplo das TRUs, podemos usar a função <code>unzip</code> para realizar a leitura do arquivo.</p>
+<pre class="r"><code>unzip(TRU_2010_2017,exdir = &quot;TRU&quot;, junkpaths = T)</code></pre>
+<p>O argumento <code>junkpaths=T</code> extrairá apenas os arquivos ignorando os <code>path</code> delas no arquivo compactado.</p>
 <p>Com isso temos nossas fontes de dados já acessíveis, mas que ainda falta realizar a leitura delas. São várias tabelas cada uma representando informações distintas e para diferentes anos.</p>
 </div>
 <div id="lendo-vários-arquivos-usando-função-list.files" class="section level2">
 <h2>Lendo vários arquivos usando função <code>list.files</code></h2>
-<p>Tal como no nosso exemplo em que existe uma quantidade razoável de arquivos a sereim lidos, casp fosse realizada a leitura individual de cada arquivo poderíamos ter um código longo e repetitivo. Uma alternativa é realizar a leitura silmultânea de várias arquivos, usando a função <code>list.files()</code>.</p>
-<p>Coloque então na pasta um arquivo em csv. Dê um exemplo usando <code>list.files()</code> com <code>str_subset(negate = TRUE)</code>para tirar esse arquivo do vetor.</p>
-<p>Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com <code>$</code> na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de <code>\\$</code>! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)</p>
+<p>Tal como no nosso exemplo em que existe uma quantidade razoável de arquivos a sereim lidos, casp fosse realizada a leitura individual de cada arquivo poderíamos ter um código longo e repetitivo. Uma alternativa é realizar a leitura silmultânea de várias arquivos, usando a função <code>list.files()</code>. Ela retorna um vetor de <code>chr</code> com o nome dos arquivos contidos em um diretório. Abaixo apresentamos alguns argumetnos úteis na função (não todos):</p>
+<pre class="r"><code>list.files(path = &quot;.&quot;, pattern = NULL, all.files = FALSE, full.names = FALSE)</code></pre>
+<p>O <code>path</code> vai indicar o diretório no qual vc deseja extrair os nomes, <code>pattern</code> é um item opcional para filtrar os resultados que satisfaçam uma determinada condição, para <code>all.files</code> caso seja positivo o resultado retornará inclusive arquivos que possam estar escondidos ou em segundo plano; e <code>full.names</code> caso seja <code>TRUE</code> retornará o nome dos arquivos e o relative path (o que pode ser particulamente útil na leitura dos dados).</p>
+<p>Retornando ao nosso exemplo, vamos primeiro criar o vetor com o relative path e o nome dos arquivos da TRU:</p>
+<pre class="r"><code>TRUfiles &lt;- list.files(&quot;TRU&quot;, full.names = T)
+# Lembrando que o full.names vai trazer não só o nome, mas também o diretório (relative path)
+head(TRUfiles)</code></pre>
+<pre><code>## [1] &quot;TRU/68_tab1_2010.xls&quot; &quot;TRU/68_tab1_2011.xls&quot; &quot;TRU/68_tab1_2012.xls&quot;
+## [4] &quot;TRU/68_tab1_2013.xls&quot; &quot;TRU/68_tab1_2014.xls&quot; &quot;TRU/68_tab1_2015.xls&quot;</code></pre>
+<p>Vamos então agora fazer a leitura da aba “VA” em todos esses arquivos. Essa aba não consta em todos os arquivos listados, somente nas tab2, então:</p>
+<pre class="r"><code>TRU_tab2 &lt;- str_subset(TRUfiles, pattern =&quot;tab2&quot;)
+TRU_tab2</code></pre>
+<pre><code>## [1] &quot;TRU/68_tab2_2010.xls&quot; &quot;TRU/68_tab2_2011.xls&quot; &quot;TRU/68_tab2_2012.xls&quot;
+## [4] &quot;TRU/68_tab2_2013.xls&quot; &quot;TRU/68_tab2_2014.xls&quot; &quot;TRU/68_tab2_2015.xls&quot;
+## [7] &quot;TRU/68_tab2_2016.xls&quot; &quot;TRU/68_tab2_2017.xls&quot;</code></pre>
+<p>Agora em posse dos nomes dos arquivos que queiremo fazer a leitura, o próximo passo é realizar a leitura dos dados usando o vetor de strings criado acima. Uma maneira simples e rápida de fazer isso é usando a função <code>map</code> que aprendemos nas aulas anteriores:</p>
+<pre class="r"><code># Criar Vetor com os nomes das atividades (colunas)
+Atividades_TRU &lt;- read_xls(TRU_tab2[1],sheet=&#39;VA&#39;, range = &quot;B4:BQ4&quot;, col_names = F) %&gt;% as.character()
+
+# Criando o vetor com o nome das variáveis (linhas no caso) 
+Variaveis_TRU &lt;- read_xls(TRU_tab2[1],sheet=&#39;VA&#39;, range = &quot;A6:A19&quot;, col_names = F) %&gt;% t() %&gt;% as.character()
+
+# Vamos também criar um vetor com os anos da série usando str_sub:
+
+Anos_Corrente &lt;- str_sub(TRU_tab2, start = -8, end=-5)
+
+# Agora realizando efetivamente a leitura dos dados:
+
+VA_corrente &lt;- TRU_tab2 %&gt;%
+  as.list() %&gt;%
+  map(~ as.data.frame(read_xls(.x, sheet = &#39;VA&#39;,range=&quot;B6:BQ19&quot;,col_names = Atividades_TRU))) %&gt;% 
+  setNames(Anos_Corrente)</code></pre>
+<p>Caso você queira usar os dados para algum exercício ou tarefa, já estão prontos. Podemos também salvar esses arquivos separadamente em alguma extensão do excel (xls, xlsx, csv).</p>
+<pre class="r"><code>escrever_xlsx &lt;- function(dados, anos){
+  
+    write.xlsx(dados, paste0(&quot;TRU/TRU_VA_corrente_&quot;, anos, &quot;.xlsx&quot;))
+  
+}
+
+map2(VA_corrente,names(VA_corrente),escrever_xlsx)</code></pre>
+<p>Agora que separamos as informações podemos, por exemplo, criar um arquivo compactado com as informações já trabalhadas. Uma possibilidade é criar um arquivo separadamente juntando os arquivos a preços correntes. A função zip é uma opção para isso:</p>
+<pre class="r"><code>arquivos_TRU_VA &lt;- paste0(&quot;TRU/&quot;,list.files(&quot;TRU&quot;, pattern = &quot;VA_corrente&quot;))
+
+zip(zipfile = &quot;TRU/TRU_VA.zip&quot;, files = arquivos_TRU_VA)</code></pre>
+<p>Outras possibilidades englobam usar o pacote <code>stringr</code> para reunir todos os arquivos que, por exemplo, tenham a mesma extensão. Para isso basta realizar o subset de acordo com os arquivos que deseja reunir ou listar. No próprio <code>list.file()</code> é possível escolher como padrão um “.csv” que reunirá todos os nomes de arquivos desse tipo.</p>
 </div>
 <div class="footnotes">
 <hr />
