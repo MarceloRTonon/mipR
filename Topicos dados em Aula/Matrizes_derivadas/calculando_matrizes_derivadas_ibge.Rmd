@@ -1,5 +1,5 @@
 ---
-title: "Calculando as matrizes derivadas"
+title: "Calculando as matrizes derivadas do IBGE"
 author: "Marcelo Tonon e Felipe Cornelio"
 date: "18/07/2020"
 output: html_document
@@ -10,6 +10,8 @@ knitr::opts_chunk$set(include = TRUE, eval = TRUE, warning = FALSE, message = FA
 options(scipen=999999999)
 ```
 
+## Pacotes Necessários, Arquivo e Notação
+
 O objetivo desse texto é calcular as tabelas derivadas a partir das matrizes básicas. Faremos isso tudo usando o R. Aqui se pressupõe que os conhecimentos passados nos Tópicos 0, 1, 2 e 3 das monitorias de R foram absorvidos. Além disso, os seguintes pacotes devem estar instalados no R^[Use ```install.packages("nomedopacote")``` para instalar os pacotes.].
 
 ```{r message=FALSE, warning=FALSE}
@@ -19,7 +21,9 @@ library(tidyverse)
 
 
 Vamos usar como referência a material do [IBGE(2018)](https://biblioteca.ibge.gov.br/visualizacao/livros/liv101604.pdf). Muitas partes aqui são inclusive transcrições integrais de lá. Vamos também usar o arquivo^[ [Clique aqui](ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls) para baixar o arquivo fora do R.] de Excel para a [Matriz Insumo Produto de 2015](https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9085-matriz-de-insumo-produto.html).
- 
+
+Importante notar que iremos manter aqui a notação usada em IBGE (2018). Desse modo, algumas letras que muitas vezes são usadas representando outro elemento, terão o significado definido pelo IBGE(2018). Este é o caso de $y$ por exemplo, que aqui representará o vetor de valor adicionado a preços básicos, em outros trabalhos é tido como o vetor do total da demanda final doméstica por atividades à preços básicos (que neste trabalho é tido como $e_N$^[Neste caso, extrapolamos da notação de IBGE(2018), uma vez que $F_N$ é representa a matriz de demanda final doméstica a nível do produto dividido por cada componente da demanda final e $f_N$ representa o vetor do total por produto da demanda final doméstica. Assim sendo, como $E_N$ é o equivalente de $F_N$ só que a nível de atividade, fizemos com que $e_N$ fosse o equivalente de $f_N$, só que a nível de atividade.] )
+
 ## Baixando o arquivo pelo R.
 
 Primeiramente iremos baixar o arquivo pelo R. Se você enfrentar problemas com este passo^[O que muito provavelmente por conta do sistema operacional que você esteja usando. Em especifico, a parte abaixo do código foi feita pensando em quem tem Windows.], baixe o arquivo manualmente e coloque ele no diretório de trabalho faça e associe ele ao objeto `arquivo_2015`.
