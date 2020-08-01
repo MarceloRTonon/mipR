@@ -373,24 +373,15 @@ summary {
 <p>Esse material usa muitas partes dos scripts feitos por Ana Camila e Pedro Gomes Andrade ao longo do Curso da POF fornecido por IPEA/ENCE/UFRJ/UFF.</p>
 <div id="pacotes-necessários" class="section level2">
 <h2>Pacotes Necessários</h2>
-<pre class="r"><code># install.packages(&quot;devtools&quot;)
-#library(devtools)
-#devtools::install_github(&quot;jimhester/archive&quot;)
-#library(archive)
-
-library(stringr)
-library(purrr)
-library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(tidyr)
-library(readr)</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages ------------------------------ tidyverse 1.3.0 --</code></pre>
+<pre><code>## v ggplot2 3.3.2     v purrr   0.3.4
+## v tibble  3.0.3     v dplyr   1.0.0
+## v tidyr   1.1.0     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.5.0</code></pre>
+<pre><code>## -- Conflicts --------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
 </div>
 <div id="baixando-os-arquivos" class="section level2">
 <h2>Baixando os arquivos</h2>
@@ -398,13 +389,126 @@ library(readr)</code></pre>
 <p>No nosso caso temos:</p>
 <p><code>Pesquisa_de_Orçamentos_Familiares_2008_2009</code> <code>Microdados</code> <code>Dados.zip</code></p>
 <p>Um detalhe que pode ser útil a quem quiser baixar pelo <code>R</code> (para fins de automatização), para conseguir o link do download do arquivo, vá na parte de downloads do seu navegador<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, clique com o botão direito do mouse sobre o arquivo baixado e depois clique em algo como: <code>Copiar link do Download</code>e você terá então o link do download<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
-<p>Estando <code>Dados.zip</code> baixado e localizado no Diretório de Trabalho, podemos então descompacta-los parcialmente pelo R.</p>
+<p>Estando <code>Dados.zip</code> baixado e localizado no Diretório de Trabalho, podemos então descompacta-lo parcialmente pelo R.</p>
 <pre class="r"><code>unzip(&quot;Dados.zip&quot;)</code></pre>
 <p>Infelizmente, o responsável pela compactação dos arquivos escolheu o formato <code>.7z</code> que é bem chato para vários sistemas (algumas distribuições do Linux em especial) descompactar. O mesmo vale para o R<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. Assim, a descompactação vai ter que ser feita na mão mesmo.</p>
 <p><strong>Importante:</strong> Extraia os arquivos no mesmo local do arquivo, de modo que o arquivo <code>T_ALUGUEL_ESTIMADO_S.txt</code> esteja em <code>Dados/T_ALUGUEL_ESTIMADO_S.txt</code> e não em <code>Dados/T_ALUGUEL_ESTIMADO_S/T_ALUGUEL_ESTIMADO_S.txt</code>.</p>
 <p>Assim, vamos usar <code>list.files</code> em conjunto com <code>stringr::str_subset</code> para criar um vetor excluindo os arquivos compactados em <code>7z</code><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>:</p>
 <pre class="r"><code>arquivos_dados &lt;- list.files(&quot;Dados&quot;, full.names = T) %&gt;%
   str_subset(&quot;.7z&quot;, negate = TRUE)</code></pre>
+<p>Como você pode perceber a POF está dividida em vários arquivos, dado o seu tamanho.</p>
+<p>Para ler os dados da POF iremos usar a função <code>read.fwf</code>, que serve para ler arquivos de texto, cujos valores são separados pelo comprimento (<em>widht</em>) de cada variável. Assim, precisamos dos dados que especifiquem nomes das variáveis e os seus comprimentos. Para tanto serve os dicionarios fornecidos por Ana Camila e o Pedro Lourenço no curso sobre a POF. Você pode acessa-lo na pasta da <a href="https://drive.google.com/drive/folders/1CjlDiFpr0AWC2hwv36Up4aNp1UivjGIX?usp=sharing">monitoria do curso</a>.</p>
+<p>Baixe a pasta <code>dicionarios</code> e coloque-a no seu diretorio de trabalho.</p>
+</div>
+<div id="lendo-os-arquivos" class="section level2">
+<h2>Lendo os arquivos</h2>
+<p>Ler os arquivos da POF leva bastante tempo. Pois se trata de muitos arquivos e num formato não muito convidativo (<code>.txt</code>). Assim vamos usar aqui a função <code>read_fwf</code> (indicada para esse caso) e a <code>fwf_widths</code>, que controla o tamanho de cada variável. Isso ocorre pois os arquivos em <code>.txt</code> não tem um separador de colunas e células como no caso de <code>.csv</code>. Assim, precisamos avisar ao <code>R</code> qual é o comprimento das celulas de cada coluna. Além disso, os nomes das variáveis não estão de uma forma que vai nos agradar, e portanto, vamos indicar isso também.</p>
+<p>Vamos começar lendo a base de despesas de 90 dias, disponível na POF2 - Quadro 6 a 9 - Registro 6.</p>
+<p>Os dicionários estão em csv2, e usamos <code>type_convert()</code> para mudar os tipos de algumas colunas:</p>
+<pre class="r"><code>pof2.reg6.desp.90.dias &lt;- read.csv2(&quot;dicionarios/pof2.reg6.desp.90.dias.csv&quot;,
+                                    header=TRUE) %&gt;%
+  type_convert()</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   nome = col_character(),
+##   variavel = col_character()
+## )</code></pre>
+<p>Vamos então associar o tamanho das colunas de <code>pof2.reg6.desp.90.dias</code> com as variáveis <code>tamanho</code> e os nomes das colunas com a coluna <code>variavel</code>. Isso tudo usando a função <code>fwf_widhts</code>:</p>
+<pre class="r"><code>col.pos &lt;- fwf_widths(pof2.reg6.desp.90.dias$tamanho,
+                      col_names = pof2.reg6.desp.90.dias$variavel)</code></pre>
+<p>Vamos então carregar os dados da POF. Importante notar, que vamos usar o <em>mesmo nome</em> que usamos para o dicionário, porém já pegamos as informações que queriamos e alocamos em <code>col.pos</code>:</p>
+<pre class="r"><code>pof2.reg6.desp.90.dias &lt;- read_fwf(file = &quot;Dados/T_DESPESA_90DIAS_S.txt&quot;,
+                                   col_positions = col.pos)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_character(),
+##   uf = col_double(),
+##   dv_seq = col_double(),
+##   n_uc = col_double()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<p>Usando <code>str()</code> no objeto percebemos que temos alguns valores em <code>character</code> que queremos como númericos.</p>
+<pre class="r"><code>str(pof2.reg6.desp.90.dias)</code></pre>
+<pre><code>## tibble [192,813 x 27] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ registro        : chr [1:192813] &quot;06&quot; &quot;06&quot; &quot;06&quot; &quot;06&quot; ...
+##  $ uf              : num [1:192813] 11 11 11 11 11 11 11 11 11 11 ...
+##  $ n_seq           : chr [1:192813] &quot;001&quot; &quot;001&quot; &quot;001&quot; &quot;001&quot; ...
+##  $ dv_seq          : num [1:192813] 9 9 9 9 9 9 9 9 9 9 ...
+##  $ n_dom           : chr [1:192813] &quot;01&quot; &quot;01&quot; &quot;01&quot; &quot;01&quot; ...
+##  $ n_uc            : num [1:192813] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ estrato         : chr [1:192813] &quot;01&quot; &quot;01&quot; &quot;01&quot; &quot;01&quot; ...
+##  $ fator_exp       : chr [1:192813] &quot;00416.49732704&quot; &quot;00416.49732704&quot; &quot;00416.49732704&quot; &quot;00416.49732704&quot; ...
+##  $ fator_exp_2     : chr [1:192813] &quot;00421.77856614&quot; &quot;00421.77856614&quot; &quot;00421.77856614&quot; &quot;00421.77856614&quot; ...
+##  $ n_quadro        : chr [1:192813] &quot;07&quot; &quot;08&quot; &quot;08&quot; &quot;06&quot; ...
+##  $ cod_item        : chr [1:192813] &quot;00101&quot; &quot;01109&quot; &quot;01301&quot; &quot;00401&quot; ...
+##  $ forma_aqui      : chr [1:192813] &quot;01&quot; &quot;01&quot; &quot;01&quot; &quot;00&quot; ...
+##  $ valor_despe     : chr [1:192813] &quot;00000105.00&quot; &quot;00000020.00&quot; &quot;00000090.00&quot; &quot;00000024.87&quot; ...
+##  $ fator_anu       : chr [1:192813] &quot;04&quot; &quot;04&quot; &quot;04&quot; &quot;12&quot; ...
+##  $ deflator        : chr [1:192813] &quot;01.02&quot; &quot;01.06&quot; &quot;01.08&quot; &quot;01.02&quot; ...
+##  $ desp_defla      : chr [1:192813] &quot;00000107.10&quot; &quot;00000021.20&quot; &quot;00000097.20&quot; &quot;00000025.37&quot; ...
+##  $ desp_anu_exp    : chr [1:192813] &quot;0000000180689.94&quot; &quot;0000000035766.82&quot; &quot;0000000163987.51&quot; &quot;0000000128406.27&quot; ...
+##  $ cod_impu        : chr [1:192813] &quot;00&quot; &quot;00&quot; &quot;00&quot; &quot;00&quot; ...
+##  $ rend_mon_mes_uc : chr [1:192813] &quot;0000000006209.56&quot; &quot;0000000006209.56&quot; &quot;0000000006209.56&quot; &quot;0000000006209.56&quot; ...
+##  $ rend_nmon_mes_uc: chr [1:192813] &quot;0000000000338.27&quot; &quot;0000000000338.27&quot; &quot;0000000000338.27&quot; &quot;0000000000338.27&quot; ...
+##  $ rend_tot_mes_uc : chr [1:192813] &quot;0000000006547.82&quot; &quot;0000000006547.82&quot; &quot;0000000006547.82&quot; &quot;0000000006547.82&quot; ...
+##  $ quant_item      : chr [1:192813] &quot;0003&quot; &quot;0000&quot; &quot;0000&quot; &quot;0000&quot; ...
+##  $ uni_medi        : chr [1:192813] &quot;09201&quot; &quot;00000&quot; &quot;00000&quot; &quot;00000&quot; ...
+##  $ peso_vol        : chr [1:192813] &quot;36101&quot; &quot;00000&quot; &quot;00000&quot; &quot;00000&quot; ...
+##  $ quant_final     : chr [1:192813] &quot;0000000039.000&quot; &quot;0000000000.000&quot; &quot;0000000000.000&quot; &quot;0000000000.000&quot; ...
+##  $ impu_quant      : chr [1:192813] &quot;00&quot; &quot;00&quot; &quot;00&quot; &quot;00&quot; ...
+##  $ cod_loc_aqui    : chr [1:192813] &quot;00101&quot; &quot;03101&quot; &quot;07501&quot; &quot;00000&quot; ...
+##  - attr(*, &quot;spec&quot;)=
+##   .. cols(
+##   ..   registro = col_character(),
+##   ..   uf = col_double(),
+##   ..   n_seq = col_character(),
+##   ..   dv_seq = col_double(),
+##   ..   n_dom = col_character(),
+##   ..   n_uc = col_double(),
+##   ..   estrato = col_character(),
+##   ..   fator_exp = col_character(),
+##   ..   fator_exp_2 = col_character(),
+##   ..   n_quadro = col_character(),
+##   ..   cod_item = col_character(),
+##   ..   forma_aqui = col_character(),
+##   ..   valor_despe = col_character(),
+##   ..   fator_anu = col_character(),
+##   ..   deflator = col_character(),
+##   ..   desp_defla = col_character(),
+##   ..   desp_anu_exp = col_character(),
+##   ..   cod_impu = col_character(),
+##   ..   rend_mon_mes_uc = col_character(),
+##   ..   rend_nmon_mes_uc = col_character(),
+##   ..   rend_tot_mes_uc = col_character(),
+##   ..   quant_item = col_character(),
+##   ..   uni_medi = col_character(),
+##   ..   peso_vol = col_character(),
+##   ..   quant_final = col_character(),
+##   ..   impu_quant = col_character(),
+##   ..   cod_loc_aqui = col_character()
+##   .. )</code></pre>
+<p>Neste caso, <code>type_convert()</code> não será de muita ajuda, porém podemos usar uma função do <code>dplyr</code> chamada <code>mutate</code><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> que nos permite modificar com mais agilidade os tipos de cada coluna.</p>
+<pre class="r"><code>pof2.reg6.desp.90.dias &lt;- pof2.reg6.desp.90.dias %&gt;%
+                          dplyr::mutate(fator_exp = as.numeric(fator_exp), 
+                                        fator_exp_2 = as.numeric(fator_exp_2),
+                                        desp_anu_exp= as.numeric(desp_anu_exp),
+                                        valor_despe = as.numeric(valor_despe))</code></pre>
+<p>Vamos então criar o código da unidade de consumo <code>UniConsumoID</code> (9 digitos) a parte da <code>uf</code> (2 digs.), <code>n_seq</code> (3 digs.), <code>dv_seq</code> (1 dig.), <code>n_dom</code> (2 digs.), <code>n_uc</code> (1 digs.):</p>
+<pre class="r"><code>pof2.reg6.desp.90.dias &lt;- pof2.reg6.desp.90.dias %&gt;%
+                          dplyr::mutate(UniConsumoID = paste0(uf, n_seq, dv_seq, n_dom, n_uc))</code></pre>
+<p>Vamos então pegar o valor das despesas anualizadas <code>valor_defl_anu</code> e dividir pelo o fator de expansão <code>fator_exp_2</code>:</p>
+<pre class="r"><code>pof2.reg6.desp.90.dias &lt;- pof2.reg6.desp.90.dias %&gt;%
+                          dplyr::mutate(valor_defl_anu = (desp_anu_exp/fator_exp_2))</code></pre>
+<p>Vamos agora criar um código do IBGE <code>codeIBGE</code> para identificar os itens das despesas. Para tanto, vamos pegar os 3 primeiros números da coluna <code>cod_item</code> e contanetar com o número do quadro.</p>
+<pre class="r"><code>pof2.reg6.desp.90.dias &lt;- pof2.reg6.desp.90.dias %&gt;%
+                          dplyr::mutate(codeIBGE = paste0(n_quadro, substr(cod_item, 1, 3)))</code></pre>
+<p>Vamos então selecionar as variáveis de interesse dessa base de dados em especifico. No nosso exemplo, vamos selecionar o código da Unidade de Consumo <code>UniConsumoID</code>, os códigos dos produtos pelo IBGE <code>codeIBGE</code>, os fatores de expansão, <code>fator_exp</code> e <code>fator_exp_2</code> e os valores das despesas deflacionadas e anualizadas sem o fator de expansão.</p>
+<pre class="r"><code>pof2.reg6.desp.90.dias &lt;- pof2.reg6.desp.90.dias %&gt;%
+                          dplyr::select(UniConsumoID, codeIBGE, fator_exp, fator_exp_2, valor_defl_anu)</code></pre>
+<div id="lendo-as-demais-bases" class="section level4">
+<h4>Lendo as demais bases</h4>
+<p>Vamos agora ler as demais bases de dados presentes em dados. O processo é muito similar ao que foi feito para <code>pof2.reg6.desp.90.dias</code>. O</p>
+</div>
 </div>
 <div class="footnotes">
 <hr />
@@ -413,6 +517,7 @@ library(readr)</code></pre>
 <li id="fn2"><p>No caso, o link do download de <code>Dados.zip</code> é: “<a href="ftp://ftp.ibge.gov.br/Orcamentos_Familiares/Pesquisa_de_Orcamentos_Familiares_2008_2009/Microdados/Dados.zip" class="uri">ftp://ftp.ibge.gov.br/Orcamentos_Familiares/Pesquisa_de_Orcamentos_Familiares_2008_2009/Microdados/Dados.zip</a>”<a href="#fnref2" class="footnote-back">↩</a></p></li>
 <li id="fn3"><p>Existe um pacote chamado <a href="https://github.com/jimhester/archive"><code>archive</code></a>, porém ainda não foi atualizado para ser usado na versão 4.0 do R.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 <li id="fn4"><p>Veja<a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p><code>mutate</code> cria, modifica e deleta colunas.<a href="#fnref5" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

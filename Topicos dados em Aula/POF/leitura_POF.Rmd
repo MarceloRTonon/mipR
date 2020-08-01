@@ -59,3 +59,77 @@ Para ler os dados da POF iremos usar a função `read.fwf`, que serve para ler a
 
 Baixe a pasta `dicionarios` e coloque-a no seu diretorio de trabalho.
 
+## Lendo os arquivos
+
+Ler os arquivos da POF leva bastante tempo. Pois se trata de muitos arquivos e num formato não muito convidativo (`.txt`). Assim vamos usar aqui a função `read_fwf` (indicada para esse caso) e a `fwf_widths`, que controla o tamanho de cada variável. Isso ocorre pois os arquivos em `.txt` não tem um separador de colunas e células como no caso de `.csv`. Assim, precisamos avisar ao `R` qual é o comprimento das celulas de cada coluna. Além disso, os nomes das variáveis não estão de uma forma que vai nos agradar, e portanto, vamos indicar isso também.
+
+Vamos começar lendo a base de despesas de 90 dias, disponível na POF2 - Quadro 6 a 9 - Registro 6.
+
+Os dicionários estão em csv2, e usamos `type_convert()` para mudar os tipos de algumas colunas:
+```{r}
+pof2.reg6.desp.90.dias <- read.csv2("dicionarios/pof2.reg6.desp.90.dias.csv",
+                                    header=TRUE) %>%
+  type_convert()
+```
+
+Vamos então associar o tamanho das colunas de `pof2.reg6.desp.90.dias` com as variáveis `tamanho` e os nomes das colunas com a coluna `variavel`. Isso tudo usando a função `fwf_widhts`:
+
+```{r}
+col.pos <- fwf_widths(pof2.reg6.desp.90.dias$tamanho,
+                      col_names = pof2.reg6.desp.90.dias$variavel)
+```
+
+Vamos então carregar os dados da POF. Importante notar, que vamos usar o *mesmo nome* que usamos para o dicionário, porém já pegamos as informações que queriamos e alocamos em `col.pos`:
+
+```{r}
+pof2.reg6.desp.90.dias <- read_fwf(file = "Dados/T_DESPESA_90DIAS_S.txt",
+                                   col_positions = col.pos)
+
+```
+
+Usando `str()` no objeto percebemos que temos alguns valores em `character` que queremos como númericos.
+```{r}
+str(pof2.reg6.desp.90.dias)
+```
+
+Neste caso, `type_convert()` não será de muita ajuda, porém podemos usar uma função do `dplyr` chamada `mutate`^[`mutate` cria, modifica e deleta colunas.] que nos permite modificar com mais agilidade os tipos de cada coluna.
+
+```{r}
+pof2.reg6.desp.90.dias <- pof2.reg6.desp.90.dias %>%
+                          dplyr::mutate(fator_exp = as.numeric(fator_exp), 
+                                        fator_exp_2 = as.numeric(fator_exp_2),
+                                        desp_anu_exp= as.numeric(desp_anu_exp),
+                                        valor_despe = as.numeric(valor_despe))
+```
+
+Vamos então criar o código da unidade de consumo `UniConsumoID` (9 digitos) a parte da `uf` (2 digs.), `n_seq` (3 digs.), `dv_seq` (1 dig.), `n_dom` (2 digs.), `n_uc` (1 digs.):
+
+```{r}
+pof2.reg6.desp.90.dias <- pof2.reg6.desp.90.dias %>%
+                          dplyr::mutate(UniConsumoID = paste0(uf, n_seq, dv_seq, n_dom, n_uc))
+```
+
+Vamos então pegar o valor das despesas anualizadas `valor_defl_anu`  e dividir pelo o fator de expansão `fator_exp_2`:
+
+```{r}
+pof2.reg6.desp.90.dias <- pof2.reg6.desp.90.dias %>%
+                          dplyr::mutate(valor_defl_anu = (desp_anu_exp/fator_exp_2))
+```
+
+Vamos agora criar um código do IBGE `codeIBGE` para identificar os itens das despesas. Para tanto, vamos pegar os 3 primeiros números da coluna `cod_item` e contanetar com o número do quadro.
+
+```{r}
+pof2.reg6.desp.90.dias <- pof2.reg6.desp.90.dias %>%
+                          dplyr::mutate(codeIBGE = paste0(n_quadro, substr(cod_item, 1, 3)))
+```
+
+Vamos então selecionar as variáveis de interesse dessa base de dados em especifico. No nosso exemplo, vamos selecionar o código da Unidade de Consumo `UniConsumoID`, os códigos dos produtos pelo IBGE `codeIBGE`, os fatores de expansão, `fator_exp` e `fator_exp_2` e os valores das despesas deflacionadas e anualizadas sem o fator de expansão.
+
+```{r}
+pof2.reg6.desp.90.dias <- pof2.reg6.desp.90.dias %>%
+                          dplyr::select(UniConsumoID, codeIBGE, fator_exp, fator_exp_2, valor_defl_anu)
+```
+
+#### Lendo as demais bases
+
+Vamos agora ler as demais bases de dados presentes em dados. O processo é muito similar ao que foi feito para `pof2.reg6.desp.90.dias`. O 
