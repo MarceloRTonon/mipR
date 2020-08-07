@@ -1,0 +1,198 @@
+---
+title: "Matriz de Fluxos Tecnológicos"
+author: "Marcelo Tonon"
+date: "06/08/2020"
+output:
+  ioslides_presentation:
+    mathjax: default
+    widescreen: true
+    incremental: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(DT)
+
+load("Dados/expor.Rdata")
+```
+
+
+# Introdução
+
+
+## Conceito da Matriz de Fluxos Tecnológicos {.build}
+
+ - União de dois núcleos da teoria econômica: Schumpeter e Leontief
+ - Relações tecnológicas intersetoriais (Rosenberg, 2006; Scherer, 2003):
+    - Esforços inovativos orientados ao processo são um quarto do total  
+    - Transbordamento intersetorial dos efeitos da inovação sobre o custo
+    - Industrias com dependência externa de recursos e capacidades de outros setores
+
+  - **Em suma:** a Matriz de Fluxos Tecnológicos pretende analisar a disseminação e absorção tecnológica entre os diversos setores.
+
+## Base de Dados {.build}
+
+  - TRUs: Passoni (2019)
+  - MAI: Miguez (2017)
+  - Gastos P\&D e Atividades Inovativas:  Pintec
+  
+  - Agregação: 35 atividades (Silva, 2018)
+  
+  - Notação de Silva (2018)
+
+# Metodologia {.build}
+
+## Modelo de Leontief
+
+ Determinação do Produto pelo modelo de Leontief:
+$$
+x = [I-A]^{-1}y = Ly
+$$
+
+Importante frisar o conceito de *subsistema*!
+
+$$
+L = \begin{pmatrix}
+l_{11} & \dots  &  l_{1n}\\
+\vdots & \ddots & \vdots \\
+l_{n1} & \dots  & l_{nn}
+\end{pmatrix}
+$$
+
+Podemos dizer que uma coluna $j$ qualquer de $L$ é o subsistema $j$ de $L$, uma vez que envolve toda a estrutura produtiva da economia.
+
+Esse conceito é útil para falar não só da produção em si, mas também como de trabalho, capital, _fluxos tecnológicos_ ...
+
+## A Matriz de Fluxos Tecnológicos: Estrutura Nominal {.build}
+
+- Estrutura nominal (_actual-structure_): $H_a = \hat{r}\hat{x}^{-1}L\hat{y}$
+
+Podemos interpretar $h_{a_{ij}}$ como a quantidade de gastos em P\&D efetuada pelo setor $i$ que foi realizada no subsistema $j$. Vamos ver (em negrito) o subsistema do setor $j = 1$ 
+
+$$
+H_a = \begin{pmatrix}
+\mathbf{h_{a_{11}}} & \dots &  h_{a_{1n}}\\
+\vdots & \ddots  & \vdots \\
+\mathbf{h_{a_{n1}}} & \dots  & h_{a_{nn}}
+\end{pmatrix}
+$$
+
+## Estrutura Nominal {.build}
+
+$H_a$ distribui pela do gasto em P\&D sobre o sistema de produção de toda a economia, de modo que a soma de todos os seus elementos e a soma de todos os elementos de $r$ seja a mesma.
+
+$$
+H_a = \begin{pmatrix}
+100 & 70 & 50 \\
+25  & 50 & 25 \\
+15  & 15 & 20
+\end{pmatrix}
+$$
+
+O setor 1 gastou 220 (linha) em P\&D e absorveu 140 (coluna) de P\&D.
+
+$h_{31}=15$ pode ser interpretada como a quantidade de gastos do setor 3 no subsistema do setor 1.
+
+## A Matriz de Fluxos Tecnológicos: Estrutura Padrão {.build}
+
+- Estrutura padrão (_standard-structure_): $H = \hat{r}\hat{x}^{-1}L$
+
+Neste caso, ao invés de olhar para a estrutura atual do sistema produtivo como em $H_a$, a Matriz de Fluxo Tecnológico é constituída a partir dos coeficientes técnicos de produção.
+
+$$
+H = \begin{pmatrix}
+\mathbf{h_{11}} & \dots & h_{1n}\\
+\vdots & \ddots & \vdots \\
+\mathbf{h_{n1}} & \dots  & h_{nn}
+\end{pmatrix}
+$$
+
+Isso permite que uma análise dos efeitos potenciais na Matriz de Fluxos Tecnológicos seja feita.
+
+
+
+## Análise da Estrutura Padrão: Gastos {.build}
+
+$\sum_i h_{ij}$: total gasto em P\&D de cada setor $i$
+
+$$
+He = \begin{pmatrix}
+h_{11} & \dots & h_{1n}\\
+\vdots & \ddots & \vdots \\
+h_{n1} & \dots  & h_{nn}
+\end{pmatrix}
+\begin{pmatrix} 1 \\ \vdots \\ 1 \end{pmatrix}
+$$
+
+
+$\sum_i(h_{ij}) - h_{ii}$: _Spillover_: total gasto em P\&D de cada setor $i$ em todo o sistema econômico, exceto os gastos no próprio subsistema $i$
+
+$$
+[H-H_{o}]e = \left[\begin{pmatrix}
+h_{11} & \dots & h_{1n}\\
+\vdots & \ddots & \vdots \\
+h_{n1} & \dots  & h_{nn}
+\end{pmatrix} -
+\begin{pmatrix}
+h_{11} & \dots & 0\\
+\vdots & \ddots & \vdots \\
+0 & \dots  & h_{nn}
+\end{pmatrix}
+\right]
+\begin{pmatrix} 1 \\ \vdots \\ 1 \end{pmatrix}
+$$
+
+## Análise da Estrutura Padrão: Absorção {.build}
+
+$\sum_j h_{ij}$: total de gastos em P\&D em todo o sistema econômico absorvido para cada setor $j$
+
+$$
+e'H = 
+\begin{pmatrix} 1 & \dots & 1 \end{pmatrix}
+\begin{pmatrix}
+h_{11} & \dots & h_{1n}\\
+\vdots & \ddots & \vdots \\
+h_{n1} & \dots  & h_{nn}
+\end{pmatrix}
+$$
+
+
+$\sum_i(h_{ij}) - h_{jj}$: total de gastos em P\&D em todo o sistema econômico para cada setor $j$, exceto os gastos no próprio subsistema $j$. 
+$$
+e'[H-H_{o}] = 
+\begin{pmatrix} 1 & \dots & 1 \end{pmatrix}
+\left[\begin{pmatrix}
+h_{11} & \dots & h_{1n}\\
+\vdots & \ddots & \vdots \\
+h_{n1} & \dots  & h_{nn}
+\end{pmatrix} -
+\begin{pmatrix}
+h_{11} & \dots & 0\\
+\vdots & \ddots & \vdots \\
+0 & \dots  & h_{nn}
+\end{pmatrix}
+\right]
+$$
+
+## Variação de Matrizes Tecnológicas
+
+As mesmas interpretações que foram feitas para a Matriz de Fluxos Tecnológicos gerada a partir da Inversa de Leontief pode ser feito para as matrizes de Consumo Intermediário, $A$, e Demanda de Capital, $B$. Assim, temos:
+
+$$
+M = \hat{r}\hat{x}^{-1}A\\
+K = \hat{r}\hat{x}^{-1}B
+$$
+
+## Limitações da interpretação {.build}
+
+ - **Todos** os gastos em P&D e outras atividades inovativas são supostos de serem incorporados em bens de consumo intermediário e bens de capital produzidos.
+
+ - A incorporação do gasto em P&D e outras atividades inovativas de um setor por outro é assumida de **forma completa e instantânea**.
+
+ - O modelo **não prevê** um transbordamento cuja dinâmica seja diferente daquela expressa no modelo insumo produto. Como por exemplo habilidades compartilhadas.
+
+Essas limitações estão ligadas a ideia das fontes de _spillover_: _Rent-spillover_ X _Knowledge-spillover_.
+
+
