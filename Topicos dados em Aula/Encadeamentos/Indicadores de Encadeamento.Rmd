@@ -85,6 +85,24 @@ L_total <- solve(diag(1,67,67)-An_total)
 
 # 3. Indicadores de Encadeamento para Trás e para Frente
 
+A partir desses dados podemos extrair informações relevantes acerca das relações intersetoriais e os setores com maiores multiplicadores. Em primeiro lugar, podemos extrair os indicadores de encadeamento para trás (backward linkages - bl), que indicam o impacto de uma variação na demanda final de um dado setor sobre os demais setores da economia (via demanda intermediária e/ou consumo induzido); e encadeamentos para frente (forward linkages - fl), indicando o quanto uma atividade é sensível a variações das demais atividades. Mais precisamente, os encadeamentos para trás seriam obtidos pela soma dos componentes de cada coluna da matriz de impacto, enquanto os encadeamentos para frente obtidos pela soma de cada linha da matriz de impacto:
+$bl=i'Ψ$	
+$fl=Ψi$		
+Onde i é um vetor de soma composto e Ψ é uma matriz de impacto arbitrária. Uma melhor forma de entender quão relevante é um setor para a economia é calcular os índices de poder de dispersão e sensibilidade de dispersão. Mas antes disso, necessita-se de duas medidas que indicam o impacto e a sensibilidade média de cada atividade. O primeiro são os backward e forward linkages médios, ou seja, os componentes do vetor bl e fl divididos pelo escalar (m) representando o número total de atividades (soma do número de atividades/setores:
+$\bar{bl}=bl(1/m)$
+$\bar{fl}=fl(1/m)$	
+A segunda medida necessária é a média total dos coeficientes da matriz de impacto, de forma a normalizar os encadeamentos médios. Os valores são obtidos mediante a soma de todos os coeficientes da Matriz de Impacto, divididos pelo número de atividades ao quadrado:
+$M_{tot}=i'Ψi(1/m^2)$		
+Em posse de ambas as medidas, os indicadores de poder de dispersão (pd) sensibilidade de dispersão (sd), razão de (9) e (10) por (11), de forma que:
+$pd=\bar{bl}/M_{tot}$		
+$sd=\bar{fl}/M_{tot}$
+Trata-se de uma medida normalizada de impacto, de forma a avaliar comparativamente os setores, e não para se obter uma medida absoluta de impacto. Para o poder de dispersão, valores maiores do que a unidade (bl>1) representam setores chave que apresentam impacto sobre os demais setores superior ao impacto médio total e vice-versa. Já para a sensibilidade de dispersão, valores maiores que a unidade (sd>1) representam setores que respondem a variações em outros setores em uma magnitude maior que a média da economia, e vice-versa.
+
+
+
+
+
+
 ## 3.1 Efeitos Diretos
 
 O primeiro indicador é o apresentado por Chenery e Watanabe (1958)
