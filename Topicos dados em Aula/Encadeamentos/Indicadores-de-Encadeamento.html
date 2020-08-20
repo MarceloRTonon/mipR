@@ -377,140 +377,2018 @@ summary {
 <h2>Leitura dos Dados</h2>
 <pre class="r"><code># Pacotes
 library(readxl)
-library(purrr)</code></pre>
-<pre><code>## Warning: package &#39;purrr&#39; was built under R version 3.6.3</code></pre>
-<pre class="r"><code># Dados
+library(purrr)
+library(formattable)</code></pre>
+<p>Antes da leitura dos dados, mostraremos novamente a forma de fazer o download automático da matriz. Caso já tenha o arquivo no diretório e não queira refazer o download, é necessário apenas fazer a leitura do comando para o nome do arquivo:</p>
+<pre class="r"><code>#download.file(&quot;ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;, destfile = &quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;, mode = &quot;wb&quot;)
 
-MIP_2015 &lt;- &quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;
-
-# Vetores com os nomes das atividades e dos produtos
-nomes_produtos &lt;- read_xls(MIP_2015, sheet=&#39;01&#39;, range=&#39;B6:B132&#39;,col_names = &#39;Prod_nome&#39;) %&gt;% as.character()
+MIP_2015 &lt;- &quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;</code></pre>
+<p>Realizando agora leitura dos dados obtidos diretamente da matriz de insumo-produto do IBGE:</p>
+<pre class="r"><code># Vetores com os nomes das atividades e dos produtos
+nomes_produtos &lt;- read_xls(MIP_2015, sheet=&#39;01&#39;, range=&#39;B6:B132&#39;,col_names = &#39;Prod_nome&#39;) %&gt;% t() %&gt;% as.character()
 nomes_atividades &lt;- read_xls(MIP_2015, sheet=&#39;13&#39;, range=&#39;B6:B72&#39;,col_names = &#39;Ativ_nome&#39;) %&gt;% t() %&gt;% as.character()
 
-# Informações
+# Informações da MIP
 An &lt;- read_xls(MIP_2015, sheet = &#39;14&#39;, range=&#39;c6:bq72&#39;, col_names = nomes_atividades)
 L &lt;-  read_xls(MIP_2015, sheet = &#39;15&#39;, range=&#39;c6:bq72&#39;, col_names = nomes_atividades)
-DF_127 &lt;- read_xls(MIP_2015, sheet = &#39;03&#39;, range=&#39;r6:w132&#39;,col_names = F)</code></pre>
-<pre><code>## New names:
-## * `` -&gt; ...1
-## * `` -&gt; ...2
-## * `` -&gt; ...3
-## * `` -&gt; ...4
-## * `` -&gt; ...5
-## * ...</code></pre>
-<pre class="r"><code>MS &lt;- read_xls(MIP_2015, sheet = &#39;13&#39;, range=&#39;c6:dy72&#39;, col_names = F)</code></pre>
-<pre><code>## New names:
-## * `` -&gt; ...1
-## * `` -&gt; ...2
-## * `` -&gt; ...3
-## * `` -&gt; ...4
-## * `` -&gt; ...5
-## * ...</code></pre>
+DF_127 &lt;- read_xls(MIP_2015, sheet = &#39;03&#39;, range=&#39;BT4:BY132&#39;) %&gt;% na.omit()
+MS &lt;- read_xls(MIP_2015, sheet = &#39;13&#39;, range=&#39;c6:dy72&#39;, col_names = nomes_produtos)
+x &lt;- as.matrix(t(read_xls(MIP_2015, sheet=&#39;01&#39;, range=&#39;H134:BV134&#39;, col_names = nomes_atividades)))</code></pre>
+<p>Além da MIP são necessárias informações da Tabela de Recursos e Usos para realizar todas as tarefas que serão apresentadas aqui. A obtenção de forma automatizada dessa parte envolveria um conhecimento que será discutido no tópico 5 das monitorias, mas ainda não apresentado.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <pre class="r"><code># VA TRU 2015
+nomes_va &lt;- read_xls(&quot;68_tab2_2015.xls&quot;, sheet=&#39;VA&#39;, range=&#39;A6:A19&#39;,col_names = &quot;TRU&quot;) %&gt;% t() %&gt;% as.character()
 TRU_2015 &lt;- read_xls(&quot;68_tab2_2015.xls&quot;, sheet=&#39;VA&#39;, range=&#39;B4:BQ19&#39;) %&gt;% as.data.frame() %&gt;% na.omit()
+rownames(TRU_2015) &lt;- nomes_va
+# Soma do Comercio Varejo e Atacado
 Comercio &lt;- TRU_2015[,42]+TRU_2015[,43]
 TRU_2015[,42] &lt;- Comercio
 TRU_2015[,43] &lt;- NULL</code></pre>
 </div>
 </div>
-<div id="endogeneizando-o-consumo" class="section level1">
-<h1>2. Endogeneizando o Consumo</h1>
-<p>Vamos aqui criar a matriz de coeficientes do consumo, confome realizado em Freitas e Dweck (2010) e inspirado em Myiazawa (1976). Vamos aqui para simplificar a análise e também apresentar uma situação semelhante à encontrada em Miller e Blair (????), na qual todo o consumo das famílias é assumido como endógeno<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<pre class="r"><code># coeficientes técnicos referentes a produçao das famílias
-
-hr &lt;- TRU_2015[3,]/TRU_2015[13,]
-
-# coeficientes referentes ao consumo das famílias
-
-hc &lt;- t(DF_127[,4])/(rep(rowSums(TRU_2015[3,]),127))
-
-
-#matriz de coeficientes técnicos de consumo
-
-Bcon &lt;- t(as.matrix(hc))%*%as.matrix(hr)
-
-#matriz de coeficientes técnicos de consumo intersetoriais
-
-Acon &lt;- as.matrix(MS)%*%Bcon
-
-# matriz de coeficientes técnicos intersetoriais completa
-
-An_total &lt;- An+Acon
-
-# Inversa de leontief com Consumo Induzido
-
-L_total &lt;- solve(diag(1,67,67)-An_total)</code></pre>
-</div>
 <div id="indicadores-de-encadeamento-para-trás-e-para-frente" class="section level1">
-<h1>3. Indicadores de Encadeamento para Trás e para Frente</h1>
-<p>A partir desses dados podemos extrair informações relevantes acerca das relações intersetoriais e os setores com maiores multiplicadores. Em primeiro lugar, podemos extrair os indicadores de encadeamento para trás (backward linkages - bl), que indicam o impacto de uma variação na demanda final de um dado setor sobre os demais setores da economia (via demanda intermediária e/ou consumo induzido); e encadeamentos para frente (forward linkages - fl), indicando o quanto uma atividade é sensível a variações das demais atividades. Mais precisamente, os encadeamentos para trás seriam obtidos pela soma dos componentes de cada coluna da matriz de impacto, enquanto os encadeamentos para frente obtidos pela soma de cada linha da matriz de impacto: <span class="math inline">\(bl=i&#39;Ψ\)</span><br />
-<span class="math inline">\(fl=Ψi\)</span><br />
-Onde i é um vetor de soma composto e Ψ é uma matriz de impacto arbitrária. Uma melhor forma de entender quão relevante é um setor para a economia é calcular os índices de poder de dispersão e sensibilidade de dispersão. Mas antes disso, necessita-se de duas medidas que indicam o impacto e a sensibilidade média de cada atividade. O primeiro são os backward e forward linkages médios, ou seja, os componentes do vetor bl e fl divididos pelo escalar (m) representando o número total de atividades (soma do número de atividades/setores: <span class="math inline">\(\bar{bl}=bl(1/m)\)</span> <span class="math inline">\(\bar{fl}=fl(1/m)\)</span><br />
-A segunda medida necessária é a média total dos coeficientes da matriz de impacto, de forma a normalizar os encadeamentos médios. Os valores são obtidos mediante a soma de todos os coeficientes da Matriz de Impacto, divididos pelo número de atividades ao quadrado: <span class="math inline">\(M_{tot}=i&#39;Ψi(1/m^2)\)</span><br />
-Em posse de ambas as medidas, os indicadores de poder de dispersão (pd) sensibilidade de dispersão (sd), razão de (9) e (10) por (11), de forma que: <span class="math inline">\(pd=\bar{bl}/M_{tot}\)</span><br />
-<span class="math inline">\(sd=\bar{fl}/M_{tot}\)</span> Trata-se de uma medida normalizada de impacto, de forma a avaliar comparativamente os setores, e não para se obter uma medida absoluta de impacto. Para o poder de dispersão, valores maiores do que a unidade (bl&gt;1) representam setores chave que apresentam impacto sobre os demais setores superior ao impacto médio total e vice-versa. Já para a sensibilidade de dispersão, valores maiores que a unidade (sd&gt;1) representam setores que respondem a variações em outros setores em uma magnitude maior que a média da economia, e vice-versa.</p>
+<h1>2. Indicadores de Encadeamento para Trás e para Frente</h1>
+<p>A partir desses dados podemos extrair informações relevantes acerca das relações intersetoriais e os setores com maiores impactos. Em primeiro lugar, podemos extrair os indicadores de encadeamento para trás (backward linkages - bl), que indicam o impacto de uma variação na demanda final de um dado setor sobre os demais setores da economia (via demanda intermediária); e encadeamentos para frente (forward linkages - fl), indicando o quanto uma atividade é sensível a variações das demais atividades.</p>
 <div id="efeitos-diretos" class="section level2">
-<h2>3.1 Efeitos Diretos</h2>
-<p>O primeiro indicador é o apresentado por Chenery e Watanabe (1958)</p>
-<pre class="r"><code>C_W_BL &lt;- colSums(An)</code></pre>
-<pre class="r"><code>C_W_FL &lt;- rowSums(An)</code></pre>
+<h2>2.1 Efeitos Diretos</h2>
+<p>O primeiro indicador é o apresentado por Chenery e Watanabe (1958), que capta os impactos diretos de um setor, sem levar em conta a difusão que esse impacto pode ter para outros setores que não estão diretamente ligados ao setor na cadeia. Ele é calculado pela soma nas colunas da matriz de coeficientes técnicos (An) em sua versão de encadeamentos para trás (<span class="math inline">\(b\)</span>) e pela soma das linhas para avaliar os encadeamentos para frente (<span class="math inline">\(f\)</span>). Matricialmente teríamos: <span class="math display">\[ b=i&#39;A_n\]</span> <span class="math display">\[f=A_ni\]</span> Isso poderia ser calculado no R da seguinte forma:</p>
+<pre class="r"><code># Encadeamentos diretos para trás
+b &lt;- colSums(An)
+
+# Encadeamentos diretos para frente
+f &lt;- rowSums(An)</code></pre>
 </div>
 <div id="efeitos-diretos-e-indiretos" class="section level2">
-<h2>3.2 Efeitos Diretos e Indiretos</h2>
-<pre class="r"><code>BL &lt;- as.data.frame(colSums(L))
-names(BL) &lt;- &#39;Backward Linkages&#39;</code></pre>
-<pre class="r"><code>FL &lt;- as.data.frame(rowSums(L))
-names(FL) &lt;- &#39;Forward Linkages&#39;</code></pre>
-<pre class="r"><code>BL_ind &lt;- BL - C_W_BL</code></pre>
-<pre class="r"><code>FL_ind &lt;- FL - C_W_FL</code></pre>
-</div>
-<div id="efeitos-diretos-indireto-e-induzidos" class="section level2">
-<h2>3.3 Efeitos Diretos, Indireto e Induzidos</h2>
-<pre class="r"><code>BL_tot &lt;- as.data.frame(colSums(L_total))
-names(BL_tot) &lt;- &#39;Backward Linkages Total&#39;</code></pre>
-<pre class="r"><code>FL_tot &lt;- as.data.frame(rowSums(L_total))
-names(FL_tot) &lt;- &#39;Forward Linkages Total&#39;</code></pre>
+<h2>2.2 Efeitos Diretos e Indiretos</h2>
+<p>Mais precisamente, os encadeamentos para trás seriam obtidos pela soma dos componentes de cada coluna da matriz de impacto, enquanto os encadeamentos para frente obtidos pela soma de cada linha da matriz de impacto. Usando a notação de Miller e Blair (2009), temos que a matriz de impacto é tal que: <span class="math display">\[L=(I-A_n)^{-1}\]</span> Esta versão de indicador de encadeamentos para trás e de encadeamentos para frente é baseado em Rasmussen (1957), e seria capaz de captar tanto os efeitos diretos, quanto os efeitos indiretos - i.e. os efeitos sobre a cadeia produtiva dos setores que foram impactados diretamente na cadeia produtiva do setor estimulado. No caso, teríamos os backward linkages <span class="math display">\[bl=i&#39;L\]</span> <span class="math display">\[fl=Li\]</span><br />
+Onde i é um vetor de soma composto por números 1 e Z é uma matriz de impacto arbitrária.</p>
+<pre class="r"><code>bl &lt;- as.data.frame(colSums(L))
+names(bl) &lt;- &#39;Backward Linkages&#39;</code></pre>
+<pre class="r"><code>fl &lt;- as.data.frame(rowSums(L))
+names(fl) &lt;- &#39;Forward Linkages&#39;</code></pre>
+<p>Se quisermos isolar os efeitos indiretos, basta realizar a substração entre os indicadores com efeitos diretos e indiretos (<span class="math inline">\(bl\)</span> e <span class="math inline">\(fl\)</span>) e o que capta somente o efeito direto (<span class="math inline">\(b\)</span> e <span class="math inline">\(f\)</span>):</p>
+<pre class="r"><code>bl_ind &lt;- bl - b</code></pre>
+<pre class="r"><code>fl_ind &lt;- fl - f</code></pre>
 </div>
 <div id="síntese-dos-resultados" class="section level2">
-<h2>3.4 Síntese dos Resultados</h2>
+<h2>2.3 Síntese dos Resultados</h2>
+<p>Vamos agora reunir os resultados para os dois tipos de indicadores apresentados: i) Diretos e ii) Diretos + Indiretos.</p>
+<pre class="r"><code>sintese &lt;- data.frame(b,bl,f,fl)
+names(sintese) &lt;- c(&quot;b&quot;, &quot;bl&quot;,&quot;f&quot;,&quot;fl&quot;)</code></pre>
+<p>Vamos então visualizar os resultados e quais são os setores-chave da economia de acordo com cada indicador:</p>
+<pre class="r"><code>formattable(sintese, list(
+  b = formatter(&quot;span&quot;, style = x ~ style(color = ifelse(rank(-x) &lt;= 5, &quot;green&quot;, &quot;gray&quot;)), x ~ sprintf(&quot;%.2f (rank: %02g)&quot;, x, rank(-x))), 
+  bl = formatter(&quot;span&quot;, style = x ~ style(color = ifelse(rank(-x) &lt;= 5, &quot;green&quot;, &quot;gray&quot;)), x ~ sprintf(&quot;%.2f (rank: %02g)&quot;, x, rank(-x))),
+  f = formatter(&quot;span&quot;, style = x ~ style(color = ifelse(rank(-x) &lt;= 5, &quot;green&quot;, &quot;gray&quot;)), x ~ sprintf(&quot;%.2f (rank: %02g)&quot;, x, rank(-x))), 
+  fl = formatter(&quot;span&quot;, style = x ~ style(color = ifelse(rank(-x) &lt;= 5, &quot;green&quot;, &quot;gray&quot;)), x ~ sprintf(&quot;%.2f (rank: %02g)&quot;, x, rank(-x)))))</code></pre>
+<table class="table table-condensed">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+b
+</th>
+<th style="text-align:right;">
+bl
+</th>
+<th style="text-align:right;">
+f
+</th>
+<th style="text-align:right;">
+fl
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Agricultura, inclusive o apoio à agricultura e a pós-colheita
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.37 (rank: 49)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.72 (rank: 43)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">1.77 (rank: 02)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">3.43 (rank: 06)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pecuária, inclusive o apoio à pecuária
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.41 (rank: 44)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.80 (rank: 37)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.44 (rank: 22)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.64 (rank: 27)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Produção florestal; pesca e aquicultura
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.20 (rank: 63)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.36 (rank: 63)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.22 (rank: 38)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.34 (rank: 38)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Extração de carvão mineral e de minerais não metálicos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.44 (rank: 36)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.83 (rank: 32)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.13 (rank: 48)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.23 (rank: 49)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Extração de petróleo e gás, inclusive as atividades de apoio
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.41 (rank: 41)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.71 (rank: 45)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.37 (rank: 27)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.56 (rank: 09)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Extração de minério de ferro, inclusive beneficiamentos e a aglomeração
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.44 (rank: 37)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.79 (rank: 38)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.08 (rank: 59)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.15 (rank: 57)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Extração de minerais metálicos não ferrosos, inclusive beneficiamentos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.56 (rank: 17)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.05 (rank: 17)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.13 (rank: 49)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.20 (rank: 51)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Abate e produtos de carne, inclusive os produtos do laticínio e da pesca
+</td>
+<td style="text-align:right;">
+<span style="color: green">0.79 (rank: 02)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">2.51 (rank: 01)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.34 (rank: 30)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.44 (rank: 33)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação e refino de açúcar
+</td>
+<td style="text-align:right;">
+<span style="color: green">0.80 (rank: 01)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">2.41 (rank: 03)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.12 (rank: 52)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.24 (rank: 47)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Outros produtos alimentares
+</td>
+<td style="text-align:right;">
+<span style="color: green">0.73 (rank: 04)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">2.36 (rank: 05)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.50 (rank: 19)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.80 (rank: 22)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de bebidas
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.63 (rank: 07)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.22 (rank: 06)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.26 (rank: 34)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.34 (rank: 39)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos do fumo
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.68 (rank: 06)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.18 (rank: 09)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.05 (rank: 64)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.05 (rank: 64)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos têxteis
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.55 (rank: 19)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.02 (rank: 19)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.53 (rank: 17)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.73 (rank: 23)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Confecção de artefatos do vestuário e acessórios
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.47 (rank: 31)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.86 (rank: 29)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.10 (rank: 56)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.13 (rank: 58)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de calçados e de artefatos de couro
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.56 (rank: 18)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.10 (rank: 13)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.14 (rank: 47)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.17 (rank: 54)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos da madeira
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.54 (rank: 22)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.96 (rank: 26)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.23 (rank: 37)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.33 (rank: 40)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de celulose, papel e produtos de papel
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.57 (rank: 15)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.03 (rank: 18)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.53 (rank: 18)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.82 (rank: 19)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Impressão e reprodução de gravações
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.46 (rank: 32)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.83 (rank: 33)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.21 (rank: 39)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.34 (rank: 37)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Refino de petróleo e coquerias
+</td>
+<td style="text-align:right;">
+<span style="color: green">0.70 (rank: 05)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">2.48 (rank: 02)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">1.44 (rank: 05)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">5.02 (rank: 02)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de biocombustíveis
+</td>
+<td style="text-align:right;">
+<span style="color: green">0.76 (rank: 03)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">2.38 (rank: 04)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.11 (rank: 53)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.31 (rank: 42)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de químicos orgânicos e inorgânicos, resinas e elastômeros
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.53 (rank: 24)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.01 (rank: 21)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.06 (rank: 08)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">3.30 (rank: 08)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de defensivos, desinfestantes, tintas e químicos diversos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.54 (rank: 23)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.00 (rank: 22)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.56 (rank: 14)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.03 (rank: 14)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos de limpeza, cosméticos/perfumaria e higiene pessoal
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.61 (rank: 10)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.19 (rank: 07)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.09 (rank: 57)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.16 (rank: 55)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos farmoquímicos e farmacêuticos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.45 (rank: 33)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.77 (rank: 39)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.09 (rank: 58)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.13 (rank: 60)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos de borracha e de material plástico
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.55 (rank: 21)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.02 (rank: 20)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.69 (rank: 11)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.17 (rank: 13)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos de minerais não metálicos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.59 (rank: 12)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.11 (rank: 12)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.33 (rank: 32)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.54 (rank: 30)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Produção de ferro gusa/ferroligas, siderurgia e tubos de aço sem costura
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.63 (rank: 09)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.15 (rank: 10)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.55 (rank: 15)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.92 (rank: 17)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Metalurgia de metais não ferosos e a fundição de metais
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.60 (rank: 11)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.13 (rank: 11)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.39 (rank: 25)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.63 (rank: 28)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos de metal, exceto máquinas e equipamentos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.51 (rank: 25)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.97 (rank: 25)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.53 (rank: 16)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.86 (rank: 18)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de equipamentos de informática, produtos eletrônicos e ópticos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.40 (rank: 45)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.68 (rank: 47)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.17 (rank: 43)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.25 (rank: 46)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de máquinas e equipamentos elétricos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.57 (rank: 14)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.07 (rank: 16)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.25 (rank: 35)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.44 (rank: 34)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de máquinas e equipamentos mecânicos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.49 (rank: 28)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.88 (rank: 28)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.33 (rank: 31)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.54 (rank: 31)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de automóveis, caminhões e ônibus, exceto peças
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.63 (rank: 08)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.18 (rank: 08)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.06 (rank: 63)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.08 (rank: 63)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de peças e acessórios para veículos automotores
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.57 (rank: 16)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.08 (rank: 15)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.33 (rank: 33)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.52 (rank: 32)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de outros equipamentos de transporte, exceto veículos automotores
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.50 (rank: 26)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.92 (rank: 27)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.16 (rank: 44)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.21 (rank: 50)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de móveis e de produtos de indústrias diversas
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.44 (rank: 34)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.82 (rank: 34)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.13 (rank: 51)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.17 (rank: 53)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Manutenção, reparação e instalação de máquinas e equipamentos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.41 (rank: 43)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.75 (rank: 40)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.63 (rank: 13)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.00 (rank: 15)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Energia elétrica, gás natural e outras utilidades
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.55 (rank: 20)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.09 (rank: 14)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.15 (rank: 07)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">3.66 (rank: 05)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Água, esgoto e gestão de resíduos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.32 (rank: 51)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.58 (rank: 51)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.24 (rank: 36)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.42 (rank: 35)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Construção
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.43 (rank: 39)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.80 (rank: 36)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.40 (rank: 24)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.65 (rank: 26)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Comércio por atacado e varejo
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.32 (rank: 53)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.54 (rank: 52)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">3.59 (rank: 01)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">6.96 (rank: 01)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transporte terrestre
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.48 (rank: 29)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.99 (rank: 24)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">1.73 (rank: 03)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">4.25 (rank: 03)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transporte aquaviário
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.41 (rank: 40)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.72 (rank: 44)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.13 (rank: 50)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.24 (rank: 48)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transporte aéreo
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.47 (rank: 30)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.86 (rank: 30)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.15 (rank: 45)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.26 (rank: 45)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Armazenamento, atividades auxiliares dos transportes e correio
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.36 (rank: 50)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.59 (rank: 50)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.75 (rank: 10)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.27 (rank: 11)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alojamento
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.39 (rank: 46)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.70 (rank: 46)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.08 (rank: 60)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.13 (rank: 59)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alimentação
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.41 (rank: 42)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.83 (rank: 31)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.20 (rank: 41)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.29 (rank: 43)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Edição e edição integrada à impressão
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.43 (rank: 38)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.73 (rank: 41)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.06 (rank: 62)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.11 (rank: 61)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atividades de televisão, rádio, cinema e gravação/edição de som e imagem
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.44 (rank: 35)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.72 (rank: 42)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.47 (rank: 20)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.00 (rank: 16)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Telecomunicações
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.50 (rank: 27)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.81 (rank: 35)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.45 (rank: 21)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.82 (rank: 20)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Desenvolvimento de sistemas e outros serviços de informação
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.24 (rank: 60)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.38 (rank: 62)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.34 (rank: 29)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.67 (rank: 24)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Intermediação financeira, seguros e previdência complementar
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.32 (rank: 54)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.49 (rank: 54)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">1.48 (rank: 04)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">3.91 (rank: 04)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atividades imobiliárias
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.07 (rank: 66)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.11 (rank: 66)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.41 (rank: 23)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.81 (rank: 21)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atividades jurídicas, contábeis, consultoria e sedes de empresas
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.27 (rank: 57)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.42 (rank: 57)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.24 (rank: 06)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">3.32 (rank: 07)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Serviços de arquitetura, engenharia, testes/análises técnicas e P &amp; D
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.28 (rank: 56)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.44 (rank: 56)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.37 (rank: 26)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.65 (rank: 25)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Outras atividades profissionais, científicas e técnicas
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.59 (rank: 13)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.99 (rank: 23)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.67 (rank: 12)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.17 (rank: 12)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aluguéis não imobiliários e gestão de ativos de propriedade intelectual
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.25 (rank: 59)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.42 (rank: 58)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.35 (rank: 28)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.58 (rank: 29)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Outras atividades administrativas e serviços complementares
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.23 (rank: 62)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.39 (rank: 61)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.86 (rank: 09)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">2.54 (rank: 10)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atividades de vigilância, segurança e investigação
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.14 (rank: 65)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.22 (rank: 65)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.20 (rank: 40)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.39 (rank: 36)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Administração pública, defesa e seguridade social
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.26 (rank: 58)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.41 (rank: 59)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.18 (rank: 42)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.32 (rank: 41)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Educação pública
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.15 (rank: 64)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.24 (rank: 64)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.02 (rank: 65)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.03 (rank: 65)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Educação privada
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.24 (rank: 61)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.39 (rank: 60)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.07 (rank: 61)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.15 (rank: 56)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saúde pública
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.28 (rank: 55)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.46 (rank: 55)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.00 (rank: 66)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.00 (rank: 66)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saúde privada
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.32 (rank: 52)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.53 (rank: 53)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.10 (rank: 55)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.11 (rank: 62)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atividades artísticas, criativas e de espetáculos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.38 (rank: 48)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.59 (rank: 49)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.11 (rank: 54)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.18 (rank: 52)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Organizações associativas e outros serviços pessoais
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.39 (rank: 47)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.66 (rank: 48)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.15 (rank: 46)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.27 (rank: 44)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Serviços domésticos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.00 (rank: 67)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.00 (rank: 67)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.00 (rank: 67)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.00 (rank: 67)</span>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="indicadores-normalizados" class="section level1">
-<h1>4. Indicadores Normalizados</h1>
-<pre class="r"><code># Indicadores de Poder e Sensibilidade de Dispersão - matriz simples
+<h1>3. Indicadores Normalizados</h1>
+<p>Conforme Nassif, Teixeira e Rocha (2015), Freitas e Dweck (2010) e Miller e Blair (2009), uma melhor forma de entender quão relevante é um setor para a economia é calcular os índices de poder de dispersão e sensibilidade de dispersão. Mas antes disso, necessita-se de duas medidas que indicam o impacto e a sensibilidade média de cada atividade. O primeiro são os backward e forward linkages médios, ou seja, os componentes do vetor bl e fl divididos pelo escalar (m) representando o número total de atividades (soma do número de atividades/setores: <span class="math display">\[\bar{bl}=bl(1/m)\]</span> <span class="math display">\[\bar{fl}=fl(1/m)\]</span> A segunda medida necessária é a média total dos coeficientes da matriz de impacto, de forma a normalizar os encadeamentos médios. Os valores são obtidos mediante a soma de todos os coeficientes da Matriz de Impacto, divididos pelo número de atividades ao quadrado: <span class="math display">\[M_{tot}=i&#39;Li(1/m^2)\]</span><br />
+Em posse de ambas as medidas, os indicadores de poder de dispersão (pd) sensibilidade de dispersão (sd) de forma que: <span class="math display">\[pd=\bar{bl}/M_{tot}\]</span> <span class="math display">\[sd=\bar{fl}/M_{tot}\]</span> Trata-se de uma medida normalizada de impacto, de forma a avaliar comparativamente os setores, e não para se obter uma medida absoluta de impacto. Para o poder de dispersão, valores maiores do que a unidade (bl&gt;1) representam setores chave que apresentam impacto sobre os demais setores superior ao impacto médio total e vice-versa. Já para a sensibilidade de dispersão, valores maiores que a unidade (sd&gt;1) representam setores que respondem a variações em outros setores em uma magnitude maior que a média da economia, e vice-versa.</p>
+<p>No R, estes indicadores são facilmente obtidos:</p>
+<pre class="r"><code># Indicadores de Poder e Sensibilidade de Dispersão
 
-BL_medio &lt;- BL/67
-FL_medio &lt;- FL/67
+bl_medio &lt;- bl/67
+fl_medio &lt;- fl/67
 M_tot &lt;- as.data.frame(sum(L)/(67^2))
-M_tot_aux &lt;- rep.row(as.matrix(M_tot),67)
 
-pd &lt;- BL_medio/M_tot_aux
-sd &lt;- FL_medio/M_tot_aux
+pd &lt;- bl_medio/as.numeric(M_tot)
+sd &lt;- fl_medio/as.numeric(M_tot)</code></pre>
+<p>Criando uma tabela reunindo os valores e ordenando os setores:</p>
+<pre class="r"><code>#reunindo os dados
+sintese_norm &lt;- data.frame(pd,sd)
+names(sintese_norm) &lt;- c(&quot;pd&quot;, &quot;sd&quot;)
 
-
-# Indicadores de Poder e Sensibilidade de Dispersão - matriz induzida
-
-BL_tot_medio &lt;- BL_tot/67
-FL_tot_medio &lt;- FL_tot/67
-M_ind_tot &lt;- as.data.frame(sum(L_total)/(67^2))
-M_ind_tot_aux &lt;- rep.row(as.matrix(M_ind_tot),67)
-
-pd_tot &lt;- BL_tot_medio/M_ind_tot_aux
-sd_tot &lt;- FL_tot_medio/M_ind_tot_aux</code></pre>
-<div id="poder-de-dispersão" class="section level2">
-<h2>4.1 Poder de Dispersão</h2>
-</div>
-<div id="sensibilidade-de-dispersão" class="section level2">
-<h2>4.2 Sensibilidade de Dispersão</h2>
-</div>
+# Gerando a tabela
+formattable(sintese_norm, list(
+  pd = formatter(&quot;span&quot;, style = x ~ style(color = ifelse(rank(-x) &lt;= 5, &quot;green&quot;, &quot;gray&quot;)), x ~ sprintf(&quot;%.2f (rank: %02g)&quot;, x, rank(-x))), 
+  sd = formatter(&quot;span&quot;, style = x ~ style(color = ifelse(rank(-x) &lt;= 5, &quot;green&quot;, &quot;gray&quot;)), x ~ sprintf(&quot;%.2f (ordem: %02g)&quot;, x, rank(-x)))))</code></pre>
+<table class="table table-condensed">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+pd
+</th>
+<th style="text-align:right;">
+sd
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Agricultura, inclusive o apoio à agricultura e a pós-colheita
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.95 (rank: 43)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.89 (ordem: 06)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pecuária, inclusive o apoio à pecuária
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.99 (rank: 37)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.90 (ordem: 27)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Produção florestal; pesca e aquicultura
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.75 (rank: 63)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.74 (ordem: 38)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Extração de carvão mineral e de minerais não metálicos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.01 (rank: 32)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.68 (ordem: 49)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Extração de petróleo e gás, inclusive as atividades de apoio
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.94 (rank: 45)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.41 (ordem: 09)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Extração de minério de ferro, inclusive beneficiamentos e a aglomeração
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.99 (rank: 38)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.64 (ordem: 57)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Extração de minerais metálicos não ferrosos, inclusive beneficiamentos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.13 (rank: 17)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.66 (ordem: 51)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Abate e produtos de carne, inclusive os produtos do laticínio e da pesca
+</td>
+<td style="text-align:right;">
+<span style="color: green">1.39 (rank: 01)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.80 (ordem: 33)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação e refino de açúcar
+</td>
+<td style="text-align:right;">
+<span style="color: green">1.33 (rank: 03)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.69 (ordem: 47)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Outros produtos alimentares
+</td>
+<td style="text-align:right;">
+<span style="color: green">1.30 (rank: 05)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.99 (ordem: 22)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de bebidas
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.23 (rank: 06)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.74 (ordem: 39)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos do fumo
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.20 (rank: 09)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.58 (ordem: 64)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos têxteis
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.12 (rank: 19)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.96 (ordem: 23)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Confecção de artefatos do vestuário e acessórios
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.03 (rank: 29)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.63 (ordem: 58)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de calçados e de artefatos de couro
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.16 (rank: 13)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.65 (ordem: 54)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos da madeira
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.08 (rank: 26)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.73 (ordem: 40)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de celulose, papel e produtos de papel
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.12 (rank: 18)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.00 (ordem: 19)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Impressão e reprodução de gravações
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.01 (rank: 33)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.74 (ordem: 37)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Refino de petróleo e coquerias
+</td>
+<td style="text-align:right;">
+<span style="color: green">1.37 (rank: 02)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">2.77 (ordem: 02)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de biocombustíveis
+</td>
+<td style="text-align:right;">
+<span style="color: green">1.31 (rank: 04)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.72 (ordem: 42)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de químicos orgânicos e inorgânicos, resinas e elastômeros
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.11 (rank: 21)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.82 (ordem: 08)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de defensivos, desinfestantes, tintas e químicos diversos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.10 (rank: 22)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.12 (ordem: 14)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos de limpeza, cosméticos/perfumaria e higiene pessoal
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.21 (rank: 07)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.64 (ordem: 55)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos farmoquímicos e farmacêuticos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.97 (rank: 39)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.62 (ordem: 60)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos de borracha e de material plástico
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.12 (rank: 20)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.20 (ordem: 13)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos de minerais não metálicos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.17 (rank: 12)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.85 (ordem: 30)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Produção de ferro gusa/ferroligas, siderurgia e tubos de aço sem costura
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.19 (rank: 10)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.06 (ordem: 17)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Metalurgia de metais não ferosos e a fundição de metais
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.17 (rank: 11)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.90 (ordem: 28)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de produtos de metal, exceto máquinas e equipamentos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.09 (rank: 25)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.03 (ordem: 18)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de equipamentos de informática, produtos eletrônicos e ópticos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.93 (rank: 47)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.69 (ordem: 46)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de máquinas e equipamentos elétricos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.14 (rank: 16)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.79 (ordem: 34)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de máquinas e equipamentos mecânicos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.03 (rank: 28)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.85 (ordem: 31)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de automóveis, caminhões e ônibus, exceto peças
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.20 (rank: 08)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.60 (ordem: 63)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de peças e acessórios para veículos automotores
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.15 (rank: 15)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.84 (ordem: 32)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de outros equipamentos de transporte, exceto veículos automotores
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.06 (rank: 27)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.67 (ordem: 50)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fabricação de móveis e de produtos de indústrias diversas
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.00 (rank: 34)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.65 (ordem: 53)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Manutenção, reparação e instalação de máquinas e equipamentos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.97 (rank: 40)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.11 (ordem: 15)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Energia elétrica, gás natural e outras utilidades
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.15 (rank: 14)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">2.02 (ordem: 05)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Água, esgoto e gestão de resíduos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.87 (rank: 51)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.78 (ordem: 35)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Construção
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.99 (rank: 36)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.91 (ordem: 26)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Comércio por atacado e varejo
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.85 (rank: 52)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">3.84 (ordem: 01)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transporte terrestre
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.10 (rank: 24)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">2.35 (ordem: 03)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transporte aquaviário
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.95 (rank: 44)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.68 (ordem: 48)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transporte aéreo
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.03 (rank: 30)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.70 (ordem: 45)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Armazenamento, atividades auxiliares dos transportes e correio
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.88 (rank: 50)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.25 (ordem: 11)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alojamento
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.94 (rank: 46)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.62 (ordem: 59)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alimentação
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.01 (rank: 31)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.71 (ordem: 43)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Edição e edição integrada à impressão
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.96 (rank: 41)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.61 (ordem: 61)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atividades de televisão, rádio, cinema e gravação/edição de som e imagem
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.95 (rank: 42)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.10 (ordem: 16)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Telecomunicações
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.00 (rank: 35)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.00 (ordem: 20)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Desenvolvimento de sistemas e outros serviços de informação
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.76 (rank: 62)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.92 (ordem: 24)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Intermediação financeira, seguros e previdência complementar
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.82 (rank: 54)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: green">2.16 (ordem: 04)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atividades imobiliárias
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.61 (rank: 66)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.00 (ordem: 21)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atividades jurídicas, contábeis, consultoria e sedes de empresas
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.79 (rank: 57)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.83 (ordem: 07)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Serviços de arquitetura, engenharia, testes/análises técnicas e P &amp; D
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.79 (rank: 56)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.91 (ordem: 25)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Outras atividades profissionais, científicas e técnicas
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.10 (rank: 23)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.20 (ordem: 12)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aluguéis não imobiliários e gestão de ativos de propriedade intelectual
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.78 (rank: 58)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.87 (ordem: 29)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Outras atividades administrativas e serviços complementares
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.77 (rank: 61)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">1.40 (ordem: 10)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atividades de vigilância, segurança e investigação
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.67 (rank: 65)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.77 (ordem: 36)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Administração pública, defesa e seguridade social
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.78 (rank: 59)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.73 (ordem: 41)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Educação pública
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.69 (rank: 64)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.57 (ordem: 65)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Educação privada
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.77 (rank: 60)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.64 (ordem: 56)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saúde pública
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.81 (rank: 55)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.55 (ordem: 66)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saúde privada
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.84 (rank: 53)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.61 (ordem: 62)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atividades artísticas, criativas e de espetáculos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.88 (rank: 49)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.65 (ordem: 52)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Organizações associativas e outros serviços pessoais
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.92 (rank: 48)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.70 (ordem: 44)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Serviços domésticos
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.55 (rank: 67)</span>
+</td>
+<td style="text-align:right;">
+<span style="color: gray">0.55 (ordem: 67)</span>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="outros-métodos" class="section level1">
-<h1>5. Outros métodos</h1>
+<h1>4. Outros métodos</h1>
+</div>
+<div id="referências" class="section level1">
+<h1>5. Referências</h1>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Na versão de Freitas e Dweck (2010) e também Cornelio(2017), há a separação do consumo das famílias em um componente exógeno (consumo de duráveis) e outro endógenos (consumo de não-duráveis). No caso, somente o consumo de não duráveis é usado no procedimento de fechamento do modelo para o consumo.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>As TRUs são disponibilizadas pelo IBGE em um arquivo compactado (.zip ou .rar) com diversos arquivos contidos, em que necessitamos apenas das Tabelas 2, com as informações dos Usos a preços correntes.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 
