@@ -90,7 +90,7 @@ f <- rowSums(An)
 
 Mais precisamente, os encadeamentos para trás seriam obtidos pela soma dos componentes de cada coluna da matriz de impacto, enquanto os encadeamentos para frente obtidos pela soma de cada linha da matriz de impacto. Usando a notação de Miller e Blair (2009), temos que a matriz de impacto é tal que:
 $$L=(I-A_n)^{-1}$$
-Esta versão de indicador de encadeamentos para trás e de encadeamentos para frente é baseado em Rasmussen (1957), e seria capaz de captar tanto os efeitos diretos, quanto os efeitos indiretos - i.e. os efeitos sobre a cadeia produtiva dos setores que foram impactados diretamente na cadeia produtiva do setor estimulado. No caso, teríamos os 
+Esta versão de indicador de encadeamentos para trás e de encadeamentos para frente é baseado em Rasmussen (1956), e seria capaz de captar tanto os efeitos diretos, quanto os efeitos indiretos - i.e. os efeitos sobre a cadeia produtiva dos setores que foram impactados diretamente na cadeia produtiva do setor estimulado. No caso, teríamos os 
 backward linkages 
 $$bl=i'L$$
 $$fl=Li$$		
@@ -131,10 +131,10 @@ Vamos então visualizar os resultados e quais são os setores-chave da economia 
 ```{r}
 
 formattable(sintese, list(
-  b = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x))), 
-  bl = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x))),
-  f = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x))), 
-  fl = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x)))))
+  b = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x))), 
+  bl = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x))),
+  f = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x))), 
+  fl = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x))))) %>% as.datatable()
 
 ```
 
@@ -172,8 +172,8 @@ names(sintese_norm) <- c("pd", "sd")
 
 # Gerando a tabela
 formattable(sintese_norm,list(
-  pd = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x))), 
-  sd = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x)))))
+  pd = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x))), 
+  sd = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x)))))  %>% as.datatable()
 
 ```
 
@@ -207,7 +207,7 @@ for (i in 1:nrow(An)){
 ```{r}
 # Gerando a tabela
 formattable(TL,list(
-  TL = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x)))))
+  TL = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x)))))  %>% as.datatable()
 
 ```
 
@@ -239,7 +239,7 @@ row.names(PoP) <- nomes_atividades
 names(PoP) <- "PoP"
 ```
 
-Antes de prosseguir, iremos replicar a tabela 1 de Morrone (2017), mas antes devemos criar os indicadores ponderados de encadeamentos diretos (que é uma variação do indicador que vimos iniciamente de Chenery e Watanabe) e também o de efeitos diretos e indiretos (Rasmussen), ambos em sua versão de backward linkages. Perceba também que a representação abaixo é equivalente ao cálculo ods indicadores de poder de dispersão discutidos na seção anterior:
+Antes de prosseguir, iremos replicar a tabela 1 de Morrone (2017), mas antes devemos criar os indicadores ponderados de encadeamentos diretos (que é uma variação do indicador que vimos iniciamente de Chenery e Watanabe) e também o de efeitos diretos e indiretos (Rasmussen), ambos em sua versão de backward linkages. Perceba também que a representação abaixo é equivalente ao cálculo dos indicadores de poder de dispersão discutidos na seção anterior:
 $$m=ni'A_n/i'A_ni$$
 $$z=ni'(I-A_n)/i'(I-A_n )i$$
 ```{r}
@@ -259,11 +259,22 @@ names(Indicadores) <- c("C_W", "Rasmussen", "Eigenvector")
 
 # Gerando a tabela
 formattable(Indicadores,list(
-  C_W = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x))),
-  Rasmussen = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x))),
-  Eigenvector = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x)))))
+  C_W = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x))),
+  Rasmussen = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x))),
+  Eigenvector = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x)))))  %>% as.datatable()
 
 ```
 
 # 5. Referências
 
+CHENERY, H.B. and WATANABE, T. (1958): *International Comparisons of the Structure of Production**. Econometrica, 26, 487–521.
+
+FREITAS, F. E DWECK, E. (2010): *Matriz de Absorção de Investimento e Análise de Impactos Econômicos, Relatório Final Estudo Transversal: Projeto Perspectivas de Investimento no Brasil*, Rio de Janeiro
+
+MILLER, R.E.; BLAIR, E. (2009): **Input-Output Analysis: Foundations and Extensions**. Second Edition. Cambridge: Cambridge University Press.
+
+MORRONE, E. (2017): **Which sectors to stimulate first in Brazil? Estimating the sectoral power to pull the economy out of the recession*. Investigación Económica, v.76, n.302.
+
+NASSIF, TEIXEIRA e ROCHA (2015): **Houve redução do impacto da indústria na economia brasileira no período 1996-2009? Uma análise das matrizes insumo-produto*. Economia e Sociedade, Campinas, v. 24, n. 2 (54), p. 355-378.
+
+RASMUSSEN, N.P. (1956): *Studies in Intersectoral Relation*. North-Holland, Amsterdam.
