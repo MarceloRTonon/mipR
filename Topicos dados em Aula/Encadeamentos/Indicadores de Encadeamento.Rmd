@@ -1,7 +1,7 @@
 ---
-title: "Indicadores de Encadeamentos e Multiplicadores"
+title: "Indicadores de Encadeamentos"
 author: "Felipe Cornelio e Marcelo Tonon"
-date: "16/08/2020"
+date: "23/08/2020"
 output: html_document
 ---
 
@@ -171,7 +171,7 @@ sintese_norm <- data.frame(pd,sd)
 names(sintese_norm) <- c("pd", "sd")
 
 # Gerando a tabela
-formattable(sintese_norm, list(
+formattable(sintese_norm,list(
   pd = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x))), 
   sd = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x)))))
 
@@ -179,6 +179,91 @@ formattable(sintese_norm, list(
 
 
 # 4. Outros métodos
+
+Apresentaremos aqui dois indicadores um pouco mais complexos que os já discutidos. O primeiro será o método de extração hipotética e ou outro será o do autovetor (eigenvector).
+
+## 4.1 Extração Hipotética
+
+O método da extração hipotética avaliar os impactos sobre a economia caso você retire, hipoteticamente, algum setor.^[Vale destacar que um exercício alternativo para avaliar este impacto seria substituir produção doméstica por importações, o que equivaleria à zerar a oferta intermediária desse bem na matriz de coeficientes técnicos e no vetor da demanda final.] Isso pode ser realizado ao excluir a linhas e colunas de algum setor i e também a linha deste setor na demanda final, para então calcular qual o valor da produção dessa matriz reduzida. O Total Linkages (TL) mede então a diferenção entre o valor da produção da matriz completa ($x$) e o valor da produção da matriz reduzida ($x_l^{-i}$):
+
+$$ TL = i'x - i'x_l^{-i} $$
+
+```{r}
+  TL <- data.frame(c(1:nrow(An)), row.names = nomes_atividades)
+  names(TL) <- "TL"
+
+for (i in 1:nrow(An)){
+  An_aux <- An[,-i] 
+  An_aux <- An_aux[-i,]
+  f <- as.matrix(MS)%*%rowSums(DF_127) %>% as.data.frame()
+  f_aux <- f[-i,]
+  TL[i,] <- sum(x) - sum(solve(diag(1,nrow(An_aux))-as.matrix(An_aux))%*%as.matrix(f_aux))
+}
+
+
+```
+
+
+```{r}
+# Gerando a tabela
+formattable(TL,list(
+  TL = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x)))))
+
+```
+
+## 4.2 Eigenvector
+
+Por fim, uma outra alternativa para medir os encadeamentos da economia é o metodo do Autovetor (Eigenvector), conforme visto em alguns trabalhos como Dietzenbacher (2002), Luo (2013) e Morrone (2017). Trata-se de uma medida que realiza iterações sucessivas entre algum indicador de encadeamento e a respectiva matriz de coeficientes técnicos. Conforme Luo (2013), a medida normalizada para a primeira iteração é dada por:
+$$ r_{i+1} = nr'_iA/r'_iAe $$
+Com $r_i$ sendo um indicador de backward linkages e $n$ o número total de setores. A maior contribuição de Dietzenbacher (1992) é mostrar que, ao fazer as interações tenderem ao infinito, o resultado para indicador equivale aos elementos da seguinte relação, também chamados de Power of Pull (PoP):
+$$PoP=nq'/(q'e)$$
+
+Onde $q'$ é autovetor dominante da esquerda ou vetor de Perron (left-hand eigenvector) da matriz de coeficientes e resultante de $q'A=q'\lambda$, $n$ é o número de setores e $e$ é um vetor de soma. O right-hand eigenvector é o cálculo de autovalor e autovetor mais comum e pode ser obtido em uma equação caracteristica da forma $Av=\lambda v$. Já o left-hand eigenvector tem como definição uma equação da forma $uA=\kappa u$,mas que equivale também à calcular os autovalores e autovetores na forma convencional sobre a matriz transposta: $A'u'=\kappa u'$. O primeiro passo é calcularmos os autovalores e autovetores da nossa matriz de coeficientes técnicos transposta, tal que:
+
+```{r}
+# Calculando os autovalores e autovetores sobre a matriz An transposta:
+eigen_An <- eigen(t(An))
+lambda <- eigen_An$values[1] %>% as.matrix()
+q_dom <- t(eigen_An$vectors[,1]) %>% as.matrix()
+
+# Testando se a definição é atendida
+all.equal(q_dom%*%as.matrix(An), lambda%*%q_dom, check.attributes=F)
+
+```
+
+A função `eigen()` retorna tanto os autovalores quanto os autovetores de uma matriz ordenando-os do maior para o menor. O passo seguinte é calcular o $PoP=nq'/(q'e)$
+
+```{r}
+PoP <- t((67*q_dom)/sum(q_dom)) %>% as.numeric() %>% as.data.frame()
+row.names(PoP) <- nomes_atividades
+names(PoP) <- "PoP"
+```
+
+Antes de prosseguir, iremos replicar a tabela 1 de Morrone (2017), mas antes devemos criar os indicadores ponderados de encadeamentos diretos (que é uma variação do indicador que vimos iniciamente de Chenery e Watanabe) e também o de efeitos diretos e indiretos (Rasmussen), ambos em sua versão de backward linkages. Perceba também que a representação abaixo é equivalente ao cálculo ods indicadores de poder de dispersão discutidos na seção anterior:
+$$m=ni'A_n/i'A_ni$$
+$$z=ni'(I-A_n)/i'(I-A_n )i$$
+```{r}
+m <- (67*colSums(An))/(sum(An))
+  
+z <- (67*colSums(L))/(sum(L))
+```
+
+
+Unindo os resultados em um data.frame, a comparação dos resultados é tal que:
+
+
+```{r}
+# Unindo os dados
+Indicadores <- data.frame(m, z, PoP)
+names(Indicadores) <- c("C_W", "Rasmussen", "Eigenvector")
+
+# Gerando a tabela
+formattable(Indicadores,list(
+  C_W = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x))),
+  Rasmussen = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x))),
+  Eigenvector = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "green", "gray")), x ~ sprintf("%.2f (rank: %02g)", x, rank(-x)))))
+
+```
 
 # 5. Referências
 
