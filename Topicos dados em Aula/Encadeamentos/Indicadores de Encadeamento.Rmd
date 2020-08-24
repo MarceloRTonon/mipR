@@ -26,6 +26,8 @@ library(purrr)
 library(formattable)
 ```
 
+O pacote `formattable` serve para produzir tabelas em arquivos html, como é o caso deste. Ele é um dos pacotes que auxiliam na construção de arquivos html dentro do Rstudio (pelo Rmarkdown). 
+
 Antes da leitura dos dados, mostraremos novamente a forma de fazer o download automático da matriz. Caso já tenha o arquivo no diretório e não queira refazer o download, é necessário apenas fazer a leitura do comando para o nome do arquivo:
 
 ```{r download}
@@ -126,7 +128,7 @@ sintese <- data.frame(b,bl,f,fl)
 names(sintese) <- c("b", "bl","f","fl")
 ```
 
-Vamos então visualizar os resultados e quais são os setores-chave da economia de acordo com cada indicador:
+Vamos então visualizar os resultados e quais são os setores-chave da economia de acordo com cada indicador^[Como já dito o `formattable` é útil para expor os dados em html]:
 
 ```{r}
 
