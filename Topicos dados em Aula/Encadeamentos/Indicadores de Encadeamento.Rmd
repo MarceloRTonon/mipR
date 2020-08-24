@@ -213,10 +213,10 @@ formattable(TL,list(
 
 ## 4.2 Eigenvector
 
-Por fim, uma outra alternativa para medir os encadeamentos da economia é o metodo do Autovetor (Eigenvector), conforme visto em alguns trabalhos como Dietzenbacher (2002), Luo (2013) e Morrone (2017). Trata-se de uma medida que realiza iterações sucessivas entre algum indicador de encadeamento e a respectiva matriz de coeficientes técnicos. Conforme Luo (2013), a medida normalizada para a primeira iteração é dada por:
-$$ r_{i+1} = nr'_iA/r'_iAe $$
-Com $r_i$ sendo um indicador de backward linkages e $n$ o número total de setores. A maior contribuição de Dietzenbacher (1992) é mostrar que, ao fazer as interações tenderem ao infinito, o resultado para indicador equivale aos elementos da seguinte relação, também chamados de Power of Pull (PoP):
-$$PoP=nq'/(q'e)$$
+Por fim, uma outra alternativa para medir os encadeamentos da economia é o metodo do Autovetor (Eigenvector), conforme visto em alguns trabalhos como Dietzenbacher (1992), Luo (2013) e Morrone (2017). Trata-se de uma medida que realiza iterações sucessivas entre algum indicador de encadeamento e a respectiva matriz de coeficientes técnicos. Conforme Luo (2013), a medida normalizada para a primeira iteração é dada por:
+$$ r_{i+1} = mr'_iA/r'_iAe $$
+Com $r_i$ sendo um indicador de backward linkages e $m$ o número total de setores (para manter coerência com os indicadores anteriores). A maior contribuição de Dietzenbacher (1992) é mostrar que, ao fazer as interações tenderem ao infinito, o resultado para indicador equivale aos elementos da seguinte relação, também chamados de Power of Pull (PoP):
+$$PoP=mq'/(q'e)$$
 
 Onde $q'$ é autovetor dominante da esquerda ou vetor de Perron (left-hand eigenvector) da matriz de coeficientes e resultante de $q'A=q'\lambda$, $n$ é o número de setores e $e$ é um vetor de soma. O right-hand eigenvector é o cálculo de autovalor e autovetor mais comum e pode ser obtido em uma equação caracteristica da forma $Av=\lambda v$. Já o left-hand eigenvector tem como definição uma equação da forma $uA=\kappa u$,mas que equivale também à calcular os autovalores e autovetores na forma convencional sobre a matriz transposta: $A'u'=\kappa u'$. O primeiro passo é calcularmos os autovalores e autovetores da nossa matriz de coeficientes técnicos transposta, tal que:
 
@@ -240,10 +240,10 @@ names(PoP) <- "PoP"
 ```
 
 Antes de prosseguir, iremos replicar a tabela 1 de Morrone (2017), mas antes devemos criar os indicadores ponderados de encadeamentos diretos (que é uma variação do indicador que vimos iniciamente de Chenery e Watanabe) e também o de efeitos diretos e indiretos (Rasmussen), ambos em sua versão de backward linkages. Perceba também que a representação abaixo é equivalente ao cálculo dos indicadores de poder de dispersão discutidos na seção anterior:
-$$m=ni'A_n/i'A_ni$$
-$$z=ni'(I-A_n)/i'(I-A_n )i$$
+$$w=mi'A_n/i'A_ni$$
+$$z=mi'(I-A_n)/i'(I-A_n )i$$
 ```{r}
-m <- (67*colSums(An))/(sum(An))
+w <- (67*colSums(An))/(sum(An))
   
 z <- (67*colSums(L))/(sum(L))
 ```
@@ -254,7 +254,7 @@ Unindo os resultados em um data.frame, a comparação dos resultados é tal que:
 
 ```{r}
 # Unindo os dados
-Indicadores <- data.frame(m, z, PoP)
+Indicadores <- data.frame(w, z, PoP)
 names(Indicadores) <- c("C_W", "Rasmussen", "Eigenvector")
 
 # Gerando a tabela
@@ -267,14 +267,18 @@ formattable(Indicadores,list(
 
 # 5. Referências
 
-CHENERY, H.B. and WATANABE, T. (1958): *International Comparisons of the Structure of Production**. Econometrica, 26, 487–521.
+CHENERY, H.B. and WATANABE, T. (1958): **International Comparisons of the Structure of Production**. Econometrica, 26, 487–521.
 
-FREITAS, F. E DWECK, E. (2010): *Matriz de Absorção de Investimento e Análise de Impactos Econômicos, Relatório Final Estudo Transversal: Projeto Perspectivas de Investimento no Brasil*, Rio de Janeiro
+DIETZENBACHER, E. (1992): **The Measurement of Interindustry Linkages: Key Sectors in the Netherlands, Economic Modeling**, 9, 419–437.
+
+FREITAS, F. E DWECK, E. (2010): **Matriz de Absorção de Investimento e Análise de Impactos Econômicos, Relatório Final Estudo Transversal: Projeto Perspectivas de Investimento no Brasil**, Rio de Janeiro
+
+LUO, J. (2013): **Which industries to bail out first in economic recession? Ranking US industrial sectors by the Power-of-Pull**, Economic Systems Research, 25:2, 157-169
 
 MILLER, R.E.; BLAIR, E. (2009): **Input-Output Analysis: Foundations and Extensions**. Second Edition. Cambridge: Cambridge University Press.
 
-MORRONE, E. (2017): **Which sectors to stimulate first in Brazil? Estimating the sectoral power to pull the economy out of the recession*. Investigación Económica, v.76, n.302.
+MORRONE, E. (2017): **Which sectors to stimulate first in Brazil? Estimating the sectoral power to pull the economy out of the recession**. Investigación Económica, v.76, n.302.
 
-NASSIF, TEIXEIRA e ROCHA (2015): **Houve redução do impacto da indústria na economia brasileira no período 1996-2009? Uma análise das matrizes insumo-produto*. Economia e Sociedade, Campinas, v. 24, n. 2 (54), p. 355-378.
+NASSIF, TEIXEIRA e ROCHA (2015): **Houve redução do impacto da indústria na economia brasileira no período 1996-2009? Uma análise das matrizes insumo-produto**. Economia e Sociedade, Campinas, v. 24, n. 2 (54), p. 355-378.
 
-RASMUSSEN, N.P. (1956): *Studies in Intersectoral Relation*. North-Holland, Amsterdam.
+RASMUSSEN, N.P. (1956): **Studies in Intersectoral Relation**. North-Holland, Amsterdam.
