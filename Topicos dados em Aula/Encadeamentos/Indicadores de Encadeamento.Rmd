@@ -231,7 +231,7 @@ all.equal(q_dom%*%as.matrix(An), lambda%*%q_dom, check.attributes=F)
 
 ```
 
-A função `eigen()` retorna tanto os autovalores quanto os autovetores de uma matriz ordenando-os do maior para o menor. O passo seguinte é calcular o $PoP=nq'/(q'e)$
+A função `eigen()` retorna tanto os autovalores quanto os autovetores de uma matriz ordenando-os do maior para o menor. O passo seguinte é calcular o $PoP=mq'/(q'e)$
 
 ```{r}
 PoP <- t((67*q_dom)/sum(q_dom)) %>% as.numeric() %>% as.data.frame()
