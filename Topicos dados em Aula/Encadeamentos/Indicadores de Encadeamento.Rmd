@@ -189,18 +189,67 @@ O método da extração hipotética avaliar os impactos sobre a economia caso vo
 $$ TL = i'x - i'x_l^{-i} $$
 
 ```{r}
-  TL <- data.frame(c(1:nrow(An)), row.names = nomes_atividades)
-  names(TL) <- "TL"
+  # Calculando o total do VBP agregado
+totalX <- sum(x)
+```
 
+Fazendo usando `for`:
+```{r}
+#Criando um df para alocar os valores
+TL <- data.frame(c(1:nrow(An)), row.names = nomes_atividades)
+ names(TL) <- "TL"
+  
 for (i in 1:nrow(An)){
-  An_aux <- An[,-i] 
-  An_aux <- An_aux[-i,]
-  f <- as.matrix(MS)%*%rowSums(DF_127) %>% as.data.frame()
-  f_aux <- f[-i,]
-  TL[i,] <- sum(x) - sum(solve(diag(1,nrow(An_aux))-as.matrix(An_aux))%*%as.matrix(f_aux))
+# Retirando a linha e coluna da atividade em questão  
+  An_aux <- An %>%
+    .[,-i] %>%
+    .[-i,]
+
+# Criando um vetor de demanda final sem a linha da atividade
+  f_aux <- as.matrix(MS)%*%rowSums(DF_127) %>%
+    as.data.frame() %>%
+    .[-i,]
+
+# Alocando em TL a diferença entre X com e sem a atividade
+  TL[i,] <- totalX - sum(solve(diag(1,nrow(An_aux))-as.matrix(An_aux))%*%as.matrix(f_aux))
 }
 
 
+```
+
+Fazendo usando `map`^[Bem mais rápido que o `for`! Confiram pelo `tictoc` se quiserem. Veja o Tópico 4 da Monitoria para mais informações.]:
+
+```{r}
+hip_extract <- function(.index, .A){
+# Pacotes necessários na função
+  require(purrr)
+
+# Retirando a linha e coluna da atividade
+  .A <- .A %>% 
+        .[,-.index] %>%
+        .[-.index,]
+
+# Criando um vetor de demanda final sem a linha da atividade
+  .fi <- as.matrix(MS) %*% rowSums(DF_127) %>%
+          as.data.frame() %>%
+          .[-.index,]
+
+# Total do produto sem a atividade
+  .totalXi <- sum(solve(diag(1,nrow(.A)) - as.matrix(.A)) %*% as.matrix(.fi))
+  
+# Retornando o diferencial do produto com e sem a atividade
+  return(totalX - .totalXi)
+}
+
+# Rodando a formula
+TL_2 <- 1:nrow(An) %>% # 1:nrow(An)= indices das atividades
+  as.list() %>% # Tratando como uma lista
+  map(~ hip_extract(.index = .x, .A = An)) %>% #Rodando a função
+  do.call(what = "rbind", args = .) %>% # Transformando em colunas
+  setNames("TL") # Colocando o nome da coluna
+
+# Colocando o nome das linhas
+rownames(TL_2) <- nomes_atividades
 ```
 
 
@@ -208,7 +257,6 @@ for (i in 1:nrow(An)){
 # Gerando a tabela
 formattable(TL,list(
   TL = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x)))))  %>% as.datatable()
-
 ```
 
 ## 4.2 Eigenvector
