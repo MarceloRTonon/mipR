@@ -1,0 +1,235 @@
+---
+title: "Introdução ao Git e ao Github"
+author: "Marcelo Tonon"
+date: "04/05/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+No mundo atual, é prática comum, e recomendada, que você tenha um backup na nuvem do seu projeto atual. Parece obvio, mas muita gente acaba sendo displicente em relação a manter um backup online do seu trabalho. Assim, a melhor forma de lidar com isso, é deixar o processo de backup o mais cômodo possível. E após alguma prática, o uso do Git/Github irá te proporcionar exatamente isso!
+
+Além disso usar o Git ideal para quem mexe com códigos, uma vez que ele te permite realizar controles de alteração. Isso para projetos muito longos e/ou que você irá trabalhar em equipe. Foi pensando nisso que o Git foi concebido, por ninguém menos que Linus Torvalds, o criador do Linux!
+
+O aproveitamento do Git é muito fortalecido quando usado com o Github, por se tratar do site mais popular e abrangente a oferecer o serviço Git. Assim, aqui irei usar as duas coisas juntas, porém há outras opções. Neste guia eu vou me basear muito, mas não só, no [capítulo escrito pelo Hadley Wickham](http://r-pkgs.had.co.nz/git.html). Existe uma grande infinidade de tutoriais na internet que ensinam isso.
+
+# Criando uma conta no Github
+
+Antes de tudo, o melhor é você criar uma conta no Github. Não tem muito segredo:
+
+Entre no [site](https://github.com/) e terá já na página inicial os campos para você cadastrar:
+
+![](github_site.png)
+
+Coloque seu  usuário ( _Username_), seu email e a sua senha ( _Password_). Veja que sua senha deve ter ao menos 15 caracteres ou 8 caracteres incluindo números e letras minusculas. Aí se der tudo certo, no email que você colocou lá, você vai receber uma mensagem para confirmar o cadastro. E pronto. Podemos ir para a instalação do Git! Pense num nome legal e minimamente sério para o seu usuário, pois todos os outros verão você a partir dele.
+
+Para fins de exemplo, vamos considerar aqui que o seguinte que os três são:
+
+**Usuário:** mipRusuario
+**Email:** mipRusuario@mip.R
+**Senha:** UmaSenhaQualquer
+
+É muito importante que você troque o desses exemplos para os seus! E dê um jeito de lembrar a sua senha!
+
+# Instalando o Git!
+
+Se você nunca usou e instalou o Git, a primeira coisa a fazer é instalar o Git no seu computador. Isso irá variar de sistema para sistema. Você pode baixa-los da seguinte forma:
+
+
+ - Windows: https://gitforwindows.org/
+ - OS X: http://git-scm.com/download/mac
+ - Debian/Ubuntu: ```sudo apt-get install git```
+ - Outras distros do Linux: http://git-scm.com/download/linux
+
+Vou me basear muito na parte de instalação no material deste [site](https://www.hostinger.com.br/tutoriais/tutorial-do-git-basics-introducao/). Não vou falar da instalação de outras distros do Linux que não sejam baseadas em Debian/Ubuntu, porque se você tem uma delas você tá bem mestrado no _The SeViration_.
+
+## No windows
+
+Se você tem um Windows, você <s> deveria repensar a sua vida e migrar para o Linux</s>, pode baixar o arquivo [aqui](https://gitforwindows.org/). Depois de baixar o arquivo, inicie o assistente de instalação e vá clicando em `Next >` até chegar em `Finish`. Depois disso, [abra o Prompt de Comando](https://www.oficinadanet.com.br/tecnologia/26006-10-maneiras-diferentes-de-abrir-o-prompt-de-comando-no-windows-10) e escreva os seguintes comandos não se esquecendo de alterar para o seu nome de verdade:
+
+```{bash, eval = F}
+git config --global user.name "mipRusuario"
+git config --global user.email "mipRusuario@mip.R"
+```
+
+Os dois comandos acima servem  para colocar o usuário e o email desejados nas configurações do Git de modo que qualquer ação que você faça no futuro estará associada à esses dados. Essa configuração ocorre da mesma forma em qualquer sistema operacional.
+
+Importante notar que no Windows (pelo link passado aqui) você vai instalar não só o Git mas também outro programa chamado Git Bash. O Git Bash serve como um Terminal próprio para o Git no Windows para algumas coisas especificas, em especial para _SSH Keys_ como veremos mais a frente
+
+Antes de ir para a próxima parte, é sugerido que o usuário de Windows reflita sobre a esse [link](https://www.oficinadanet.com.br/sistemas_operacionais/24690-12-razoes-para-migrar-do-windows-para-o-linux) e então acesse esse [daqui](https://www.techtudo.com.br/dicas-e-tutoriais/noticia/2016/01/como-instalar-o-ubuntu.html).
+
+
+## No Linux (Debian/Ubuntu)
+
+Se você tem uma distribuição ativa de Debian ou Ubuntu^[Guerreiro], basta abrir o Terminal (acesse via `Ctrl` + `Alt` + `T`) e escrever:
+
+
+```{bash, eval = F}
+sudo apt-get update
+sudo apt-get install git
+```
+
+Verifique se a instalação foi um sucesso fazendo:
+
+```{bash, eval = F}
+git --version
+```
+
+Se retornou a versão do git que você instalou (positivo) então faça:
+
+```{bash, eval = F}
+git config --global user.name "mipRusuario"
+git config --global user.email "mipRusuario@mip.R"
+```
+
+Os dois comandos acima servem  para colocar o usuário e o email desejados nas configurações do Git de modo que qualquer ação que você faça no futuro estará associada à esses dados. Essa configuração ocorre da mesma forma em qualquer sistema operacional.
+
+
+## No Mac 
+Se você tem um Mac é capaz de você já ter o git instalado na sua máquina sem saber. Para conferir isso, abra o Terminal (`Control` + `Option` + `Shift` + `T`) e digite
+
+```{bash, eval=F}
+git --version
+```
+
+Se você obteve alguma resposta como ```git version 2.7.0 (Apple Git-66)```, então você já tem o Git instalado no seu Mac. 
+
+Caso não retorne isso, vá neste [site](https://sourceforge.net/projects/git-osx-installer/files/) e baixe a versão mais recente. Quando o instalador e siga as instruções de instalação. Abra de novo o terminal (`Control` + `Option` + `Shift` + `T`) e tente de novo o comando ```git --version```. Se você obtiver uma resposta positiva, então faça:
+
+
+```{bash, eval = F}
+git config --global user.name "mipRusuario"
+git config --global user.email "mipRusuario@mip.R"
+```
+
+Os dois comandos acima servem  para colocar o usuário e o email desejados nas configurações do Git de modo que qualquer ação que você faça no futuro estará associada à esses dados. Essa configuração ocorre da mesma forma em qualquer sistema operacional.
+
+
+# Conectando Git ao Github
+
+É importante frisar que o Git não é a mesma coisa que o Github. O Github é um servidor remoto que você pode acessar a partir do Git. A questão toda é como configurar para que o seu usuário do Git no seu computador tenha acesso aos repositórios da sua conta no servidor remoto do Github. E mais importante: como fazer isso com segurança! Nesse caso, são usados os protocolos [SSH](https://en.wikipedia.org/wiki/Secure_Shell) para fazer o login no Github.
+
+As _SSH Keys_ são as senhas que fazem essa conexão. **É importante** notar que se sua conta no Github ficar mais de um ano inativa, este irá apagar das suas configurações. Ou seja, você terá que reconfigurar isso. Essa parte abaixo é muito baseada no [material](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh) presente no próprio Github.
+
+### Gerando SSH Keys
+
+Essa parte pode ser um pouco árida de entender apenas pelo texto, em especial nas partes dentro do site do Github e na ora de acessar a _SSH Key_. Assim, você pode querer acompanhar por este [vídeo](https://youtu.be/OuOb1_qADBQ?t=5591) entre 1:33:11 e 1:40:40, se você tiver dificuldade por este material. O comando a ser executado no Terminal ou Git Bash que mostra no video está presente neste texto.
+
+Para criar uma _SSH Keys_ você deve:
+
+ - Abrir o Git Bash se você for usuário do Windows
+ - Abrir o Terminal se você for usuário Linux (`Ctrl` + `Alt` + `T`)
+ - Abrir o Terminal se você for usuário Mac (`Control` + `Option` + `Shift` + `T`)
+ 
+ Então escreva abaixo (substituindo `"mipRusuario@mip.R"` pelo seu email de cadastro do github):
+ 
+```{bash, eval = F}
+ssh-keygen -t rsa -b 4096 -C "mipRusuario@mip.R"
+```
+
+Irá aparecer então a seguinte mensagem `Generating public/private rsa key pair` dizendo que as _SSH Keys_ foram geradas (nos interessa aqui a pública). Na linha de baixo terá escrito algo como `Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]`^[Para Windows] só que com a parte em parênteses algum diretório especifico do seu computador em que será criada uma pasta **oculta** chamada ``.ssh`. **Aperte Enter** e então vá até a pasta que foi indicada por esse 
+
+
+
+
+
+## Comandos Git para commit
+
+- Para adicionar novos arquivos para a *"staging area"*.
+```{bash, eval = FALSE}
+git add -A
+```
+
+- Para dar commit em tudo que está na *"staging area"*
+
+```{bash, eval = FALSE}
+git commit -m "commiting all staging area"
+```
+
+- Para adicionar tudo à *"staging area"* e dar commit
+
+```{bash, eval = FALSE}
+git commit -a -m "including everything in the staging area and then commiting"
+```
+
+## Comandos git para dar push nas modificações
+
+ 
+```{bash, eval = FALSE}
+git push <remote> <branch>
+```
+
+Para dar `push` via o terminal, você deve dizer qual é o destino `<remote>`, e qual ramificação `<branch>`, você deseja dar o push.
+
+Assim, se você quer dar o push para origem na ramificação mestre (`master`), basta:
+
+```{bash, eval = FALSE}
+git push origin master
+```
+
+## Comandos para dar commit e push tudo junto
+
+```{bash, eval = FALSE}
+git commit -a -m "Mensagem do commit"
+
+git push origin master
+```
+
+
+## Comandos git para criar branchs
+
+
+```{bash, eval = FALSE}
+git checkout -b <branch_name>
+```
+
+## Comandos git para deletar branchs
+
+ - Deletar o branch localmente
+```{bash, eval = FALSE}
+git branch -d localbranchname
+```
+
+ - Deletar o branch remotamente
+```{bash, eval = FALSE}
+git push origin --delete remoteBranchName
+```
+ 
+ Muito provavelmente o `remoteBranchName` e o `localbranchname` serão iguais.
+
+# Pacotes fora do CRAN
+
+Além de tudo, uma das vantagens de usar o Github é usar a função `install_github` do pacote `devtools`. Sem ele, para você instalar um determinado pacote você baixa direto do CRAN da seguinte forma:
+
+```{r, eval = FALSE}
+install.packages("pacoteTAL")
+```
+
+Porém, como muitos pacotes estão em desenvolvimento constante, pode haver um delay entre a última versão no CRAN e a última versão desenvolvida pelo desenvolvedor. Para instalar essa versão podemos fazer:
+
+```{r, eval = FALSE}
+require(devtools)
+devtools::install_github("pacoteTAL")
+```
+
+Esse delay muitas vezes é apenas o tempo dos pareceristas avaliarem as mudanças feitas no pacote. **É importante frisar no entanto,** que as versão no CRAN são no geral mais seguras que as do Github, uma vez que elas passaram pelo crivo de um parecerista. A versão no Github pode ter alguma melhoria de performance ou uma nova função, mas **por outro lado** também tem mais chances de ter algum _bug_ que passou desapercebido pelo desenvolvedor do pacote.
+
+Existem também pacotes que foram completamente recusados pelo CRAN do R. "Qual seria o motivo de se querer um pacote que foi recusado pelo CRAN?", alguém poderia perguntar. A resposta é que cada repositório oficial das linguagens (CRAN) tem uma política própria em relação a aprovação de um pacote especifico. No caso do R por exemplo, esse tem uma política em relação a pacotes de base de dados muito pesadas ou em relação a forma como esses podem estar estruturados. Assim, pode te interessar ter um pacote que não está no CRAN, mas cumpre uma missão que nenhum outro que você já viu lá cumpre.
+
+
+## Bibliografia
+
+WICKHAM, HADLEY. R Packages. Link: http://r-pkgs.had.co.nz/git.html. Acesso em 26/08/2020.
+
+https://www.hostinger.com.br/tutoriais/tutorial-do-git-basics-introducao/
+
+## Tutoriais
+
+Livro do próprio Git https://git-scm.com/book
+
+Mais de 2 horas de video, muito completo: https://www.youtube.com/watch?v=OuOb1_qADBQ
+
+
+Um bookdown de Git voltado para R e Rstudio: https://happygitwithr.com
