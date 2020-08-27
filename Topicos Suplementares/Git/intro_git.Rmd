@@ -280,8 +280,88 @@ b <- 2 + a
 b-2
 ```
 
-Agora, com a mudança sendo percebida pelo Git vamos fazer:
+Agora, com a mudança sendo percebida pelo Git vá na aba Git, clique em commit e veja como as mudanças são rastreadas pelo Git. Você pode fazer o commit por nessa janela mesmo, ou pode fazer pelo Terminal da seguinte forma:
 
+```{bash}
+git commit -m "Adicionando 3a linha em script_exemplo"
+```
+
+Você pode ver o seu histórico de commits clicando no ícone de relógio na aba Git.
+
+## Push
+
+Até agora, você fez os commits para rastrear as alterações que você fez no seu projeto. Porém se você entrar agora na página do repositorio no Github você vai ver que nada mudou. Isso porque você fez tudo localmente. Para fazer o repositorio Git remoto (do Github) ficar igual o seu local (do seu PC), você deve dar um push ( _empurrão_). Você pode apertar a seta **verde** na aba Git ou então dar o comando no terminal:
+
+```{bash}
+git push
+```
+
+Trabalhando em equipe, é de bom tom que sempre que você terminar o seu trabalho do dia dê um commit final e um push para que o outro saiba o que fez.
+
+Depois de dado o push, vá na página do seu repositório no Github para conferir se houve modificações. Se deu tudo certo, você deve esperar modificações sim. Repare que na lista dos arquivos, as mensagens do último commit que você deu referente a cada arquivo aparecem do lado destes. Ou seja, do lado de `git_exemplo.Rproj` e `script_exemplo.R` você tem, respectivamente as mensagens "Criando os arquivos iniciais do R após conectar o RStudio com o Github." e "Adicionando terceira linha em script_exemplo". Repare que você pode clicar tanto no arquivo quanto na mensagem do commit (para visualizar o que ocorreu).
+
+Na pagina inicial do repositorio também tem o número de commits que você deu nele que é um link para o seu histórico de commits.
+
+
+## Pull
+
+Por se tratar de um repositorio remoto pode ocorrer situações em que você quer igualar o seu repositorio local ao remoto e não o contrario. Motivos para isso podem ser:
+
+ - Você trabalhou de outro computador no repositorio remoto e agora o seu repositorio local está defasado frente ao seu trabalho  (que você colocou no repositorio remoto);
+ 
+ - Você está trabalhando em equipe e quer atualizar o seu repositorio local com as mudanças feitas pelos seus colegas.
+
+No caso do segundo, é bom  que sempre que você vá começar uma nova jornada de trabalho você dê um pull (sendo que você deu um commit antes de ir dormir) para trabalhar sobre a versão mais recente do trabalho de todos.
+
+Para dar um pull basta que você aperte a seta azul na aba Git ou dê o seguinte comando no Terminal:
+
+```{bash}
+git pull
+```
+
+No caso do exemplo que estamos dando aqui, vamos receber a resposta de que está tudo atualizado. Para ver como ocorre, crie um arquivo dê o upload num arquivo qualquer no seu repositorio Git. Para tanto basta clicar no botão `Add file` e ou criar um arquivo ou upar um. Com o arquivo adicionado, ao usar o comando `git pull` no terminal aparecerá uma mensagem sumarizando as modificações dos arquivos e quais arquivos novos tem.
+
+## Rotina do Git- sem ramificação (multiplos  _branches_)
+
+Agora você aprendeu os quatro comandos mais básicos e essenciais do git: add, commit, push e pull. Porém, qual é um bom uso que você deve dar a eles na sua rotina do dia a dia? Importante notar que o que está aqui são dicas e não leis sagradas. Não precisa se matar para cumprir tudo a risco. Porém, o hábito faz o monge.
+
+Em primeiro lugar, **procure sempre fazer boas mensagens de commit**. Não precisam ser imensas, mas elas devem servir para identificar mais ou menos o que você estava trabalhando. Bons exemplos de commits podem ser coisas como "corrigindo a leitura da base de dados", "criando funções basicas", "adicionando slides", "corrigindo erros de gramatica" e etc... Mensagens ruins seriam coisas como "mexi em algumas coisas", "aa", "adicionei linhas" e etc... Porém, não se martirize para criar excelentes mensagens. Se não vier, tente escrever sobre algo que você fez e tá valendo.
+
+Em segundo lugar, tente dar commits em blocos que fazem sentido. Ou seja, dê um commit se você revisou uma parte especifica do seu código (como por exemplo a seleção de variáveis). Isso inclusive vai facilitar sua vida na hora de pensar nas mensagens.
+
+Em terceiro lugar, você não precisa por outro lado dar um commit por linha modificada. Existe um meio termo ótimo entre o céu e o inferno.
+
+Por fim, em termos de trabalho individual, é que você não precisa dar um push para cada commit que você fizer. Não deixe de atualizar o seu repositorio remoto sempre que der.
+
+### Quando trabalhando em equipe
+
+Se você estiver trabalhando em equipe as alterações que você e seus colegas fizerem podem sobrepor uma a outra e ser um desastre. Para isso servem múltiplos branches (que falaremos mais a frente), mas algumas boas práticas já ajudam em muitas questões.
+
+Quando estiver trabalhando em equipe no Git (sem branches) é sempre pensar que o repositorio está modificado. Assim, você deve sempre fazer algumas medidas de segurança. A primeira coisa é sempre dar um pull toda vez que começar a trabalhar. **Importante dizer** que isso pressupõe que você colocou no repositorio remoto tudo que você fez no local.
+
+A segunda coisa a se atentar quando estiver trabalhando em equipe é a ordem entre o commit, pull e push. A depender das mudanças que os seus colegas colocaram no repositório, quando você der push, você pode criar uma série de erros. Por outro lado, se você der o Pull inadvertidamente pode perder tudo o que você fez. Por isso é importante que você siga a seguinte ordem ao dar um push:
+
+```{bash}
+git Add -A
+git commit -m "A mensagem a ser dada"
+git pull
+git push
+```
+
+Se você deu um commit antes de dar o pull, o seu git irá manter no seu repositorio local as mudanças que você fez ao longo do tempo. E como você vai ter no seu repositorio local todas as modificações que os seus colegas fizeram (por conta do pull), o seu push dificilmente dará erro. Pode no entanto ocorrer, especialmente se você e seu colega estiverem mexendo no mesmo arquivo no mesmo intervalo de tempo.
+
+Para não deixar de falar o óbvio: evite a todo custo mexer ao mesmo tempo e no mesmo arquivo que o seu colega está mexendo.
+
+Por fim, apesar de ser melhor commits facilmente identificados por tópico, sempre dê um commit e um push no fim da sua jornada de trabalho. Seja às 4 da tarde ou as 3 da madrugada, seu colega pode pegar isso no dia seguinte e acabar mexendo num arquivo que você também mexeu no dia anterior, mas como você não deu push, pode dar problema quando os dois derem lá na frente.
+
+## Multiplos Branches
+
+Nós acabamos de dar dicas sobre como trabalhar em equipe sem multiplos branches, mas em trabalhos muito grandes e de muitas atividades em paralelo pode ser dificil seguir a risca algumas daquelas práticas. Especialmente em trabalhos que podem envolver mais de 5 pessoas. Por isso, pode ser interessante ramificar o seu repositório. Isso quer dizer criar várias versões dele. Você pode criar um ramo do seu repositorio muito facilmente, basta 
+
+
+```{bash}
+push -u origin teste
+```
 
 
 ## Comandos Git para commit
