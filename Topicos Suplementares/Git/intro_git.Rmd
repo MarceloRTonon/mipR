@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(include = T, eval=F)
 ```
 
 No mundo atual, é prática comum, e recomendada, que você tenha um backup na nuvem do seu projeto atual. Parece obvio, mas muita gente acaba sendo displicente em relação a manter um backup online do seu trabalho. Assim, a melhor forma de lidar com isso, é deixar o processo de backup o mais cômodo possível. E após alguma prática, o uso do Git/Github irá te proporcionar exatamente isso!
@@ -21,7 +21,7 @@ Antes de tudo, o melhor é você criar uma conta no Github. Não tem muito segre
 
 Entre no [site](https://github.com/) e terá já na página inicial os campos para você cadastrar:
 
-![](github_site.png)
+![](imagens/github_site.png)
 
 Coloque seu  usuário ( _Username_), seu email e a sua senha ( _Password_). Veja que sua senha deve ter ao menos 15 caracteres ou 8 caracteres incluindo números e letras minusculas. Aí se der tudo certo, no email que você colocou lá, você vai receber uma mensagem para confirmar o cadastro. E pronto. Podemos ir para a instalação do Git! Pense num nome legal e minimamente sério para o seu usuário, pois todos os outros verão você a partir dele.
 
@@ -107,9 +107,23 @@ git config --global user.email "mipRusuario@mip.R"
 Os dois comandos acima servem  para colocar o usuário e o email desejados nas configurações do Git de modo que qualquer ação que você faça no futuro estará associada à esses dados. Essa configuração ocorre da mesma forma em qualquer sistema operacional.
 
 
+
+## Git Clients
+
+Usar o Terminal recorrentemente pode ser muito intimidadora para as pessoas que estão começando na programação. Isso é extremamente compreensível. Assim sendo, muita gente usa Git Clients para usar o Git de forma mais amigável e menos dependente do terminal. Eu não uso nem nunca usei nenhum programa do tipo, porém, apesar do que dizem por aí não existe forma certa de usar Git. Eu acho o Terminal (que pode ser acessado pelo RStudio) muito prático (e mais rápido), porém pode não ser o caso de quem começa. Um tempo atrás, quando comecei a usar Git, a reputação desses programas era muito negativa, mas ultimamente tem melhorado. O próprio Github tem um programa desse tipo, o Github Desktop. De novo, eu nunca usei. 
+
+Como eu nunca usei algo do tipo, não tenho condições de instruir ninguém nisso, por isso essa parte é apenas um disclosure: existe e não tem problema nenhum usar (apesar de ser consenso que via o Terminal tudo é mais rápido). Eu leria [esta parte](https://happygitwithr.com/git-client.html) do _Happy git with R_ se você quer saber mais disso.
+
+Apenas um adendo, há como fazer as coisas dentro do RStudio sem precisar recorrer ao Terminal, apesar de ser consideravelmente lento para algumas coisas. Inclusive, quando começarmos a ensinar os conceitos mais básicos, vamos ensinar primeiro sem o terminal.
+
+
+
+
+
+
 # Conectando Git ao Github
 
-É importante frisar que o Git não é a mesma coisa que o Github. O Github é um servidor remoto que você pode acessar a partir do Git. A questão toda é como configurar para que o seu usuário do Git no seu computador tenha acesso aos repositórios da sua conta no servidor remoto do Github. E mais importante: como fazer isso com segurança! Nesse caso, são usados os protocolos [SSH](https://en.wikipedia.org/wiki/Secure_Shell) para fazer o login no Github.
+É importante frisar que o Git não é a mesma coisa que o Github. O Github é um servidor remoto que você pode acessar a partir do Git. A questão toda é como configurar para que o seu usuário do Git no seu computador envie o que ele está fazendo para o Github. E mais importante: como fazer isso com segurança! Nesse caso, são usados os protocolos [SSH](https://en.wikipedia.org/wiki/Secure_Shell) para fazer o login no Github.
 
 As _SSH Keys_ são as senhas que fazem essa conexão. **É importante** notar que se sua conta no Github ficar mais de um ano inativa, este irá apagar das suas configurações. Ou seja, você terá que reconfigurar isso. Essa parte abaixo é muito baseada no [material](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh) presente no próprio Github.
 
@@ -129,9 +143,144 @@ Para criar uma _SSH Keys_ você deve:
 ssh-keygen -t rsa -b 4096 -C "mipRusuario@mip.R"
 ```
 
-Irá aparecer então a seguinte mensagem `Generating public/private rsa key pair` dizendo que as _SSH Keys_ foram geradas (nos interessa aqui a pública). Na linha de baixo terá escrito algo como `Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]`^[Para Windows] só que com a parte em parênteses algum diretório especifico do seu computador em que será criada uma pasta **oculta** chamada ``.ssh`. **Aperte Enter** e então vá até a pasta que foi indicada por esse 
+Irá aparecer então a seguinte mensagem `Generating public/private rsa key pair` dizendo que as _SSH Keys_ foram geradas (nos interessa aqui a pública). Na linha de baixo terá escrito algo como `Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]`^[Para Windows] só que com a parte em parênteses algum diretório especifico do seu computador em que será criada uma pasta **oculta** chamada ``.ssh`. **Aperte Enter**.
+
+Vá no diretório em que foi criada a pasta `.ssh` e veja que tem uma [pasta oculta](https://www.tudocelular.com/curiosidade/noticias/n139348/ensina-como-exibir-pastas-arquivos-ocultos-windows.html) chamada `.ssh`. Nela haverá dois arquivos chamados `id_rsa`. Um deles é apenas `id_rsa` mesmo, sem nenhuma extensão, e o outro se chama `id_rsa.pub`. O primeiro é a sua chave privada e o segundo é a sua chave pública. Abra a sua chave pública como um arquivo de texto^[Para isso basta clicar com o mouse direito em cima do arquivo e selecionar *Abrir com* e selecionar um aplicativo como Bloco de Notas.]. Quando você conseguir abrir, você terá uma linha de texto que começa com `ssh-rsa ` e aí tem vários caracteres e bem no final tem o seu email `mipRusuario@mip.R`. Essa é a sua `SSH Key` pública. *Não modifique nada* e copie toda essa linha, do inicio ao fim.
+
+No site do Github faça o [login](https://github.com/login).^[A opção para o login na página inicial é em `Sign in`.] Você deve então ir nas configurações ( _Settings_) do seu perfil adicionar a _SSH Keys_. Para entrar no _Settings_ você vai no canto superior direito da página e clique na imagem que terá a sua imagem de perfil (quando você colocar) onde abrirá um menu em que uma das opções é _Settings_ (veja a imagem logo abaixo. Na página de configurações terá no menu na esquerda página uma opção escrita `SHH and GPG Keys`. Clique nela. Você pode também, depois de logado, ir direto a essa página [clicando aqui](https://github.com/settings/keys).
+
+![](imagens/menu.png)
+
+Na página vai aparecer um botão verde escrito `New SSH Key`, clique nele (ou [aqui](https://github.com/settings/ssh/new)). Lá aparecerão dois campos, `Title` e `key`. No primeiro coloque um nome para o computador que você está usando, que você vá saber qual é, como por exemplo `notebook_marca`, `computador_trabalho`, `pc_cidade`. Assim, você vai poder saber de qual computador você está trabalhando. No campo `key` cole toda a `ssh key` que você copiou de `id_rsa.pub`. Clique no botão verde escrito `Add SSH Key`.
+
+Com a `SSH Key` configurada tanto no Github quanto no seu computador, você não irá precisar ficar confirmando a sua identidade toda vez que for alterar algo no Github direto do seu computador
 
 
+
+## Repositório Git
+
+Na computação um repositório é um local onde você reune as informações, histórico de alterações, os arquivos relacionados e etc... Assim podemos entre um repositorio Git e um arquivo com controle de alteração. Podemos rastrear quem e quando alterou o o quê dentro dele. Isso vale para qualquer arquivo. O repositorio Git portanto pode armazenar dentro dele dados sobre diversas versões do projeto como veremos mais a frente.
+
+Assim como há uma forma de você criar um arquivo Word com controle de alteração no seu computador localmente, você também pode criar um repositorio Git local, sem precisar se conectar ao Github nem nenhum outro servidor remoto. Esse porém não é o foco desta apostila. Se for do seu interesse você pode ver essa parte nesse 
+[vídeo  a partir de 27:08](https://www.youtube.com/watch?v=OuOb1_qADBQ&t=1628s). 
+
+### Criando um repositório pelo Github
+
+O foco deste material é auxiliar no uso conjunto entre o Git, Github e o Rstudio. Assim sendo, aqui vamos mostrar como criar um repositório pelo Github e então clonar ele para o seu computador. Vamos então como se cria um repositorio no Github. Estando logado, no canto superior direito da página do Github vai ter um botão com o sinal de + que ao clicar nele vai aparecer um menu em barra em que a primeira opção é `New Repository` (veja a imagem abaixo para tirar quaisquer dúvidas). Você também pode [clicar direto aqui](https://github.com/new). 
+
+![](imagens/github_newrepo.png)
+
+Na hora de criar o seu repositório você deve dar a ele um nome, uma descrição, escolher se ele é público ou privado, e escolher se cria um arquivo `README` e um arquivo `.gitignore`. Para fins de exemplo vamos criar um repositorio público, com o nome `git_exemplo`, com a descrição "Hello-world" e criando um arquivo `README` tanto um `.gitignore`. Veja o [exemplo que eu criei no meu perfil](https://github.com/MarceloRTonon/git_exemplo), só que sem o `.gitignore`. 
+
+Se deu tudo certo você criou o seu primeiro repositório no Github! Simples, não é?
+
+## Conectando o Rstudio ao Github
+
+Existem várias formas de você conectar o RStudio a um repositorio do Github. Você pode:
+
+ - Criar um repositorio local, conectar ele ao RStudio e então conectar ele ao Github.
+ - Criar um repositorio local, conectar ele ao Github e então conectar ele ao Rstudio.
+ - Criar um repositorio no Github, conectar ele ao RStudio e de quebra criando um clone desse repositorio no seu computador.
+ 
+ A primeira opção dá um trabalho imenso, sem contar na dor de cabeça. A segunda é de certo modo pragmática. A terceira é a **melhor de todas em termos de praticidade.** Por isso é a que vamos ensinar aqui. Clique nos hyperlinks para saber mais sobre a [primeira](https://happygitwithr.com/existing-github-last.html) [segunda](https://happygitwithr.com/existing-github-first.html) opções.
+
+
+Para clonar o seu repositorio do Github no seu repositório local, vá na página do seu repositório `git_exemplo` criado e copie o endereço URL dele. Com o link copiado, vá para o RStudio e no canto superior esquerdo da tela e clique em File -> New Project -> Version Control -> Git. Cole o link do repositório que você tinha copiado  no campo de `Repository URL:`, e o restante deve preencher automaticamente.
+
+![](imagens/proj_github.png)
+
+Clique em `Create Project` e você criará um projeto do zero. Porém agora você pode reparar que na janela do canto direito superior, onde ficam as abas `Environment` e `History` agora tem também a aba `Git`. Perceba também que na janela logo abaixo, na aba `Files`, aparecem elementos  que não apareciam originalmente no seu Repositório do Github. Veja na imagem abaixo:
+
+![](imagens/rstudio_abagit.png)
+
+A pasta `.git` existe no repositório no Github, só que ela é uma pasta oculta. Por sua vez, você criou o projeto `git_exemplo.Rproj` e a pasta `.Rproj.user`. Se você notar na aba Git da imagem acima, você tem dois elementos lá apenas: `.gitignore` e `git_exemplo.Rproj`. Isso ocorre porque a aba Git é a que rastreia quais foram as modificações nos seus arquivos rastreados. Essa aba também mostra os arquivos que são novos e ainda não estão sendo rastreados pelo Git. Isso explica porque ambos os arquivos estão com o simbolo amarelode ?, uma vez que o Git não está controlando as modificações deles ainda, apesar de estarem no diretorio do repositório. Como `git_exemplo.Rproj` não existe no repositorio remoto no Github, o Git está pergutando o que fazer com ele.
+
+Porém, você pode estar se perguntando o por quê a pasta `.Rproj.user` não aparece na aba Git se ela não existia no repositorio remoto? Isso se deve ao `.gitignore` que lista todos os arquivos que o Git deve ignorar. Você pode ver e alterar essa lista abrindo o arquivo `.gitignore` clicando nele dentro da aba `Files` do RStudio, em que vai abrir uma lista em que você verá que contém entre outras coisas a pasta `.Rproj.user`.
+
+>>Muitas pessoas gostam de colocar o arquivo do projeto na lista de arquivos ignorados. Eu não tenho esse costume, mas há uma certa sabedoria nisso, pois te treina para deixar sempre tudo muito arrumadinho.  
+
+O `.gitignore` é muito utíl também para quando você tem uma base de dados privada, mas quer deixar o seu repositorio público. Basta você adicioanar a pasta de dados ou os arquivos que você não quer que se torne público na lista do `.gitignore` que o Git não irá torna-la adiciona-la nos seus registros.
+
+A seguir vamos praticar o controle de alteração do repositório Git remoto dentro do RStudio.
+
+# Praticando o Github.
+
+Vamos agora introduzir os comandos Gits para você alterar o repositorio remoto do Github direto do RStudio. Vamos fazer de duas formas: Primeiro, um modo sem usar o Terminal, e depois usando o terminal.
+
+No fim, vamos discutir quais medidas podem ser o procedimento padrão na sua rotina.
+
+## Commit
+
+O comando de commit serve para rastrear as modificações que você fez. No caso de `git_exemplo` nós criamos alguns arquivos e isso não está sendo rastreado pelo Git. Na aba de `Git` clique no Botão `Commit` e irá aparecer uma janela em que a parte superior é desse modo:
+
+![](imagens/commit_rstudio.png)
+
+Se você clicar no campo em branco da coluna `Staged` você verá que mudará de `?` para `A`, o que quer dizer (Added) Adicionado. Ou seja agora o Git vai ter nos registros dele que foi nesse commit que você adicionou esses arquivos no rastreio dele. Clique nos dois campos em branco e escreve uma mensagem no campo `Commit Message`. Algo que possibilite você, ou outra pessoa, identificar facilmente o que foi feito nesse caso. Aqui uma boa mensagem seria "Criando os arquivos iniciais do R após conectar o RStudio com o Github."
+
+Irá aparecer uma janela de terminal realizando o commit, e depois que a barra sumir, terminando a operação, você verá que na aba `Git` não tem mais nada lá. Se você não selecionasse os dois, mas apenas um, o outro permaneceria lá com o simbolo de ? de `Untracked`.
+
+Vamos agora criar um script R, chamado `script_exemplo.R`. Coloque nele:
+
+```{r}
+a <- 2
+b <- 2 + a
+```
+
+Salve o Rscript na pasta do Git e perceba depois que na aba Git ele apareceu com o simbolo ? de que não foi adicionado ainda ao rastreio do Git. Podemos fazer o mesmo processo que antes de clicar na aba, ou fazer pelo Terminal. Para usar o Terminal você não precisa sair do RStudio. Na janela do canto esquerdo inferior (abaixo do editor de texto), tem no geral duas abas `Console` e `Terminal`.
+
+![](imagens/rstudio_terminal.png)
+
+Pode acontecer de você sem querer fechar aba do Terminal. Se isso ocorrer não se desespere. No conta esquerdo superior da janela do RStudio você pode ir em `Tools` > `Terminal` > `New Terminal` para abrir um novo (ou usar o atalho `Alt`+`Shift`+ `R`). Para dar o commit agora nós devemos fazer dois comandos: um para adicionar o arquivo ao rastreio do git e outro para realizar o commit. 
+
+Pense que tal qual você clicou nos campos em branco para depois dar o commit, você primeiro adiciona o arquivo ao rastreio e então dá o commit. Isso serve para quando você vai adicionar muitos arquivos de uma vez só para um mesmo commit. O comando para adicionar um arquivo especifico (nesse caso `script_exemplo.R`) é:
+
+```{bash}
+git add script_exemplo.R
+```
+
+Por outro lado, você pode adicionar todos os arquivos de uma vez fazendo:
+
+```{bash, eval = F}
+git add -A
+```
+
+Pense em `-A` como `All` que você vai se lembrar mais fácil disso. Agora você vai dar um novo commit para esse arquivo, só que pelo terminal.
+
+```{bash, eval = F}
+git commit -m "Criando script_exemplo"
+```
+
+O resultado é algo mais ou menos assim:
+
+![](imagens/commit2.png)
+
+Novamente, a aba Git está vazia. Vamos agora mudar o Git e fazer uma modificação no arquivo `script_exemplo.R` colocando uma terceira linha escrita `b - 2`:
+
+```{r}
+a <- 2
+b <- 2 + a
+b-2
+```
+
+Salve isso e veja que na aba Git o arquivo `script_exemplo.R` reapareceu, mas agora com o simbolo M de _Modified_ (Modificado). Isso é o Git percebendo que o arquivo teve uma modificação que foi salva. Faça o exercicio de excluir a linha 3 e salvar novamente o arquivo do jeito que ele tava antes.
+
+```{r}
+a <- 2
+b <- 2 + a
+```
+
+Repare que quando você salva do jeito antigo, o arquivo desaparece de novo da aba Git, uma vez que o Git compara o seu arquivo atual com como ele estava no último commit. Se ele estiver igual (mesmo que tendo sido modificado por um momento), o Git simplesmente não verá diferença se você não deu um outro commit no meio do caminho. Inclusive se você tentar dar um commit agora, sem nenhuma modificação visivel, com `git commit -m "teste"` você receberá uma mensagem dizendo que você está atualizado e não há nada para dar commit.
+
+
+Vamos adicionar uma terceira linha `b+2` de novo no arquivo `script_exemplo.R` e então salvar ele:
+
+```{r}
+a <- 2
+b <- 2 + a
+b-2
+```
+
+Agora, com a mudança sendo percebida pelo Git vamos fazer:
 
 
 
