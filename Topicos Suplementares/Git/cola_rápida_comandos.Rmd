@@ -1,0 +1,77 @@
+---
+title: "git_cola"
+author: "Marcelo Tonon e Felipe Cornélio"
+date: "01/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = F, include = T)
+```
+
+Esse documento serve como uma cola rápida para os comandos básicos do git. Foi feita pensando em quem ainda não lembra de cor cada comando usado no dia a dia, só que já leu o material explicativo e entende o comando do passo a passo e seria um martirio ir no material rechonchudo apenas para relembrar um comando em especifico. Então, se o que tá aqui não for suficiente para você entender o que é volte para o arquivo de introdução.
+
+## Comandos Git para commit
+
+- Para adicionar todos os novos arquivos para a *"staging area"*.
+```{bash, eval = FALSE}
+git add -A
+```
+
+- Para dar commit em tudo que está na *"staging area"*
+
+```{bash, eval = FALSE}
+git commit -m "commiting all staging area"
+```
+
+- Para adicionar tudo à *"staging area"* e dar commit
+
+```{bash, eval = FALSE}
+git commit -a -m "including everything in the staging area and then commiting"
+```
+
+## Comandos git para dar push nas modificações
+
+ 
+```{bash, eval = FALSE}
+git push <remote> <branch>
+```
+
+Para dar `push` via o terminal, você deve dizer qual é o destino `<remote>`, e qual ramificação `<branch>`, você deseja dar o push.
+
+Assim, se você quer dar o push para origem na ramificação mestre (`master`), basta:
+
+```{bash, eval = FALSE}
+git push origin master
+```
+
+## Comandos para dar commit e push tudo junto
+
+```{bash, eval = FALSE}
+git commit -a -m "Mensagem do commit"
+
+git push origin master
+```
+
+
+## Comandos git para criar branchs
+
+
+```{bash, eval = FALSE}
+git checkout -b <branch_name>
+```
+
+## Comandos git para deletar branchs
+
+ - Deletar o branch localmente
+```{bash, eval = FALSE}
+git branch -d localbranchname
+```
+
+ - Deletar o branch remotamente
+```{bash, eval = FALSE}
+git push origin --delete remoteBranchName
+```
+ 
+ Muito provavelmente o `remoteBranchName` e o `localbranchname` serão iguais.
+

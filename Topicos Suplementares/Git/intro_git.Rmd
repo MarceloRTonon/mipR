@@ -1,6 +1,6 @@
 ---
 title: "Introdução ao Git e ao Github"
-author: "Marcelo Tonon"
+author: "Marcelo Tonon e Felipe Cornélio"
 date: "04/05/2020"
 output: html_document
 ---
@@ -354,7 +354,7 @@ Para não deixar de falar o óbvio: evite a todo custo mexer ao mesmo tempo e no
 
 Por fim, apesar de ser melhor commits facilmente identificados por tópico, sempre dê um commit e um push no fim da sua jornada de trabalho. Seja às 4 da tarde ou as 3 da madrugada, seu colega pode pegar isso no dia seguinte e acabar mexendo num arquivo que você também mexeu no dia anterior, mas como você não deu push, pode dar problema quando os dois derem lá na frente. Ou seja, nesse caso vale você fazer um commit com uma mensagem como `commit -m "Mexendo no arquivo xxxx.R, commit de fim de noite"`
 
-## Multiplos Branches
+## Criando e Deletando multiplos Branches
 
 Nós acabamos de dar dicas sobre como trabalhar em equipe sem multiplos branches, mas em trabalhos muito grandes e de muitas atividades em paralelo pode ser dificil seguir a risca algumas daquelas práticas. Especialmente em trabalhos que podem envolver mais de 5 pessoas. Por isso, pode ser interessante ramificar o seu repositório. Isso quer dizer criar várias versões dele. Aqui vamos usar as palavras _branch(es)_ e _ramo(s)_ como idênticas. O branch principal do seu repositorio, é chama-se de `master`. Você pode criar um ramo do seu repositorio muito facilmente, basta fazer o comando abaixo:
 
@@ -362,76 +362,37 @@ Nós acabamos de dar dicas sobre como trabalhar em equipe sem multiplos branches
 push -u origin teste
 ```
 
-**É importante notar** que com esse comando, você apenas criou um _branch_ (ramo) novo, **você ainda está no mesmo** **_branch_** **de antes**. Tal qual na imagem abaixo, repare que na aba Git, você tem um botão escrito `master`, marcado em amarelo, indicando que é esse o branch em que você está. Se você clicar no botão com o símbolo amarelo, você verá uma barra onde estão listados os branches locais, bem como os remotos.
+**É importante notar** que com esse comando, você apenas criou um _branch_ (ramo) novo, **você ainda está no mesmo** **_branch_** **de antes**. Tal qual na imagem abaixo, repare que na aba Git, você tem um botão escrito `master` (destaque amarelo) indicando que é esse o branch em que você está. Se você clicar no botão com o símbolo amarelo, você verá uma barra onde estão listados os branches locais, bem como os remotos.
 
 ![](imagens/branches_rstudio.png)
 
-Se nessa barra você clicar, **na parte dos repositorios locais**, em `teste` você irá mudar para o ramo `teste` a
-Na imagem acima também temos um botão com 
+**Importante:** Abaixo vamos falar sobre como se troca de um branch para outro. Antes de fazer isso (com algum projeto relevante), salve tudo e dê um commit. Se não fizer isso pode ocasionar erros. 
 
-## Comandos Git para commit
-
-- Para adicionar novos arquivos para a *"staging area"*.
-```{bash, eval = FALSE}
-git add -A
+Se nessa barra você clicar, **na parte dos repositorios locais**, em `teste` você irá mudar para o ramo `teste`. Você pode fazer isso pelo terminal também, usando o comando `checkout <branch>`, que no nosso caso seria:
+```{bash}
+git checkout teste
 ```
 
-- Para dar commit em tudo que está na *"staging area"*
+Na imagem que mostramos também tem um outro botão, com destaque vermelho. Esse serve para você adicionar um branch. Na prática ele faz a mesma coisa que o comando `git push -u origin <branch>`.
 
-```{bash, eval = FALSE}
-git commit -m "commiting all staging area"
+Você pode listar os seus branches pelo terminal também. Basta fazer `git branch` e aparecerá uma lista com cada um dos ramos. Aquela que aparecer em cor diferente e com um asterisco `*` na frente é o ramo em que você está trabalhando. Vale notar que se você fizer `git branch teste2` você irá criar um branch local, sem equivalente no repositório remoto. Para excluir um repositorio localmente basta dar o comando `git branch -d <branchlocal>`, no caso de `teste2` seria:
+
+```{bash}
+git branch -d teste2
 ```
 
-- Para adicionar tudo à *"staging area"* e dar commit
+No caso de você querer excluir um branch no seu repositório remoto o comando é `git push origin --delete <remoteBranchName>`. No caso de ter um branch remoto chamado `teste3`, o comando seria:
 
-```{bash, eval = FALSE}
-git commit -a -m "including everything in the staging area and then commiting"
+```{bash}
+git push origin --delete teste3
 ```
 
-## Comandos git para dar push nas modificações
+Aqui está boa parte do que há para aprender sobre como criar
 
- 
-```{bash, eval = FALSE}
-git push <remote> <branch>
-```
+## Merge
 
-Para dar `push` via o terminal, você deve dizer qual é o destino `<remote>`, e qual ramificação `<branch>`, você deseja dar o push.
+Na última seção aprendemos como criar e deletar branches. O que nos interessa agora é aprender a fundir dois branches.
 
-Assim, se você quer dar o push para origem na ramificação mestre (`master`), basta:
-
-```{bash, eval = FALSE}
-git push origin master
-```
-
-## Comandos para dar commit e push tudo junto
-
-```{bash, eval = FALSE}
-git commit -a -m "Mensagem do commit"
-
-git push origin master
-```
-
-
-## Comandos git para criar branchs
-
-
-```{bash, eval = FALSE}
-git checkout -b <branch_name>
-```
-
-## Comandos git para deletar branchs
-
- - Deletar o branch localmente
-```{bash, eval = FALSE}
-git branch -d localbranchname
-```
-
- - Deletar o branch remotamente
-```{bash, eval = FALSE}
-git push origin --delete remoteBranchName
-```
- 
- Muito provavelmente o `remoteBranchName` e o `localbranchname` serão iguais.
 
 # Pacotes fora do CRAN
 
