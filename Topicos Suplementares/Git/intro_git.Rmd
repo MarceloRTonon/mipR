@@ -352,17 +352,22 @@ Se você deu um commit antes de dar o pull, o seu git irá manter no seu reposit
 
 Para não deixar de falar o óbvio: evite a todo custo mexer ao mesmo tempo e no mesmo arquivo que o seu colega está mexendo.
 
-Por fim, apesar de ser melhor commits facilmente identificados por tópico, sempre dê um commit e um push no fim da sua jornada de trabalho. Seja às 4 da tarde ou as 3 da madrugada, seu colega pode pegar isso no dia seguinte e acabar mexendo num arquivo que você também mexeu no dia anterior, mas como você não deu push, pode dar problema quando os dois derem lá na frente.
+Por fim, apesar de ser melhor commits facilmente identificados por tópico, sempre dê um commit e um push no fim da sua jornada de trabalho. Seja às 4 da tarde ou as 3 da madrugada, seu colega pode pegar isso no dia seguinte e acabar mexendo num arquivo que você também mexeu no dia anterior, mas como você não deu push, pode dar problema quando os dois derem lá na frente. Ou seja, nesse caso vale você fazer um commit com uma mensagem como `commit -m "Mexendo no arquivo xxxx.R, commit de fim de noite"`
 
 ## Multiplos Branches
 
-Nós acabamos de dar dicas sobre como trabalhar em equipe sem multiplos branches, mas em trabalhos muito grandes e de muitas atividades em paralelo pode ser dificil seguir a risca algumas daquelas práticas. Especialmente em trabalhos que podem envolver mais de 5 pessoas. Por isso, pode ser interessante ramificar o seu repositório. Isso quer dizer criar várias versões dele. Você pode criar um ramo do seu repositorio muito facilmente, basta 
-
+Nós acabamos de dar dicas sobre como trabalhar em equipe sem multiplos branches, mas em trabalhos muito grandes e de muitas atividades em paralelo pode ser dificil seguir a risca algumas daquelas práticas. Especialmente em trabalhos que podem envolver mais de 5 pessoas. Por isso, pode ser interessante ramificar o seu repositório. Isso quer dizer criar várias versões dele. Aqui vamos usar as palavras _branch(es)_ e _ramo(s)_ como idênticas. O branch principal do seu repositorio, é chama-se de `master`. Você pode criar um ramo do seu repositorio muito facilmente, basta fazer o comando abaixo:
 
 ```{bash}
 push -u origin teste
 ```
 
+**É importante notar** que com esse comando, você apenas criou um _branch_ (ramo) novo, **você ainda está no mesmo** **_branch_** **de antes**. Tal qual na imagem abaixo, repare que na aba Git, você tem um botão escrito `master`, marcado em amarelo, indicando que é esse o branch em que você está. Se você clicar no botão com o símbolo amarelo, você verá uma barra onde estão listados os branches locais, bem como os remotos.
+
+![](imagens/branches_rstudio.png)
+
+Se nessa barra você clicar, **na parte dos repositorios locais**, em `teste` você irá mudar para o ramo `teste` a
+Na imagem acima também temos um botão com 
 
 ## Comandos Git para commit
 
