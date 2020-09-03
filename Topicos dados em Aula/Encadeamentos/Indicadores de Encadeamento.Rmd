@@ -41,26 +41,43 @@ Realizando agora leitura dos dados obtidos diretamente da matriz de insumo-produ
 ```{r, warning=F}
 
 # Vetores com os nomes das atividades e dos produtos
-nomes_produtos <- read_xls(MIP_2015, sheet='01', range='B6:B132',col_names = 'Prod_nome') %>% t() %>% as.character()
-nomes_atividades <- read_xls(MIP_2015, sheet='13', range='B6:B72',col_names = 'Ativ_nome') %>% t() %>% as.character()
+nomes_produtos <- read_xls(MIP_2015, sheet='01', range='B6:B132',col_names = 'Prod_nome') %>%
+  t() %>%
+  as.character()
+
+nomes_atividades <- read_xls(MIP_2015, sheet='13', range='B6:B72',col_names = 'Ativ_nome') %>%
+  t() %>%
+  as.character()
 
 # Informações da MIP
 An <- read_xls(MIP_2015, sheet = '14', range='c6:bq72', col_names = nomes_atividades)
-L <-  read_xls(MIP_2015, sheet = '15', range='c6:bq72', col_names = nomes_atividades)
-DF_127 <- read_xls(MIP_2015, sheet = '03', range='BT4:BY132') %>% na.omit()
-MS <- read_xls(MIP_2015, sheet = '13', range='c6:dy72', col_names = nomes_produtos)
-x <- as.matrix(t(read_xls(MIP_2015, sheet='01', range='H134:BV134', col_names = nomes_atividades)))
 
+L <-  read_xls(MIP_2015, sheet = '15', range='c6:bq72', col_names = nomes_atividades)
+
+DF_127 <- read_xls(MIP_2015, sheet = '03', range='BT4:BY132') %>%
+  na.omit()
+
+MS <- read_xls(MIP_2015, sheet = '13', range='c6:dy72', col_names = nomes_produtos)
+
+x <- as.matrix(t(read_xls(MIP_2015, sheet='01', range='H134:BV134', col_names = nomes_atividades)))
 ```
 
 Além da MIP são necessárias informações da Tabela de Recursos e Usos para realizar todas as tarefas que serão apresentadas aqui. A obtenção de forma automatizada dessa parte envolveria um conhecimento que será discutido no tópico 5 das monitorias, mas ainda não apresentado.^[As TRUs são disponibilizadas pelo IBGE em um arquivo compactado (.zip ou .rar) com diversos arquivos contidos, em que necessitamos apenas das Tabelas 2, com as informações dos Usos a preços correntes.]
 
 ```{r,warning=FALSE}
 # VA TRU 2015
-nomes_va <- read_xls("68_tab2_2015.xls", sheet='VA', range='A6:A19',col_names = "TRU") %>% t() %>% as.character()
-TRU_2015 <- read_xls("68_tab2_2015.xls", sheet='VA', range='B4:BQ19') %>% as.data.frame() %>% na.omit()
+nomes_va <- read_xls("68_tab2_2015.xls", sheet='VA', range='A6:A19',col_names = "TRU") %>%
+  t() %>%
+  as.character()
+
+TRU_2015 <- read_xls("68_tab2_2015.xls", sheet='VA', range='B4:BQ19') %>%
+  as.data.frame() %>%
+  na.omit()
+
 rownames(TRU_2015) <- nomes_va
+
 # Soma do Comercio Varejo e Atacado
+
 Comercio <- TRU_2015[,42]+TRU_2015[,43]
 TRU_2015[,42] <- Comercio
 TRU_2015[,43] <- NULL

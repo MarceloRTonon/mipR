@@ -356,13 +356,14 @@ Por fim, apesar de ser melhor commits facilmente identificados por tópico, semp
 
 ## Criando e Deletando multiplos Branches
 
-Nós acabamos de dar dicas sobre como trabalhar em equipe sem multiplos branches, mas em trabalhos muito grandes e de muitas atividades em paralelo pode ser dificil seguir a risca algumas daquelas práticas. Especialmente em trabalhos que podem envolver mais de 5 pessoas. Por isso, pode ser interessante ramificar o seu repositório. Isso quer dizer criar várias versões dele. Aqui vamos usar as palavras _branch(es)_ e _ramo(s)_ como idênticas. O branch principal do seu repositorio, é chama-se de `master`. Você pode criar um ramo do seu repositorio muito facilmente, basta fazer o comando abaixo:
+Nós acabamos de dar dicas sobre como trabalhar em equipe sem multiplos branches, mas em trabalhos muito grandes e de muitas atividades em paralelo pode ser dificil seguir a risca algumas daquelas práticas. Especialmente em trabalhos que podem envolver mais de 5 pessoas. Por isso, pode ser interessante ramificar o seu repositório. Isso quer dizer criar várias versões dele. Aqui vamos usar as palavras _branch(es)_ e _ramo(s)_ como idênticas. O branch principal do seu repositorio, é chama-se de `master`. Você pode criar um ramo do seu repositorio muito facilmente, basta fazer os comandos abaixo:
 
 ```{bash}
-push -u origin teste
+git branch -d teste
+git push -u origin teste
 ```
 
-**É importante notar** que com esse comando, você apenas criou um _branch_ (ramo) novo, **você ainda está no mesmo** **_branch_** **de antes**. Tal qual na imagem abaixo, repare que na aba Git, você tem um botão escrito `master` (destaque amarelo) indicando que é esse o branch em que você está. Se você clicar no botão com o símbolo amarelo, você verá uma barra onde estão listados os branches locais, bem como os remotos.
+**É importante notar** que com esses comandos, você apenas criou um _branch_ (ramo) novo, **você ainda está no mesmo** **_branch_** **de antes**. Tal qual na imagem abaixo, repare que na aba Git, você tem um botão escrito `master` (destaque amarelo) indicando que é esse o branch em que você está. Se você clicar no botão com o símbolo amarelo, você verá uma barra onde estão listados os branches locais, bem como os remotos.
 
 ![](imagens/branches_rstudio.png)
 
@@ -373,13 +374,20 @@ Se nessa barra você clicar, **na parte dos repositorios locais**, em `teste` vo
 git checkout teste
 ```
 
-Na imagem que mostramos também tem um outro botão, com destaque vermelho. Esse serve para você adicionar um branch. Na prática ele faz a mesma coisa que o comando `git push -u origin <branch>`.
+Na imagem que mostramos também tem um outro botão, com destaque vermelho. Esse serve para você adicionar um branch. Na prática ele faz a mesma coisa que os dois comandos usados anteriormente (`git checkout -d ``git push -u origin <branch>`).
 
 Você pode listar os seus branches pelo terminal também. Basta fazer `git branch` e aparecerá uma lista com cada um dos ramos. Aquela que aparecer em cor diferente e com um asterisco `*` na frente é o ramo em que você está trabalhando. Vale notar que se você fizer `git branch teste2` você irá criar um branch local, sem equivalente no repositório remoto. Para excluir um repositorio localmente basta dar o comando `git branch -d <branchlocal>`, no caso de `teste2` seria:
-
 ```{bash}
 git branch -d teste2
 ```
+
+Para forçar um branch local no remoto basta fazer:
+
+```{bash}
+git push -u origin teste2
+```
+
+Repare que é a mesma coisa que feita originalmente, porém com as partes decompostas.
 
 No caso de você querer excluir um branch no seu repositório remoto o comando é `git push origin --delete <remoteBranchName>`. No caso de ter um branch remoto chamado `teste3`, o comando seria:
 
@@ -387,11 +395,16 @@ No caso de você querer excluir um branch no seu repositório remoto o comando �
 git push origin --delete teste3
 ```
 
-Aqui está boa parte do que há para aprender sobre como criar
+Aqui está boa parte do que há para aprender sobre como criar e deletar branches.
 
 ## Merge
 
-Na última seção aprendemos como criar e deletar branches. O que nos interessa agora é aprender a fundir dois branches.
+Na última seção aprendemos como criar e deletar branches. O que nos interessa agora é aprender a fundir dois branches. Para isso serve o comando merge. Vamos criar um branch chamado `code1` (veja [aqui](https://github.com/MarceloRTonon/git_merge) o resultado final do repositorio `git_merge` que será o exemplo nesta parte.):
+
+```{bash}
+git branch -d code1
+git push -u origin code1
+```
 
 
 # Pacotes fora do CRAN
