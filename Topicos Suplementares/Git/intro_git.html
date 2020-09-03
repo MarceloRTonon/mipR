@@ -580,18 +580,98 @@ git push -u origin teste</code></pre>
 <p><strong>Importante:</strong> Abaixo vamos falar sobre como se troca de um branch para outro. Antes de fazer isso (com algum projeto relevante), salve tudo e dê um commit. Se não fizer isso pode ocasionar erros.</p>
 <p>Se nessa barra você clicar, <strong>na parte dos repositorios locais</strong>, em <code>teste</code> você irá mudar para o ramo <code>teste</code>. Você pode fazer isso pelo terminal também, usando o comando <code>checkout &lt;branch&gt;</code>, que no nosso caso seria:</p>
 <pre class="bash"><code>git checkout teste</code></pre>
-<p>Na imagem que mostramos também tem um outro botão, com destaque vermelho. Esse serve para você adicionar um branch. Na prática ele faz a mesma coisa que o comando <code>git push -u origin &lt;branch&gt;</code>.</p>
+<p>Na imagem que mostramos também tem um outro botão, com destaque vermelho. Esse serve para você adicionar um branch. Na prática ele faz a mesma coisa que os dois comandos usados anteriormente (<code>git checkout -d ``git push -u origin &lt;branch&gt;</code>).</p>
 <p>Você pode listar os seus branches pelo terminal também. Basta fazer <code>git branch</code> e aparecerá uma lista com cada um dos ramos. Aquela que aparecer em cor diferente e com um asterisco <code>*</code> na frente é o ramo em que você está trabalhando. Vale notar que se você fizer <code>git branch teste2</code> você irá criar um branch local, sem equivalente no repositório remoto. Para excluir um repositorio localmente basta dar o comando <code>git branch -d &lt;branchlocal&gt;</code>, no caso de <code>teste2</code> seria:</p>
 <pre class="bash"><code>git branch -d teste2</code></pre>
 <p>Para forçar um branch local no remoto basta fazer:</p>
+<pre class="bash"><code>git push -u origin teste2</code></pre>
+<p>Repare que é a mesma coisa que feita originalmente, porém com as partes decompostas.</p>
 <p>No caso de você querer excluir um branch no seu repositório remoto o comando é <code>git push origin --delete &lt;remoteBranchName&gt;</code>. No caso de ter um branch remoto chamado <code>teste3</code>, o comando seria:</p>
 <pre class="bash"><code>git push origin --delete teste3</code></pre>
-<p>Aqui está boa parte do que há para aprender sobre como criar</p>
+<p>Aqui está boa parte do que há para aprender sobre como criar e deletar branches.</p>
 </div>
 <div id="merge" class="section level2">
 <h2>Merge</h2>
 <p>Na última seção aprendemos como criar e deletar branches. O que nos interessa agora é aprender a fundir dois branches. Para isso serve o comando merge. Vamos criar um branch chamado <code>code1</code> (veja <a href="https://github.com/MarceloRTonon/git_merge">aqui</a> o resultado final do repositorio <code>git_merge</code> que será o exemplo nesta parte.):</p>
-<pre class="bash"><code>git -u origin code1</code></pre>
+<pre class="bash"><code>git branch -d code1
+git push -u origin code1
+git checkout code1</code></pre>
+<p>Vamos então agora criar um código, dentro do branch <code>code1</code> chamado <code>codigo1.R</code>. Nele vai ter escrito:</p>
+<pre class="r"><code>## Codigo 1
+a &lt;- &quot;Criando um código para todos&quot;
+
+d &lt;- list(&quot;A&quot;= 10,
+          &quot;B&quot;=20,
+          &quot;C&quot;=30,
+          &quot;D&quot;=40,
+          &quot;F&quot;=50
+          )</code></pre>
+<p>Importante, o branch <code>master</code> não vai ter esse código. Agora dê os comandos para dar o commit:</p>
+<pre class="bash"><code>git add -A
+git commit -m &quot;codigo1&quot;</code></pre>
+<p>Agora, volte para o branch master, usando <code>git checkout master</code>, e crie um documento chamado <code>codigomaster.R</code> que tem escrito:</p>
+<pre class="r"><code>#Codigomaster
+
+H &lt;- &quot;Controle geral sobre os dados&quot;</code></pre>
+<p>Repare que o arquivo <code>codigomaster.R</code> não existe no branch <code>code1</code> e o arquivo <code>codigo1.R</code>, não existe no branch <code>master</code>. Para unir os dois vamos usar o comando <code>git merge</code>:</p>
+<pre class="bash"><code>git merge code1</code></pre>
+<p>Nesse caso, você pode reparar que o arquivo <code>codigo1.R</code> está agora também no branch principal. e dê como comando <code>git merge &lt;branch&gt;</code>. Repare porém que não há o <code>codigomaster.R</code> no branch <code>code1</code>.</p>
+<p>Agora, vamos voltar para o branch <code>code1</code> e criar um branch <code>code2</code> a partir do <code>code1</code>:</p>
+<pre class="bash"><code>git checkout code1
+git checkout -b code2</code></pre>
+<p>Vamos abrir o <code>codigo1.R</code> e fazer a seguinte alteração:</p>
+<pre class="r"><code>## Codigo 1
+a &lt;- &quot;Criando um código para todos&quot;
+
+d &lt;- list(&quot;A&quot;= 10,
+          &quot;B&quot;=20,
+          &quot;C&quot;=30,
+          &quot;D&quot;=40,
+          &quot;F&quot;=55,
+          &quot;G&quot;=60
+          )</code></pre>
+<p>Repare que alteramos a linha em que definimos “F” e passamos a definir o elemento “G=60”. Agora, vamos voltar para o branch <code>code1</code>. Nele altere a linha que tem <code>&quot;A&quot;= 10</code> para <code>&quot;A&quot; = 15</code>. Repare que agora, temos algumas informações novas no branch <code>code1</code> e outras em <code>code2</code>. Vamos dar então um merge a partir de <code>code1</code>:</p>
+<pre class="bash"><code>git merge code2</code></pre>
+<p>Disso coisas importantes devem ser ditas:</p>
+<ul>
+<li>O branch escrito no comando é o branch que você fundirá com o branch que você está mexendo nesse exato momento. Então, se você tiver no branch master e escrever <code>git merge code1</code> você irá fundir o branch <code>master</code> com o <code>code1</code> e isso ficará <em>gravado no <code>master</code></em>.</li>
+<li>O merge confere as linhas de cada código. Dessa forma, quando criamos o elemento<code>&quot;G&quot; = 60</code>, o git não entenderá isso como uma nova linha, e sim você alterando a linha que antes tinha o <code>)</code>. No caso, ele entenderá como uma nova linha o <code>)</code> que está na linha abaixo, uma vez que ela não existia antes.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></li>
+</ul>
+<p>Desse modo, o merge permite que você e outras pessoas trabalhem de modo paralelo num mesmo projeto. Porém nem tudo é flores e podem existir conflitos.</p>
+<div id="conflitos-entre-branches" class="section level3">
+<h3>Conflitos entre branches</h3>
+<p>No nosso mesmo exemplo, pode acontecer que você e outra pessoa alteraram o mesmo arquivo nas mesmas linhas enquanto trabalhavam. Isso pode ser bastante problemático, pois dará conflitos entre os branches. Para testar vamos fazer o seguinte (dando o add e commit em todas as alterações feitas): 1. Em code1 coloque uma linha vazia antes de <code>a</code>. Dê commit nas alterações. 2. Em code2 troque o valor de <code>G=60</code> para <code>G=95</code>. Dê commit nas alterações. 3. Volte para code1 e tente fazer o merge com code2.</p>
+<p>É importante notar que em <code>code1</code>, quando você adicionou um linha em branco você fez várias alterações, pois agora, o conteudo da linha 5 foi para a linha 6, o da 6 para a 7 e assim por diante. Você alterou tudo que estava abaixo da nova linha em branco que você adicionou. Logo, o commit que você deu em 1 envolve todas essas linhas. Por sua vez, em 2 você também deu um commit com uma mudança de uma das linhas alteradas em 1. Desse modo, você tem dois commits conflitantes. Será de tal modo que o Terminal irá avisar com algo como:</p>
+<pre><code>Auto-merging code1.R
+CONFLICT (content): Merge conflict in code1.R
+Automatic merge failed; fix conflicts and then commit the result.</code></pre>
+<p>E se você abrir o arquivo <code>codigo1.R</code> vai ter algo como:</p>
+<pre class="r"><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+          &quot;G&quot;=60
+          )
+=======
+          &quot;G&quot;=95
+          )
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; code2</code></pre>
+<p>Ou seja, você vai ter que alterar e dizer qual dos valores de G você quer. Assim, você mantém só as linhas que você quer, excluindo as com <code>&lt;&lt;&lt;</code>, <code>===</code> e <code>&gt;&gt;&gt;&gt;</code> também. Depois de resolvido, dê o git add e commit para finalizar o problema. Se não há solução para o conflito, você pode abortar o merge com <code>git merge --abort</code>.</p>
+<p>Acima demos um exemplo simples, porém quando as coisas escalonam podem ficar monstruosas e dar uma dor de cabeça imensa. Por conta disso, muitas vezes é melhor evitar os conflitos de merge, adotando algumas boas práticas (algumas delas valem para equipe e outras para sozinho mesmo):</p>
+<ul>
+<li><strong>Comunicação!</strong> Se você e seus colegas estão trabalhando numa mesma parte em diferentes branches e isso pode dar ruim, converse com eles. Falem um para o outro que estão fazendo e onde. Sabendo onde o seu colega está mexendo, você naturalmente terá mais cuidade. Pode até avisar ele que vai fazer uma alteração especifica.</li>
+<li><strong>Confira as diferenças</strong> antes de dar o merge. Como? Simples, use o comando <code>git diff branch1..branch2</code> no terminal e vá dando enter no terminal que isso fará você ver qual a diferença do <code>branch1</code> para o <code>branch_2</code> (sim, tem dois pontos finais <code>..</code> entre eles). <strong>Importante:</strong> vá dando enter toda vida pois as diferenças vão aparecendo aos poucos no terminal do RStudio. <strong>Ao final, escreva Q no terminal para sair.</strong> Com as informações das diferenças em mão, você já tem condições de ver o que fazer com cada uma.</li>
+<li><strong>Faça mais scripts curtos.</strong> Ao invés de escrever um código imenso, dê prefêrencia para fazer vários códigos mais curtos. Isso irá evitar que mudar uma parte do código altere todo o resto. Além disso, fica muito mais fácil e organizado em vários códigos menores. A função <code>source()</code> do R te permite rodar um outro script diretamente. Ou seja, você pode criar uma cadeia de scripts sem problemas.</li>
+<li><strong>Combinem quando for dar um merge.</strong> Dar o merge será a grande hora da verdade muitas vezes. Assim é interessante que todos da equipe fiquem preparados para ele, de modo que se algo acontecer, ninguém esta desavisado (e vocês podem pensar em uma saída).</li>
+<li><strong>Deixe o merge para quem se sente confortável!</strong> É aquela, nem sempre a gente vai ficar confiante de que vai dar tudo certo. Se você acha que algo pode dar errado e que tem alguém mais capaz que você, deixe para essa pessoa. A depender do conflito, vale a pena você especificar o que é cada coisa.</li>
+<li><strong>Teste antes de fazer!</strong> <em>Veja a próxima seção.</em></li>
+</ul>
+<div id="testando-conflitos-e-resultados" class="section level4">
+<h4>Testando conflitos e resultados</h4>
+<p>Por fim, você pode testar se haverá conflitos e qual vai ser o resultado final. Isso evita que você faça um <code>merge</code> e o resultado final não seja bom. Para evitar isso, vale fazer o seguinte hábito. Suponha que você quer fazer o merge no <code>branch1</code> com o <code>branch2</code>. Estando em <code>branch1</code>, faça um clone de <code>branch1</code>, nesse caso <code>branch1a</code>:</p>
+<pre class="bash"><code>git checkout -b branch1a</code></pre>
+<p>Com o <code>branch1a</code> feito dê então o merge:</p>
+<pre class="bash"><code>git merge branch2</code></pre>
+<p>Nesse caso, você vai testar em <code>branch1a</code> como vai ser o merge de <code>branch1</code>com <code>branch2</code>. Se vai dar erro, se não vai, qual vai ser o erro. Tudo isso pode ser resolvido lá. Com isso tudo já feito, você pode simplesmente fazer</p>
+</div>
+</div>
 </div>
 </div>
 <div id="pacotes-fora-do-cran" class="section level1">
@@ -622,6 +702,7 @@ devtools::install_github(&quot;pacoteTAL&quot;)</code></pre>
 <li id="fn2"><p>Para Windows<a href="#fnref2" class="footnote-back">↩</a></p></li>
 <li id="fn3"><p>Para isso basta clicar com o mouse direito em cima do arquivo e selecionar <em>Abrir com</em> e selecionar um aplicativo como Bloco de Notas.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 <li id="fn4"><p>A opção para o login na página inicial é em <code>Sign in</code>.<a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p>Estamos aqui considerando que não existe linha nenhuma depois de <code>)</code> em nenhum dos casos.<a href="#fnref5" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

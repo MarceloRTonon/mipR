@@ -404,8 +404,134 @@ Na última seção aprendemos como criar e deletar branches. O que nos interessa
 ```{bash}
 git branch -d code1
 git push -u origin code1
+git checkout code1
 ```
 
+Vamos então agora criar um código, dentro do branch `code1` chamado `codigo1.R`. Nele vai ter escrito:
+
+```{r}
+## Codigo 1
+a <- "Criando um código para todos"
+
+d <- list("A"= 10,
+          "B"=20,
+          "C"=30,
+          "D"=40,
+          "F"=50
+          )
+```
+
+Importante, o branch `master` não vai ter esse código. Agora dê os comandos para dar o commit:
+
+```{bash}
+git add -A
+git commit -m "codigo1"
+```
+
+Agora, volte para o branch master, usando `git checkout master`, e crie um documento chamado `codigomaster.R` que tem escrito:
+
+```{r}
+#Codigomaster
+
+H <- "Controle geral sobre os dados"
+```
+
+Repare que o arquivo `codigomaster.R` não existe no branch `code1` e o arquivo `codigo1.R`, não existe no branch `master`. Para unir os dois vamos usar o comando `git merge`:
+
+```{bash}
+git merge code1
+```
+
+Nesse caso, você pode reparar que o arquivo `codigo1.R` está agora também no branch principal. 
+e dê como comando `git merge <branch>`. Repare porém que não há o `codigomaster.R` no branch `code1`.
+
+Agora, vamos voltar para o branch `code1` e criar um branch `code2` a partir do `code1`:
+
+```{bash}
+git checkout code1
+git checkout -b code2
+```
+
+Vamos abrir o `codigo1.R` e fazer a seguinte alteração:
+
+```{r}
+## Codigo 1
+a <- "Criando um código para todos"
+
+d <- list("A"= 10,
+          "B"=20,
+          "C"=30,
+          "D"=40,
+          "F"=55,
+          "G"=60
+          )
+```
+
+Repare que alteramos a linha em que definimos "F" e passamos a definir o elemento "G=60". Agora, vamos voltar para o branch `code1`. Nele altere a linha que tem `"A"= 10` para `"A" = 15`. Repare que agora, temos algumas informações novas no branch `code1` e outras em `code2`. Vamos dar então um merge a partir de `code1`:
+
+```{bash}
+git merge code2
+```
+
+Disso coisas importantes devem ser ditas:
+
+ - O branch escrito no comando é o branch que você  fundirá com o branch que você está mexendo nesse exato momento. Então, se você tiver no branch master e escrever `git merge code1` você irá fundir o branch `master` com o `code1` e isso ficará *gravado no `master`*.
+ - O merge confere as linhas de cada código. Dessa forma, quando criamos o elemento` "G" = 60`, o git não entenderá isso como uma nova linha, e sim você alterando a linha que antes tinha o `)`. No caso, ele entenderá como uma nova linha o `)` que está na linha abaixo, uma vez que ela não existia antes.^[Estamos aqui considerando que não existe linha nenhuma depois de `)` em nenhum dos casos.]
+ 
+Desse modo, o merge permite que você e outras pessoas trabalhem de modo paralelo num mesmo projeto. Porém nem tudo é flores e podem existir conflitos.
+
+### Conflitos entre branches
+
+No nosso mesmo exemplo, pode acontecer que você e outra pessoa alteraram o mesmo arquivo nas mesmas linhas enquanto trabalhavam. Isso pode ser bastante problemático, pois dará conflitos entre os branches.  Para testar vamos fazer o seguinte (dando o add e commit em todas as alterações feitas):
+ 1. Em code1 coloque uma linha vazia antes de `a`. Dê commit nas alterações.
+ 2. Em code2 troque o valor de `G=60` para `G=95`. Dê commit nas alterações.
+ 3. Volte para code1 e tente fazer o merge com code2.
+ 
+ É importante notar que em `code1`, quando você adicionou um linha em branco você fez várias alterações, pois agora, o conteudo da linha 5 foi para a linha 6, o da 6 para a 7 e assim por diante. Você alterou tudo que estava abaixo da nova linha em branco que você adicionou. Logo, o commit que você deu em 1 envolve todas essas linhas. Por sua vez, em 2 você também deu um commit com uma mudança de uma das linhas alteradas em 1. Desse modo, você tem dois commits conflitantes. Será de tal modo que o Terminal irá avisar com algo como:
+ 
+```
+Auto-merging code1.R
+CONFLICT (content): Merge conflict in code1.R
+Automatic merge failed; fix conflicts and then commit the result.
+```
+ E se você abrir o arquivo `codigo1.R` vai ter algo como:
+ 
+```{r}
+<<<<<<< HEAD
+          "G"=60
+          )
+=======
+          "G"=95
+          )
+>>>>>>> code2
+```
+
+Ou seja, você vai ter que alterar e dizer qual dos valores de G você quer. Assim, você mantém só as linhas que você quer, excluindo as com `<<<`, `===` e `>>>>` também. Depois de resolvido, dê o git add e commit para finalizar o problema. Se não há solução para o conflito, você pode abortar o merge com `git merge --abort`.
+
+Acima demos um exemplo simples, porém quando as coisas escalonam podem ficar monstruosas e dar uma dor de cabeça imensa. Por conta disso, muitas vezes é melhor evitar os conflitos de merge, adotando algumas boas práticas (algumas delas valem para equipe e outras para sozinho mesmo):
+
+ - **Comunicação!** Se você e seus colegas estão trabalhando numa mesma parte em diferentes branches e isso pode dar ruim, converse com eles. Falem um para o outro que estão fazendo e onde. Sabendo onde o seu colega está mexendo, você naturalmente terá mais cuidade. Pode até avisar ele que vai fazer uma alteração especifica.
+ - **Confira as diferenças** antes de dar o merge. Como? Simples, use o comando `git diff branch1..branch2` no terminal e vá dando enter no terminal que isso fará você ver qual a diferença do `branch1` para o `branch_2` (sim, tem dois pontos finais `..` entre eles). **Importante:** vá dando enter toda vida pois as diferenças vão aparecendo aos poucos no terminal do RStudio. **Ao final, escreva Q no terminal para sair.** Com as informações das diferenças em mão, você já tem condições de ver o que fazer com cada uma.
+ - **Faça mais scripts curtos.** Ao invés de escrever um código imenso, dê prefêrencia para fazer vários códigos mais curtos. Isso irá evitar que mudar uma parte do código altere todo o resto. Além disso, fica muito mais fácil e organizado em vários códigos menores. A função `source()` do R te permite rodar um outro script diretamente. Ou seja, você pode criar uma cadeia de scripts sem problemas.
+ - **Combinem quando for dar um merge.** Dar o merge será a grande hora da verdade muitas vezes. Assim é interessante que todos da equipe fiquem preparados para ele, de modo que se algo acontecer, ninguém esta desavisado (e vocês podem pensar em uma saída).
+ - **Deixe o merge para quem se sente confortável!** É aquela, nem sempre a gente vai ficar confiante de que vai dar tudo certo. Se você acha que algo pode dar errado e que tem alguém mais capaz que você, deixe para essa pessoa. A depender do conflito, vale a pena você especificar o que é cada coisa.
+ - **Teste antes de fazer!** _Veja a próxima seção._
+ 
+#### Testando conflitos e resultados
+
+Por fim, você pode testar se haverá conflitos e qual vai ser o resultado final. Isso evita que você faça um `merge` e o resultado final não seja bom. Para evitar isso, vale fazer o seguinte hábito. Suponha que você quer fazer o merge no `branch1` com o `branch2`. Estando em `branch1`, faça um clone de `branch1`, nesse caso `branch1a`:
+
+```{bash}
+git checkout -b branch1a
+```
+
+Com o `branch1a` feito dê então o merge:
+
+```{bash}
+git merge branch2
+```
+
+Nesse caso, você vai testar em `branch1a` como vai ser o merge de `branch1`com `branch2`. Se vai dar erro, se não vai, qual vai ser o erro. Tudo isso pode ser resolvido lá. Com isso tudo já feito, você pode simplesmente fazer 
 
 # Pacotes fora do CRAN
 
