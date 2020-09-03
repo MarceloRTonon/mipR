@@ -1,7 +1,7 @@
 ---
 title: "Indicadores de Encadeamentos"
 author: "Felipe Cornelio e Marcelo Tonon"
-date: "23/08/2020"
+date: "03/09/2020"
 output: html_document
 ---
 
@@ -256,9 +256,14 @@ rownames(TL_2) <- nomes_atividades
 
 
 ```{r}
+# Criando um vetor com o Rank separado
+TL <- data.frame(TL,rank(-TL))
+names(TL) <- c("TL", "Rank") 
+
 # Gerando a tabela
 formattable(TL,list(
-  TL = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("%.2f (R: %02g)", x, rank(-x)))))  %>% as.datatable()
+  TL = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray"))),
+  Rank = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray"))))) %>% as.datatable()
 ```
 
 ## 4.2 Eigenvector
