@@ -280,7 +280,7 @@ names(TL) <- c("TL", "Rank")
 # Gerando a tabela
 formattable(TL,list(
   TL = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray"))),
-  Rank = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray"))))) %>% as.datatable()
+  Rank = formatter("span", style = x ~ style(color = ifelse(rank(x) <= 5, "darkgreen", "gray"))))) %>% as.datatable()
 ```
 
 ## 4.2 Eigenvector
