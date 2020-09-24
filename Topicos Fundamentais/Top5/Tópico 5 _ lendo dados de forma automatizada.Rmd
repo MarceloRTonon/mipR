@@ -141,14 +141,6 @@ writeLines(z)
 
 Para que o R leia corretamente o que vc deseja na frase, é necessário usar a função `writeLines()`.
 
-```{r MT_quote, eval = FALSE, include = FALSE}
-#Falar de "" e ''.
-
-#Faça algo similar ao Strings Basics do R4DS ( https://r4ds.had.co.nz/strings.html#string-basics) sobre a necessidade de usar "" e '' e etc...
-
-#Olhe em ?Quotes também.
-```
-
 Aqui entra um importante tema quando trabalhando com `strings` e `characters`: os caracteres especiais e os nomes não convencionais. Tratam de letras, símbolos e caracteres que não estão no escopo padrão da linguagem e em geral associoados a elementos de língua não-inglesa. Entrem aqui, por exemplo, elementos do alfabeto grego^[No próprio wikipedia é possível encontrar uma lista com os unicodes ([link](https://en.wikipedia.org/wiki/Greek_and_Coptic))].
 
 ```{r, eval=T}
@@ -214,43 +206,6 @@ sum <- function(x,y) rbind(x,y)
 Agora, é possível ter diversas confusões com a função c() e a extração de um elemento de c[], confundir a operação de transposição com a própria transposta em si, e assim por diante.
 
 
-```{r MT_reserved, eval = FALSE, include = FALSE}
-#Falar dos nomes reservados e sobre os nomes não convencionais. Importante você deixar claro que não é para sair definindo objetos com esses nomes, mesmo tendo como fazer isso. Fale que é para deixar reservado isso para nomes de elementos listas. 
-
-# Para te ajudar nisso tudo , vale você dar uma olhada no R Documentation "?Reserved", 
-
-
-#Exemplos:
-
-# TRUE <- "impossível pois o R não deixa"
-# Fale como F e T são "apelidos" de FALSE e TRUE.
-
-# Coloque no meio disso tudo o chunck lista_reservados.
-
-# Fale do que deixa nome impossível (espaço, parenteses, aspas e etc) Veja mais sobre em: https://adv-r.hadley.nz/names-values.html#non-syntactic
-
-
-
-# Fale como se pode burlar as impossibilidades
-# `TRUE` <- paste("truly", "chaotic", "evil", sep = " ")
-# `2000` <- "PESSIMO"
-#"df$`2000`$AUS" <- "ACEITÁVEL"
-
-# `x y` <- "dez anos de gulag"
-# T <- "passível de fuzilamento"
-
-
-#Fale também sobre as boas práticas de não criar objetos com nomes já usados. 
-
-#c <- c(1:4)
-#matrix <- matrix(c(1:4), nrow = 2)
-#t <- t(matrix(c(1:4), nrow =2))
-# sum <- function(x,y) rbind(x,y)
-
-# Fale do risco disso criar uma mega confusão ao longo do código e para o computador.
-```
-
-
 ### Criando nomes legitimos
 
 Caso você queira fazer uma nomeação semelhante a algum nome reservado ou impossível, existe uma função do R que irá te sugerir um nome possível e semelhante ao que você colocar como input:
@@ -267,25 +222,6 @@ make.names("x y")
 São nomes semelhantes mas que possuem uma sintaxe possível de ser usada diretamente no R. No entanto, reforçamos que mesmo os nomes criados por 'make.names()' devem ser evitados, principalmente para objetos que serão incluídos no seu global environment. De um modo geral, se está sendo necessário usar a função `make.names()`, é preferível repensar a nomeclatura das variáveis, de forma que não seja usada a `make.names()`.
 
 Uma observação importante é que para elementos dentro de algum objeto, em especial algum `data.frame`, a função `make.names()` exerce um papel relevante. Um dos inputs da função `data.frame` é `checknames`, em que ao se ter `TRUE` o R aplica `make.names()` sobre os nomes das colunas, forçando a criação de nomes possíveis para todas as colunas. Essa é uma das situações em que o uso de `make.names()` é menos problemático, que seria dentro de algum objeto e não no seu global environment.
-
-
-
-```{r MT_makenames, eval = FALSE, include = FALSE}
-#mostre os exemplos de você transformando nomes ruins em nomes legitimos com a função make.names (veja ?make.names)
-
-# make.names(TRUE)
-# make.names(NA)
-# make.names("NA")
-# make.names(2000)
-# make.names("_A")
-# make.names("x y")
-
-## Em suma oque acontece com cada um:
-# make.names("nomevalido")
-# make.names("_nome invalido")
-# Mas chame a atenção para o fato de que podendo, é sempre melhor evitar dar nomes a objetos do Global Environment que precise de make.names(). Mas fale, que em data.frame(..., check.names = TRUE) os nomes das colunas passam por make.names()
-
-```
 
 
 ## O pacote stringr
@@ -547,94 +483,3 @@ zip(zipfile = "TRU/TRU_VA.zip", files = arquivos_TRU_VA)
 ```
 
 Outras possibilidades englobam usar o pacote `stringr` para reunir todos os arquivos que, por exemplo, tenham a mesma extensão. Para isso basta realizar o subset de acordo com os arquivos que deseja reunir ou listar. No próprio `list.file()` é possível escolher como padrão um ".csv" que reunirá todos os nomes de arquivos desse tipo.
-
-
-```{r MT_coment, include=F, eval=F}
-
-#Fale então para o usuário abrir um dos arquivos de excel fora do R. A depender do software usado é possível que o sistema operacional podem gerar um arquivo com `$` na frente (isso ocorre especialmente quando o arquivo veio zipado). Esse arquivo pode estar oculto quando você entra na pasta inclusive. Relembre então de `\\$`! (Qualquer coisa, usa o paste0 mesmo para dizer essa parte.)
-
-```
-
-
-```{r, include=F}
-
-# Comentários do MT
-
-
-```
-
-
-```{r MT_str_def, eval= FALSE, include = FALSE}
-#Defina o que é uma string em termos gerais de programação. Procura na internet uma definição e tenta deixar ela mastigada, mas também sem dar muitas voltas. Não precisa definir string no contexto do R não logo de cara não, a definição pode ser ampla (e é até melhor se você conseguir). Um paragrafo falando disso. É melhor você definir primeiro num contexto geral, para então falar no R.
-
-#Depois que você definir, fale no contexto do R (que não tem um tipo de dados chamados de strings por si só). Seria interessante você falar (mesmo que numa nota de rodapé) que existe uma função is.string() do pacote xtable (para produzir tabelas em tex) porém que na própria seção de Details da função diz que ela não deve ser usada em outro contexto. Assim, vale falar que no R não tem uma distinção entre strings e character. Que em outras linguagens é que há essa diferença (em muitas linguagens character se refere a letras individuais, enquanto string é um conjunto de characters).
-
-#https://stackoverflow.com/questions/18513200/what-is-the-difference-between-string-and-character-in-r
-
-#https://pediaa.com/what-is-the-difference-between-character-and-string/
-```
-
-
-```{r MT_base_de_dados, eval = FALSE, include = FALSE}
-#Procure uma base de dados que tenha muitos nomes... Os exemplos de stringr na cheatsheet do RStudio (está na pasta Top5) são todos usando a base fruit. Vale você usar ela para você aprender o que cada função do pacote faz e funciona, PORÈM lembre que não é para usar ela para evitar problemas de copyright. 
-
-#Dica: Na falta de algo melhor, dentro do próprio pacote datasets tem uma base de dados que pode ser interessante: "USJudgeRatings". Apresenta a função "tibble::rownames_to_column()" para transformar os nomes das linhas numa coluna. .
-  
-# Se você quiser, pode fazer uma base própria usando paste e paste0.
-
-# Dica: Se você fizer:
-
-#df_vignette <- vignette(all= TRUE)[[4]] %>% as.data.frame
-
-#você tem aí um belo data.frame só com strings para você brincar. Se você não quiser fazer isso na parte expositiva, é uma boa ideia para a lista de exercicios. Só vale dizer que vai ser diferente para cada usuário, uma vez que cada um instalou pacotes diferentes.
-```
-
-```{r MT_stringr, eval = FALSE, include = FALSE}
-# Decidida a base de dados que você vai usar, aplique nela os exemplos presentes na página 1 do cheatsheet. 
-
-# Dica, use o help em todas as funções. Explique na primeira os argumentos que aparecem nela "str_detect(string, pattern, negate = FALSE)" (sempre mostra a função assim como tá em usage)  e explica o que cada um quer dizer. Aí você segue nas seguintes funções só falando os argumentos que mudarem.
-
-#Veja o exemplo abaixo na seção "#### Usando ``stringr` para detectar padrões"
-```
-
-```{r MT_stringr_final, eval = FALSE, include =FALSE}
-#Vá falando das funções de `stringr` nesse nível. Se você precisar de inspiração nas explicações pega o capítulo disso no R4DS e as vignettes de R.
-
-#Da segunda página do cheatsheet fala só a parte que tem "need to know".
-
-#### MUITO RELEVANTE: Fale de "$", que quando você quando for usar str_subset e um dos valores tiver "$" no meio do nome, não bastará usar pattern = "$", nem "\$". Deve ser "\\$".
-```
-
-```{r MT_stringi, eval = FALSE, include =FALSE}
-#Não precisa entrar em nada de regex ou nada especifico do stringi. Vamos deixar isso para um tópico suplementar mais a frente se necessário.
-```
-
-
-```{r, MT_download, include=F, eval=F}
-
-#Fala da função download.file. Fala da questão de dados binários ou não precisa ser `mode= wb` e etc...
-
-#Já que o ibge é um porre conseguir o link direto para o download, faz pra NIOT mesmo... Não precisa baixar o zip de todos os páises via o R (já que ele é imenso e só faz em primeiro plano). Baixa algum outro, mas explica a função por parte. Fala também da questão dos arquivos e diretórios temporarios e etc...
-
-```
-
-
-```{r, MT_decode, include=F, eval=F}
-
-#Funções `zip`, `unz`, `unzip`, `unzip(..., list = TRUE)` e `unzip(..., files = c("", ""))`.
-
-#Brinca com os arquivos que você criou para lidar com isso e etc... Mostra como fazer uma sequência para importar arquivos pro R e etc... Usa `str_sub()` para criar o nome dos objetos e etc... 
-
-```
-
-```{r MT_listfiles, eval = FALSE, include = FALSE}
-#Fale da função list.files primeiro em abstrato.
-
-#Depois, crie, a partir das bases dentro datasets do R, uma série de arquivos xlsx com openxlsx::write.xlsx. Coloque todos numa pasta x.
-
-#Usa list.files() na pasta.
-
-#Leia então usando map. Importante o as.list()
-
-
-```
