@@ -1737,7 +1737,26 @@ ou
   x=(I-A)^{-1}f
 \end{equation}\]</span></p></li>
 </ul>
-<p>Por este curso ser voltado para análises de Insumo-Produto, há interesse especial na apresentação de dados forma matricial. Para inserir uma matriz precisamos além da equação, inserir um comando para criar a forma de uma matriz</p>
+<p>Por este curso ser voltado para análises de Insumo-Produto, há interesse especial na apresentação de dados forma matricial. Para inserir uma matriz precisamos além da equação, inserir um comando para criar a forma de uma matriz, no caso como o <code>\begin{pmatrix}</code></p>
+<pre class="r"><code>$$
+\begin{pmatrix}
+  Escrever a matriz  
+\end{pmatrix}
+$$
+    
+# Exemplo
+    
+$$
+A=\begin{pmatrix}
+a_{11} &amp; a_{12} \\ a_{21} &amp; a_{22} 
+\end{pmatrix}
+$$</code></pre>
+<p>A matriz do exemplo seria visualizada da seguinte forma:</p>
+<p><span class="math display">\[
+A=\begin{pmatrix}
+a_{11} &amp; a_{12} \\ a_{21} &amp; a_{22} 
+\end{pmatrix}
+\]</span></p>
 </div>
 </div>
 <div id="rodando-o-código" class="section level1">
@@ -1746,7 +1765,7 @@ ou
 <ol style="list-style-type: decimal">
 <li>Na barra de edição no topo de onde escrevemos o código, temos o botão “knit”. Basta clicar nele e em seguida na opção “knit to HTML”<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</li>
 <li>pelo console chamando o pacote <code>rmarkdown</code> e usando a função <code>render()</code>, tal que: <code>rmarkdown::render(&quot;Local e nome do arquivo&quot;)</code></li>
-<li>Por fim, o mais rápido e simples é usando o atalho <code>ctrl + alt + k</code> em alusão ao knit.</li>
+<li>Por fim, o mais rápido e simples é usando o atalho <code>ctrl + shift + k</code> em alusão ao knit.</li>
 </ol>
 <p>Com isso você consegue ter o básico para criar um relatório, apresentação ou arquivo dinâmico usando o R Markdown. O uso de documentos desse tipo é essencial para quem trabalha com pesquisa acadência, além de ser capaz de contribuir para que seu trabalho ou pesquisa seja mais acessível para outras pesssoas.</p>
 </div>

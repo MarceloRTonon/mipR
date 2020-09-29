@@ -273,8 +273,31 @@ Visualizando os resultados:
     x=(I-A)^{-1}f
   \end{equation}
 
-Por este curso ser voltado para análises de Insumo-Produto, há interesse especial na apresentação de dados forma matricial. Para inserir uma matriz precisamos além da equação, inserir um comando para criar a forma de uma matriz
+Por este curso ser voltado para análises de Insumo-Produto, há interesse especial na apresentação de dados forma matricial. Para inserir uma matriz precisamos além da equação, inserir um comando para criar a forma de uma matriz, no caso como o `\begin{pmatrix}`
 
+```{r, eval=F}
+$$
+\begin{pmatrix}
+  Escrever a matriz  
+\end{pmatrix}
+$$
+    
+# Exemplo
+    
+$$
+A=\begin{pmatrix}
+a_{11} & a_{12} \\ a_{21} & a_{22} 
+\end{pmatrix}
+$$
+```
+
+A matriz do exemplo seria visualizada da seguinte forma:
+
+$$
+A=\begin{pmatrix}
+a_{11} & a_{12} \\ a_{21} & a_{22} 
+\end{pmatrix}
+$$
 
 # Rodando o código
 
@@ -282,7 +305,7 @@ Por fim, com seu arquivo `.Rmd` completo o passo final é gerar seu arquivo. Exi
 
 1. Na barra de edição no topo de onde escrevemos o código, temos o botão "knit". Basta clicar nele e em seguida na opção "knit to HTML"^[Obs: existe a opção de gerar outros tipos de arquivo como você verá no botão knit, tais como os mais usuais pdf e word.]. 
 1. pelo console chamando o pacote `rmarkdown` e usando a função `render()`, tal que: `rmarkdown::render("Local e nome do arquivo")`
-1. Por fim, o mais rápido e simples é usando o atalho `ctrl + alt + k` em alusão ao knit.
+1. Por fim, o mais rápido e simples é usando o atalho `ctrl + shift + k` em alusão ao knit.
 
 Com isso você consegue ter o básico para criar um relatório, apresentação ou arquivo dinâmico usando o R Markdown. O uso de documentos desse tipo é essencial para quem trabalha com pesquisa acadência, além de ser capaz de contribuir para que seu trabalho ou pesquisa seja mais acessível para outras pesssoas.
 
