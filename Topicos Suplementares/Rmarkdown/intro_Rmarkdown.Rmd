@@ -228,31 +228,52 @@ Para a inserção de algum link para alguma página da internet, inserir uma ima
 
 ## Tabelas
 
-Agora para inserir uma tabela no corpo do texto ()
+Agora para inserir uma tabela na parte de texto livre é pelo uso de de trações e barras que separam os conteúdos. Lembrando que existe ainda a opção de inserir tabelas usando os códigos do R dentro do chunk, tal como fosse criado normalmente em seu código. Vejamos o exemplo para uma tabela de três colunas e três linhas, sendo uma delas do cabeçalho da tabela:
 
 ```{r, eval=FALSE}
 
-   Título 1   |   Título 2
-------------- | -------------
-   Conteúdo   |   Conteúdo
-   Conteúdo   |   Conteúdo
+   Título 1   |   Título 2    |   Título 3
+------------- | ------------- | ------------- 
+   Conteúdo   |   Conteúdo    |   Conteúdo
+   Conteúdo   |   Conteúdo    |   Conteúdo
 ```
 
+A tabela descrita acima teria o seguinte formato:
 
-   Título 1   |   Título 2
-------------- | -------------
-   Conteúdo   |   Conteúdo
-   Conteúdo   |   Conteúdo
+   Título 1   |   Título 2    |   Título 3
+------------- | ------------- | ------------- 
+   Conteúdo   |   Conteúdo    |   Conteúdo
+   Conteúdo   |   Conteúdo    |   Conteúdo
 
+Essa configuração poderia ser reduzida ou expandida de acordo com a necessidade, não se limitando ao exemplo usado. Esse tipo de configuração (de tabelas no corpo do texto) são mais indicadas para ilustrações ou resultados com poucas informações, deixando tabelas com maior número de informações para os próprios chunks e, consequentemente, no código do R
 
 ## Equações
 
+Por fim, uma das configurações mais relevantes do markdown é poder inserir equações que vão representar de forma mais clara as operações que estão sendo realizadas. Existem duas principais maneiras de se incluir uma equação: nas próprias linhas dos parágrafos ou como um elemento separado. O delimitador de uma equação é símbolo `$` para equações na linha e `$$` para equações na linha seguinte. No caso de equações separadas há ainda uma terceira forma, que é usando os comandos `\begin{equation}`. A representação seria tal como se segue:
+
+```{r, eval=F}
+
 Equações na linha: $x=(I-A)^{-1}f$
-Equações separadas
-$$x=(I-A)^{-1}f$$
 
+Equações separadas: $$x=(I-A)^{-1}f$$
+ou
+  \begin{equation}
+  x=(I-A)^{-1}f
+  \end{equation}
+```
 
-Para inserir uma matriz precisamos além da equação, inserir um comando para criar a forma de uma matriz
+Visualizando os resultados:
+
+- Equações na linha: $x=(I-A)^{-1}f$
+
+- Equações separadas: $$x=(I-A)^{-1}f$$ 
+
+- Equações separados (com begin):   
+  \begin{equation}
+    x=(I-A)^{-1}f
+  \end{equation}
+
+Por este curso ser voltado para análises de Insumo-Produto, há interesse especial na apresentação de dados forma matricial. Para inserir uma matriz precisamos além da equação, inserir um comando para criar a forma de uma matriz
 
 
 # Rodando o código

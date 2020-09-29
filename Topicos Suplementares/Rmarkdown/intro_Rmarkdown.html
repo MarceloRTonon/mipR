@@ -1689,34 +1689,55 @@ sobrescrito<sup>2</sup> and subscrito<sub>2</sub><br />
 </div>
 <div id="tabelas" class="section level2">
 <h2><span class="header-section-number">5.5</span> Tabelas</h2>
-<p>Agora para inserir uma tabela no corpo do texto ()</p>
-<pre class="r"><code>   Título 1   |   Título 2
-------------- | -------------
-   Conteúdo   |   Conteúdo
-   Conteúdo   |   Conteúdo</code></pre>
+<p>Agora para inserir uma tabela na parte de texto livre é pelo uso de de trações e barras que separam os conteúdos. Lembrando que existe ainda a opção de inserir tabelas usando os códigos do R dentro do chunk, tal como fosse criado normalmente em seu código. Vejamos o exemplo para uma tabela de três colunas e três linhas, sendo uma delas do cabeçalho da tabela:</p>
+<pre class="r"><code>   Título 1   |   Título 2    |   Título 3
+------------- | ------------- | ------------- 
+   Conteúdo   |   Conteúdo    |   Conteúdo
+   Conteúdo   |   Conteúdo    |   Conteúdo</code></pre>
+<p>A tabela descrita acima teria o seguinte formato:</p>
 <table>
 <thead>
 <tr class="header">
 <th>Título 1</th>
 <th>Título 2</th>
+<th>Título 3</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Conteúdo</td>
 <td>Conteúdo</td>
+<td>Conteúdo</td>
 </tr>
 <tr class="even">
+<td>Conteúdo</td>
 <td>Conteúdo</td>
 <td>Conteúdo</td>
 </tr>
 </tbody>
 </table>
+<p>Essa configuração poderia ser reduzida ou expandida de acordo com a necessidade, não se limitando ao exemplo usado. Esse tipo de configuração (de tabelas no corpo do texto) são mais indicadas para ilustrações ou resultados com poucas informações, deixando tabelas com maior número de informações para os próprios chunks e, consequentemente, no código do R</p>
 </div>
 <div id="equações" class="section level2">
 <h2><span class="header-section-number">5.6</span> Equações</h2>
-<p>Equações na linha: <span class="math inline">\(x=(I-A)^{-1}f\)</span> Equações separadas <span class="math display">\[x=(I-A)^{-1}f\]</span></p>
-<p>Para inserir uma matriz precisamos além da equação, inserir um comando para criar a forma de uma matriz</p>
+<p>Por fim, uma das configurações mais relevantes do markdown é poder inserir equações que vão representar de forma mais clara as operações que estão sendo realizadas. Existem duas principais maneiras de se incluir uma equação: nas próprias linhas dos parágrafos ou como um elemento separado. O delimitador de uma equação é símbolo <code>$</code> para equações na linha e <code>$$</code> para equações na linha seguinte. No caso de equações separadas há ainda uma terceira forma, que é usando os comandos <code>\begin{equation}</code>. A representação seria tal como se segue:</p>
+<pre class="r"><code>Equações na linha: $x=(I-A)^{-1}f$
+
+Equações separadas: $$x=(I-A)^{-1}f$$
+ou
+  \begin{equation}
+  x=(I-A)^{-1}f
+  \end{equation}</code></pre>
+<p>Visualizando os resultados:</p>
+<ul>
+<li><p>Equações na linha: <span class="math inline">\(x=(I-A)^{-1}f\)</span></p></li>
+<li><p>Equações separadas: <span class="math display">\[x=(I-A)^{-1}f\]</span></p></li>
+<li><p>Equações separados (com begin):<br />
+<span class="math display">\[\begin{equation}
+  x=(I-A)^{-1}f
+\end{equation}\]</span></p></li>
+</ul>
+<p>Por este curso ser voltado para análises de Insumo-Produto, há interesse especial na apresentação de dados forma matricial. Para inserir uma matriz precisamos além da equação, inserir um comando para criar a forma de uma matriz</p>
 </div>
 </div>
 <div id="rodando-o-código" class="section level1">
