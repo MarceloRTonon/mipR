@@ -1,0 +1,19 @@
+---
+title: "Tópico 6 - Gráficos e Tabelas no ggplot2"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "29/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE, include = TRUE)
+# Todos os chunks em que estiver escrito "MT" quer dizer = Mensagem do Tonon. É um quadro dando dicas e etc... Use r = Mensagem do Felipe.
+```
+
+## Pacotes Necessários
+
+
+## Objetivos do Tópico
+
+ 
+## ggplot2
