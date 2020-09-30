@@ -367,7 +367,7 @@ head(dfvignette_html_extract_all)
 Uma função que já foi abordada nos exercícios, mas que ainda não foi devidamente apresentada é a `download.file()`. Como já visto ela é particulamente útil para a automação e reprodução de um código, realizando o download automático de algum arquivo a partir de sua url na internet. Simplificando para os argumentos mais comuns da função, ela é estruturada da seguinte forma:
 
 ```{r,eval=F}
-download.file(url, destfile, mode = "w", headers = NULL)
+download.file(url, destfile, mode = "wb", headers = NULL)
 ```
 
 A `url` vai ser o endereço da internet que você deseja realizar o download, `destfile` identifica o arquivo/diretório para onde o arquivo será baixado, `mode` identificará a forma que o arquivo será escrita, aqui é importante destacar que para uso no windows o uso de transferência binária (mode = "wb" ou "ab") é importante para separar textos, comandos e códigos binários; `headers` é para o caso de que se queira colocar as urls como header do arquivo.

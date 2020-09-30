@@ -1,0 +1,203 @@
+---
+title: "Tópico 6 - Visualizando resultados de Decomposições Estruturais no ggplot2"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "29/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = T, include = TRUE, warning = F)
+# Todos os chunks em que estiver escrito "MT" quer dizer = Mensagem do Tonon. É um quadro dando dicas e etc... Use r = Mensagem do Felipe.
+```
+
+```{r MTcronograma_tonon, eval = F, include=F}
+
+# O que eu penso em fazer para este topico é fazer uma decomposição aditiva, uma multiplicativa e uma com a decomposição da matriz de leontief. Vou repetir o exemplo do Dietzenbacher, Lahr e Los (2004) para 2010-2015 só que também focando na aditiva. Assim os passos serão:
+
+# 1- Baixar os arquivos (pois é o primeiro)
+# 2- Int
+```
+
+## Pacotes Necessários
+
+```{r, warning=FALSE}
+library(ggplot2)
+library(readxl)
+library(purrr)
+library(stringr)
+```
+
+
+## Objetivos do Tópico
+
+Esse tópico irá introduzir tanto o tópico de análise de decomposição estrutural quanto introduzir o uso do pacote `ggplot2` para a criação de gráficos. 
+
+Para a parte de decomposição estrutural, a bibliografia utilizada será o capitulo 13 do livro de Miller e Blair(2009), bem como os artigos de Dietzenbacher e Los (1998) e Dietzenbahcer, Lahr e Los (2004).
+
+Para a parte de criação de gráficos com o `ggplot2` a bibliografia utilizada será o 
+
+**Importante:** Ambos os temas são de tal profundidade que este material não poderia nem presumir esgotar ambos os tópicos.
+
+## Dados Necessários
+
+Para realizar uma decomposição estrutural é necessário que as bases sejam compátiveis na sua estrutura em termos de linhas e colunas. No nosso caso, nós iremos comparar as bases de 2010 e 2015 com 12 setores cada uma.
+
+Criando arquivos temporários^[A vantagem de arquivos temporários é que eles não ficam permanentemente gravados no seu disco rígido. Para arquivos pequenos como os que estamos tratando, é bastante vantajoso.] para servirem de parametros em `destfile`:
+
+```{r}
+mip2010 <- tempfile(fileext = ".xls")
+mip2015 <- tempfile(fileext = ".xls")
+tbru <- tempfile(fileext = ".zip")
+```
+
+Definindo os links a serem baixados:^[Importante: Para diminuir a poluição visual na hora da leitura, este arquivo está configurado para ignorar os `warnings` dados pelo R. Assim, ao reproduzir esta e outras partes deste tópico você pode se deparar com `warnings` referentes a esta questão. A exceção é a função `read_xls` que sempre avisa quando cria novos nomes.]
+
+```{r}
+link_2010 <- "ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2010/Matriz_de_Insumo_Produto_2010_Nivel_12_20161019.xls"
+
+link_2015 <- "ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_12.xls"
+
+link_tbru <- "ftp://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2015/tabelas_xls/tabelas_de_recursos_e_usos/nivel_12_2000_2015_xls.zip"
+```
+
+Baixando os arquivos sendo os arquivos temporarios os arquivos destino:
+
+```{r}
+download.file(url = link_2010, destfile = mip2010, mode = "wb")
+download.file(url = link_2015, destfile = mip2015, mode = "wb")
+download.file(url = link_tbru, destfile = tbru, mode = "wb")
+```
+
+Vamos ler com `readxl::read_xls` as partes que nos interessam dos arquivos de matriz insumo produto baixados. Vejamos a relação destes abaixo:
+
+| **Nome do objeto** | **Descrição**                                               | **Aba** | **range**  |
+|--------|---------------------------------------------------------|-----|--------|
+| `nomesSetores`  | Nomes dos Setores                                       | 01  | B6:B17 |
+| `Bn`     | Matriz dos Coeficientes Técnicos dos Insumos Nacionais  | 11  | C6:N17 |
+| `Bm`     | Matriz dos Coeficientes Técnicos dos Insumos Importados | 12  | C6:N17 |
+| `D_MS`   | Matriz de Market Share                                  | 13  | C6:N17 |
+| `f_p`    | Demanda final ao nivel do produto                       | 03  | Q6:V17 |
+
+Vamos primeiro carregar os nomes dos setores:
+
+```{r}
+nomesSetores <- read_xls(mip2010, sheet = "01", range = "B6:B17", col_names = "Setores")
+```
+
+Vamos criar agora listas com os parametros de cada elementos:
+
+```{r}
+mipElements <- list("Bn", "Bm", "D_MS", "f_p")
+
+
+mipRanges <- list("C6:N17", "C6:N17", "C6:N17", "Q6:V17") %>%
+  setNames(mipElements)
+
+mipAbas <- list("11", "12", "13", "14")  %>%
+  setNames(mipElements)
+```
+
+Vamos agora criar uma lista para cada ano:
+
+```{r}
+matrizes2010 <- map2(mipAbas, mipRanges,
+                     ~ readxl::read_xls(path = mip2010,
+                                        sheet = .x,
+                                        range = .y,
+                                        col_names = nomesSetores$Setores))
+
+matrizes2015 <- map2(mipAbas, mipRanges,
+                     ~ readxl::read_xls(path = mip2015,
+                                        sheet = .x,
+                                        range = .y,
+                                        col_names = nomesSetores$Setores))
+```
+
+Vamos agora tratar das Tabelas de Recursos e Usos. Nós desejamos retirar os seguintes elementos delas:
+
+| Nome do Objeto | Descrição                                           | tipo de arquivo | aba | range   |
+|----------------|-----------------------------------------------------|-----------------|-----|---------|
+| `valorAd`        | Total de valor adicionado gerado em cada atividade  | tab2            | VA  | B6:M6   |
+| `W`              | Total de Salário gerado em cada atividade           | tab2            | VA  | B8:M8   |
+| `fatorL`         | Total do Fator Trabalho demandado em cada atividade | tab2            | VA  | B19:M19 |
+
+
+Criando os parâmetros:
+
+```{r}
+truElements <- list("valorAd", "W", "fatorL")
+
+truRange <- list("B6:M6", "B8:M8", "B19:M19") %>%
+  setNames(truElements)
+```
+
+O arquivo `tbru` é um arquivo `zip` que contém vários arquivos, muito dos quais não nos interessam. Como já abordamos no tópico 5, vamos descompactar apenas os arquivos que nos interessam, que são os que contém a descrição `tab2` e são de 2010 e 2015:
+
+```{r}
+tab2_arquivos <-  tbru %>%
+  unzip(list = T) %>%
+  unlist %>%
+  stringr::str_subset("tab2")
+```
+
+Vamos criar uma função que nos possibilite mais facilmente descompactar um arquivo do vetor `tab2_arquivos` diretamente apenas indicando o ano que queremos baixar.
+
+```{r}
+unzip_tab2 <- function(ano){
+  .tab2_dir <- tempfile()
+  
+ .tab2_output <-  tab2_arquivos %>%
+  stringr::str_subset(paste0("tab2_", ano, ".xls")) %>%
+  unzip(zipfile = tbru,
+        files = .,
+        junkpaths = F,
+        exdir = .tab2_dir)  
+ return(.tab2_output)
+}
+```
+
+Vamos então carregar para os dois anos em questão:
+
+```{r}
+tab2_2010 <- map(truRange, ~ read_xls(unzip_tab2("2010"),
+                       sheet = "VA",
+                       range = .x,
+                       col_names = nomesSetores$Setores)
+    )
+  
+tab2_2015 <-  map(truRange, 
+                  ~ read_xls(unzip_tab2("2015"),
+                    sheet = "VA",
+                    range = .x,
+                    col_names = nomesSetores$Setores)
+    )
+```
+
+### Deflacionando os valores
+
+Importante: nesse caso, os valores não estão deflacionados. Por isso precisamos deflacionar os valores. Como discutido no curso 
+
+## Análise de Decomposição Estrutural
+
+A análise de decomposição estrutural (_Structural Decomposition Analisys_ - SDA) é uma forma de se analisar as diferenças entre dois períodos ou regiões diferentes.
+
+
+
+## ggplot2
+
+## Bibliografia usada neste material
+
+### Análise de Decomposição Estrutural
+
+DIETZENBACHER, Erik; LAHR, Michael L.; LOS, Bart. The decline in labor compensation’s share of GDP: a structural decomposition analysis for the United States, 1982 to 1997. Wassily Leontief and Input-Output Economics, p. 138-185, 2004.
+
+DIETZENBACHER, Erik; LOS, Bart. Structural decomposition techniques: sense and sensitivity. Economic Systems Research, v. 10, n. 4, p. 307-324, 1998.
+
+MILLER, Ronald E.; BLAIR, Peter D. Input-output analysis: foundations and extensions. Cambridge university press, 2009.
+
+### ggplot2
+
+WICKHAM, Hadley. ggplot2: elegant graphics for data analysis. springer, 2016.
+
+
+## Bibliografia extra indicada
