@@ -415,31 +415,31 @@ download.file(url = link_tbru, destfile = tbru, mode = &quot;wb&quot;)</code></p
 <td><code>nomesSetores</code></td>
 <td>Nomes dos Setores</td>
 <td>01</td>
-<td>B6:B17</td>
+<td><span style="color: green;"> “B6:B17” </span></td>
 </tr>
 <tr class="even">
 <td><code>Bn</code></td>
 <td>Matriz dos Coeficientes Técnicos dos Insumos Nacionais</td>
 <td>11</td>
-<td>C6:N17</td>
+<td><span style="color: green;"> “C6:N17” </span></td>
 </tr>
 <tr class="odd">
 <td><code>Bm</code></td>
 <td>Matriz dos Coeficientes Técnicos dos Insumos Importados</td>
 <td>12</td>
-<td>C6:N17</td>
+<td><span style="color: green;"> “C6:N17” </span></td>
 </tr>
 <tr class="even">
 <td><code>D_MS</code></td>
 <td>Matriz de Market Share</td>
 <td>13</td>
-<td>C6:N17</td>
+<td><span style="color: green;"> “C6:N17” </span></td>
 </tr>
 <tr class="odd">
 <td><code>f_p</code></td>
 <td>Demanda final ao nivel do produto</td>
 <td>03</td>
-<td>Q6:V17</td>
+<td><span style="color: green;"> “V6:V17” </span></td>
 </tr>
 </tbody>
 </table>
@@ -449,25 +449,40 @@ download.file(url = link_tbru, destfile = tbru, mode = &quot;wb&quot;)</code></p
 <pre class="r"><code>mipElements &lt;- list(&quot;Bn&quot;, &quot;Bm&quot;, &quot;D_MS&quot;, &quot;f_p&quot;)
 
 
-mipRanges &lt;- list(&quot;C6:N17&quot;, &quot;C6:N17&quot;, &quot;C6:N17&quot;, &quot;Q6:V17&quot;) %&gt;%
+nomesSetores &lt;- list(nomesSetores$Setores, 
+                     nomesSetores$Setores,
+                     nomesSetores$Setores,
+                     &quot;Total&quot;) %&gt;%
   setNames(mipElements)
 
-mipAbas &lt;- list(&quot;11&quot;, &quot;12&quot;, &quot;13&quot;, &quot;14&quot;)  %&gt;%
+mipRanges &lt;- list(&quot;C6:N17&quot;, &quot;C6:N17&quot;, &quot;C6:N17&quot;, &quot;V6:V17&quot;) %&gt;%
+  setNames(mipElements)
+
+mipAbas &lt;- list(&quot;11&quot;, &quot;12&quot;, &quot;13&quot;, &quot;03&quot;)  %&gt;%
   setNames(mipElements)</code></pre>
 <p>Vamos agora criar uma lista para cada ano:</p>
-<pre class="r"><code>matrizes2010 &lt;- map2(mipAbas, mipRanges,
-                     ~ readxl::read_xls(path = mip2010,
-                                        sheet = .x,
-                                        range = .y,
-                                        col_names = nomesSetores$Setores))
+<pre class="r"><code>matrizes2010 &lt;- list(mipAbas, mipRanges, nomesSetores) %&gt;%
+  pmap(function(x,y,z) readxl::read_xls(path = mip2010,
+                                        sheet = x,
+                                        range = y,
+                                        col_names = z)) %&gt;%
+  map(as.matrix)
 
-matrizes2015 &lt;- map2(mipAbas, mipRanges,
-                     ~ readxl::read_xls(path = mip2015,
-                                        sheet = .x,
-                                        range = .y,
-                                        col_names = nomesSetores$Setores))</code></pre>
+matrizes2015 &lt;- list(mipAbas, mipRanges, nomesSetores) %&gt;%
+  pmap(function(x,y,z) readxl::read_xls(path = mip2015,
+                                        sheet = x,
+                                        range = y,
+                                        col_names = z)) %&gt;%
+  map(as.matrix)</code></pre>
 <p>Vamos agora tratar das Tabelas de Recursos e Usos. Nós desejamos retirar os seguintes elementos delas:</p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col width="15%"></col>
+<col width="52%"></col>
+<col width="17%"></col>
+<col width="4%"></col>
+<col width="8%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th>Nome do Objeto</th>
@@ -483,21 +498,21 @@ matrizes2015 &lt;- map2(mipAbas, mipRanges,
 <td>Total de valor adicionado gerado em cada atividade</td>
 <td>tab2</td>
 <td>VA</td>
-<td>B6:M6</td>
+<td><span style="color: green;"> “B6:M6” </span></td>
 </tr>
 <tr class="even">
 <td><code>W</code></td>
 <td>Total de Salário gerado em cada atividade</td>
 <td>tab2</td>
 <td>VA</td>
-<td>B8:M8</td>
+<td><span style="color: green;"> “B8:M8” </span></td>
 </tr>
 <tr class="odd">
 <td><code>fatorL</code></td>
 <td>Total do Fator Trabalho demandado em cada atividade</td>
 <td>tab2</td>
 <td>VA</td>
-<td>B19:M19</td>
+<td><span style="color: green;"> “B19:M19” </span></td>
 </tr>
 </tbody>
 </table>
@@ -527,15 +542,17 @@ truRange &lt;- list(&quot;B6:M6&quot;, &quot;B8:M8&quot;, &quot;B19:M19&quot;) %
 <pre class="r"><code>tab2_2010 &lt;- map(truRange, ~ read_xls(unzip_tab2(&quot;2010&quot;),
                        sheet = &quot;VA&quot;,
                        range = .x,
-                       col_names = nomesSetores$Setores)
-    )
+                       col_names = nomesSetores$Bn)
+    ) %&gt;%
+  map(as.matrix)
   
 tab2_2015 &lt;-  map(truRange, 
                   ~ read_xls(unzip_tab2(&quot;2015&quot;),
                     sheet = &quot;VA&quot;,
                     range = .x,
-                    col_names = nomesSetores$Setores)
-    )</code></pre>
+                    col_names = nomesSetores$Bn)
+    ) %&gt;%
+  map(as.matrix)</code></pre>
 <div id="deflacionando-os-valores" class="section level3">
 <h3>Deflacionando os valores</h3>
 <p>Importante: nesse caso, os valores não estão deflacionados. Por isso precisamos deflacionar os valores. Como discutido durante o curso, existem várias formas de você fazer uma deflação de preços. Por questões de simplicidade, vamos usar aqui um deflator único. Para tanto, vamos comparar os valores correntes e do ano anterior da produção total da economia. Esses valores está disponivel na célula <code>O19</code> da aba <code>producao</code> das tabelas 1 (valores correntes) e 3 (valores do ano anterior).</p>
@@ -592,7 +609,52 @@ tab2_2015$W &lt;- tab2_2015$W/deflator</code></pre>
 </div>
 <div id="análise-de-decomposição-estrutural" class="section level2">
 <h2>Análise de Decomposição Estrutural</h2>
-<p>A análise de decomposição estrutural (<em>Structural Decomposition Analisys</em> - SDA) é uma forma de se analisar as diferenças entre dois períodos ou regiões diferentes.</p>
+<p><strong>Atenção:</strong> a parte a seguir vamos deixar as contas mais simples ocultar. É sugerido que se pegue um papel e caneta e faça as contas por si só.</p>
+<p>A análise de decomposição estrutural ( <em>Structural Decomposition Analisys: SDA</em>) é uma forma de se decompor os motivos de uma diferença entre dois períodos ou regiões de um determinado valor.</p>
+<p>Por exemplo, sejam <span class="math inline">\(X_0\)</span> e <span class="math inline">\(X_1\)</span> os valores bruto de produção dos períodos 0 e 1, que são dados a partir do modelo básico de Leontief:</p>
+<p><span class="math display">\[X = L f\]</span></p>
+<pre class="r"><code>matrizes2010$An &lt;- matrizes2010$D_MS %*% matrizes2010$Bn
+matrizes2010$Leontief &lt;- solve(diag(nrow(matrizes2010$An)) - matrizes2010$An)
+matrizes2010$f &lt;- matrizes2010$D_MS %*% matrizes2010$f_p
+matrizes2010$X &lt;- matrizes2010$Leontief %*% matrizes2010$f
+
+matrizes2015$An &lt;- matrizes2015$D_MS %*% matrizes2015$Bn
+matrizes2015$Leontief &lt;- solve(diag(nrow(matrizes2015$An)) -     matrizes2015$An)
+matrizes2015$f &lt;- matrizes2015$D_MS %*% matrizes2015$f_p
+matrizes2015$X &lt;- matrizes2015$Leontief %*% matrizes2015$f</code></pre>
+<p>Sendo <span class="math inline">\(L\)</span> a inversa de Leontief e <span class="math inline">\(f\)</span> o vetor de demanda final. A definição de <span class="math inline">\(X_0\)</span> é <span class="math inline">\(X_1\)</span> é, respectivamente <span class="math inline">\(X_0 = L_0f_0\)</span> e <span class="math inline">\(X_1 = L_1 f_1\)</span>. Desse modo, queremos agora saber qual foi a contribuição das variações tanto de <span class="math inline">\(L\)</span> quanto de <span class="math inline">\(f\)</span> para a variação final em <span class="math inline">\(X\)</span>. Temos então que:</p>
+<p><span class="math display">\[\Delta X = X_1 - X_0 = L_1f_1 - L_0f_0\]</span></p>
+<pre class="r"><code>deltaX &lt;- matrizes2015$X - matrizes2010$X</code></pre>
+<p>Seja <span class="math inline">\(\Delta L = L_1 - L0\)</span> e <span class="math inline">\(\Delta f = f_1 - f_0\)</span>, podemos substituir na equação acima os valores de modo:</p>
+<p><span class="math display">\[\Delta X = L_1 (f_0 + \Delta f) - (L_1 - \Delta L) f_0 = \Delta L f_0 + L_1(\Delta f)\]</span></p>
+<pre class="r"><code>deltaL &lt;- matrizes2015$Leontief - matrizes2010$Leontief
+deltaf &lt;- matrizes2015$f - matrizes2010$f</code></pre>
+<pre class="r"><code>deltaX1 &lt;- (deltaL %*% matrizes2010$f) + (matrizes2015$Leontief %*% deltaf)
+
+all.equal(deltaX1, deltaX)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Podemos no entanto, redistribuir isso de outra forma:</p>
+<p><span class="math display">\[\Delta X = (L_0 + \Delta L) f_1 - L_0(f_1 -  \Delta f) = (\Delta L)f_1 + L_0 (\Delta f)\]</span></p>
+<pre class="r"><code>deltaX2 &lt;- (deltaL %*% matrizes2015$f) + (matrizes2010$Leontief %*% deltaf)
+
+all.equal(deltaX2, deltaX)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p><em>Relembrando:</em> Para ter certeza que compreendeu a álgebra, faça essas substituições e operações no papel.</p>
+<p>Ambas as formas apresentadas agora são igualmente válidas, sendo ambas igualmente corretas.</p>
+<pre class="r"><code>all.equal(deltaX1, deltaX2)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>No entanto, é de certo modo obvio que esperamos que $(L)f_1 (L) f_0 $.</p>
+<pre class="r"><code>all.equal(deltaL %*% matrizes2010$f,
+          deltaL %*% matrizes2015$f)</code></pre>
+<pre><code>## [1] &quot;Mean relative difference: 1.280942&quot;</code></pre>
+<p>Dietzenbacher e Los (1998), mostram que ao tirarmos os valores médios das adições aditivas temos um resultado aceitável:</p>
+<p><span class="math display">\[\Delta X = (1/2) \Delta L (f_0 + f_1) + (1/2) (L_1 + L_2) \Delta f \]</span></p>
+<pre class="r"><code>deltaX3 &lt;- ((1/2) *deltaL %*% (matrizes2010$f + matrizes2015$f)) +
+  ((1/2)*(matrizes2010$Leontief + matrizes2015$Leontief) %*% deltaf)
+
+all.equal(deltaX, deltaX3)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Na equação acima, temos que a parcela <span class="math inline">\((1/2) \Delta L (f_0 + f_1)\)</span> é referente a mudança tecnológica enquanto <span class="math inline">\((1/2) (L_1 + L_2) \Delta f\)</span> é referente a mudanças na demadna final</p>
 </div>
 <div id="ggplot2" class="section level2">
 <h2>ggplot2</h2>

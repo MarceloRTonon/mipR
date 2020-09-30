@@ -72,16 +72,17 @@ Vamos ler com `readxl::read_xls` as partes que nos interessam dos arquivos de ma
 
 | **Nome do objeto** | **Descrição**                                               | **Aba** | **range**  |
 |--------|---------------------------------------------------------|-----|--------|
-| `nomesSetores`  | Nomes dos Setores                                       | 01  | B6:B17 |
-| `Bn`     | Matriz dos Coeficientes Técnicos dos Insumos Nacionais  | 11  | C6:N17 |
-| `Bm`     | Matriz dos Coeficientes Técnicos dos Insumos Importados | 12  | C6:N17 |
-| `D_MS`   | Matriz de Market Share                                  | 13  | C6:N17 |
-| `f_p`    | Demanda final ao nivel do produto                       | 03  | Q6:V17 |
+| `nomesSetores`  | Nomes dos Setores                                       | 01  | <span style="color: green;"> "B6:B17" </span> |
+| `Bn`     | Matriz dos Coeficientes Técnicos dos Insumos Nacionais  | 11  | <span style="color: green;"> "C6:N17" </span> |
+| `Bm`     | Matriz dos Coeficientes Técnicos dos Insumos Importados | 12  | <span style="color: green;"> "C6:N17" </span> |
+| `D_MS`   | Matriz de Market Share                                  | 13  | <span style="color: green;"> "C6:N17" </span> |
+| `f_p`    | Demanda final ao nivel do produto                       | 03  | <span style="color: green;"> "V6:V17" </span> |
 
 Vamos primeiro carregar os nomes dos setores:
 
 ```{r}
 nomesSetores <- read_xls(mip2010, sheet = "01", range = "B6:B17", col_names = "Setores")
+
 ```
 
 Vamos criar agora listas com os parametros de cada elementos:
@@ -90,36 +91,44 @@ Vamos criar agora listas com os parametros de cada elementos:
 mipElements <- list("Bn", "Bm", "D_MS", "f_p")
 
 
-mipRanges <- list("C6:N17", "C6:N17", "C6:N17", "Q6:V17") %>%
+nomesSetores <- list(nomesSetores$Setores, 
+                     nomesSetores$Setores,
+                     nomesSetores$Setores,
+                     "Total") %>%
   setNames(mipElements)
 
-mipAbas <- list("11", "12", "13", "14")  %>%
+mipRanges <- list("C6:N17", "C6:N17", "C6:N17", "V6:V17") %>%
+  setNames(mipElements)
+
+mipAbas <- list("11", "12", "13", "03")  %>%
   setNames(mipElements)
 ```
 
 Vamos agora criar uma lista para cada ano:
 
 ```{r}
-matrizes2010 <- map2(mipAbas, mipRanges,
-                     ~ readxl::read_xls(path = mip2010,
-                                        sheet = .x,
-                                        range = .y,
-                                        col_names = nomesSetores$Setores))
+matrizes2010 <- list(mipAbas, mipRanges, nomesSetores) %>%
+  pmap(function(x,y,z) readxl::read_xls(path = mip2010,
+                                        sheet = x,
+                                        range = y,
+                                        col_names = z)) %>%
+  map(as.matrix)
 
-matrizes2015 <- map2(mipAbas, mipRanges,
-                     ~ readxl::read_xls(path = mip2015,
-                                        sheet = .x,
-                                        range = .y,
-                                        col_names = nomesSetores$Setores))
+matrizes2015 <- list(mipAbas, mipRanges, nomesSetores) %>%
+  pmap(function(x,y,z) readxl::read_xls(path = mip2015,
+                                        sheet = x,
+                                        range = y,
+                                        col_names = z)) %>%
+  map(as.matrix)
 ```
 
 Vamos agora tratar das Tabelas de Recursos e Usos. Nós desejamos retirar os seguintes elementos delas:
 
 | Nome do Objeto | Descrição                                           | tipo de arquivo | aba | range   |
 |----------------|-----------------------------------------------------|-----------------|-----|---------|
-| `valorAd`        | Total de valor adicionado gerado em cada atividade  | tab2            | VA  | B6:M6   |
-| `W`              | Total de Salário gerado em cada atividade           | tab2            | VA  | B8:M8   |
-| `fatorL`         | Total do Fator Trabalho demandado em cada atividade | tab2            | VA  | B19:M19 |
+| `valorAd`        | Total de valor adicionado gerado em cada atividade  | tab2            | VA  | <span style="color: green;"> "B6:M6" </span>   |
+| `W`              | Total de Salário gerado em cada atividade           | tab2            | VA  | <span style="color: green;"> "B8:M8" </span>   |
+| `fatorL`         | Total do Fator Trabalho demandado em cada atividade | tab2            | VA  | <span style="color: green;"> "B19:M19" </span> |
 
 
 Criando os parâmetros:
@@ -162,15 +171,17 @@ Vamos então carregar para os dois anos em questão:
 tab2_2010 <- map(truRange, ~ read_xls(unzip_tab2("2010"),
                        sheet = "VA",
                        range = .x,
-                       col_names = nomesSetores$Setores)
-    )
+                       col_names = nomesSetores$Bn)
+    ) %>%
+  map(as.matrix)
   
 tab2_2015 <-  map(truRange, 
                   ~ read_xls(unzip_tab2("2015"),
                     sheet = "VA",
                     range = .x,
-                    col_names = nomesSetores$Setores)
-    )
+                    col_names = nomesSetores$Bn)
+    ) %>%
+  map(as.matrix)
 ```
 
 ### Deflacionando os valores
@@ -241,9 +252,87 @@ Agora temos todos os nossos valores prontos para realizar uma decomposição.
 
 ## Análise de Decomposição Estrutural
 
-A análise de decomposição estrutural (_Structural Decomposition Analisys_ - SDA) é uma forma de se analisar as diferenças entre dois períodos ou regiões diferentes.
+**Atenção:** a parte a seguir vamos deixar as contas mais simples ocultar. É sugerido que se pegue um papel e caneta e faça as contas por si só.
+
+A análise de decomposição estrutural ( _Structural Decomposition Analisys: SDA_) é uma forma de se decompor os motivos de uma diferença entre dois períodos ou regiões de um determinado valor.
+
+Por exemplo, sejam $X_0$ e $X_1$ os valores bruto de produção dos períodos 0 e 1, que são dados a partir do modelo básico de Leontief:
+
+$$X = L f$$
+```{r}
+matrizes2010$An <- matrizes2010$D_MS %*% matrizes2010$Bn
+matrizes2010$Leontief <- solve(diag(nrow(matrizes2010$An)) - matrizes2010$An)
+matrizes2010$f <- matrizes2010$D_MS %*% matrizes2010$f_p
+matrizes2010$X <- matrizes2010$Leontief %*% matrizes2010$f
+
+matrizes2015$An <- matrizes2015$D_MS %*% matrizes2015$Bn
+matrizes2015$Leontief <- solve(diag(nrow(matrizes2015$An)) -     matrizes2015$An)
+matrizes2015$f <- matrizes2015$D_MS %*% matrizes2015$f_p
+matrizes2015$X <- matrizes2015$Leontief %*% matrizes2015$f
+
+```
+
+Sendo $L$ a inversa de Leontief e $f$ o vetor de demanda final. A definição de $X_0$ é $X_1$ é, respectivamente $X_0 = L_0f_0$ e $X_1 = L_1 f_1$. Desse modo, queremos agora saber qual foi a contribuição das variações tanto de $L$ quanto de $f$ para a variação final em $X$. Temos então que:
+
+$$\Delta X = X_1 - X_0 = L_1f_1 - L_0f_0$$
+
+```{r}
+deltaX <- matrizes2015$X - matrizes2010$X
+```
 
 
+Seja $\Delta L = L_1 - L0$ e $\Delta f = f_1 - f_0$, podemos substituir na equação acima os valores de modo:
+
+$$\Delta X = L_1 (f_0 + \Delta f) - (L_1 - \Delta L) f_0 = \Delta L f_0 + L_1(\Delta f)$$
+```{r}
+deltaL <- matrizes2015$Leontief - matrizes2010$Leontief
+deltaf <- matrizes2015$f - matrizes2010$f
+```
+
+```{r}
+deltaX1 <- (deltaL %*% matrizes2010$f) + (matrizes2015$Leontief %*% deltaf)
+
+all.equal(deltaX1, deltaX)
+```
+
+Podemos no entanto, redistribuir isso de outra forma:
+
+$$\Delta X = (L_0 + \Delta L) f_1 - L_0(f_1 -  \Delta f) = (\Delta L)f_1 + L_0 (\Delta f)$$
+
+```{r}
+deltaX2 <- (deltaL %*% matrizes2015$f) + (matrizes2010$Leontief %*% deltaf)
+
+all.equal(deltaX2, deltaX)
+```
+
+_Relembrando:_ Para ter certeza que compreendeu a álgebra, faça essas substituições e operações no papel.
+
+Ambas as formas apresentadas agora são igualmente válidas, sendo ambas igualmente corretas.
+
+```{r}
+all.equal(deltaX1, deltaX2)
+```
+
+ No entanto, é de certo modo obvio que esperamos que $(\Delta L)f_1 \neq (\Delta L) f_0 $.
+
+```{r}
+all.equal(deltaL %*% matrizes2010$f,
+          deltaL %*% matrizes2015$f)
+```
+
+
+Dietzenbacher e Los (1998), mostram que ao tirarmos os valores médios das adições aditivas temos um resultado aceitável:
+
+$$\Delta X = (1/2) \Delta L (f_0 + f_1) + (1/2) (L_1 + L_2) \Delta f $$
+
+```{r}
+deltaX3 <- ((1/2) *deltaL %*% (matrizes2010$f + matrizes2015$f)) +
+  ((1/2)*(matrizes2010$Leontief + matrizes2015$Leontief) %*% deltaf)
+
+all.equal(deltaX, deltaX3)
+```
+
+Na equação acima, temos que a parcela $(1/2) \Delta L (f_0 + f_1)$ é referente a mudança tecnológica enquanto $(1/2) (L_1 + L_2) \Delta f$ é referente a mudanças na demadna final
 
 ## ggplot2
 
