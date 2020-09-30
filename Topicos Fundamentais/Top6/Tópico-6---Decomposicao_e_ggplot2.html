@@ -536,6 +536,59 @@ tab2_2015 &lt;-  map(truRange,
                     range = .x,
                     col_names = nomesSetores$Setores)
     )</code></pre>
+<div id="deflacionando-os-valores" class="section level3">
+<h3>Deflacionando os valores</h3>
+<p>Importante: nesse caso, os valores não estão deflacionados. Por isso precisamos deflacionar os valores. Como discutido durante o curso, existem várias formas de você fazer uma deflação de preços. Por questões de simplicidade, vamos usar aqui um deflator único. Para tanto, vamos comparar os valores correntes e do ano anterior da produção total da economia. Esses valores está disponivel na célula <code>O19</code> da aba <code>producao</code> das tabelas 1 (valores correntes) e 3 (valores do ano anterior).</p>
+<pre class="r"><code>tab_arquivos &lt;- function(tab){
+  .tab &lt;- tbru %&gt;%
+    unzip(list = T) %&gt;%
+    unlist %&gt;%
+    stringr::str_subset(paste0(tab, &quot;_&quot;, 201)) %&gt;%
+    as.list()
+  return(.tab)
+}
+
+deflatorY2Y &lt;- function(Corrente, Anterior){
+
+  fileCor &lt;- tempfile(fileext = &quot;.xls&quot;)
+  fileAnt &lt;- tempfile(fileext = &quot;.xls&quot;)
+
+  unziptab &lt;- function(x,y){
+    unzip(zipfile = tbru,
+        files = x,
+        junkpaths = F,
+        exdir = y,
+        overwrite = T)
+  }
+  
+  .Cor &lt;- read_xls(path = unziptab(Corrente, fileCor),
+                   sheet = &quot;producao&quot;,
+                   range = &quot;O19&quot;,
+                   col_names = &quot;Total&quot;) %&gt;%
+    unlist()
+  
+  .Ant &lt;- read_xls(path = unziptab(Anterior, fileAnt),
+                   sheet = &quot;producao&quot;,
+                   range = &quot;O19&quot;,
+                   col_names = &quot;Total&quot;) %&gt;%
+    unlist()
+    
+    return(.Cor/.Ant)
+}
+
+deflatores_Ano_a_Ano &lt;- map2(tab_arquivos(&quot;tab1&quot;),
+                             tab_arquivos(&quot;tab3&quot;),
+                             deflatorY2Y)</code></pre>
+<p>Para gerar um deflator direto de 2010 a 2015, multiplicamos todos os deflatores de 2011 à 2015 (o deflator de 2010 é referente a deflação de preços de 2010 frente à 2009, por isso iremos exclui-lo). Para tanto, vamos usar a função <code>purrr::reduce</code> do pacote purrr.</p>
+<pre class="r"><code>deflator &lt;- deflatores_Ano_a_Ano[-1] %&gt;%
+  reduce(`*`)</code></pre>
+<p>Agora, vamos deflacionar os valores que devem ser deflacionados:</p>
+<pre class="r"><code>matrizes2015$f_p &lt;- matrizes2015$f_p/deflator
+
+tab2_2015$valorAd &lt;- tab2_2015$valorAd/deflator
+tab2_2015$W &lt;- tab2_2015$W/deflator</code></pre>
+<p>Agora temos todos os nossos valores prontos para realizar uma decomposição.</p>
+</div>
 </div>
 <div id="análise-de-decomposição-estrutural" class="section level2">
 <h2>Análise de Decomposição Estrutural</h2>

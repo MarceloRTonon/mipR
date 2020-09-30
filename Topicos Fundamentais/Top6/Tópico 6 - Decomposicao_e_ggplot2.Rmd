@@ -175,7 +175,69 @@ tab2_2015 <-  map(truRange,
 
 ### Deflacionando os valores
 
-Importante: nesse caso, os valores não estão deflacionados. Por isso precisamos deflacionar os valores. Como discutido no curso 
+Importante: nesse caso, os valores não estão deflacionados. Por isso precisamos deflacionar os valores. Como discutido durante o curso, existem várias formas de você fazer uma deflação de preços. Por questões de simplicidade, vamos usar aqui um deflator único. Para tanto, vamos comparar os valores correntes e do ano anterior da produção total da economia. Esses valores está disponivel na célula `O19` da aba `producao` das tabelas 1 (valores correntes) e 3 (valores do ano anterior).
+
+```{r}
+tab_arquivos <- function(tab){
+  .tab <- tbru %>%
+    unzip(list = T) %>%
+    unlist %>%
+    stringr::str_subset(paste0(tab, "_", 201)) %>%
+    as.list()
+  return(.tab)
+}
+
+deflatorY2Y <- function(Corrente, Anterior){
+
+  fileCor <- tempfile(fileext = ".xls")
+  fileAnt <- tempfile(fileext = ".xls")
+
+  unziptab <- function(x,y){
+    unzip(zipfile = tbru,
+        files = x,
+        junkpaths = F,
+        exdir = y,
+        overwrite = T)
+  }
+  
+  .Cor <- read_xls(path = unziptab(Corrente, fileCor),
+                   sheet = "producao",
+                   range = "O19",
+                   col_names = "Total") %>%
+    unlist()
+  
+  .Ant <- read_xls(path = unziptab(Anterior, fileAnt),
+                   sheet = "producao",
+                   range = "O19",
+                   col_names = "Total") %>%
+    unlist()
+    
+    return(.Cor/.Ant)
+}
+
+deflatores_Ano_a_Ano <- map2(tab_arquivos("tab1"),
+                             tab_arquivos("tab3"),
+                             deflatorY2Y)
+```
+
+Para gerar um deflator direto de 2010 a 2015, multiplicamos todos os deflatores de 2011 à 2015  (o deflator de 2010 é referente a deflação de preços de 2010 frente à 2009, por isso iremos exclui-lo). Para tanto, vamos usar a função `purrr::reduce` do pacote purrr.
+
+```{r}
+deflator <- deflatores_Ano_a_Ano[-1] %>%
+  reduce(`*`)
+```
+
+Agora, vamos deflacionar os valores que devem ser deflacionados:
+
+```{r}
+matrizes2015$f_p <- matrizes2015$f_p/deflator
+
+tab2_2015$valorAd <- tab2_2015$valorAd/deflator
+tab2_2015$W <- tab2_2015$W/deflator
+```
+
+Agora temos todos os nossos valores prontos para realizar uma decomposição.
+
 
 ## Análise de Decomposição Estrutural
 
