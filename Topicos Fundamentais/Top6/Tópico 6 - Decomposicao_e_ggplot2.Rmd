@@ -254,9 +254,17 @@ Agora temos todos os nossos valores prontos para realizar uma decomposição.
 
 **Atenção:** a parte a seguir vamos deixar as contas mais simples ocultar. É sugerido que se pegue um papel e caneta e faça as contas por si só.
 
-A análise de decomposição estrutural ( _Structural Decomposition Analisys: SDA_) é uma forma de se decompor os motivos de uma diferença entre dois períodos ou regiões de um determinado valor.
+A análise de decomposição estrutural ( _Structural Decomposition Analisys: SDA_) é uma forma de se decompor os motivos de uma diferença entre dois períodos ou regiões de um determinado valor. Podemos dividir as decomposições em dois tipos: a aditivas e as multiplicativas. As aditivas são referentes as diferenças em termos absolutos, como $x_1 - x_0$, enquanto as multiplicativas são referentes as diferenças em taxa, $\frac{x_1}{x_0}$. Podemos também decompor as mudanças na Inversa de Leontief (ou em quaisquer multiplicadores similares).
 
-Por exemplo, sejam $X_0$ e $X_1$ os valores bruto de produção dos períodos 0 e 1, que são dados a partir do modelo básico de Leontief:
+**ATENÇÃO:** A notação neste tópico segue a seguinte lógica: um sobreescrito $i$ se refere ao período da variável, enquanto o subscrito $j$ é para denominar variáveis diferentes. Ou seja: $x^0_j$ e $x^1_j$ são a mesma variáveis porém de períodos/regiões diferentes. Enquanto isso, $x^i_1$ e $x^i_2$ são variáveis diferentes de um mesmo período/região. 
+
+
+
+### Decomposições Aditivas.
+
+Como já dito, a decomposição aditiva se preocupa com a diferença entre dois resultados em termos absolutos, ou seja $\Delta x = X^1 - X^0$. Esse caso de decomposição é a mais simples de se efetuar _a priori_, porém ela contém nuances quando tratamos de casos com mais de 2 variaveis. Vamos no entanto, começar por um caso justamente com apenas variáveis para podermos discutir essa questão. 
+
+Sejam $X^0$ e $X^1$ os valores bruto de produção dos períodos 0 e 1, que são dados a partir do modelo básico de Leontief:
 
 $$X = L f$$
 ```{r}
@@ -272,18 +280,18 @@ matrizes2015$X <- matrizes2015$Leontief %*% matrizes2015$f
 
 ```
 
-Sendo $L$ a inversa de Leontief e $f$ o vetor de demanda final. A definição de $X_0$ é $X_1$ é, respectivamente $X_0 = L_0f_0$ e $X_1 = L_1 f_1$. Desse modo, queremos agora saber qual foi a contribuição das variações tanto de $L$ quanto de $f$ para a variação final em $X$. Temos então que:
+Sendo $L$ a inversa de Leontief e $f$ o vetor de demanda final. A definição de $X^0$ é $X^1$ é, respectivamente $X^0 = L^0f^0$ e $X^1 = L^1 f^1$. Desse modo, queremos agora saber qual foi a contribuição das variações tanto de $L$ quanto de $f$ para a variação final em $X$. Temos então que:
 
-$$\Delta X = X_1 - X_0 = L_1f_1 - L_0f_0$$
+$$\Delta X = X^1 - X^0 = L^1f^1 - L^0f^0$$
 
 ```{r}
 deltaX <- matrizes2015$X - matrizes2010$X
 ```
 
 
-Seja $\Delta L = L_1 - L0$ e $\Delta f = f_1 - f_0$, podemos substituir na equação acima os valores de modo:
+Seja $\Delta L = L^1 - L0$ e $\Delta f = f^1 - f^0$, podemos substituir na equação acima os valores de modo:
 
-$$\Delta X = L_1 (f_0 + \Delta f) - (L_1 - \Delta L) f_0 = \Delta L f_0 + L_1(\Delta f)$$
+$$\Delta X = L^1 (f^0 + \Delta f) - (L^1 - \Delta L) f^0 = \Delta L f^0 + L^1(\Delta f)$$
 ```{r}
 deltaL <- matrizes2015$Leontief - matrizes2010$Leontief
 deltaf <- matrizes2015$f - matrizes2010$f
@@ -297,7 +305,7 @@ all.equal(deltaX1, deltaX)
 
 Podemos no entanto, redistribuir isso de outra forma:
 
-$$\Delta X = (L_0 + \Delta L) f_1 - L_0(f_1 -  \Delta f) = (\Delta L)f_1 + L_0 (\Delta f)$$
+$$\Delta X = (L^0 + \Delta L) f^1 - L^0(f^1 -  \Delta f) = (\Delta L)f^1 + L^0 (\Delta f)$$
 
 ```{r}
 deltaX2 <- (deltaL %*% matrizes2015$f) + (matrizes2010$Leontief %*% deltaf)
@@ -313,7 +321,7 @@ Ambas as formas apresentadas agora são igualmente válidas, sendo ambas igualme
 all.equal(deltaX1, deltaX2)
 ```
 
- No entanto, é de certo modo obvio que esperamos que $(\Delta L)f_1 \neq (\Delta L) f_0 $.
+ No entanto, é de certo modo obvio que esperamos que $(\Delta L)f^1 \neq (\Delta L) f^0 $.
 
 ```{r}
 all.equal(deltaL %*% matrizes2010$f,
@@ -323,7 +331,7 @@ all.equal(deltaL %*% matrizes2010$f,
 
 Dietzenbacher e Los (1998), mostram que ao tirarmos os valores médios das adições aditivas temos um resultado aceitável:
 
-$$\Delta X = (1/2) \Delta L (f_0 + f_1) + (1/2) (L_1 + L_2) \Delta f $$
+$$\Delta X = (1/2) \Delta L (f^0 + f^1) + (1/2) (L^0 + L^1) \Delta f $$
 
 ```{r}
 deltaX3 <- ((1/2) *deltaL %*% (matrizes2010$f + matrizes2015$f)) +
@@ -332,9 +340,44 @@ deltaX3 <- ((1/2) *deltaL %*% (matrizes2010$f + matrizes2015$f)) +
 all.equal(deltaX, deltaX3)
 ```
 
-Na equação acima, temos que a parcela $(1/2) \Delta L (f_0 + f_1)$ é referente a mudança tecnológica enquanto $(1/2) (L_1 + L_2) \Delta f$ é referente a mudanças na demadna final
+Na equação acima, temos que a parcela $(1/2) \Delta L (f^0 + f^1)$ é referente a mudança tecnológica enquanto $(1/2) (L^0 + L^1) \Delta f$ é referente a mudanças na demadna final.
+
+### Decomposições aditivas com mais de 2 variáveis
+
+A decomposição anterior apresentou a forma aditiva com duas variáveis. Como vimos, há duas formas de se decompor $\Delta X = L^1f^1 - L^0f^0$. Como veremos a seguir isso se deve ao fator de que a quantidade de formas possíveis de se decompor é igual ao valor fatorial de variáveis da decomposição. Ou seja, se você tiver $n$ variáveis explicativas, de tal modo que $X = x_1 \dots x_n$, você terá $n!$ decomposições possíveis. A melhor forma de entender isso é olhando a forma abstrata da decomposição aditiva. Comecemos novamente por 2 variáveis explicativas: $X = x_1 x_2$. Uma vez que temos $\Delta X = X^1 - X^0 = x_1^1x_2^1 - x_1^0x_2^0$ e que $\Delta x_1 = x_1^1 - x_1^0$ e $\Delta x_2 = x_2^1 - x_2^0$, podemos, como antes, substituir esses elementos. Como já vimos antes, temos DUAS formas de fazer essa substituição: começando por $x_1$ ou por $x_2$. Vamos primeiro começar por $x_1$. 
+
+Fazendo $x_1^1 = \Delta x_1 + x_1^0$, temos que:
+
+$$\Delta X = (\Delta x_1 + x_1^0) x_2^1 - x_1^0x_2^0 = \Delta x_1 x^1_2 + x^0_1x^1_2 - x^0_1x^0_2$$
+Podemos então substituir $x^1_2 = \Delta x_2 + x_2^0$ em $x^0_1 x^1_2$ e teremos:
+
+$$\Delta X = \Delta x_1 x^1_2 + x^0_1(\Delta x_2 + x^0_2) - x^0_1x^0_2 = \Delta x_1 x^1_2 + x^0_1\Delta x_2 + x^0_1x^0_2 - x^0_1x^0_2$$
+Como os dois últimos elementos se cancelam, temos que:
+
+$$\Delta X = \Delta x_1 x_2^1 + x_1^0 \Delta x_2$$
+
+Como já falamos, o mesmo processo pode ser feito, só que começando por $x_2$. Sendo $ x_2^1 = x_2^0 + \Delta x_2$:
+
+$$\Delta X = x_1^1 (\Delta x_2 + x^0_2) - x_1^0x_2^0 = x^1_1\Delta x_2 + x^1_1 x_2^0 - x_1^0x_2^0 $$
+
+Substituindo $x_1^1 = \Delta x_1 + x_1^0$ temos:
+
+$$\Delta X = x_1^1 \Delta x_2 + (\Delta x_1 + x_1^0)x_2^0 - x_1^0x_2^0 = x_1^1 \Delta x_2 + \Delta x_1x_2^0 + x_1^0x_2^0 - x_1^0x_2^0$$
+
+Com os dois últimos elementos se cancelando temos que:
+
+$$\Delta X = x^1_1 \Delta x_2 = \Delta_1 x^0_2$$
+
+Para quem quiser realmente **entender** essa substituição fica a sugestão de fazer essa decomposição substituindo $x^0_1 = x^1_1 - \Delta x_1$ e $x^0_2 = x^1_2 - \Delta x_2$ e ver que os resultados não se diferenciam. Assim, como sugerido por Dietzenbacher e Los (1997) podemos simplesmente tirar a média aritmética das duas decomposições e fazer sem problema.
+
+Por se tratar de uma decomposição com apenas 2 variáveis, a decomposição irá eventualmente começar por um dos polos da equação. Ou seja, sendo $\Delta X = x_1^1x_2^1 - x_1^0x_2^0$, vamos começar inevitavelmente a decomposição por $x_1$ ou $x_2$. Além disso, se a decomposição começa por $x_1$ ela inevitavelmente termina por $x_2$ e vice e versa. Isso é importante, pois ajuda a entender o porque que teremos sempre $n!$ decomposições possíveis para $X = x_1 \dots x_n$. Vamos agora vizualizar o caso de $X = x_1x_2x_3$.
 
 ## ggplot2
+
+
+## Agradecimentos
+
+Os autores agradecem [João Pedro Oliveira](https://github.com/kimjoaoun) por amavelmente ceder a imagem feita por ele e [Pedro Cavalcante](https://github.com/pedrocava).
 
 ## Bibliografia usada neste material
 
@@ -348,7 +391,16 @@ MILLER, Ronald E.; BLAIR, Peter D. Input-output analysis: foundations and extens
 
 ### ggplot2
 
-WICKHAM, Hadley. ggplot2: elegant graphics for data analysis. springer, 2016.
+WICKHAM, Hadley. ggplot2: elegant graphics for data analysis. springer, 2016. Acesse a versão online em: https://ggplot2-book.org
 
 
-## Bibliografia extra indicada
+
+## Confira também!
+
+Outras bibliografias de artigos e sites para você acessar e aprender mais coisas de formas mais profunda.
+
+### ggplot2
+
+[How to make any plot in ggplot2?](http://r-statistics.co/ggplot2-Tutorial-With-R.html)
+
+[The R Graph Gallery](https://www.r-graph-gallery.com/)
