@@ -30,9 +30,9 @@ library(stringr)
 
 ## Objetivos do Tópico
 
-Esse tópico irá introduzir tanto o tópico de análise de decomposição estrutural quanto introduzir o uso do pacote `ggplot2` para a criação de gráficos. 
+Esse tópico irá introduzir tanto o tema de análise de decomposição estrutural quanto introduzir o uso do pacote `ggplot2` para a criação de gráficos. 
 
-Para a parte de decomposição estrutural, a bibliografia utilizada será o capitulo 13 do livro de Miller e Blair(2009), bem como os artigos de Dietzenbacher e Los (1998) e Dietzenbahcer, Lahr e Los (2004).
+Para a parte de decomposição estrutural, a bibliografia utilizada será o capítulo 13 do livro de Miller e Blair (2009), bem como os artigos de Dietzenbacher e Los (1998) e Dietzenbacher, Lahr e Los (2004).
 
 Para a parte de criação de gráficos com o `ggplot2` a bibliografia utilizada será o 
 
@@ -40,9 +40,9 @@ Para a parte de criação de gráficos com o `ggplot2` a bibliografia utilizada 
 
 ## Dados Necessários
 
-Para realizar uma decomposição estrutural é necessário que as bases sejam compátiveis na sua estrutura em termos de linhas e colunas. No nosso caso, nós iremos comparar as bases de 2010 e 2015 com 12 setores cada uma.
+Para realizar uma decomposição estrutural é necessário que as bases sejam compatíveis na sua estrutura em termos de linhas e colunas. No nosso caso, nós iremos comparar as bases de 2010 e 2015 com 12 setores cada uma.
 
-Criando arquivos temporários^[A vantagem de arquivos temporários é que eles não ficam permanentemente gravados no seu disco rígido. Para arquivos pequenos como os que estamos tratando, é bastante vantajoso.] para servirem de parametros em `destfile`:
+Criando arquivos temporários^[A vantagem de arquivos temporários é que eles não ficam permanentemente gravados no seu disco rígido. Para arquivos pequenos como os que estamos tratando, é bastante vantajoso.] para servirem de parâmetros em `destfile`:
 
 ```{r}
 mip2010 <- tempfile(fileext = ".xls")
@@ -60,7 +60,7 @@ link_2015 <- "ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/20
 link_tbru <- "ftp://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2015/tabelas_xls/tabelas_de_recursos_e_usos/nivel_12_2000_2015_xls.zip"
 ```
 
-Baixando os arquivos sendo os arquivos temporarios os arquivos destino:
+Baixando os arquivos sendo os arquivos temporários os arquivos destino:
 
 ```{r}
 download.file(url = link_2010, destfile = mip2010, mode = "wb")
@@ -85,7 +85,7 @@ nomesSetores <- read_xls(mip2010, sheet = "01", range = "B6:B17", col_names = "S
 
 ```
 
-Vamos criar agora listas com os parametros de cada elementos:
+Vamos criar agora listas com os parâmetros de cada elemento:
 
 ```{r}
 mipElements <- list("Bn", "Bm", "D_MS", "f_p")
@@ -186,7 +186,7 @@ tab2_2015 <-  map(truRange,
 
 ### Deflacionando os valores
 
-Importante: nesse caso, os valores não estão deflacionados. Por isso precisamos deflacionar os valores. Como discutido durante o curso, existem várias formas de você fazer uma deflação de preços. Por questões de simplicidade, vamos usar aqui um deflator único. Para tanto, vamos comparar os valores correntes e do ano anterior da produção total da economia. Esses valores está disponivel na célula `O19` da aba `producao` das tabelas 1 (valores correntes) e 3 (valores do ano anterior).
+Importante: nesse caso, os valores não estão deflacionados. Por isso precisamos deflacionar os valores. Como discutido durante o curso, existem várias formas de você fazer uma deflação de preços. Por questões de simplicidade, vamos usar aqui um deflator único. Para tanto, vamos comparar os valores correntes e do ano anterior da produção total da economia. Esse valor está disponível na célula `O19` da aba `producao` das tabelas 1 (valores correntes) e 3 (valores do ano anterior).
 
 ```{r}
 tab_arquivos <- function(tab){
@@ -231,7 +231,7 @@ deflatores_Ano_a_Ano <- map2(tab_arquivos("tab1"),
                              deflatorY2Y)
 ```
 
-Para gerar um deflator direto de 2010 a 2015, multiplicamos todos os deflatores de 2011 à 2015  (o deflator de 2010 é referente a deflação de preços de 2010 frente à 2009, por isso iremos exclui-lo). Para tanto, vamos usar a função `purrr::reduce` do pacote purrr.
+Para gerar um deflator direto de 2010 a 2015, multiplicamos todos os deflatores de 2011 à 2015  (o deflator de 2010 é referente a deflação de preços de 2010 frente à 2009, por isso iremos exclui-lo), isso nos retorna a relação entre os preços de 2010 e 2015. Para tanto, vamos usar a função `purrr::reduce` do pacote purrr.
 
 ```{r}
 deflator <- deflatores_Ano_a_Ano[-1] %>%
@@ -252,9 +252,9 @@ Agora temos todos os nossos valores prontos para realizar uma decomposição.
 
 ## Análise de Decomposição Estrutural
 
-**Atenção:** a parte a seguir vamos deixar as contas mais simples ocultar. É sugerido que se pegue um papel e caneta e faça as contas por si só.
+**Atenção:** a parte a seguir vamos deixar as contas mais simples ocultas. É sugerido que se pegue um papel e caneta e faça as contas por si só.
 
-A análise de decomposição estrutural ( _Structural Decomposition Analisys: SDA_) é uma forma de se decompor os motivos de uma diferença entre dois períodos ou regiões de um determinado valor. Podemos dividir as decomposições em dois tipos: a aditivas e as multiplicativas. As aditivas são referentes as diferenças em termos absolutos, como $x_1 - x_0$, enquanto as multiplicativas são referentes as diferenças em taxa, $\frac{x_1}{x_0}$. Podemos também decompor as mudanças na Inversa de Leontief (ou em quaisquer multiplicadores similares).
+A análise de decomposição estrutural ( _Structural Decomposition Analisys: SDA_) é uma forma de se decompor os motivos que explicam uma diferença entre dois períodos ou regiões de um determinado valor. Podemos dividir as decomposições em dois tipos: as aditivas e as multiplicativas. As aditivas são referentes as diferenças em termos absolutos, como $x_1 - x_0$, enquanto as multiplicativas são referentes as diferenças em taxa, $\frac{x_1}{x_0}$. Podemos também decompor as mudanças na Inversa de Leontief (ou em quaisquer multiplicadores similares).
 
 **ATENÇÃO:** A notação neste tópico segue a seguinte lógica: um sobreescrito $i$ se refere ao período da variável, enquanto o subscrito $j$ é para denominar variáveis diferentes. Ou seja: $x^0_j$ e $x^1_j$ são a mesma variáveis porém de períodos/regiões diferentes. Enquanto isso, $x^i_1$ e $x^i_2$ são variáveis diferentes de um mesmo período/região. 
 
@@ -262,7 +262,7 @@ A análise de decomposição estrutural ( _Structural Decomposition Analisys: SD
 
 ### Decomposições Aditivas.
 
-Como já dito, a decomposição aditiva se preocupa com a diferença entre dois resultados em termos absolutos, ou seja $\Delta x = X^1 - X^0$. Esse caso de decomposição é a mais simples de se efetuar _a priori_, porém ela contém nuances quando tratamos de casos com mais de 2 variaveis. Vamos no entanto, começar por um caso justamente com apenas variáveis para podermos discutir essa questão. 
+Como já dito, a decomposição aditiva se preocupa com a diferença entre dois resultados em termos absolutos, ou seja $\Delta x = X^1 - X^0$. Esse caso de decomposição é a mais simples de se efetuar _a priori_, porém ela contém nuances quando tratamos de casos com mais de duas variaveis. Vamos no entanto, começar por um caso justamente com apenas duas variáveis para podermos discutir essa questão. 
 
 Sejam $X^0$ e $X^1$ os valores bruto de produção dos períodos 0 e 1, que são dados a partir do modelo básico de Leontief:
 
@@ -321,7 +321,7 @@ Ambas as formas apresentadas agora são igualmente válidas, sendo ambas igualme
 all.equal(deltaX1, deltaX2)
 ```
 
- No entanto, é de certo modo obvio que esperamos que $(\Delta L)f^1 \neq (\Delta L) f^0 $.
+ No entanto, é de certo modo óbvio que esperamos que $(\Delta L)f^1 \neq (\Delta L) f^0 $.
 
 ```{r}
 all.equal(deltaL %*% matrizes2010$f,
@@ -340,11 +340,11 @@ deltaX3 <- ((1/2) *deltaL %*% (matrizes2010$f + matrizes2015$f)) +
 all.equal(deltaX, deltaX3)
 ```
 
-Na equação acima, temos que a parcela $(1/2) \Delta L (f^0 + f^1)$ é referente a mudança tecnológica enquanto $(1/2) (L^0 + L^1) \Delta f$ é referente a mudanças na demadna final.
+Na equação acima, temos que a parcela $(1/2) \Delta L (f^0 + f^1)$ é referente a mudança tecnológica enquanto $(1/2) (L^0 + L^1) \Delta f$ é referente a mudanças na demanda final.
 
 ### Decomposições aditivas com mais de 2 variáveis
 
-A decomposição anterior apresentou a forma aditiva com duas variáveis. Como vimos, há duas formas de se decompor $\Delta X = L^1f^1 - L^0f^0$. Como veremos a seguir isso se deve ao fator de que a quantidade de formas possíveis de se decompor é igual ao valor fatorial de variáveis da decomposição. Ou seja, se você tiver $n$ variáveis explicativas, de tal modo que $X = x_1 \dots x_n$, você terá $n!$ decomposições possíveis. A melhor forma de entender isso é olhando a forma abstrata da decomposição aditiva. Comecemos novamente por 2 variáveis explicativas: $X = x_1 x_2$. Uma vez que temos $\Delta X = X^1 - X^0 = x_1^1x_2^1 - x_1^0x_2^0$ e que $\Delta x_1 = x_1^1 - x_1^0$ e $\Delta x_2 = x_2^1 - x_2^0$, podemos, como antes, substituir esses elementos. Como já vimos antes, temos DUAS formas de fazer essa substituição: começando por $x_1$ ou por $x_2$. Vamos primeiro começar por $x_1$. 
+A decomposição anterior apresentou a forma aditiva com duas variáveis. Como vimos, há duas formas de se decompor $\Delta X = L^1f^1 - L^0f^0$. Como veremos a seguir isso se deve ao fator de que a quantidade de formas possíveis de se decompor é igual ao valor fatorial de variáveis da decomposição. Ou seja, se você tiver $n$ variáveis explicativas, de tal modo que $X = x_1 \dots x_n$, você terá $n!$ decomposições possíveis. A melhor forma de entender isso é olhando a forma abstrata da decomposição aditiva. Comecemos novamente por duas variáveis explicativas: $X = x_1 x_2$. Uma vez que temos $\Delta X = X^1 - X^0 = x_1^1x_2^1 - x_1^0x_2^0$ e que $\Delta x_1 = x_1^1 - x_1^0$ e $\Delta x_2 = x_2^1 - x_2^0$, podemos, como antes, substituir esses elementos. Como já vimos antes, temos DUAS formas de fazer essa substituição: começando por $x_1$ ou por $x_2$. Vamos primeiro começar por $x_1$. 
 
 Fazendo $x_1^1 = \Delta x_1 + x_1^0$, temos que:
 
@@ -374,6 +374,11 @@ Por se tratar de uma decomposição com apenas 2 variáveis, a decomposição ir
 
 ## ggplot2
 
+Vamos agora aproveitar os dados elavorados para a decomposição e visualizá-los aplicando o pacote `ggplot2`. Trata-se de um pacote com várias possibilidades de configurações, de forma que será impossível explorar todo o pacote, mas ao menos as principais configurações possíveis.
+
+### Como criar gráficos no ggplot2
+
+A ideia central é formar os gráficos por camadas, adicionando elementos sequencialmente. 
 
 ## Agradecimentos
 

@@ -378,15 +378,15 @@ library(stringr)</code></pre>
 </div>
 <div id="objetivos-do-tópico" class="section level2">
 <h2>Objetivos do Tópico</h2>
-<p>Esse tópico irá introduzir tanto o tópico de análise de decomposição estrutural quanto introduzir o uso do pacote <code>ggplot2</code> para a criação de gráficos.</p>
-<p>Para a parte de decomposição estrutural, a bibliografia utilizada será o capitulo 13 do livro de Miller e Blair(2009), bem como os artigos de Dietzenbacher e Los (1998) e Dietzenbahcer, Lahr e Los (2004).</p>
+<p>Esse tópico irá introduzir tanto o tema de análise de decomposição estrutural quanto introduzir o uso do pacote <code>ggplot2</code> para a criação de gráficos.</p>
+<p>Para a parte de decomposição estrutural, a bibliografia utilizada será o capítulo 13 do livro de Miller e Blair (2009), bem como os artigos de Dietzenbacher e Los (1998) e Dietzenbacher, Lahr e Los (2004).</p>
 <p>Para a parte de criação de gráficos com o <code>ggplot2</code> a bibliografia utilizada será o</p>
 <p><strong>Importante:</strong> Ambos os temas são de tal profundidade que este material não poderia nem presumir esgotar ambos os tópicos.</p>
 </div>
 <div id="dados-necessários" class="section level2">
 <h2>Dados Necessários</h2>
-<p>Para realizar uma decomposição estrutural é necessário que as bases sejam compátiveis na sua estrutura em termos de linhas e colunas. No nosso caso, nós iremos comparar as bases de 2010 e 2015 com 12 setores cada uma.</p>
-<p>Criando arquivos temporários<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> para servirem de parametros em <code>destfile</code>:</p>
+<p>Para realizar uma decomposição estrutural é necessário que as bases sejam compatíveis na sua estrutura em termos de linhas e colunas. No nosso caso, nós iremos comparar as bases de 2010 e 2015 com 12 setores cada uma.</p>
+<p>Criando arquivos temporários<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> para servirem de parâmetros em <code>destfile</code>:</p>
 <pre class="r"><code>mip2010 &lt;- tempfile(fileext = &quot;.xls&quot;)
 mip2015 &lt;- tempfile(fileext = &quot;.xls&quot;)
 tbru &lt;- tempfile(fileext = &quot;.zip&quot;)</code></pre>
@@ -396,7 +396,7 @@ tbru &lt;- tempfile(fileext = &quot;.zip&quot;)</code></pre>
 link_2015 &lt;- &quot;ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_12.xls&quot;
 
 link_tbru &lt;- &quot;ftp://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2015/tabelas_xls/tabelas_de_recursos_e_usos/nivel_12_2000_2015_xls.zip&quot;</code></pre>
-<p>Baixando os arquivos sendo os arquivos temporarios os arquivos destino:</p>
+<p>Baixando os arquivos sendo os arquivos temporários os arquivos destino:</p>
 <pre class="r"><code>download.file(url = link_2010, destfile = mip2010, mode = &quot;wb&quot;)
 download.file(url = link_2015, destfile = mip2015, mode = &quot;wb&quot;)
 download.file(url = link_tbru, destfile = tbru, mode = &quot;wb&quot;)</code></pre>
@@ -445,7 +445,7 @@ download.file(url = link_tbru, destfile = tbru, mode = &quot;wb&quot;)</code></p
 </table>
 <p>Vamos primeiro carregar os nomes dos setores:</p>
 <pre class="r"><code>nomesSetores &lt;- read_xls(mip2010, sheet = &quot;01&quot;, range = &quot;B6:B17&quot;, col_names = &quot;Setores&quot;)</code></pre>
-<p>Vamos criar agora listas com os parametros de cada elementos:</p>
+<p>Vamos criar agora listas com os parâmetros de cada elemento:</p>
 <pre class="r"><code>mipElements &lt;- list(&quot;Bn&quot;, &quot;Bm&quot;, &quot;D_MS&quot;, &quot;f_p&quot;)
 
 
@@ -555,7 +555,7 @@ tab2_2015 &lt;-  map(truRange,
   map(as.matrix)</code></pre>
 <div id="deflacionando-os-valores" class="section level3">
 <h3>Deflacionando os valores</h3>
-<p>Importante: nesse caso, os valores não estão deflacionados. Por isso precisamos deflacionar os valores. Como discutido durante o curso, existem várias formas de você fazer uma deflação de preços. Por questões de simplicidade, vamos usar aqui um deflator único. Para tanto, vamos comparar os valores correntes e do ano anterior da produção total da economia. Esses valores está disponivel na célula <code>O19</code> da aba <code>producao</code> das tabelas 1 (valores correntes) e 3 (valores do ano anterior).</p>
+<p>Importante: nesse caso, os valores não estão deflacionados. Por isso precisamos deflacionar os valores. Como discutido durante o curso, existem várias formas de você fazer uma deflação de preços. Por questões de simplicidade, vamos usar aqui um deflator único. Para tanto, vamos comparar os valores correntes e do ano anterior da produção total da economia. Esse valor está disponível na célula <code>O19</code> da aba <code>producao</code> das tabelas 1 (valores correntes) e 3 (valores do ano anterior).</p>
 <pre class="r"><code>tab_arquivos &lt;- function(tab){
   .tab &lt;- tbru %&gt;%
     unzip(list = T) %&gt;%
@@ -596,7 +596,7 @@ deflatorY2Y &lt;- function(Corrente, Anterior){
 deflatores_Ano_a_Ano &lt;- map2(tab_arquivos(&quot;tab1&quot;),
                              tab_arquivos(&quot;tab3&quot;),
                              deflatorY2Y)</code></pre>
-<p>Para gerar um deflator direto de 2010 a 2015, multiplicamos todos os deflatores de 2011 à 2015 (o deflator de 2010 é referente a deflação de preços de 2010 frente à 2009, por isso iremos exclui-lo). Para tanto, vamos usar a função <code>purrr::reduce</code> do pacote purrr.</p>
+<p>Para gerar um deflator direto de 2010 a 2015, multiplicamos todos os deflatores de 2011 à 2015 (o deflator de 2010 é referente a deflação de preços de 2010 frente à 2009, por isso iremos exclui-lo), isso nos retorna a relação entre os preços de 2010 e 2015. Para tanto, vamos usar a função <code>purrr::reduce</code> do pacote purrr.</p>
 <pre class="r"><code>deflator &lt;- deflatores_Ano_a_Ano[-1] %&gt;%
   reduce(`*`)</code></pre>
 <p>Agora, vamos deflacionar os valores que devem ser deflacionados:</p>
@@ -609,12 +609,12 @@ tab2_2015$W &lt;- tab2_2015$W/deflator</code></pre>
 </div>
 <div id="análise-de-decomposição-estrutural" class="section level2">
 <h2>Análise de Decomposição Estrutural</h2>
-<p><strong>Atenção:</strong> a parte a seguir vamos deixar as contas mais simples ocultar. É sugerido que se pegue um papel e caneta e faça as contas por si só.</p>
-<p>A análise de decomposição estrutural ( <em>Structural Decomposition Analisys: SDA</em>) é uma forma de se decompor os motivos de uma diferença entre dois períodos ou regiões de um determinado valor. Podemos dividir as decomposições em dois tipos: a aditivas e as multiplicativas. As aditivas são referentes as diferenças em termos absolutos, como <span class="math inline">\(x_1 - x_0\)</span>, enquanto as multiplicativas são referentes as diferenças em taxa, <span class="math inline">\(\frac{x_1}{x_0}\)</span>. Podemos também decompor as mudanças na Inversa de Leontief (ou em quaisquer multiplicadores similares).</p>
+<p><strong>Atenção:</strong> a parte a seguir vamos deixar as contas mais simples ocultas. É sugerido que se pegue um papel e caneta e faça as contas por si só.</p>
+<p>A análise de decomposição estrutural ( <em>Structural Decomposition Analisys: SDA</em>) é uma forma de se decompor os motivos que explicam uma diferença entre dois períodos ou regiões de um determinado valor. Podemos dividir as decomposições em dois tipos: as aditivas e as multiplicativas. As aditivas são referentes as diferenças em termos absolutos, como <span class="math inline">\(x_1 - x_0\)</span>, enquanto as multiplicativas são referentes as diferenças em taxa, <span class="math inline">\(\frac{x_1}{x_0}\)</span>. Podemos também decompor as mudanças na Inversa de Leontief (ou em quaisquer multiplicadores similares).</p>
 <p><strong>ATENÇÃO:</strong> A notação neste tópico segue a seguinte lógica: um sobreescrito <span class="math inline">\(i\)</span> se refere ao período da variável, enquanto o subscrito <span class="math inline">\(j\)</span> é para denominar variáveis diferentes. Ou seja: <span class="math inline">\(x^0_j\)</span> e <span class="math inline">\(x^1_j\)</span> são a mesma variáveis porém de períodos/regiões diferentes. Enquanto isso, <span class="math inline">\(x^i_1\)</span> e <span class="math inline">\(x^i_2\)</span> são variáveis diferentes de um mesmo período/região.</p>
 <div id="decomposições-aditivas." class="section level3">
 <h3>Decomposições Aditivas.</h3>
-<p>Como já dito, a decomposição aditiva se preocupa com a diferença entre dois resultados em termos absolutos, ou seja <span class="math inline">\(\Delta x = X^1 - X^0\)</span>. Esse caso de decomposição é a mais simples de se efetuar <em>a priori</em>, porém ela contém nuances quando tratamos de casos com mais de 2 variaveis. Vamos no entanto, começar por um caso justamente com apenas variáveis para podermos discutir essa questão.</p>
+<p>Como já dito, a decomposição aditiva se preocupa com a diferença entre dois resultados em termos absolutos, ou seja <span class="math inline">\(\Delta x = X^1 - X^0\)</span>. Esse caso de decomposição é a mais simples de se efetuar <em>a priori</em>, porém ela contém nuances quando tratamos de casos com mais de duas variaveis. Vamos no entanto, começar por um caso justamente com apenas duas variáveis para podermos discutir essa questão.</p>
 <p>Sejam <span class="math inline">\(X^0\)</span> e <span class="math inline">\(X^1\)</span> os valores bruto de produção dos períodos 0 e 1, que são dados a partir do modelo básico de Leontief:</p>
 <p><span class="math display">\[X = L f\]</span></p>
 <pre class="r"><code>matrizes2010$An &lt;- matrizes2010$D_MS %*% matrizes2010$Bn
@@ -647,7 +647,7 @@ all.equal(deltaX2, deltaX)</code></pre>
 <p>Ambas as formas apresentadas agora são igualmente válidas, sendo ambas igualmente corretas.</p>
 <pre class="r"><code>all.equal(deltaX1, deltaX2)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<p>No entanto, é de certo modo obvio que esperamos que $(L)f^1 (L) f^0 $.</p>
+<p>No entanto, é de certo modo óbvio que esperamos que $(L)f^1 (L) f^0 $.</p>
 <pre class="r"><code>all.equal(deltaL %*% matrizes2010$f,
           deltaL %*% matrizes2015$f)</code></pre>
 <pre><code>## [1] &quot;Mean relative difference: 1.280942&quot;</code></pre>
@@ -658,11 +658,11 @@ all.equal(deltaX2, deltaX)</code></pre>
 
 all.equal(deltaX, deltaX3)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<p>Na equação acima, temos que a parcela <span class="math inline">\((1/2) \Delta L (f^0 + f^1)\)</span> é referente a mudança tecnológica enquanto <span class="math inline">\((1/2) (L^0 + L^1) \Delta f\)</span> é referente a mudanças na demadna final.</p>
+<p>Na equação acima, temos que a parcela <span class="math inline">\((1/2) \Delta L (f^0 + f^1)\)</span> é referente a mudança tecnológica enquanto <span class="math inline">\((1/2) (L^0 + L^1) \Delta f\)</span> é referente a mudanças na demanda final.</p>
 </div>
 <div id="decomposições-aditivas-com-mais-de-2-variáveis" class="section level3">
 <h3>Decomposições aditivas com mais de 2 variáveis</h3>
-<p>A decomposição anterior apresentou a forma aditiva com duas variáveis. Como vimos, há duas formas de se decompor <span class="math inline">\(\Delta X = L^1f^1 - L^0f^0\)</span>. Como veremos a seguir isso se deve ao fator de que a quantidade de formas possíveis de se decompor é igual ao valor fatorial de variáveis da decomposição. Ou seja, se você tiver <span class="math inline">\(n\)</span> variáveis explicativas, de tal modo que <span class="math inline">\(X = x_1 \dots x_n\)</span>, você terá <span class="math inline">\(n!\)</span> decomposições possíveis. A melhor forma de entender isso é olhando a forma abstrata da decomposição aditiva. Comecemos novamente por 2 variáveis explicativas: <span class="math inline">\(X = x_1 x_2\)</span>. Uma vez que temos <span class="math inline">\(\Delta X = X^1 - X^0 = x_1^1x_2^1 - x_1^0x_2^0\)</span> e que <span class="math inline">\(\Delta x_1 = x_1^1 - x_1^0\)</span> e <span class="math inline">\(\Delta x_2 = x_2^1 - x_2^0\)</span>, podemos, como antes, substituir esses elementos. Como já vimos antes, temos DUAS formas de fazer essa substituição: começando por <span class="math inline">\(x_1\)</span> ou por <span class="math inline">\(x_2\)</span>. Vamos primeiro começar por <span class="math inline">\(x_1\)</span>.</p>
+<p>A decomposição anterior apresentou a forma aditiva com duas variáveis. Como vimos, há duas formas de se decompor <span class="math inline">\(\Delta X = L^1f^1 - L^0f^0\)</span>. Como veremos a seguir isso se deve ao fator de que a quantidade de formas possíveis de se decompor é igual ao valor fatorial de variáveis da decomposição. Ou seja, se você tiver <span class="math inline">\(n\)</span> variáveis explicativas, de tal modo que <span class="math inline">\(X = x_1 \dots x_n\)</span>, você terá <span class="math inline">\(n!\)</span> decomposições possíveis. A melhor forma de entender isso é olhando a forma abstrata da decomposição aditiva. Comecemos novamente por duas variáveis explicativas: <span class="math inline">\(X = x_1 x_2\)</span>. Uma vez que temos <span class="math inline">\(\Delta X = X^1 - X^0 = x_1^1x_2^1 - x_1^0x_2^0\)</span> e que <span class="math inline">\(\Delta x_1 = x_1^1 - x_1^0\)</span> e <span class="math inline">\(\Delta x_2 = x_2^1 - x_2^0\)</span>, podemos, como antes, substituir esses elementos. Como já vimos antes, temos DUAS formas de fazer essa substituição: começando por <span class="math inline">\(x_1\)</span> ou por <span class="math inline">\(x_2\)</span>. Vamos primeiro começar por <span class="math inline">\(x_1\)</span>.</p>
 <p>Fazendo <span class="math inline">\(x_1^1 = \Delta x_1 + x_1^0\)</span>, temos que:</p>
 <p><span class="math display">\[\Delta X = (\Delta x_1 + x_1^0) x_2^1 - x_1^0x_2^0 = \Delta x_1 x^1_2 + x^0_1x^1_2 - x^0_1x^0_2\]</span> Podemos então substituir <span class="math inline">\(x^1_2 = \Delta x_2 + x_2^0\)</span> em <span class="math inline">\(x^0_1 x^1_2\)</span> e teremos:</p>
 <p><span class="math display">\[\Delta X = \Delta x_1 x^1_2 + x^0_1(\Delta x_2 + x^0_2) - x^0_1x^0_2 = \Delta x_1 x^1_2 + x^0_1\Delta x_2 + x^0_1x^0_2 - x^0_1x^0_2\]</span> Como os dois últimos elementos se cancelam, temos que:</p>
@@ -679,6 +679,7 @@ all.equal(deltaX, deltaX3)</code></pre>
 </div>
 <div id="ggplot2" class="section level2">
 <h2>ggplot2</h2>
+<p>Vamos agora aproveitar os dados elavorados para a decomposição e visualizá-los aplicando o pacote <code>ggplot2</code>. Trata-se de um</p>
 </div>
 <div id="agradecimentos" class="section level2">
 <h2>Agradecimentos</h2>
