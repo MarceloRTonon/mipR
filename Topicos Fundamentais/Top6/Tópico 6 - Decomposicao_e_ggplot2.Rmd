@@ -25,6 +25,7 @@ library(ggplot2)
 library(readxl)
 library(purrr)
 library(stringr)
+library(gtools)
 ```
 
 
@@ -370,7 +371,180 @@ $$\Delta X = x^1_1 \Delta x_2 = \Delta_1 x^0_2$$
 
 Para quem quiser realmente **entender** essa substituição fica a sugestão de fazer essa decomposição substituindo $x^0_1 = x^1_1 - \Delta x_1$ e $x^0_2 = x^1_2 - \Delta x_2$ e ver que os resultados não se diferenciam. Assim, como sugerido por Dietzenbacher e Los (1997) podemos simplesmente tirar a média aritmética das duas decomposições e fazer sem problema.
 
-Por se tratar de uma decomposição com apenas 2 variáveis, a decomposição irá eventualmente começar por um dos polos da equação. Ou seja, sendo $\Delta X = x_1^1x_2^1 - x_1^0x_2^0$, vamos começar inevitavelmente a decomposição por $x_1$ ou $x_2$. Além disso, se a decomposição começa por $x_1$ ela inevitavelmente termina por $x_2$ e vice e versa. Isso é importante, pois ajuda a entender o porque que teremos sempre $n!$ decomposições possíveis para $X = x_1 \dots x_n$. Vamos agora vizualizar o caso de $X = x_1x_2x_3$.
+Por se tratar de uma decomposição com apenas 2 variáveis, a decomposição irá eventualmente começar por um dos polos da equação. Ou seja, sendo $\Delta X = x_1^1x_2^1 - x_1^0x_2^0$, vamos começar inevitavelmente a decomposição por $x_1$ ou $x_2$. Além disso, se a decomposição começa por $x_1$ ela inevitavelmente termina por $x_2$ e vice e versa. Isso é importante, pois ajuda a entender o porque que teremos sempre $n!$ decomposições possíveis para $X = x_1 \dots x_n$. Vamos agora vizualizar o caso de $X = x_1x_2x_3$. Primeiramente podemos decompor em $x_1$, $x_2$ ou $x_3$, como podemos ver abaixo:
+
+
+$$
+\Delta X = \begin{cases} (x_1^0 + \Delta x_1) x_2^1 x_3^1 - x_1^0x_2^0x_3^0 = x_1^0 x_2^1 x_3^1 + \Delta x_1 x_2^1 x_3^1 - x_1^0x_2^0x_3^0\\ x_1^1(x_2^0 + \Delta x_2)x_3^1 - x_1^0x_2^0x_3^0 = x_1^1x_2^0 x_3^1 + x_1^1\Delta x_2x_3^1 - x_1^0x_2^0x_3^0 \\ x_1^1x_2^1(x_3^0 + \Delta x_3) - x_1^0x_2^0x_3^0 =  x_1^1x_2^1x_3^0 + x_1^0x_2^0\Delta x_3 - x_1^0x_2^0x_3^0 \end{cases}
+$$
+
+Ou seja, da mesma forma que no caso de duas variáveis, que podemos começar tanto por $x_1$ ou $x_2$, aqui podemos participar por $x_1$, $x_2$ ou $x_3$. Só que no caso de duas variáveis, se começarmos por $x_1$ temos que terminar por $x_2$ e vice e versa. No caso de três variáveis, se começarmos por $x_1$ podemos decompor tanto $x_2$ quanto $x_3$ logo em seguida. Aqui fica clara porque a quantidade de decomposições possiveis de uma equação com $n$ variáveis é igual à $n!$: primeiro pode-se começar por qualquer uma das $n$ variáveis, e em cada uma dessas decomposições pode-se decompor qualquer uma das outras $n-1$ variáveis disponíveis, e então temos $n-2$ variáveis restantes e assim por diante. Ou seja, o total de possibilidades é igual à $n(n-1)(n-2)\dots (n+1-n)$. No caso de $X= x_1x_2x_3$ temos primeiro 3 variáveis que podemos decompor, depois 2 (em cada uma das decomposições), e por fim a final. Neste contexto chamamos de ***decomposições polares*** as decomposições que partem de um polo e vão unilateralmente em direção ao outro, ou seja de frente para trás e de trás para frente. No primeiro caso, de frente para trás, se começa por $x_1$, depois $x_2$, $x_3$, $\dots$, $x_{n-1}$, $x_n$. No segundo caso, de trás para frente, se começa por $x_n$, $x_{n-1}$, $\dots$, $x_3$, $x_2$, $x_1$. 
+
+
+No caso de $X = x_1x_2x_3$ a decomposição polar, de frente para trás, é começar por $x_1$, depois decompor $x_2$ e enfim $x_3$:
+
+$$\Delta X =\Delta x_1 x_2^1 x_3^1 +x_1^0 \Delta x_2 x_3^1 + x_1^0 x_2^0 \Delta x_3 $$
+
+A outra decomposição polar (de trás para frente), é começar por $x_3$, depois para $x_2$, e depois $x_1$.
+
+$$\Delta X = \Delta x_1x_2^0x_3^0 +x_1^1\Delta x_2x_3^0  + x_1^0x_2^0\Delta x_3 $$
+No entanto, não há um motivo a priori pelo qual se deva tirar a média apenas dessas duas decomposições e desconsiderar as outras $n! - 2$ decomposições possíveis. No caso de 3 variáveis as 6 decomposições podem não parecer muito, mas quando se considera 5 variáveis já são 120 possíveis^[Veja a função `factorial` para saber o fatorial de qualquer valor.]. Há de se concordar que fazer todas as todas as possibilidades disso na mão não parece ser uma tarefa possível^[Por isso mesmo, estamos a desenvolver uma solução prática para isso, criando uma rotina de programação que gera um conjunto de funções para cada decomposição possível.].
+
+$$\Delta X = \begin{cases} 
+ \begin{cases} 
+\begin{cases}\Delta x_1 x_2^1 x_3^1 + x_1^0\Delta x_2 x_3^1 + x_1^0x_2^0\Delta x_3 \end{cases} \\
+\begin{cases}\Delta x_1x_2^1x_3^1 + x^0_1x^1_2\Delta x_3 + x_1^0 \Delta x_2 x_3^0 \end{cases}
+\end{cases} \\ \\
+\begin{cases}
+\begin{cases}x_1^1 \Delta x_2 x_3^1 + \Delta x_1 x_2^0x_3^1 + x_1^0x_2^0\Delta x_3\end{cases} \\
+\begin{cases}x_1^1 \Delta x_2 x_3^1 + x_1^1 x_2^0 \Delta x_3 + \Delta x_1 x_2^0 x_3^0 \end{cases}
+\end{cases} \\ \\
+\begin{cases}
+\begin{cases}x_1^1 x_2^1\Delta x_3 + \Delta x_1 x_2^1 x_3^0 + x_1^0 \Delta x_2 x_3^0 \end{cases} \\
+\begin{cases}x_1^1 x_2^1\Delta x_3 + x_1^1 \Delta x_2 x_3^0 + \Delta x_1 x_2^0 x_3^0 \end{cases}
+\end{cases}
+\end{cases}
+$$
+
+No sistema de equações acima, vemos as 6 decomposições possíveis, sendo o primeiro grupo de _sub-chaves_ (que contém duas equações cada uma) referente a cada modo de iniciar possível as decomposições. Repare que isso é uma operação de permutação sem repetição. Uma forma de analisar isso é usando a função `permutations` do pacote `gtools`:
+
+
+```{r}
+decMatrix <- permutations(3,3, v=1:3, repeats.allowed = F) 
+
+colnames(decMatrix) <- c("x_1", "x_2", "x_3")
+
+rownames(decMatrix) <- c("Polar 1",
+                          paste0("dec", 2:5),
+                          "Polar 2")
+
+decMatrix
+```
+
+As linhas da matriz gerada pela função `permutations` são referentes a cada uma das decomposições possíveis. Podemos interpretar pensar que o valor de cada coluna é referente a ordem em que a variável é a ordem em que essa variável vai ser decomposta. Ou seja, na primeira linha, `Polar 1 ` de `decMatrix`, temos que $x_1$ é a primeira a ser decomposta, $x_2$ é a segunda, $x_3$ é a terceira. Já na quarta linha por exemplo, `decMatrix[4,]`, temos que $x_1$ é a segunda variável a ser decomposta, $x_2$ a terceira e $x_3$ a segunda.
+
+Para deixar isso mais claro, vamos usar, para fins puramente didáticos, o simbolo $\Delta$ com os subscritos se referindo a ordem a ordem que cada variável será decomposta. Por exemplo, no caso de  $\Delta_{(123)}$ $x_1$ é a primeira variável a ser decomposta, $x_2$ a segunda e $x_3$ a terceira. Vamos então reescrever o conjunto de decomposições sinalizando com um $\Delta_{(---)}$ na frente qual é a ordem da decomposição. (Repare que as linhas do sistema não segue a mesma ordem )
+
+$$\Delta_{(---)} X = \begin{cases} 
+ \Delta_{(1--)}  \begin{cases} 
+\Delta_{(123)}  \begin{cases}\Delta x_1 x_2^1 x_3^1 + x_1^0\Delta x_2 x_3^1 + x_1^0x_2^0\Delta x_3 \end{cases} \\
+\Delta_{(132)}\begin{cases}\Delta x_1x_2^1x_3^1 + x^0_1x^1_2\Delta x_3 + x_1^0 \Delta x_2 x_3^0 \end{cases}
+\end{cases} \\ \\
+\Delta_{(-1-)}\begin{cases}
+\Delta_{(213)}\begin{cases}x_1^1 \Delta x_2 x_3^1 + \Delta x_1 x_2^0x_3^1 + x_1^0x_2^0\Delta x_3\end{cases} \\
+\Delta_{(312)}\begin{cases}x_1^1 \Delta x_2 x_3^1 + x_1^1 x_2^0 \Delta x_3 + \Delta x_1 x_2^0 x_3^0 \end{cases}
+\end{cases} \\ \\
+\Delta_{(--1)}\begin{cases}
+\Delta_{(321)}\begin{cases}x_1^1 x_2^1\Delta x_3 + \Delta x_1 x_2^1 x_3^0 + x_1^0 \Delta x_2 x_3^0 \end{cases} \\
+\Delta_{(231)}\begin{cases}x_1^1 x_2^1\Delta x_3 + x_1^1 \Delta x_2 x_3^0 + \Delta x_1 x_2^0 x_3^0 \end{cases}
+\end{cases}
+\end{cases}
+$$
+
+Vamos agora fazer um exemplo prático para esse caso. Seja $\lambda$ a quantidade de emprego diretamente necessária por unidade de produção, ou seja para um determinado setor $i$,  $\lambda_i = E_i/x_i$,  com $E_i$ igual a quantidade de ocupações que cada setor da economia utilizou diretamente no total.
+
+```{r}
+matrizes2010$lambda <- t(tab2_2010$fatorL)/matrizes2010$X
+
+matrizes2015$lambda <- t(tab2_2015$fatorL)/matrizes2015$X
+```
+
+Definimos a quantidade do emprego que cada setor gerou pelos efeitos diretos e indiretos como:
+
+$$ \Psi = \hat{\lambda} L f$$
+
+```{r}
+matrizes2010$Psi <- diag(c(matrizes2010$lambda)) %*% matrizes2010$Leontief %*% matrizes2010$f
+
+matrizes2015$Psi <- diag(c(matrizes2015$lambda)) %*% matrizes2015$Leontief %*% matrizes2015$f
+
+deltaPsi <- matrizes2015$Psi - matrizes2010$Psi
+```
+
+Repare que `deltaPsi` não é um valor único, mas um **vetor**. Isso é importante, pois nos mostra que podemos fazer decomposições para partes do sistema (e não apenas para ele como um todo).
+
+Sendo $\Delta \lambda = \lambda^1 - \lambda^0$.
+
+```{r}
+deltalambda <- matrizes2015$lambda - matrizes2010$lambda
+```
+
+
+As decomposições possíveis são^[Repare que aqui vamos escrever elas sempre em ordem da variável, ou seja $\Delta \lambda$ será sempre a primeira parte da equação, $\Delta L$ a segunda e $\Delta f$ a terceira]:
+
+$$\Delta_{123} \Psi = \Delta \hat{\lambda} L^1 f^1 + \hat{\lambda}^0\Delta L f^1 + \hat{\lambda}^0L^0\Delta f$$
+
+```{r}
+deltaPsi123 <- list(diag(c(deltalambda)) %*% matrizes2015$Leontief %*% matrizes2015$f,
+                 diag(c(matrizes2010$lambda)) %*% deltaL %*% matrizes2015$f,
+                 diag(c(matrizes2010$lambda)) %*% matrizes2010$Leontief %*% deltaf) %>%
+  setNames(paste("delta", c("lambda", "L", "f")))
+```
+
+Podemos ver que `deltaPsi` e `deltaPsi123` são iguais tanto no total quanto em cada setor fazendo:
+
+```{r}
+#Totais
+all.equal(sum(deltaPsi), sum(unlist(deltaPsi123)))
+
+# Célula à célula
+all.equal(deltaPsi, reduce(deltaPsi123, `+`))
+```
+
+
+
+$$\Delta_{132} \Psi = \Delta \hat{\lambda} L^1f^1 + \hat{\lambda}^0 \Delta L f^0 + \hat{\lambda}^0_1L^1\Delta f$$
+
+```{r}
+deltaPsi132 <- list(diag(c(deltalambda)) %*% matrizes2015$Leontief %*% matrizes2015$f,
+                 diag(c(matrizes2010$lambda)) %*% deltaL %*% matrizes2010$f,
+                 diag(c(matrizes2010$lambda)) %*% matrizes2015$Leontief %*% deltaf) %>%
+  setNames(paste("delta", c("lambda", "L", "f")))
+
+
+all.equal(sum(deltaPsi), sum(unlist(deltaPsi132)))
+```
+
+$$\Delta_{213} \Psi = \Delta \hat{\lambda} L^0f^1 + \hat{\lambda}^1 \Delta L f^1 +  \hat{\lambda}^0L^0\Delta f$$
+```{r}
+deltaPsi213 <- list(diag(c(deltalambda)) %*% matrizes2010$Leontief %*% matrizes2015$f,
+                 diag(c(matrizes2015$lambda)) %*% deltaL %*% matrizes2015$f,
+                 diag(c(matrizes2010$lambda)) %*% matrizes2010$Leontief %*% deltaf) %>%
+  setNames(paste("delta", c("lambda", "L", "f")))
+
+
+all.equal(sum(deltaPsi), sum(unlist(deltaPsi213)))
+```
+
+
+$$\Delta_{312} \Psi = \Delta \hat{\lambda} L^0 f^0 + \hat{\lambda}^1 \Delta L f^1 + \hat{\lambda}^1 L^0 \Delta f$$
+
+```{r}
+deltaPsi312 <- list(diag(c(deltalambda)) %*% matrizes2010$Leontief %*% matrizes2010$f,
+                 diag(c(matrizes2015$lambda)) %*% deltaL %*% matrizes2015$f,
+                 diag(c(matrizes2015$lambda)) %*% matrizes2010$Leontief %*% deltaf) %>%
+  setNames(paste("delta", c("lambda", "L", "f")))
+```
+
+$$\Delta_{231} \Psi = \Delta \hat{\lambda} L^1 f^0 + \hat{\lambda}^0 \Delta L f^0 + \hat{\lambda}^1 L^1\Delta f$$
+
+```{r}
+deltaPsi231 <- list(diag(c(deltalambda)) %*% matrizes2015$Leontief %*% matrizes2010$f,
+                 diag(c(matrizes2010$lambda)) %*% deltaL %*% matrizes2010$f,
+                 diag(c(matrizes2015$lambda)) %*% matrizes2015$Leontief %*% deltaf) %>%
+  setNames(paste("delta", c("lambda", "L", "f")))
+
+```
+
+$$\Delta_{321} \Psi = \Delta \hat{\lambda} L^0 f^0  + \hat{\lambda}^1 \Delta L f^0 + \hat{\lambda}^1 L^1\Delta f$$
+
+```{r}
+deltaPsi321 <- list(diag(c(deltalambda)) %*% matrizes2010$Leontief %*% matrizes2010$f,
+                 diag(c(matrizes2015$lambda)) %*% deltaL %*% matrizes2010$f,
+                 diag(c(matrizes2015$lambda)) %*% matrizes2015$Leontief %*% deltaf) %>%
+  setNames(paste("delta", c("lambda", "L", "f")))
+
+```
 
 ## ggplot2
 
@@ -379,6 +553,8 @@ Vamos agora aproveitar os dados elavorados para a decomposição e visualizá-lo
 ### Como criar gráficos no ggplot2
 
 A ideia central é formar os gráficos por camadas, adicionando elementos sequencialmente. 
+
+![](estrutura.jpg)
 
 ## Agradecimentos
 
