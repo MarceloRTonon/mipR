@@ -562,7 +562,96 @@ Essa porém, não é a única forma em que se pode tirar a média na decomposiç
 
 ### Decomposições Multiplicativas
 
-Nós vimos até agora 
+Nós vimos até agora como realizar decomposições aditivas, que são as que olham a diferença em termos absolutos. As decomposições aditivas por sua vez entregam a diferença em taxa. Essa decomposição é apresentada no trabalho de Dietzenbacher, Lahr e Los (2004). Seja $v^1$ o valor de uma determinada quantidade no período $1$ dada por $v^1 = p^{1}q^1$, podemos decompor a sua variação em relação ao valor de $v^0 = p^{0}q^0$ como um índice de Paasche:
+
+$$\frac{v^1}{v^0}= \left(\frac{p^{1}q^{1}}{p^{0}q^{1}} \right) \left(\frac{p^0q^1}{p^0q^0} \right)$$
+
+Ou como um índice de Laspeyres:
+
+$$ \frac{v^1}{v^0}= \left(\frac{p^{1}q^{0}}{p^{0}q^{0}} \right) \left(\frac{p^1q^1}{p^1q^0} \right)$$
+
+Podemos então fazer um índice de Fisher, a partir da média geométrica delos dois índices anteriores:
+
+$$\frac{v^1}{v^0} = \left(\frac{p^{1}q^{1}}{p^{0}q^{1}} \frac{p^0q^1}{p^0q^0} \right)^{0.5}
+\left(\frac{p^{1}q^{0}}{p^{0}q^{0}}\frac{p^1q^1}{p^1q^0} \right)^{0.5}$$
+
+Reorganizando para deixarmos em evidência a contribuição de cada parte:
+
+$$\frac{v^1}{v^0} = \left(\frac{p^{1}q^{1}}{p^{0}q^{1}}  \frac{p^{1}q^{0}}{p^{0}q^{0}}\right)^{0.5}
+\left(\frac{p^0q^1}{p^0q^0}\frac{p^1q^1}{p^1q^0} \right)^{0.5}$$
+
+Nesse caso, o termo em primeiro parenteses representa a contribuição de $p$ para a variação em $v$ e o segundo a contribuição de $q$. 
+
+Essa mesma lógica pode ser aplicada para casos com mais de duas variáveis. No caso de algo ao estilo do Índice de Paasche:
+
+$$\frac{X^1}{X^0} = \left(
+\frac{x_1^1 x_2^1 \dots x_{n-1}^1x_n^1}{x_1^0 x_2^1 \dots x_{n-1}^1x_n^1} \right)
+\left(\frac{x_1^0 x_2^1 \dots x_{n-1}^1x_n^1}{x_1^0 x_2^0 \dots x_{n-1}^1x_n^1} \right) 
+\dots
+\left(  \frac{x_1^0x^0_2\dots x_{n-1}^1 x_n^1}{x_1^0x^0_2\dots x_{n-1}^0 x_n^1}\right)
+\left(  \frac{x_1^0x^0_2\dots x_{n-1}^0 x_n^1}{x_1^0x^0_2\dots x_{n-1}^0 x_n^0}\right)$$
+
+E no caso de algo como o Índice de Laspeyeres:
+
+$$\frac{X^1}{X^0} =
+\left( \frac{x_1^1 x_2^0\dots x_{n-1}^0 x_n^0}{x_1^0 x_2^0\dots x_{n-1}^0 x_n^0} \right)
+\left( \frac{x_1^1 x_2^1\dots x_{n-1}^0 x_n^0}{x_1^1 x_2^0\dots x_{n-1}^0 x_n^0} \right)
+\dots
+\left( \frac{x_1^1 x_2^1\dots x_{n-1}^1 x_n^0}{x_1^1 x_2^1\dots x_{n-1}^0 x_n^0} \right)
+\left( \frac{x_1^1 x_2^1\dots x_{n-1}^1 x_n^1}{x_1^1 x_2^1\dots x_{n-1}^1 x_n^0} \right)$$
+
+Basta então tirar a média geométrica de ambos. Um ponto relevante é que se atentarmos para a estrutura das duas equações acima, podemos ver que são ambas decomposições polares. Além disso, perceba que na primeira decomposição polar (Paasche), a parte de baixo do primeiro parênteses, $x_1^0 x_2^1 \dots x_{n-1}^1x_n^1$, é igual a parte de cima do segundo parênteses. Isso se repete de modo que o denominador, à exceção do último parênteses, vai sempre ser igual ao númerador do próximo parênteses. Desse modo ao cortarmos as partes igual teremos $\frac{v^1}{v^0}=\frac{x_1^1x_2^1\dots x_{n-1}^1 x_n^1}{x_1^0x_2^0\dots x_{n-1}^0 x_n^0}$. O mesmo ocorre com a segunda decomposição polar (Laspeyeres), porém são os numeradores, à exceção do último, que são iguais aos denominadores do próximo parênteses. O resultado final, como no caso do Paasche, é $\frac{v^1}{v^0}=\frac{x_1^1x_2^1\dots x_{n-1}^1 x_n^1}{x_1^0x_2^0\dots x_{n-1}^0 x_n^0}$.
+
+Vamos voltar agora ao exemplo prático com $\Psi = \lambda L f$:
+
+```{r}
+txPsi <- sum(matrizes2015$Psi)/sum(matrizes2010$Psi)
+```
+
+A primeira decomposição polar é:
+$$\frac{\Psi_1}{\Psi0} = \left(\frac{\lambda^1 L^1 f^1}{\lambda^0 L^1 f^1}\right)
+\left(\frac{\lambda^0L^1f^1}{\lambda^0L^0f^1}\right)
+\left(\frac{\lambda^0L^0f^1}{\lambda^0L^0f^0}\right)  $$
+
+```{r}
+dec1_psi <- list(
+  "lambda" = c((t(matrizes2015$lambda) %*% matrizes2015$Leontief %*% matrizes2015$f)/(t(matrizes2010$lambda) %*% matrizes2015$Leontief %*% matrizes2015$f)),
+  "L" = c((t(matrizes2010$lambda) %*% matrizes2015$Leontief %*% matrizes2015$f)/(t(matrizes2010$lambda) %*% matrizes2010$Leontief %*% matrizes2015$f)),
+  "f" = c((t(matrizes2010$lambda) %*% matrizes2010$Leontief %*% matrizes2015$f)/(t(matrizes2010$lambda) %*% matrizes2010$Leontief %*% matrizes2010$f))
+     )
+
+reduce(dec1_psi, `*`) %>%
+  all.equal(txPsi)
+```
+
+A segunda decomposição é:
+
+$$\frac{\Psi_1}{\Psi_0} = \left(\frac{\lambda^1L^0f^0}{\lambda^0L^0f^0}\right)
+\left(\frac{\lambda^1L^1f^0}{\lambda^1L^0f^0} \right) 
+\left( \frac{\lambda^1L^1f^1}{\lambda^1L^1f^0} \right)$$
+
+```{r}
+dec2_psi <- list(
+  "lambda" =c((t(matrizes2015$lambda)%*%matrizes2010$Leontief%*%matrizes2010$f)/(t(matrizes2010$lambda)%*%matrizes2010$Leontief%*%matrizes2010$f)),
+  "L" = c((t(matrizes2015$lambda) %*% matrizes2015$Leontief %*% matrizes2010$f)/(t(matrizes2015$lambda) %*% matrizes2010$Leontief %*% matrizes2010$f)),
+  "f"=c((t(matrizes2015$lambda) %*% matrizes2015$Leontief %*% matrizes2015$f)/(t(matrizes2015$lambda) %*% matrizes2015$Leontief %*% matrizes2010$f))
+            )
+
+dec2_psi %>%
+  reduce(`*`) %>%
+  all.equal(txPsi)
+```
+
+Tirando a média geométrica:
+
+```{r}
+Psi_geoAv<- map2(dec1_psi, dec2_psi, ~ sqrt(.x*.y))
+
+Psi_geoAv %>%
+  reduce(`*`) %>%
+  all.equal(txPsi)
+```
+
 
 ## ggplot2
 
@@ -573,6 +662,18 @@ Vamos agora aproveitar os dados elavorados para a decomposição e visualizá-lo
 A ideia central é formar os gráficos por camadas, adicionando elementos sequencialmente. 
 
 ![](estrutura.jpg)
+
+### geom_point
+
+Um gráfico muito usado no pacote `ggplot2` é o `geom_poit()`. Ele permite
+
+```{r}
+PsiDF <- tibble::tibble("y2010" = matrizes2010$Psi,
+                        "y2015" = matrizes2015$Psi)
+
+ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
+```
+
 
 ## Agradecimentos
 
@@ -597,6 +698,10 @@ WICKHAM, Hadley. ggplot2: elegant graphics for data analysis. springer, 2016. Ac
 ## Confira também!
 
 Outras bibliografias de artigos e sites para você acessar e aprender mais coisas de formas mais profunda.
+
+### Decomposição Estrutural
+
+Dietzenbacher, E. and B. Los (2000) Structural decomposition with dependent determinants, Economic Systems Research, 12, pp. 498-514.
 
 ### ggplot2
 
