@@ -546,6 +546,24 @@ deltaPsi321 <- list(diag(c(deltalambda)) %*% matrizes2010$Leontief %*% matrizes2
 
 ```
 
+Podemos então somar todas as possibilidades, e tirando a média aritmética:
+
+```{r}
+deltaPsiMedia <- list(deltaPsi123, deltaPsi132, deltaPsi213,
+     deltaPsi312, deltaPsi231, deltaPsi321) %>%
+  transpose %>%
+  map_df(~ reduce(.x, `+`)/6) %>%
+  setNames(c("lambda", "L", "f"))
+
+deltaPsiMedia
+```
+
+Essa porém, não é a única forma em que se pode tirar a média na decomposição de $\Delta \Psi$, veja Dietzenbacher e Los (1998) para uma discussão extensa sobre esse tema.
+
+### Decomposições Multiplicativas
+
+Nós vimos até agora 
+
 ## ggplot2
 
 Vamos agora aproveitar os dados elavorados para a decomposição e visualizá-los aplicando o pacote `ggplot2`. Trata-se de um pacote com várias possibilidades de configurações, de forma que será impossível explorar todo o pacote, mas ao menos as principais configurações possíveis.

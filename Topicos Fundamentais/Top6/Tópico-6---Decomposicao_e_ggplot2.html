@@ -793,6 +793,34 @@ all.equal(sum(deltaPsi), sum(unlist(deltaPsi213)))</code></pre>
                  diag(c(matrizes2015$lambda)) %*% deltaL %*% matrizes2010$f,
                  diag(c(matrizes2015$lambda)) %*% matrizes2015$Leontief %*% deltaf) %&gt;%
   setNames(paste(&quot;delta&quot;, c(&quot;lambda&quot;, &quot;L&quot;, &quot;f&quot;)))</code></pre>
+<p>Podemos então somar todas as possibilidades, e tirando a média aritmética:</p>
+<pre class="r"><code>deltaPsiMedia &lt;- list(deltaPsi123, deltaPsi132, deltaPsi213,
+     deltaPsi312, deltaPsi231, deltaPsi321) %&gt;%
+  transpose %&gt;%
+  map_df(~ reduce(.x, `+`)/6) %&gt;%
+  setNames(c(&quot;lambda&quot;, &quot;L&quot;, &quot;f&quot;))
+
+deltaPsiMedia</code></pre>
+<pre><code>## # A tibble: 12 x 3
+##    lambda[,&quot;Total&quot;] L[,&quot;Total&quot;] f[,&quot;Total&quot;]
+##               &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+##  1        -4776904.     185039.    2248457.
+##  2         -124693.       -446.     145754.
+##  3       -12524113.     -36734.   12169384.
+##  4        -1999135.     -34844.    2012439.
+##  5      -343972440.   15435367.  329332506.
+##  6       -18931734.     354022.   19639086.
+##  7        -6511277.     -96313.    7130047.
+##  8        -3833747.        473.    4030381.
+##  9        -1612726.     -12766.    1744264.
+## 10         -491250.      -1218.     565141.
+## 11       -46403285.   -1094986.   50652072.
+## 12       -16958564.    -353880.   17955479.</code></pre>
+<p>Essa porém, não é a única forma em que se pode tirar a média na decomposição de <span class="math inline">\(\Delta \Psi\)</span>, veja Dietzenbacher e Los (1998) para uma discussão extensa sobre esse tema.</p>
+</div>
+<div id="decomposições-multiplicativas" class="section level3">
+<h3>Decomposições Multiplicativas</h3>
+<p>Nós vimos até agora</p>
 </div>
 </div>
 <div id="ggplot2" class="section level2">
