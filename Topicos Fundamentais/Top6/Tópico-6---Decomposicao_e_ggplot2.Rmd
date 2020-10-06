@@ -315,7 +315,7 @@ deltaX2 <- list(deltaL %*% matrizes2015$f,
                 matrizes2010$Leontief %*% deltaf)
 
 deltaX2 %>%
-  reduce(`+`)
+  reduce(`+`) %>%
 all.equal(deltaX)
 ```
 

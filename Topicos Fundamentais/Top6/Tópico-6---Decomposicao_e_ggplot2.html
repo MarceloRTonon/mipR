@@ -634,30 +634,38 @@ matrizes2015$X &lt;- matrizes2015$Leontief %*% matrizes2015$f</code></pre>
 <p><span class="math display">\[\Delta X = L^1 (f^0 + \Delta f) - (L^1 - \Delta L) f^0 = \Delta L f^0 + L^1(\Delta f)\]</span></p>
 <pre class="r"><code>deltaL &lt;- matrizes2015$Leontief - matrizes2010$Leontief
 deltaf &lt;- matrizes2015$f - matrizes2010$f</code></pre>
-<pre class="r"><code>deltaX1 &lt;- (deltaL %*% matrizes2010$f) + (matrizes2015$Leontief %*% deltaf)
-
-all.equal(deltaX1, deltaX)</code></pre>
+<pre class="r"><code>deltaX1 &lt;- list(deltaL %*% matrizes2010$f,
+                matrizes2015$Leontief %*% deltaf)
+deltaX1 %&gt;%
+  reduce(`+`) %&gt;%
+all.equal( deltaX)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>Podemos no entanto, redistribuir isso de outra forma:</p>
 <p><span class="math display">\[\Delta X = (L^0 + \Delta L) f^1 - L^0(f^1 -  \Delta f) = (\Delta L)f^1 + L^0 (\Delta f)\]</span></p>
-<pre class="r"><code>deltaX2 &lt;- (deltaL %*% matrizes2015$f) + (matrizes2010$Leontief %*% deltaf)
+<pre class="r"><code>deltaX2 &lt;- list(deltaL %*% matrizes2015$f,
+                matrizes2010$Leontief %*% deltaf)
 
-all.equal(deltaX2, deltaX)</code></pre>
+deltaX2 %&gt;%
+  reduce(`+`) %&gt;%
+all.equal(deltaX)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p><em>Relembrando:</em> Para ter certeza que compreendeu a álgebra, faça essas substituições e operações no papel.</p>
 <p>Ambas as formas apresentadas agora são igualmente válidas, sendo ambas igualmente corretas.</p>
 <pre class="r"><code>all.equal(deltaX1, deltaX2)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
+<pre><code>## [1] &quot;Component 1: Mean relative difference: 1.280942&quot;  
+## [2] &quot;Component 2: Mean relative difference: 0.03370805&quot;</code></pre>
 <p>No entanto, é de certo modo óbvio que esperamos que $(L)f^1 (L) f^0 $.</p>
 <pre class="r"><code>all.equal(deltaL %*% matrizes2010$f,
           deltaL %*% matrizes2015$f)</code></pre>
 <pre><code>## [1] &quot;Mean relative difference: 1.280942&quot;</code></pre>
 <p>Dietzenbacher e Los (1998), mostram que ao tirarmos os valores médios das adições aditivas temos um resultado aceitável:</p>
 <p><span class="math display">\[\Delta X = (1/2) \Delta L (f^0 + f^1) + (1/2) (L^0 + L^1) \Delta f \]</span></p>
-<pre class="r"><code>deltaX3 &lt;- ((1/2) *deltaL %*% (matrizes2010$f + matrizes2015$f)) +
-  ((1/2)*(matrizes2010$Leontief + matrizes2015$Leontief) %*% deltaf)
+<pre class="r"><code>deltaX3 &lt;- list((1/2) *deltaL %*% (matrizes2010$f + matrizes2015$f),
+  (1/2)*(matrizes2010$Leontief + matrizes2015$Leontief) %*% deltaf)
 
-all.equal(deltaX, deltaX3)</code></pre>
+deltaX3 %&gt;%
+  reduce(`+`) %&gt;%
+all.equal(deltaX)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>Na equação acima, temos que a parcela <span class="math inline">\((1/2) \Delta L (f^0 + f^1)\)</span> é referente a mudança tecnológica enquanto <span class="math inline">\((1/2) (L^0 + L^1) \Delta f\)</span> é referente a mudanças na demanda final.</p>
 </div>
@@ -885,7 +893,8 @@ Psi_geoAv %&gt;%
 <div id="decomposição-de-matrizes-internas" class="section level3">
 <h3>Decomposição de “Matrizes Internas”</h3>
 <p>Essa parte é baseada no capítulo 13 do Miller e Blair(2009, p. 603-604). Nela os autores chamam isso de decomposição da matriz de coeficientes diretos. No entanto esse ferramental também pode servir para decompor gastos endógenos (como o consumo induzido). Por isso, por falta de definição melhor, escolhemos usar o termo <em>matriz interna</em>, que no fim se refere à uma matriz <span class="math inline">\(M\)</span> qualquer de matriz interna em relação à <span class="math inline">\(N\)</span> se ela define <span class="math inline">\(N\)</span> da seguinte forma: <span class="math display">\[N = [I-M]^{-1}\]</span>.</p>
-<p>Desse modo, temos que a matriz de coeficientes domésticos diretos da produção <span class="math inline">\(A_n\)</span> é uma matriz interna em relação a Inversa de Leontief. Suponha que queremos então saber os efeitos das mudanças de <span class="math inline">\(A\)</span> em <span class="math inline">\(L\)</span>. Desse modo, seja <span class="math inline">\(L^0 = (I-A^0)^{-1}\)</span> e <span class="math inline">\(L^1 = (I-A^1)^{-1}\)</span>, <strong>pós-multiplicando</strong> <span class="math inline">\(L^1\)</span> por <span class="math inline">\((I-A^1)\)</span> teremos:</p>
+<p>Desse modo, temos que a matriz de coeficientes domésticos diretos da produção <span class="math inline">\(A_n\)</span> é uma matriz interna em relação a Inversa de Leontief.</p>
+<p><strong>Na explicação da decomposição a seguir iremos nos referir a <span class="math inline">\(A_n\)</span> como <span class="math inline">\(A\)</span>, seguindo a notação de Miller e Blair(2009, p. 603-604) e para não deixar a notação mais carregada desnecessariamente.</strong> Suponha que queremos então saber os efeitos das mudanças de <span class="math inline">\(A\)</span> em <span class="math inline">\(L\)</span>. Desse modo, seja <span class="math inline">\(L^0 = (I-A^0)^{-1}\)</span> e <span class="math inline">\(L^1 = (I-A^1)^{-1}\)</span>, <strong>pós-multiplicando</strong> <span class="math inline">\(L^1\)</span> por <span class="math inline">\((I-A^1)\)</span> teremos:</p>
 <p><span class="math display">\[L^1 (I-A^1) = I = L^1 - L^1A^1\]</span></p>
 <p>Rearranjando as partes finais:</p>
 <p><span class="math display">\[L^1 - I = L^1A^1\]</span> E depois <strong>pós-multiplicando</strong> por <span class="math inline">\(L^0\)</span> teremos:</p>
@@ -897,7 +906,53 @@ Psi_geoAv %&gt;%
 <p><span class="math display">\[\left(L^1L^0 -L^0\right) - \left(L^1L^0 -L^1 \right) = L^1A^1L^0 - L^1A^0L^0\]</span> Rearranjando cada um dos lados, e lembrando das propriedades de matriz, teremos que:</p>
 <p><span class="math display">\[L^1 - L^0 = \Delta L = L^1\left(A^1 - A^0 \right)L^0 = L^1 \Delta A L^0\]</span></p>
 <p>De modo que temos por fim que <span class="math inline">\(\Delta L = L^1 \Delta A L^0\)</span>.</p>
-<pre class="r"><code>deltaL_int1 &lt;- matrizes2010$Leontief</code></pre>
+<pre class="r"><code>deltaL_int1 &lt;- matrizes2015$Leontief %*% (matrizes2015$An - matrizes2010$An) %*% matrizes2010$Leontief
+
+all.equal(deltaL, deltaL_int1)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<div id="indo-mais-fundo" class="section level4">
+<h4>Indo mais fundo</h4>
+<p>Como dissemos antes, o ganho desse ferramental não precisa ser apenas as variações finais da matriz de insumos domésticos diretos (no caso acima seguimas a notação de Miller e Blair(2009), nos referindo a ela como <span class="math inline">\(A\)</span>, porém agora trataremos ela como <span class="math inline">\(A_n\)</span>). Podemos fazer decomposições que decomponham os efeitos das mudanças de <span class="math inline">\(A_n\)</span> sobre <span class="math inline">\(L = (I-A)^{-1}\)</span>. Seja <span class="math inline">\(A_n = D B_n\)</span>, sendo <span class="math inline">\(D\)</span> a matriz de Market Share e <span class="math inline">\(B_n\)</span> a matriz de coeficientes técnicos dos insumos nacionais. Podemos fazer, uma decomposição aditiva para <span class="math inline">\(A_n\)</span> que resulta em<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>:</p>
+<p><span class="math display">\[\Delta A_n = \left(\tfrac{1}{2}\right) \Delta D \left(B_n^0 + B_n^1 \right) + \left(\tfrac{1}{2}\right) \left(D^0 + D^1\right) \Delta B_n\]</span></p>
+<pre class="r"><code>deltaAn &lt;- matrizes2015$An - matrizes2010$An
+
+deltaBn &lt;- matrizes2015$Bn - matrizes2010$Bn
+
+deltaD_MS &lt;- matrizes2015$D_MS - matrizes2010$D_MS
+
+
+deltaAn2 &lt;- list(1/2 * deltaD_MS %*%(matrizes2010$Bn+matrizes2015$Bn),
+                 1/2 *(matrizes2010$D_MS + matrizes2015$D_MS)%*%deltaBn)
+
+reduce(deltaAn2, `+`) %&gt;%
+  all.equal(deltaAn)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Com <span class="math inline">\(\Delta A_n\)</span> resolvido, podemos então substituir esses valores na decomposição de <span class="math inline">\(\Delta L = L^1\Delta A_n L^0\)</span>:</p>
+<p><span class="math inline">\(\Delta L = L^1 \left[\left(\tfrac{1}{2}\right) \Delta D \left(B_n^0 + B_n^1 \right) + \left(\tfrac{1}{2}\right) \left(D^0 + D^1\right) \Delta B_n \right] L^0\)</span></p>
+<pre class="r"><code>deltaL_int2 &lt;- matrizes2015$Leontief %*% reduce(deltaAn2, `+`) %*% matrizes2010$Leontief
+
+all.equal(deltaL, deltaL_int2)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Se fizermos as distribuição dos valores internos aos colchetes <span class="math inline">\([]\)</span>, teremos que:</p>
+<p><span class="math display">\[\Delta L = \left(\tfrac{1}{2}\right)\left[L^1 \Delta D \left(B_n^0 + B_n^1 \right) L^0\right] + \left(\tfrac{1}{2}\right)\left[L^1\left(D^0 + D^1\right) \Delta B_n L^0\right]\]</span></p>
+<p>Sendo a primeira parte, <span class="math inline">\(\left(\tfrac{1}{2}\right)\left[L^1 \Delta D \left(B_n^0 + B_n^1 \right) L^0\right]\)</span> referente os efeitos da variação de <span class="math inline">\(D\)</span> sobre <span class="math inline">\(L\)</span> e o segundo <span class="math inline">\(\left(\tfrac{1}{2}\right)\left[L^1\left(D^0 + D^1\right) \Delta B_n L^0\right]\)</span> referente os efeitos da variação de <span class="math inline">\(B_n\)</span> em <span class="math inline">\(L\)</span>.</p>
+<pre class="r"><code>decL_1 &lt;- deltaAn2 %&gt;%
+  map(~ matrizes2015$Leontief %*%.x %*% matrizes2010$Leontief)
+
+reduce(decL_1, `+`) %&gt;%
+  all.equal(deltaL)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Se nós já substituimos os elementos que decompõe <span class="math inline">\(\Delta A_n\)</span> na decomposição de <span class="math inline">\(\Delta L\)</span>, podemos ir num passo além e substituir isso em <span class="math inline">\(\Delta X = \left(\tfrac{1}{2}\right) \Delta L \left(f^0 + f^1 \right) + \left(\tfrac{1}{2}\right) \left(L^0 + L^1\right) \Delta f\)</span>, de modo que fica:</p>
+<p><span class="math display">\[\Delta X = \left(\tfrac{1}{2}\right) \left[\left(\tfrac{1}{2}\right)\left(L^1 \Delta D \left(B_n^0 + B_n^1 \right) L^0\right)
++ \left(\tfrac{1}{2}\right)\left(L^1\left(D^0 + D^1\right) \Delta B_n L^0\right] \right) \left(f^0 + f^1 \right)
++ \left(\tfrac{1}{2}\right) \left(L^0 + L^1\right) \Delta f\]</span></p>
+<p>Rearranjando teremos:</p>
+<p><span class="math display">\[\Delta X = \left[\left(\tfrac{1}{4} \right) L^1\Delta D \left(B_n^0 + B_n^1 \right) L^0  \left(f^0 + f^1 \right)\right] + 
+\left[\left(\tfrac{1}{4} \right) L^1\left(D^0 + D^1\right)\Delta B_n L^0  \left(f^0 + f^1 \right)\right] + \dots \\
+\dots + \left[\left(\tfrac{1}{2}\right)   \left(L^0 + L^1\right) \Delta f \right]\]</span></p>
+<p>O termo no primeiro colchete se refere aos efeitos de <span class="math inline">\(\Delta D\)</span> sobre <span class="math inline">\(X\)</span>, o segundo de <span class="math inline">\(\Delta B_n\)</span> sobre <span class="math inline">\(X\)</span> e o último o de <span class="math inline">\(\Delta f\)</span> sobre <span class="math inline">\(X\)</span>.</p>
+<pre class="r"><code>decX_2 &lt;- map(decL_1, ~ 1/2 * .x %*% (matrizes2010$f + matrizes2015$f))</code></pre>
+</div>
 </div>
 </div>
 <div id="ggplot2" class="section level2">
@@ -956,6 +1011,7 @@ ggplot(PsiDF, aes(y2010, y2015)) + geom_point()</code></pre>
 <li id="fn3"><p>Veja a função <code>factorial</code> para saber o fatorial de qualquer valor.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 <li id="fn4"><p>Por isso mesmo, estamos a desenvolver uma solução prática para isso, criando uma rotina de programação que gera um conjunto de funções para cada decomposição possível.<a href="#fnref4" class="footnote-back">↩</a></p></li>
 <li id="fn5"><p>Repare que aqui vamos escrever elas sempre em ordem da variável, ou seja <span class="math inline">\(\Delta \lambda\)</span> será sempre a primeira parte da equação, <span class="math inline">\(\Delta L\)</span> a segunda e <span class="math inline">\(\Delta f\)</span> a terceira<a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p>A derivação da conta fica como treino<a href="#fnref6" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 
