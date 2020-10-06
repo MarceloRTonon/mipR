@@ -882,6 +882,23 @@ Psi_geoAv %&gt;%
   all.equal(txPsi)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 </div>
+<div id="decomposição-de-matrizes-internas" class="section level3">
+<h3>Decomposição de “Matrizes Internas”</h3>
+<p>Essa parte é baseada no capítulo 13 do Miller e Blair(2009, p. 603-604). Nela os autores chamam isso de decomposição da matriz de coeficientes diretos. No entanto esse ferramental também pode servir para decompor gastos endógenos (como o consumo induzido). Por isso, por falta de definição melhor, escolhemos usar o termo <em>matriz interna</em>, que no fim se refere à uma matriz <span class="math inline">\(M\)</span> qualquer de matriz interna em relação à <span class="math inline">\(N\)</span> se ela define <span class="math inline">\(N\)</span> da seguinte forma: <span class="math display">\[N = [I-M]^{-1}\]</span>.</p>
+<p>Desse modo, temos que a matriz de coeficientes domésticos diretos da produção <span class="math inline">\(A_n\)</span> é uma matriz interna em relação a Inversa de Leontief. Suponha que queremos então saber os efeitos das mudanças de <span class="math inline">\(A\)</span> em <span class="math inline">\(L\)</span>. Desse modo, seja <span class="math inline">\(L^0 = (I-A^0)^{-1}\)</span> e <span class="math inline">\(L^1 = (I-A^1)^{-1}\)</span>, <strong>pós-multiplicando</strong> <span class="math inline">\(L^1\)</span> por <span class="math inline">\((I-A^1)\)</span> teremos:</p>
+<p><span class="math display">\[L^1 (I-A^1) = I = L^1 - L^1A^1\]</span></p>
+<p>Rearranjando as partes finais:</p>
+<p><span class="math display">\[L^1 - I = L^1A^1\]</span> E depois <strong>pós-multiplicando</strong> por <span class="math inline">\(L^0\)</span> teremos:</p>
+<p><span class="math inline">\(L^1L^0 - L^0 = L^1A^1L^0\)</span></p>
+<p>Se fizermos uma <strong>pré-multiplicação</strong> de <span class="math inline">\(L^0\)</span> por <span class="math inline">\((I-A^0)\)</span> teremos:</p>
+<p><span class="math display">\[(I-A^0)L^0 = I = L^0 - A^0L^0\]</span> Podemos então (de forma similar ao feito para <span class="math inline">\(L^1\)</span>) rearranjar a equação de <span class="math inline">\(I = L^0 - A^0L^0\)</span> e <strong>pré-multiplicar</strong> por <span class="math inline">\(L^1\)</span>, de modo que teremos:</p>
+<p><span class="math display">\[L^0 - I = A^0L^0 \Rightarrow L^1L^0 - L^1 = L^1A^0L^0\]</span></p>
+<p>Subtraindo então <span class="math inline">\(L^1L^0 - L^0\)</span> por <span class="math inline">\(L^1L^0-L^1\)</span> teremos:</p>
+<p><span class="math display">\[\left(L^1L^0 -L^0\right) - \left(L^1L^0 -L^1 \right) = L^1A^1L^0 - L^1A^0L^0\]</span> Rearranjando cada um dos lados, e lembrando das propriedades de matriz, teremos que:</p>
+<p><span class="math display">\[L^1 - L^0 = \Delta L = L^1\left(A^1 - A^0 \right)L^0 = L^1 \Delta A L^0\]</span></p>
+<p>De modo que temos por fim que <span class="math inline">\(\Delta L = L^1 \Delta A L^0\)</span>.</p>
+<pre class="r"><code>deltaL_int1 &lt;- matrizes2010$Leontief</code></pre>
+</div>
 </div>
 <div id="ggplot2" class="section level2">
 <h2>ggplot2</h2>

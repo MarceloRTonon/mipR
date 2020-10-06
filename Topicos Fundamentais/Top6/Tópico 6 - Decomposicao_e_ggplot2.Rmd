@@ -652,6 +652,41 @@ Psi_geoAv %>%
   all.equal(txPsi)
 ```
 
+### Decomposição de "Matrizes Internas"
+
+Essa parte é baseada no capítulo 13 do Miller e Blair(2009, p. 603-604). Nela os autores chamam isso de decomposição da matriz de coeficientes diretos. No entanto esse ferramental também pode servir para decompor gastos endógenos (como o consumo induzido). Por isso, por falta de definição melhor, escolhemos usar o termo _matriz interna_, que no fim se refere à uma matriz $M$ qualquer de matriz interna em relação à $N$ se ela define $N$ da seguinte forma: $$N = [I-M]^{-1}$$.
+
+Desse modo, temos que a matriz de coeficientes domésticos diretos da produção $A_n$ é uma matriz interna em relação a Inversa de Leontief. Suponha que queremos então saber os efeitos das mudanças de $A$ em $L$. Desse modo, seja $L^0 = (I-A^0)^{-1}$ e $L^1 = (I-A^1)^{-1}$, **pós-multiplicando** $L^1$ por $(I-A^1)$  teremos:
+
+$$L^1 (I-A^1) = I = L^1 - L^1A^1$$
+
+Rearranjando as partes finais:
+
+$$L^1 - I = L^1A^1$$
+E depois **pós-multiplicando** por $L^0$ teremos:
+
+$L^1L^0 - L^0 = L^1A^1L^0$
+
+Se fizermos uma **pré-multiplicação** de $L^0$ por $(I-A^0)$  teremos:
+
+$$(I-A^0)L^0 = I = L^0 - A^0L^0$$
+Podemos então (de forma similar ao feito para $L^1$) rearranjar a equação de $I = L^0 - A^0L^0$ e **pré-multiplicar** por $L^1$, de modo que teremos:
+
+$$L^0 - I = A^0L^0 \Rightarrow L^1L^0 - L^1 = L^1A^0L^0$$
+
+Subtraindo então $L^1L^0 - L^0$ por $L^1L^0-L^1$ teremos:
+
+$$\left(L^1L^0 -L^0\right) - \left(L^1L^0 -L^1 \right) = L^1A^1L^0 - L^1A^0L^0$$
+Rearranjando cada um dos lados, e lembrando das propriedades de matriz, teremos que:
+
+$$L^1 - L^0 = \Delta L = L^1\left(A^1 - A^0 \right)L^0 = L^1 \Delta A L^0$$
+
+De modo que temos por fim que $\Delta L = L^1 \Delta A L^0$. 
+
+```{r}
+deltaL_int1 <- matrizes2010$Leontief
+```
+
 
 ## ggplot2
 
