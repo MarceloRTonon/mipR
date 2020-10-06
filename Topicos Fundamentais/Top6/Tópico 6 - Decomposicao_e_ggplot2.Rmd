@@ -552,9 +552,57 @@ Vamos agora aproveitar os dados elavorados para a decomposição e visualizá-lo
 
 ### Como criar gráficos no ggplot2
 
-A ideia central é formar os gráficos por camadas, adicionando elementos sequencialmente. 
+A ideia central é formar os gráficos por camadas, adicionando elementos sequencialmente. Em todos os casos, o primeiro passo é usar a função `ggplot()` em conjunto com a base de dados que você deseja trabalhar. Em seguida é que você adicionará elementos ao gráfico, usando o símbolo de soma (+), entre os mais importantes temos:
+
+- **geom_(?)**: aqui você vai indicar a forma que seu gráfico terá, modificando o final da função com, por exemplo, "point", "line", "bar", entre outros.
+- **aes(x,y)**: representam a estética dos gráficos (aesthetics) onde se inclui os elementos que formarão os nossos eixos e também possíveis outros elementos estéticos (cores, tamanhos, traços, etc) .
+
+A figura abaixo traz uma representação de como se estrutura um gráfico pelo ggplot:
 
 ![](estrutura.jpg)
+
+No console do R, qualquer representação gráfica no ggplot2 é formada por, pelo menos duas linhas. A primeira, representada pela primeira caixa na figura acima, com a base de dados, e a segunda com as variáveis que você deseja relacionar. A representação do código é da seguinte maneira:
+
+```{r, eval=F}
+
+ggplot(dados))+
+aes(x = valores eixo x, y = valores do eixo y, outros elementos)
+
+```
+
+### Elementos gráficos
+
+Diversos aspectos podem ser modificados, podemos definir a cor dos pontos, das linhas, das barras; definir se uma linha será tracejada ou sólida; entre diversas outras questões. Vamos aqui citar alguma das opções, mas é importante destacar que o ggplot2 é pacote amplo com diversas opções de configurações. Para essa parte será usada a `vignette` "aesthetics specifications" do próprio ggplot, de forma que, caso queiram, lá existe um conteúdo mais completo sobre as possibilidade de configurações estéticas.
+
+#### Cores e Preenchimento
+
+Para escolher a cor das bordas, do preenchimento, ou ambas, existem algumas opções:
+
+- Pode ser através do __nome__ da cor, tal como "red", "blue", etc. Lembrando que a lista de cores possíveis pode ser obtida por `colours()`.
+
+- Pode ser uma especificação RGB (red, green and blue) por meio de uma string da forma "#RRGGBB" com cada par de RR, GG e BB representando um nível para cada cor.
+
+- Por fim, se colocar `NA` para deixar um gráfico transparente.
+
+#### Linhas
+
+#### Ponto
+- **size**:
+
+
+Vamos então explorar diferentes tipos de gráficos:
+
+#### Gráficos de Pontos
+
+#### Linha de Suavização
+
+#### Gráficos de Linhas
+
+#### Gráficos de Barras
+
+#### Gráficos de Caminha
+
+#### Salvando os Resultados
 
 ## Agradecimentos
 
