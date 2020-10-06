@@ -892,7 +892,7 @@ Psi_geoAv %&gt;%
 </div>
 <div id="decomposição-de-matrizes-internas" class="section level3">
 <h3>Decomposição de “Matrizes Internas”</h3>
-<p>Essa parte é baseada no capítulo 13 do Miller e Blair(2009, p. 603-604). Nela os autores chamam isso de decomposição da matriz de coeficientes diretos. No entanto esse ferramental também pode servir para decompor gastos endógenos (como o consumo induzido). Por isso, por falta de definição melhor, escolhemos usar o termo <em>matriz interna</em>, que no fim se refere à uma matriz <span class="math inline">\(M\)</span> qualquer de matriz interna em relação à <span class="math inline">\(N\)</span> se ela define <span class="math inline">\(N\)</span> da seguinte forma: <span class="math display">\[N = [I-M]^{-1}\]</span>.</p>
+<p>Essa parte é baseada no capítulo 13 do Miller e Blair(2009, p. 603-604). Nela os autores chamam isso de decomposição da matriz de coeficientes diretos. No entanto esse ferramental também pode servir para decompor gastos endógenos (como o consumo induzido). Por isso, por falta de definição melhor, escolhemos usar o termo <em>matriz interna</em><a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>, que no fim se refere à uma matriz <span class="math inline">\(M\)</span> qualquer de matriz interna em relação à <span class="math inline">\(N\)</span> se ela define <span class="math inline">\(N\)</span> da seguinte forma: <span class="math display">\[N = [I-M]^{-1}\]</span>.</p>
 <p>Desse modo, temos que a matriz de coeficientes domésticos diretos da produção <span class="math inline">\(A_n\)</span> é uma matriz interna em relação a Inversa de Leontief.</p>
 <p><strong>Na explicação da decomposição a seguir iremos nos referir a <span class="math inline">\(A_n\)</span> como <span class="math inline">\(A\)</span>, seguindo a notação de Miller e Blair(2009, p. 603-604) e para não deixar a notação mais carregada desnecessariamente.</strong> Suponha que queremos então saber os efeitos das mudanças de <span class="math inline">\(A\)</span> em <span class="math inline">\(L\)</span>. Desse modo, seja <span class="math inline">\(L^0 = (I-A^0)^{-1}\)</span> e <span class="math inline">\(L^1 = (I-A^1)^{-1}\)</span>, <strong>pós-multiplicando</strong> <span class="math inline">\(L^1\)</span> por <span class="math inline">\((I-A^1)\)</span> teremos:</p>
 <p><span class="math display">\[L^1 (I-A^1) = I = L^1 - L^1A^1\]</span></p>
@@ -912,7 +912,7 @@ all.equal(deltaL, deltaL_int1)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <div id="indo-mais-fundo" class="section level4">
 <h4>Indo mais fundo</h4>
-<p>Como dissemos antes, o ganho desse ferramental não precisa ser apenas as variações finais da matriz de insumos domésticos diretos (no caso acima seguimas a notação de Miller e Blair(2009), nos referindo a ela como <span class="math inline">\(A\)</span>, porém agora trataremos ela como <span class="math inline">\(A_n\)</span>). Podemos fazer decomposições que decomponham os efeitos das mudanças de <span class="math inline">\(A_n\)</span> sobre <span class="math inline">\(L = (I-A)^{-1}\)</span>. Seja <span class="math inline">\(A_n = D B_n\)</span>, sendo <span class="math inline">\(D\)</span> a matriz de Market Share e <span class="math inline">\(B_n\)</span> a matriz de coeficientes técnicos dos insumos nacionais. Podemos fazer, uma decomposição aditiva para <span class="math inline">\(A_n\)</span> que resulta em<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>:</p>
+<p>Como dissemos antes, o ganho desse ferramental não precisa ser apenas as variações finais da matriz de insumos domésticos diretos (no caso acima seguimas a notação de Miller e Blair(2009), nos referindo a ela como <span class="math inline">\(A\)</span>, porém agora trataremos ela como <span class="math inline">\(A_n\)</span>). Podemos fazer decomposições que decomponham os efeitos das mudanças de <span class="math inline">\(A_n\)</span> sobre <span class="math inline">\(L = (I-A)^{-1}\)</span>. Seja <span class="math inline">\(A_n = D B_n\)</span>, sendo <span class="math inline">\(D\)</span> a matriz de Market Share e <span class="math inline">\(B_n\)</span> a matriz de coeficientes técnicos dos insumos nacionais. Podemos fazer, uma decomposição aditiva para <span class="math inline">\(A_n\)</span> que resulta em<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>:</p>
 <p><span class="math display">\[\Delta A_n = \left(\tfrac{1}{2}\right) \Delta D \left(B_n^0 + B_n^1 \right) + \left(\tfrac{1}{2}\right) \left(D^0 + D^1\right) \Delta B_n\]</span></p>
 <pre class="r"><code>deltaAn &lt;- matrizes2015$An - matrizes2010$An
 
@@ -951,7 +951,44 @@ reduce(decL_1, `+`) %&gt;%
 \left[\left(\tfrac{1}{4} \right) L^1\left(D^0 + D^1\right)\Delta B_n L^0  \left(f^0 + f^1 \right)\right] + \dots \\
 \dots + \left[\left(\tfrac{1}{2}\right)   \left(L^0 + L^1\right) \Delta f \right]\]</span></p>
 <p>O termo no primeiro colchete se refere aos efeitos de <span class="math inline">\(\Delta D\)</span> sobre <span class="math inline">\(X\)</span>, o segundo de <span class="math inline">\(\Delta B_n\)</span> sobre <span class="math inline">\(X\)</span> e o último o de <span class="math inline">\(\Delta f\)</span> sobre <span class="math inline">\(X\)</span>.</p>
-<pre class="r"><code>decX_2 &lt;- map(decL_1, ~ 1/2 * .x %*% (matrizes2010$f + matrizes2015$f))</code></pre>
+<pre class="r"><code>decX_2 &lt;- map(decL_1, ~ 1/2 * .x %*% (matrizes2010$f + matrizes2015$f))
+
+
+decX_2[[3]] &lt;- deltaX3[[2]]
+
+decX_2[1:2] %&gt;%
+  reduce(`+`) %&gt;%
+  all.equal(deltaX3[[1]])</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>decX_2 %&gt;%
+  reduce(`+`) %&gt;%
+  all.equal(deltaX)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Desse modo, podemos combinar de inúmeras formas decomposições aditivas com as decomposições de matrizes internas. É possível realizar decomposições da Matriz de Miyazawa $ c_W’$ que esitver dentro de um multiplicador <span class="math inline">\(X = [I-A-c_w \omega&#39;] f_o\)</span><a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>. Existe também outras possibilidades, para decompor uma matriz. Vejamos:</p>
+<p><span class="math display">\[A_n =\begin{pmatrix} A_{n(1,1)} &amp; A_{n(1,2)} \\
+A_{n(2,1)} &amp; A_{n(2,2)}\end{pmatrix}\]</span></p>
+<p>Nesse caso, podemos fazer:</p>
+<p><span class="math display">\[A_{n1} =\begin{pmatrix} A_{n(1,1)} &amp; 0 \\
+A_{n(2,1)} &amp; 0\end{pmatrix}, A_{n2} =\begin{pmatrix} 0 &amp; A_{n(1,2)} \\
+0 &amp; A_{n(2,2)}\end{pmatrix}\]</span></p>
+<p>Podemos então fazer com que <span class="math inline">\(A_n = A_{n1} + A_{n2}\)</span>. Como se trata de uma <strong>soma</strong>, a decomposição de <span class="math inline">\(\Delta A_n\)</span> é simplemente: <span class="math display">\[\Delta A_n = \Delta A_{n1} + \Delta A_{n2}\]</span></p>
+<pre class="r"><code># Para fins de exemplo, vamos separar ao meio, mas a partição pode ser muito maleável.
+
+matrix0 &lt;- rep(0, (nrow(matrizes2010$An)^2)/2) %&gt;% matrix(nrow = 12)
+
+partAn2010 &lt;- list(&quot;An1&quot; = cbind(matrizes2010$An[,1:6], matrix0),
+                   &quot;An2&quot;= cbind(matrix0, matrizes2010$An[,7:12])) 
+
+partAn2015 &lt;- list(&quot;An1&quot; = cbind(matrizes2015$An[,1:6], matrix0),
+                   &quot;An2&quot;= cbind(matrix0, matrizes2015$An[,7:12])) 
+
+decAnpart &lt;- map2(partAn2010, partAn2015, ~ .y - .x)
+
+decAnpart %&gt;%
+  reduce(`+`) %&gt;%
+  all.equal(deltaAn, check.attributes = F)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Podemos então substituir <span class="math inline">\(\Delta A_n = \Delta A_{n1} + \Delta A_{n2}\)</span> em <span class="math inline">\(\Delta L\)</span> e novamente em <span class="math inline">\(\Delta X\)</span> novamente. Podemos também ao invés disso, ao invés de particionar <span class="math inline">\(A_n\)</span> particionar <span class="math inline">\(B_n\)</span> e ver qual o efeito das variações das partes de <span class="math inline">\(B_n\)</span> sobre <span class="math inline">\(\Delta A_n\)</span> (e repetir o processo até <span class="math inline">\(\Delta X\)</span>).</p>
 </div>
 </div>
 </div>
@@ -996,6 +1033,7 @@ ggplot(PsiDF, aes(y2010, y2015)) + geom_point()</code></pre>
 <div id="decomposição-estrutural" class="section level3">
 <h3>Decomposição Estrutural</h3>
 <p>Dietzenbacher, E. and B. Los (2000) Structural decomposition with dependent determinants, Economic Systems Research, 12, pp. 498-514.</p>
+<p>KREPSKY, Camila. Output growth and household consumption in Brazil from 2000 to 2016: a structural decomposition analysis, 2019. Dissertação de Mestrado. UFRJ</p>
 </div>
 <div id="ggplot2-2" class="section level3">
 <h3>ggplot2</h3>
@@ -1011,7 +1049,9 @@ ggplot(PsiDF, aes(y2010, y2015)) + geom_point()</code></pre>
 <li id="fn3"><p>Veja a função <code>factorial</code> para saber o fatorial de qualquer valor.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 <li id="fn4"><p>Por isso mesmo, estamos a desenvolver uma solução prática para isso, criando uma rotina de programação que gera um conjunto de funções para cada decomposição possível.<a href="#fnref4" class="footnote-back">↩</a></p></li>
 <li id="fn5"><p>Repare que aqui vamos escrever elas sempre em ordem da variável, ou seja <span class="math inline">\(\Delta \lambda\)</span> será sempre a primeira parte da equação, <span class="math inline">\(\Delta L\)</span> a segunda e <span class="math inline">\(\Delta f\)</span> a terceira<a href="#fnref5" class="footnote-back">↩</a></p></li>
-<li id="fn6"><p>A derivação da conta fica como treino<a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p>Esse nome foi criado por nós, logo pode ser mudado. Queremos apenas expressar aqui a relação.<a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p>A derivação da conta fica como treino<a href="#fnref7" class="footnote-back">↩</a></p></li>
+<li id="fn8"><p>Ver Krepsky(2019) para tanto<a href="#fnref8" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

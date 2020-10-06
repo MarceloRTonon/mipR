@@ -661,7 +661,7 @@ Psi_geoAv %>%
 
 ### Decomposição de "Matrizes Internas"
 
-Essa parte é baseada no capítulo 13 do Miller e Blair(2009, p. 603-604). Nela os autores chamam isso de decomposição da matriz de coeficientes diretos. No entanto esse ferramental também pode servir para decompor gastos endógenos (como o consumo induzido). Por isso, por falta de definição melhor, escolhemos usar o termo _matriz interna_, que no fim se refere à uma matriz $M$ qualquer de matriz interna em relação à $N$ se ela define $N$ da seguinte forma: $$N = [I-M]^{-1}$$.
+Essa parte é baseada no capítulo 13 do Miller e Blair(2009, p. 603-604). Nela os autores chamam isso de decomposição da matriz de coeficientes diretos. No entanto esse ferramental também pode servir para decompor gastos endógenos (como o consumo induzido). Por isso, por falta de definição melhor, escolhemos usar o termo _matriz interna_^[Esse nome foi criado por nós, logo pode ser mudado. Queremos apenas expressar aqui a relação.], que no fim se refere à uma matriz $M$ qualquer de matriz interna em relação à $N$ se ela define $N$ da seguinte forma: $$N = [I-M]^{-1}$$.
 
 Desse modo, temos que a matriz de coeficientes domésticos diretos da produção $A_n$ é uma matriz interna em relação a Inversa de Leontief. 
 
@@ -759,7 +759,52 @@ O termo no primeiro colchete se refere aos efeitos de $\Delta D$ sobre $X$, o se
 
 ```{r}
 decX_2 <- map(decL_1, ~ 1/2 * .x %*% (matrizes2010$f + matrizes2015$f))
+
+
+decX_2[[3]] <- deltaX3[[2]]
+
+decX_2[1:2] %>%
+  reduce(`+`) %>%
+  all.equal(deltaX3[[1]])
+
+
+decX_2 %>%
+  reduce(`+`) %>%
+  all.equal(deltaX)
 ```
+
+Desse modo, podemos combinar de inúmeras formas decomposições aditivas com as decomposições de matrizes internas. É possível realizar decomposições da Matriz de Miyazawa $ c_W\omega'$ que esitver dentro de um multiplicador $X = [I-A-c_w \omega'] f_o$^[Ver Krepsky(2019) para tanto]. Existe também outras possibilidades, para decompor uma matriz. Vejamos:
+
+$$A_n =\begin{pmatrix} A_{n(1,1)} & A_{n(1,2)} \\
+A_{n(2,1)} & A_{n(2,2)}\end{pmatrix}$$
+
+Nesse caso, podemos fazer:
+
+$$A_{n1} =\begin{pmatrix} A_{n(1,1)} & 0 \\
+A_{n(2,1)} & 0\end{pmatrix}, A_{n2} =\begin{pmatrix} 0 & A_{n(1,2)} \\
+0 & A_{n(2,2)}\end{pmatrix}$$
+
+Podemos então fazer com que $A_n = A_{n1} + A_{n2}$. Como se trata de uma **soma**, a decomposição de $\Delta A_n$ é simplemente:
+$$\Delta A_n = \Delta A_{n1} + \Delta A_{n2}$$
+```{r}
+# Para fins de exemplo, vamos separar ao meio, mas a partição pode ser muito maleável.
+
+matrix0 <- rep(0, (nrow(matrizes2010$An)^2)/2) %>% matrix(nrow = 12)
+
+partAn2010 <- list("An1" = cbind(matrizes2010$An[,1:6], matrix0),
+                   "An2"= cbind(matrix0, matrizes2010$An[,7:12])) 
+
+partAn2015 <- list("An1" = cbind(matrizes2015$An[,1:6], matrix0),
+                   "An2"= cbind(matrix0, matrizes2015$An[,7:12])) 
+
+decAnpart <- map2(partAn2010, partAn2015, ~ .y - .x)
+
+decAnpart %>%
+  reduce(`+`) %>%
+  all.equal(deltaAn, check.attributes = F)
+```
+
+Podemos então substituir $\Delta A_n = \Delta A_{n1} + \Delta A_{n2}$ em $\Delta L$ e novamente em $\Delta X$ novamente. Podemos também ao invés disso, ao invés de particionar $A_n$ particionar $B_n$ e ver qual o efeito das variações das partes de $B_n$ sobre $\Delta A_n$ (e repetir o processo até $\Delta X$).
 
 
 ## ggplot2
@@ -811,6 +856,9 @@ Outras bibliografias de artigos e sites para você acessar e aprender mais coisa
 ### Decomposição Estrutural
 
 Dietzenbacher, E. and B. Los (2000) Structural decomposition with dependent determinants, Economic Systems Research, 12, pp. 498-514.
+
+
+KREPSKY, Camila. Output growth and household consumption in Brazil from 2000 to 2016: a structural decomposition analysis, 2019. Dissertação de Mestrado. UFRJ
 
 ### ggplot2
 
