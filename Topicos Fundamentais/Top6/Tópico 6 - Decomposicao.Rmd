@@ -28,17 +28,7 @@ library(readxl)
 library(purrr)
 library(stringr)
 library(gtools)
-library(tidyr)
-library(dplyr)
 ```
-
-```{r, include=F, warning=F}
-#install.packages("rlang")
-#install.packages("gridExtra")
-library(rlang)
-library(gridExtra)
-```
-
 
 ## Objetivos do Tópico
 
@@ -301,7 +291,6 @@ $$\Delta X = X^1 - X^0 = L^1f^1 - L^0f^0$$
 deltaX <- matrizes2015$X - matrizes2010$X
 ```
 
-
 Seja $\Delta L = L^1 - L^0$ e $\Delta f = f^1 - f^0$, podemos substituir na equação acima os valores de modo:
 
 $$\Delta X = L^1 (f^0 + \Delta f) - (L^1 - \Delta L) f^0 = \Delta L f^0 + L^1(\Delta f)$$
@@ -314,8 +303,6 @@ deltaf <- matrizes2015$f - matrizes2010$f
 ```{r}
 deltaX1 <- list(deltaL %*% matrizes2010$f,
                 matrizes2015$Leontief %*% deltaf)
-
-# Usando all.equall para testar se a soma das partes de deltaX1 é igual à deltaX
 deltaX1 %>%
   reduce(`+`) %>%
 all.equal( deltaX)
@@ -339,24 +326,15 @@ all.equal(deltaX)
 Ambas as formas apresentadas agora são igualmente válidas, sendo ambas igualmente corretas.
 
 ```{r}
-all.equal(reduce(deltaX1, `+`),
-          reduce(deltaX2, `+`))
+all.equal(deltaX1, deltaX2)
 ```
 
-No entanto, é de certo modo óbvio que esperamos que $(\Delta L)f^1\neq(\Delta L) f^0$ e que $L^1(\Delta f) \neq L^0 (\Delta f)$.
+No entanto, é de certo modo óbvio que esperamos que $(\Delta L)f^1\neq(\Delta L) f^0$.
 
 ```{r}
-all.equal(deltaX1,
-          deltaX2)
+all.equal(deltaL %*% matrizes2010$f,
+          deltaL %*% matrizes2015$f)
 ```
-
-Podemos ver que a diferença de um é compensada na do outro:
-```{r}
-map2_dbl(deltaX1, deltaX2, ~sum(.y) - sum(.x))
-```
-
-
-
 
 Dietzenbacher e Los (1998), mostram que ao tirarmos os valores médios das adições aditivas temos um resultado aceitável:
 
@@ -371,57 +349,7 @@ deltaX3 %>%
 all.equal(deltaX)
 ```
 
-
-
 Na equação acima, temos que a parcela $(1/2) \Delta L (f^0 + f^1)$ é referente à mudança tecnológica enquanto $(1/2) (L^0 + L^1) \Delta f$ é referente à mudanças na demanda final.
-
-Graficamente podemos ver que:
-
-```{r plotDeltaX, echo=F}
-library(ggplot2)
-library(rlang)
-library(gridExtra)
-#library(magrittr)
-
-DLf0 <-   expression(Delta * L * f^{0})
-DLf1 <-  expression(Delta * L * f^{1})
-DLf01 <- expression( (1/2) * Delta * (f^{0} + f^{1}))
-
-plotdeltaX_L <- data.frame("delta1" = sum(deltaX1[[1]]),
-           "delta2" = sum(deltaX2[[1]]),
-           "delta3" = sum(deltaX3[[1]]))  %>%
-  pivot_longer(cols = starts_with("delta"),
-               names_to = "Decomposição")  %>%
-  ggplot(aes(x = Decomposição, y = value)) +
-    geom_bar(stat = "identity", fill = c("blue", "green", "red")) +
-  scale_x_discrete(labels = c("delta1" = DLf0,
-                              "delta2" = DLf1,
-                              "delta3" = DLf01)) +
-  ggtitle("Contribuição de \u0394L para a \u0394 x") +
-  theme(axis.title.x = element_blank(),
-        axis.title.y = element_blank())
-
-L1Df <-   expression(L^{1} * Delta *f)
-L0Df <-  expression(L^{0} * Delta *f)
-L01Df <- expression( (1/2) * (L^{0} + L^{1}) * Delta * f)
-
-plotdeltaX_f <- data.frame("delta1" = sum(deltaX1[[2]]),
-           "delta2" = sum(deltaX2[[2]]),
-           "delta3" = sum(deltaX3[[2]]))  %>%
-  pivot_longer(cols = starts_with("delta"),
-               names_to = "Decomposição")  %>%
-  ggplot(aes(x = Decomposição, y = value)) +
-    geom_bar(stat = "identity", fill = c("blue", "green", "red")) +
-  scale_x_discrete(labels = c("delta1" = L1Df,
-                              "delta2" = L0Df,
-                              "delta3" = L01Df)) +
-  ggtitle("Contribuição de \u0394f para a \u0394 x") +
-  theme(axis.title.x=element_blank(),
-        axis.title.y = element_blank())
-
-grid.arrange(plotdeltaX_L, plotdeltaX_f, ncol =2)
-```
-
 
 ### Decomposições aditivas com mais de 2 variáveis
 
@@ -632,34 +560,12 @@ deltaPsiMedia <- list(deltaPsi123, deltaPsi132, deltaPsi213,
      deltaPsi312, deltaPsi231, deltaPsi321) %>%
   transpose %>%
   map_df(~ reduce(.x, `+`)/6) %>%
-  setNames(c("lambda", "L", "f")) %>%
-  data.frame("Setores" = rownames(deltaL),
-                            .)
+  setNames(c("lambda", "L", "f"))
+
+deltaPsiMedia
 ```
 
-```{r plotDeltaPsi, echo = FALSE}
-library(ggplot2)
-library(tidyr)
-
-plotdeltaPsiMedia <- deltaPsiMedia %>%
-  setNames(c("Setores", "\U03BB", "L", "f"))
-plotdeltaPsiMedia$Setores <- as.character(c(1:12))
-plotdeltaPsiMedia$Setores <- factor(plotdeltaPsiMedia$Setores,
-                                    levels = as.character(c(1:12)))
-plotdeltaPsiMedia <- plotdeltaPsiMedia %>%
-  pivot_longer(-Setores, 
-               names_to = "Variavel") %>% 
-  ggplot(aes(y = value, x = Setores, fill = Variavel)) +
-  geom_col(position = "stack") + 
-  ggtitle("Decomposição do nível de emprego de cada setor") +
-  theme(axis.title.y = element_blank())
-
-plotdeltaPsiMedia  
-```
-
-Os números no eixo horizontal são a ordem do setor nas colunas de nomes. Basta fazer `rownames(DeltaX)`para saber qual é a qual.
-
-Deve-se atentar que a média aritimética não é a única forma em que se pode tirar a média na decomposição de $\Delta \Psi$. Veja Dietzenbacher e Los (1998) para uma discussão extensa sobre esse tema.
+Essa porém, não é a única forma em que se pode tirar a média na decomposição de $\Delta \Psi$, veja Dietzenbacher e Los (1998) para uma discussão extensa sobre esse tema.
 
 ### Decomposições Multiplicativas
 
@@ -902,192 +808,6 @@ decAnpart %>%
 
 Podemos então substituir $\Delta A_n = \Delta A_{n1} + \Delta A_{n2}$ em $\Delta L$ e novamente em $\Delta X$ novamente. Podemos também ao invés disso, ao invés de particionar $A_n$ particionar $B_n$ e ver qual o efeito das variações das partes de $B_n$ sobre $\Delta A_n$ (e repetir o processo até $\Delta X$).
 
-## ggplot2
-
-Vamos agora aproveitar os dados elavorados para a decomposição e visualizá-los aplicando o pacote `ggplot2`. Trata-se de um pacote com várias possibilidades de configurações, de forma que será impossível explorar todo o pacote, mas ao menos as principais configurações possíveis.
-
-### Como criar gráficos no ggplot2
-
-A ideia central é formar os gráficos por camadas, adicionando elementos sequencialmente. Em todos os casos, o primeiro passo é usar a função `ggplot()` em conjunto com a base de dados que você deseja trabalhar. Em seguida é que você adicionará elementos ao gráfico, usando o símbolo de soma (+), entre os mais importantes temos:
-
-- **geom_(?)**: aqui você vai indicar a forma que seu gráfico terá, modificando o final da função com, por exemplo, "point", "line", "bar", entre outros.
-- **aes(x,y)**: representam a estética dos gráficos (aesthetics) onde se inclui os elementos que formarão os nossos eixos e também possíveis outros elementos estéticos (cores, tamanhos, traços, etc) .
-
-A figura abaixo traz uma representação de como se estrutura um gráfico pelo ggplot:
-
-![](estrutura.jpg)
-
-No console do R, qualquer representação gráfica no ggplot2 é formada por, pelo menos duas linhas. A primeira, representada pela primeira caixa na figura acima, com a base de dados, e a segunda com as variáveis que você deseja relacionar. A representação do código é da seguinte maneira:
-
-```{r, eval=F}
-
-ggplot(dados))+
-aes(x = valores eixo x, y = valores do eixo y, outros elementos)
-
-```
-
-### Elementos gráficos
-
-Diversos aspectos podem ser modificados, podemos definir a cor dos pontos, das linhas, das barras; definir se uma linha será tracejada ou sólida; entre diversas outras questões. Vamos aqui citar alguma das opções, mas é importante destacar que o ggplot2 é pacote amplo com diversas opções de configurações. Para essa parte será usada a `vignette` "aesthetics specifications" do próprio ggplot, de forma que, caso queiram, lá existe um conteúdo mais completo sobre as possibilidade de configurações estéticas.
-
-#### Cores e Preenchimento
-
-Para escolher a cor das bordas, do preenchimento, ou ambas, existem algumas opções a serem inseridos na opção `colour=`:
-
-- Pode ser através do __nome__ da cor, tal como "red", "blue", etc. Lembrando que a lista de cores possíveis pode ser obtida por `colours()`.
-
-- Pode ser uma especificação RGB (red, green and blue) por meio de uma string da forma "#RRGGBB", com cada par representando a escala de cada cor. 
-
-- Para deixar sem cor (transparente), usar o `NA`.
-
-#### Linhas
-
-Os tipos de linhas são configurados pela opção `linetype=`, que podem ser um número inteiro ou um nome na seguinte lista:
-
-0 = blank, 1 = solid, 2 = dashed, 3 = dotted, 4 = dotdash, 5 = longdash, 6 = twodash
-
-Esses tipos de linha podem  ser visualizados tal como figura inspirada na vignette do aesthetics:
-
-
-```{r, echo=F}
-lty <- c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash")
-linetypes <- data.frame(
-  y = seq_along(lty),
-  lty = lty
-) 
-ggplot(linetypes, aes(0, y)) + 
-  geom_segment(aes(xend = 5, yend = y, linetype = y)) + 
-  scale_linetype_identity() + 
-  geom_text(aes(label = lty), hjust = 0, nudge_y = 0.2) +
-  scale_x_continuous(NULL, breaks = NULL) + 
-  scale_y_reverse(NULL, breaks = NULL)
-```
-
-Já o tamanho da linha é determinado pelo item `size=` que determinará a largura (width) da linha em milímetros. No gráfico abaixo temos exemplo de diferentes larguras:
-
-```{r, echo=F}
-width <- c("0.1", "0.5", "1", "2", "3")
-linetypes <- data.frame(
-  y = c(0.1,0.5,1,2,3),
-  width = width
-) 
-ggplot(linetypes, aes(0, y)) + 
-  geom_segment(aes(xend = 5, yend = y, size = width)) + 
-  scale_linetype_identity() + 
-  geom_text(aes(label = width), hjust = 0, nudge_y = 0.2) +
-  scale_x_continuous(NULL, breaks = NULL) + 
-  scale_y_reverse(NULL, breaks = NULL)
-```
-
-#### Ponto
-
-Para definir o tipo de ponto escolhido usamos a opção `shape=`, que recebe 5 tipos de comandos diferentes:
-
-- Primeiramente pode ser um número inteiro no intervalo [0,25] com o resultado dos 25 primeiros (exceto o último, dado que o zero está contido):
-```{r, echo=F}
-shapes <- data.frame(
-  shape = c(0:19, 22, 21, 24, 23, 20),
-  x = 0:24 %/% 5,
-  y = -(0:24 %% 5)
-)
-ggplot(shapes, aes(x, y)) + 
-  geom_point(aes(shape = shape), size = 5, fill = "red") +
-  geom_text(aes(label = shape), hjust = 0, nudge_x = 0.15) +
-  scale_shape_identity() +
-  expand_limits(x = 4.1) +
-  theme_void()
-```
-
-- The name of the shape:
-
-```{r, echo=F}
-shape_names <- c(
-  "circle", paste("circle", c("open", "filled", "cross", "plus", "small")), "bullet",
-  "square", paste("square", c("open", "filled", "cross", "plus", "triangle")),
-  "diamond", paste("diamond", c("open", "filled", "plus")),
-  "triangle", paste("triangle", c("open", "filled", "square")),
-  paste("triangle down", c("open", "filled")),
-  "plus", "cross", "asterisk"
-)
-
-shapes <- data.frame(
-  shape_names = shape_names,
-  x = c(1:7, 1:6, 1:3, 5, 1:3, 6, 2:3, 1:3),
-  y = -rep(1:6, c(7, 6, 4, 4, 2, 3))
-)
-
-ggplot(shapes, aes(x, y)) +
-  geom_point(aes(shape = shape_names), fill = "red", size = 5) +
-  geom_text(aes(label = shape_names), nudge_y = -0.3, size = 3.5) +
-  scale_shape_identity() +
-  theme_void()
-```
-
-
-- A single character, to use that character as a plotting symbol.
-
-- A . to draw the smallest rectangle that is visible, usualy 1 pixel.
-
-- An NA, to draw nothing.
-
-#### Tipos de Gráficos
-
-Vamos então explorar diferentes tipos de gráficos:
-
-#### Gráficos de Pontos
-
-Um gráfico muito usado no pacote `ggplot2` é o `geom_poit()`. Ele permite
-
-```{r}
-PsiDF <- tibble::tibble("y2010" = matrizes2010$Psi,
-                        "y2015" = matrizes2015$Psi)
-
-ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
-```
-
-```{r, eval=F, include=F}
-Gráfico comparando multiplicadores do emprego e do va
-```
-
-
-#### Gráficos de Barras
-
-`geom_bar()`
-
-Usar o exemplo do deltax3.
-
-
-#### Gráficos de Linhas
-
-`geom_line()`
-
-```{r coment, eval=F}
-Buscar exemplo de alguma série temporal
-
-possivelmente taxa de crescimento do pib e de outro componente (taxa de investimento)
-```
-
-
-#### Gráficos de Caminho
-
-`geom_path()`
-
-```{r, eval=F}
-comparar os multiplicadores do emprego em 2010 e 2015.
-```
-
-
-#### Linha de Suavização
-
-`geom_smooth()`
-
-#### Salvando os Resultados
-
-
-## Agradecimentos
-
-Os autores agradecem [João Pedro Oliveira](https://github.com/kimjoaoun) por amavelmente ceder a imagem feita por ele e [Pedro Cavalcante](https://github.com/pedrocava).
-
 ## Bibliografia usada neste material
 
 ### Análise de Decomposição Estrutural
@@ -1097,10 +817,6 @@ DIETZENBACHER, Erik; LAHR, Michael L.; LOS, Bart. The decline in labor compensat
 DIETZENBACHER, Erik; LOS, Bart. Structural decomposition techniques: sense and sensitivity. Economic Systems Research, v. 10, n. 4, p. 307-324, 1998.
 
 MILLER, Ronald E.; BLAIR, Peter D. Input-output analysis: foundations and extensions. Cambridge university press, 2009.
-
-### ggplot2
-
-WICKHAM, Hadley. ggplot2: elegant graphics for data analysis. springer, 2016. Acesse a versão online em: <https://ggplot2-book.org>
 
 ## Confira também!
 
@@ -1112,8 +828,4 @@ Dietzenbacher, E. and B. Los (2000) Structural decomposition with dependent dete
 
 KREPSKY, Camila. Output growth and household consumption in Brazil from 2000 to 2016: a structural decomposition analysis, 2019. Dissertação de Mestrado. UFRJ
 
-### ggplot2
-
-[How to make any plot in ggplot2?](http://r-statistics.co/ggplot2-Tutorial-With-R.html)
-
-[The R Graph Gallery](https://www.r-graph-gallery.com/)
+### 
