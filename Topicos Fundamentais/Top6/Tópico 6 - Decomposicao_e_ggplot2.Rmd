@@ -39,7 +39,6 @@ library(rlang)
 library(gridExtra)
 ```
 
-
 ## Objetivos do Tópico
 
 Esse tópico irá introduzir tanto o tema de análise de decomposição estrutural quanto introduzir o uso do pacote `ggplot2` para a criação de gráficos.
@@ -301,7 +300,6 @@ $$\Delta X = X^1 - X^0 = L^1f^1 - L^0f^0$$
 deltaX <- matrizes2015$X - matrizes2010$X
 ```
 
-
 Seja $\Delta L = L^1 - L^0$ e $\Delta f = f^1 - f^0$, podemos substituir na equação acima os valores de modo:
 
 $$\Delta X = L^1 (f^0 + \Delta f) - (L^1 - \Delta L) f^0 = \Delta L f^0 + L^1(\Delta f)$$
@@ -351,12 +349,10 @@ all.equal(deltaX1,
 ```
 
 Podemos ver que a diferença de um é compensada na do outro:
+
 ```{r}
 map2_dbl(deltaX1, deltaX2, ~sum(.y) - sum(.x))
 ```
-
-
-
 
 Dietzenbacher e Los (1998), mostram que ao tirarmos os valores médios das adições aditivas temos um resultado aceitável:
 
@@ -370,8 +366,6 @@ deltaX3 %>%
   reduce(`+`) %>%
 all.equal(deltaX)
 ```
-
-
 
 Na equação acima, temos que a parcela $(1/2) \Delta L (f^0 + f^1)$ é referente à mudança tecnológica enquanto $(1/2) (L^0 + L^1) \Delta f$ é referente à mudanças na demanda final.
 
@@ -421,7 +415,6 @@ plotdeltaX_f <- data.frame("delta1" = sum(deltaX1[[2]]),
 
 grid.arrange(plotdeltaX_L, plotdeltaX_f, ncol =2)
 ```
-
 
 ### Decomposições aditivas com mais de 2 variáveis
 
@@ -910,8 +903,8 @@ Vamos agora aproveitar os dados elavorados para a decomposição e visualizá-lo
 
 A ideia central é formar os gráficos por camadas, adicionando elementos sequencialmente. Em todos os casos, o primeiro passo é usar a função `ggplot()` em conjunto com a base de dados que você deseja trabalhar. Em seguida é que você adicionará elementos ao gráfico, usando o símbolo de soma (+), entre os mais importantes temos:
 
-- **geom_(?)**: aqui você vai indicar a forma que seu gráfico terá, modificando o final da função com, por exemplo, "point", "line", "bar", entre outros.
-- **aes(x,y)**: representam a estética dos gráficos (aesthetics) onde se inclui os elementos que formarão os nossos eixos e também possíveis outros elementos estéticos (cores, tamanhos, traços, etc) .
+-   **geom\_(?)**: aqui você vai indicar a forma que seu gráfico terá, modificando o final da função com, por exemplo, "point", "line", "bar", entre outros.
+-   **aes(x,y)**: representam a estética dos gráficos (aesthetics) onde se inclui os elementos que formarão os nossos eixos e também possíveis outros elementos estéticos (cores, tamanhos, traços, etc) .
 
 A figura abaixo traz uma representação de como se estrutura um gráfico pelo ggplot:
 
@@ -934,11 +927,11 @@ Diversos aspectos podem ser modificados, podemos definir a cor dos pontos, das l
 
 Para escolher a cor das bordas, do preenchimento, ou ambas, existem algumas opções a serem inseridos na opção `colour=`:
 
-- Pode ser através do __nome__ da cor, tal como "red", "blue", etc. Lembrando que a lista de cores possíveis pode ser obtida por `colours()`.
+-   Pode ser através do **nome** da cor, tal como "red", "blue", etc. Lembrando que a lista de cores possíveis pode ser obtida por `colours()`.
 
-- Pode ser uma especificação RGB (red, green and blue) por meio de uma string da forma "#RRGGBB", com cada par representando a escala de cada cor. 
+-   Pode ser uma especificação RGB (red, green and blue) por meio de uma string da forma "\#RRGGBB", com cada par representando a escala de cada cor.
 
-- Para deixar sem cor (transparente), usar o `NA`.
+-   Para deixar sem cor (transparente), usar o `NA`.
 
 #### Linhas
 
@@ -946,10 +939,9 @@ Os tipos de linhas são configurados pela opção `linetype=`, que podem ser um 
 
 0 = blank, 1 = solid, 2 = dashed, 3 = dotted, 4 = dotdash, 5 = longdash, 6 = twodash
 
-Esses tipos de linha podem  ser visualizados tal como figura inspirada na vignette do aesthetics:
+Esses tipos de linha podem ser visualizados tal como figura inspirada na vignette do aesthetics:
 
-
-```{r, echo=F}
+```{r, echo=F, fig.height=4,fig.width=4,fig.align='center'}
 lty <- c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash")
 linetypes <- data.frame(
   y = seq_along(lty),
@@ -965,7 +957,7 @@ ggplot(linetypes, aes(0, y)) +
 
 Já o tamanho da linha é determinado pelo item `size=` que determinará a largura (width) da linha em milímetros. No gráfico abaixo temos exemplo de diferentes larguras:
 
-```{r, echo=F}
+```{r, echo=F, fig.height=4,fig.width=4,fig.align='center'}
 width <- c("0.1", "0.5", "1", "2", "3")
 linetypes <- data.frame(
   y = c(0.1,0.5,1,2,3),
@@ -983,8 +975,9 @@ ggplot(linetypes, aes(0, y)) +
 
 Para definir o tipo de ponto escolhido usamos a opção `shape=`, que recebe 5 tipos de comandos diferentes:
 
-- Primeiramente pode ser um número inteiro no intervalo [0,25] com o resultado dos 25 primeiros (exceto o último, dado que o zero está contido):
-```{r, echo=F}
+-   Primeiramente pode ser um número inteiro no intervalo [0,25] com o resultado dos 25 primeiros (exceto o último, dado que o zero está contido):
+
+```{r, echo=F, fig.height=4,fig.width=4,fig.align='center'}
 shapes <- data.frame(
   shape = c(0:19, 22, 21, 24, 23, 20),
   x = 0:24 %/% 5,
@@ -998,9 +991,9 @@ ggplot(shapes, aes(x, y)) +
   theme_void()
 ```
 
-- Usando o nome do tipo de ponto que você deseja, conforme a figura abaixo também extraído da vignette do aesthetics:
+-   Usando o nome do tipo de ponto que você deseja, conforme a figura abaixo também extraído da vignette do aesthetics:
 
-```{r, echo=F}
+```{r, echo=F, fig.height=4,fig.width=7,fig.align='center'}
 shape_names <- c(
   "circle", paste("circle", c("open", "filled", "cross", "plus", "small")), "bullet",
   "square", paste("square", c("open", "filled", "cross", "plus", "triangle")),
@@ -1023,12 +1016,11 @@ ggplot(shapes, aes(x, y)) +
   theme_void()
 ```
 
+-   Algum caracter para usá-lo como o símbolo no plot.
 
-- Algum caracter para usá-lo como o símbolo no plot.
+-   Um `.` para o menor retângulo que é visível, em geral equivalente a 1 pixel.
 
-- Um `.` para o menor retângulo que é visível, em geral equivalente a 1 pixel.
-
-- Por fim, `NA` para não ter nenhum símbolo.
+-   Por fim, `NA` para não ter nenhum símbolo.
 
 #### Tipos de Gráficos
 
@@ -1038,7 +1030,7 @@ Vamos então explorar diferentes tipos de gráficos. Destacamos que o maior foco
 
 Um gráfico muito usado no pacote `ggplot2` é o `geom_point()`. Ele permite apresentar as relações entre duas variáveis (que estão no eixo x e y) com as observações sendo pontos no gráfico. Isso é particulamente útil para avaliar se os dados estão concentrados em alguma parte do quadrante, se apresenta alguma tendência, etc.
 
-Vamos, por exemplo, ver a relação entre os multiplicadores entre os anos 2010 e 2015: primeiro o do emprego e depois do valor adicionado
+Vamos, por exemplo, ver a relação entre os multiplicadores entre os anos 2010 e 2015 da variável emprego já apresentada anteriormente.
 
 ```{r}
 PsiDF <- tibble::tibble("y2010" = matrizes2010$Psi,
@@ -1046,6 +1038,8 @@ PsiDF <- tibble::tibble("y2010" = matrizes2010$Psi,
 
 ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
 ```
+
+Era de se esperar uma correlação positiva e próxima de uma reta com inclunação de 45 graus, dado que os multiplicadores refletem informações estruturais que demoram mais tempo para apresentarem mudanças significativas. Vamos agora fazer outro exercício, que é comparar o multiplicador do emprego com o do VA e o dos Salários. Antes disso é necessário criar 
 
 ```{r, eval=F, include=F}
 VADF <- tibble::tibble("y2010" = matrizes2010$Psi,
@@ -1055,12 +1049,14 @@ ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
 ```
 
 
+
 #### Gráficos de Colunas
 
 Este é decerto o principal gráfico para análises de decomposição, tendo em vista que é a melhor forma de se avaliar contribuições para um total. Inclusive, os gráficos já visualizados anteriormente (e que serão replicados aqui de forma simplificada) são gráficos de colunas e gerados por `geom_col`.
 
 Usar o exemplo do deltax3.
-```{r plotDeltaPsi}
+
+```{r plotDeltaPsi2}
 
 plotdeltaPsiMedia <- deltaPsiMedia %>%
   setNames(c("Setores", "\U03BB", "L", "f"))
@@ -1078,9 +1074,7 @@ plotdeltaPsiMedia <- plotdeltaPsiMedia %>%
 plotdeltaPsiMedia  
 ```
 
-
-
-```{r plotDeltaX}
+```{r plotDeltaX2}
 library(ggplot2)
 library(rlang)
 library(gridExtra)
@@ -1125,8 +1119,6 @@ plotdeltaX_f <- data.frame("delta1" = sum(deltaX1[[2]]),
 grid.arrange(plotdeltaX_L, plotdeltaX_f, ncol =2)
 ```
 
-
-
 #### Gráficos de Linhas
 
 `geom_line()`
@@ -1137,7 +1129,6 @@ Buscar exemplo de alguma série temporal
 possivelmente taxa de crescimento do pib e de outro componente (taxa de investimento)
 ```
 
-
 #### Gráficos de Caminho
 
 `geom_path()`
@@ -1145,7 +1136,6 @@ possivelmente taxa de crescimento do pib e de outro componente (taxa de investim
 ```{r, eval=F}
 comparar os multiplicadores do emprego em 2010 e 2015.
 ```
-
 
 #### Linha de Suavização
 
