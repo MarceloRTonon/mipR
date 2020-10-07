@@ -808,31 +808,6 @@ decAnpart %>%
 
 Podemos então substituir $\Delta A_n = \Delta A_{n1} + \Delta A_{n2}$ em $\Delta L$ e novamente em $\Delta X$ novamente. Podemos também ao invés disso, ao invés de particionar $A_n$ particionar $B_n$ e ver qual o efeito das variações das partes de $B_n$ sobre $\Delta A_n$ (e repetir o processo até $\Delta X$).
 
-## ggplot2
-
-Vamos agora aproveitar os dados elavorados para a decomposição e visualizá-los aplicando o pacote `ggplot2`. Trata-se de um pacote com várias possibilidades de configurações, de forma que será impossível explorar todo o pacote, mas ao menos as principais configurações possíveis.
-
-### Como criar gráficos no ggplot2
-
-A ideia central é formar os gráficos por camadas, adicionando elementos sequencialmente.
-
-![](estrutura.jpg)
-
-### geom\_point
-
-Um gráfico muito usado no pacote `ggplot2` é o `geom_poit()`. Ele permite
-
-```{r}
-PsiDF <- tibble::tibble("y2010" = matrizes2010$Psi,
-                        "y2015" = matrizes2015$Psi)
-
-ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
-```
-
-## Agradecimentos
-
-Os autores agradecem [João Pedro Oliveira](https://github.com/kimjoaoun) por amavelmente ceder a imagem feita por ele e [Pedro Cavalcante](https://github.com/pedrocava).
-
 ## Bibliografia usada neste material
 
 ### Análise de Decomposição Estrutural
@@ -842,10 +817,6 @@ DIETZENBACHER, Erik; LAHR, Michael L.; LOS, Bart. The decline in labor compensat
 DIETZENBACHER, Erik; LOS, Bart. Structural decomposition techniques: sense and sensitivity. Economic Systems Research, v. 10, n. 4, p. 307-324, 1998.
 
 MILLER, Ronald E.; BLAIR, Peter D. Input-output analysis: foundations and extensions. Cambridge university press, 2009.
-
-### ggplot2
-
-WICKHAM, Hadley. ggplot2: elegant graphics for data analysis. springer, 2016. Acesse a versão online em: <https://ggplot2-book.org>
 
 ## Confira também!
 
@@ -857,8 +828,4 @@ Dietzenbacher, E. and B. Los (2000) Structural decomposition with dependent dete
 
 KREPSKY, Camila. Output growth and household consumption in Brazil from 2000 to 2016: a structural decomposition analysis, 2019. Dissertação de Mestrado. UFRJ
 
-### ggplot2
-
-[How to make any plot in ggplot2?](http://r-statistics.co/ggplot2-Tutorial-With-R.html)
-
-[The R Graph Gallery](https://www.r-graph-gallery.com/)
+### 
