@@ -838,21 +838,105 @@ Diversos aspectos podem ser modificados, podemos definir a cor dos pontos, das l
 
 #### Cores e Preenchimento
 
-Para escolher a cor das bordas, do preenchimento, ou ambas, existem algumas opções:
+Para escolher a cor das bordas, do preenchimento, ou ambas, existem algumas opções a serem inseridos na opção `colour=`:
 
 - Pode ser através do __nome__ da cor, tal como "red", "blue", etc. Lembrando que a lista de cores possíveis pode ser obtida por `colours()`.
 
-- Pode ser uma especificação RGB (red, green and blue) por meio de uma string da formaAn rgb specification, with a string of the form "#RRGGBB" where each of the pairs RR, GG,  BB consists of two hexadecimal digits giving a value in the range 00 to FF
+- Pode ser uma especificação RGB (red, green and blue) por meio de uma string da forma "#RRGGBB", com cada par representando a escala de cada cor. 
 
-You can optionally make the colour transparent by using the form "#RRGGBBAA".
-
-An NA, for a completely transparent colour.
+- Para deixar sem cor (transparente), usar o `NA`.
 
 #### Linhas
 
-#### Ponto
-- **size**:
+Os tipos de linhas são configurados pela opção `linetype=`, que podem ser um número inteiro ou um nome na seguinte lista:
 
+0 = vazio, 1 = sólido, 2 = tracejado, 3 = pontilhado, 4 = ponto e traço, 5 = tracejado longo, 6 = tracejado curto e longo
+
+Esses tipos de linha podem  ser visualizados tal como figura inspirada na vignette do aesthetics:
+
+
+```{r, echo=F}
+lty <- c("sólido", "tracejado", "pontilhado", "ponto e traço", "tracejado longo", "tracejado curto e longo")
+linetypes <- data.frame(
+  y = seq_along(lty),
+  lty = lty
+) 
+ggplot(linetypes, aes(0, y)) + 
+  geom_segment(aes(xend = 5, yend = y, linetype = y)) + 
+  scale_linetype_identity() + 
+  geom_text(aes(label = lty), hjust = 0, nudge_y = 0.2) +
+  scale_x_continuous(NULL, breaks = NULL) + 
+  scale_y_reverse(NULL, breaks = NULL)
+```
+
+Já o tamanho da linha é determinado pelo item `size=` que determinará a largura (width) da linha em milímetros. No gráfico abaixo temos exemplo de diferentes larguras:
+
+```{r, echo=F}
+width <- c("0.1", "0.5", "1", "2", "3")
+linetypes <- data.frame(
+  y = c(0.1,0.5,1,2,3),
+  width = width
+) 
+ggplot(linetypes, aes(0, y)) + 
+  geom_segment(aes(xend = 5, yend = y, size = width)) + 
+  scale_linetype_identity() + 
+  geom_text(aes(label = width), hjust = 0, nudge_y = 0.2) +
+  scale_x_continuous(NULL, breaks = NULL) + 
+  scale_y_reverse(NULL, breaks = NULL)
+```
+
+#### Ponto
+
+Shapes take five types of values:
+
+- An integer in [0,25]:
+```{r, echo=F}
+shapes <- data.frame(
+  shape = c(0:19, 22, 21, 24, 23, 20),
+  x = 0:24 %/% 5,
+  y = -(0:24 %% 5)
+)
+ggplot(shapes, aes(x, y)) + 
+  geom_point(aes(shape = shape), size = 5, fill = "red") +
+  geom_text(aes(label = shape), hjust = 0, nudge_x = 0.15) +
+  scale_shape_identity() +
+  expand_limits(x = 4.1) +
+  theme_void()
+```
+
+- The name of the shape:
+
+```{r, echo=F}
+shape_names <- c(
+  "circle", paste("circle", c("open", "filled", "cross", "plus", "small")), "bullet",
+  "square", paste("square", c("open", "filled", "cross", "plus", "triangle")),
+  "diamond", paste("diamond", c("open", "filled", "plus")),
+  "triangle", paste("triangle", c("open", "filled", "square")),
+  paste("triangle down", c("open", "filled")),
+  "plus", "cross", "asterisk"
+)
+
+shapes <- data.frame(
+  shape_names = shape_names,
+  x = c(1:7, 1:6, 1:3, 5, 1:3, 6, 2:3, 1:3),
+  y = -rep(1:6, c(7, 6, 4, 4, 2, 3))
+)
+
+ggplot(shapes, aes(x, y)) +
+  geom_point(aes(shape = shape_names), fill = "red", size = 5) +
+  geom_text(aes(label = shape_names), nudge_y = -0.3, size = 3.5) +
+  scale_shape_identity() +
+  theme_void()
+```
+
+
+- A single character, to use that character as a plotting symbol.
+
+- A . to draw the smallest rectangle that is visible, usualy 1 pixel.
+
+- An NA, to draw nothing.
+
+#### Tipos de Gráficos
 
 Vamos então explorar diferentes tipos de gráficos:
 
@@ -870,11 +954,19 @@ ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
 
 #### Linha de Suavização
 
+`geom_smooth()`
+
 #### Gráficos de Linhas
+
+`geom_line()`
 
 #### Gráficos de Barras
 
-#### Gráficos de Caminha
+`geom_bar()`
+
+#### Gráficos de Caminho
+
+`geom_path()`
 
 #### Salvando os Resultados
 
