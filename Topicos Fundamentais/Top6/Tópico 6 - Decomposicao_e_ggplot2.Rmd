@@ -28,7 +28,17 @@ library(readxl)
 library(purrr)
 library(stringr)
 library(gtools)
+library(tidyr)
+library(dplyr)
 ```
+
+```{r, include=F, warning=F}
+#install.packages("rlang")
+#install.packages("gridExtra")
+library(rlang)
+library(gridExtra)
+```
+
 
 ## Objetivos do Tópico
 
@@ -291,6 +301,7 @@ $$\Delta X = X^1 - X^0 = L^1f^1 - L^0f^0$$
 deltaX <- matrizes2015$X - matrizes2010$X
 ```
 
+
 Seja $\Delta L = L^1 - L^0$ e $\Delta f = f^1 - f^0$, podemos substituir na equação acima os valores de modo:
 
 $$\Delta X = L^1 (f^0 + \Delta f) - (L^1 - \Delta L) f^0 = \Delta L f^0 + L^1(\Delta f)$$
@@ -303,6 +314,8 @@ deltaf <- matrizes2015$f - matrizes2010$f
 ```{r}
 deltaX1 <- list(deltaL %*% matrizes2010$f,
                 matrizes2015$Leontief %*% deltaf)
+
+# Usando all.equall para testar se a soma das partes de deltaX1 é igual à deltaX
 deltaX1 %>%
   reduce(`+`) %>%
 all.equal( deltaX)
@@ -326,15 +339,24 @@ all.equal(deltaX)
 Ambas as formas apresentadas agora são igualmente válidas, sendo ambas igualmente corretas.
 
 ```{r}
-all.equal(deltaX1, deltaX2)
+all.equal(reduce(deltaX1, `+`),
+          reduce(deltaX2, `+`))
 ```
 
-No entanto, é de certo modo óbvio que esperamos que $(\Delta L)f^1\neq(\Delta L) f^0$.
+No entanto, é de certo modo óbvio que esperamos que $(\Delta L)f^1\neq(\Delta L) f^0$ e que $L^1(\Delta f) \neq L^0 (\Delta f)$.
 
 ```{r}
-all.equal(deltaL %*% matrizes2010$f,
-          deltaL %*% matrizes2015$f)
+all.equal(deltaX1,
+          deltaX2)
 ```
+
+Podemos ver que a diferença de um é compensada na do outro:
+```{r}
+map2_dbl(deltaX1, deltaX2, ~sum(.y) - sum(.x))
+```
+
+
+
 
 Dietzenbacher e Los (1998), mostram que ao tirarmos os valores médios das adições aditivas temos um resultado aceitável:
 
@@ -349,7 +371,57 @@ deltaX3 %>%
 all.equal(deltaX)
 ```
 
+
+
 Na equação acima, temos que a parcela $(1/2) \Delta L (f^0 + f^1)$ é referente à mudança tecnológica enquanto $(1/2) (L^0 + L^1) \Delta f$ é referente à mudanças na demanda final.
+
+Graficamente podemos ver que:
+
+```{r plotDeltaX, echo=F}
+library(ggplot2)
+library(rlang)
+library(gridExtra)
+#library(magrittr)
+
+DLf0 <-   expression(Delta * L * f^{0})
+DLf1 <-  expression(Delta * L * f^{1})
+DLf01 <- expression( (1/2) * Delta * (f^{0} + f^{1}))
+
+plotdeltaX_L <- data.frame("delta1" = sum(deltaX1[[1]]),
+           "delta2" = sum(deltaX2[[1]]),
+           "delta3" = sum(deltaX3[[1]]))  %>%
+  pivot_longer(cols = starts_with("delta"),
+               names_to = "Decomposição")  %>%
+  ggplot(aes(x = Decomposição, y = value)) +
+    geom_bar(stat = "identity", fill = c("blue", "green", "red")) +
+  scale_x_discrete(labels = c("delta1" = DLf0,
+                              "delta2" = DLf1,
+                              "delta3" = DLf01)) +
+  ggtitle("Contribuição de \u0394L para a \u0394 x") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
+L1Df <-   expression(L^{1} * Delta *f)
+L0Df <-  expression(L^{0} * Delta *f)
+L01Df <- expression( (1/2) * (L^{0} + L^{1}) * Delta * f)
+
+plotdeltaX_f <- data.frame("delta1" = sum(deltaX1[[2]]),
+           "delta2" = sum(deltaX2[[2]]),
+           "delta3" = sum(deltaX3[[2]]))  %>%
+  pivot_longer(cols = starts_with("delta"),
+               names_to = "Decomposição")  %>%
+  ggplot(aes(x = Decomposição, y = value)) +
+    geom_bar(stat = "identity", fill = c("blue", "green", "red")) +
+  scale_x_discrete(labels = c("delta1" = L1Df,
+                              "delta2" = L0Df,
+                              "delta3" = L01Df)) +
+  ggtitle("Contribuição de \u0394f para a \u0394 x") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y = element_blank())
+
+grid.arrange(plotdeltaX_L, plotdeltaX_f, ncol =2)
+```
+
 
 ### Decomposições aditivas com mais de 2 variáveis
 
@@ -560,12 +632,34 @@ deltaPsiMedia <- list(deltaPsi123, deltaPsi132, deltaPsi213,
      deltaPsi312, deltaPsi231, deltaPsi321) %>%
   transpose %>%
   map_df(~ reduce(.x, `+`)/6) %>%
-  setNames(c("lambda", "L", "f"))
-
-deltaPsiMedia
+  setNames(c("lambda", "L", "f")) %>%
+  data.frame("Setores" = rownames(deltaL),
+                            .)
 ```
 
-Essa porém, não é a única forma em que se pode tirar a média na decomposição de $\Delta \Psi$, veja Dietzenbacher e Los (1998) para uma discussão extensa sobre esse tema.
+```{r plotDeltaPsi, echo = FALSE}
+library(ggplot2)
+library(tidyr)
+
+plotdeltaPsiMedia <- deltaPsiMedia %>%
+  setNames(c("Setores", "\U03BB", "L", "f"))
+plotdeltaPsiMedia$Setores <- as.character(c(1:12))
+plotdeltaPsiMedia$Setores <- factor(plotdeltaPsiMedia$Setores,
+                                    levels = as.character(c(1:12)))
+plotdeltaPsiMedia <- plotdeltaPsiMedia %>%
+  pivot_longer(-Setores, 
+               names_to = "Variavel") %>% 
+  ggplot(aes(y = value, x = Setores, fill = Variavel)) +
+  geom_col(position = "stack") + 
+  ggtitle("Decomposição do nível de emprego de cada setor") +
+  theme(axis.title.y = element_blank())
+
+plotdeltaPsiMedia  
+```
+
+Os números no eixo horizontal são a ordem do setor nas colunas de nomes. Basta fazer `rownames(DeltaX)`para saber qual é a qual.
+
+Deve-se atentar que a média aritimética não é a única forma em que se pode tirar a média na decomposição de $\Delta \Psi$. Veja Dietzenbacher e Los (1998) para uma discussão extensa sobre esse tema.
 
 ### Decomposições Multiplicativas
 
