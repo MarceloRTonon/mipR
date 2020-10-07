@@ -4,7 +4,7 @@ author: "Marcelo Tonon e Felipe Cornelio"
 date: "29/09/2020"
 output: html_document
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -1039,7 +1039,7 @@ PsiDF <- tibble::tibble("y2010" = matrizes2010$Psi,
 ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
 ```
 
-Era de se esperar uma correlação positiva e próxima de uma reta com inclunação de 45 graus, dado que os multiplicadores refletem informações estruturais que demoram mais tempo para apresentarem mudanças significativas. Vamos agora fazer outro exercício, que é comparar o multiplicador do emprego com o do VA e o dos Salários. Antes disso é necessário criar 
+Era de se esperar uma correlação positiva e próxima de uma reta com inclunação de 45 graus, dado que os multiplicadores refletem informações estruturais que demoram mais tempo para apresentarem mudanças significativas. Vamos agora fazer outro exercício, que é comparar o multiplicador do emprego com o do VA e o dos Salários. Antes disso é necessário criar ps multiplicadores do VA e W, com uam definição semelhante à que foi usada para o emprego:
 
 ```{r, eval=F, include=F}
 VADF <- tibble::tibble("y2010" = matrizes2010$Psi,
