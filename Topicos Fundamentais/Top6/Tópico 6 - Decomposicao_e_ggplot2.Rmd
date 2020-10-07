@@ -1083,6 +1083,7 @@ comparar os multiplicadores do emprego em 2010 e 2015.
 
 #### Salvando os Resultados
 
+
 ## Agradecimentos
 
 Os autores agradecem [João Pedro Oliveira](https://github.com/kimjoaoun) por amavelmente ceder a imagem feita por ele e [Pedro Cavalcante](https://github.com/pedrocava).
