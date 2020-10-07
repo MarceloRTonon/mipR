@@ -998,7 +998,7 @@ ggplot(shapes, aes(x, y)) +
   theme_void()
 ```
 
-- The name of the shape:
+- Usando o nome do tipo de ponto que você deseja, conforme a figura abaixo também extraído da vignette do aesthetics:
 
 ```{r, echo=F}
 shape_names <- c(
@@ -1024,19 +1024,21 @@ ggplot(shapes, aes(x, y)) +
 ```
 
 
-- A single character, to use that character as a plotting symbol.
+- Algum caracter para usá-lo como o símbolo no plot.
 
-- A . to draw the smallest rectangle that is visible, usualy 1 pixel.
+- Um `.` para o menor retângulo que é visível, em geral equivalente a 1 pixel.
 
-- An NA, to draw nothing.
+- Por fim, `NA` para não ter nenhum símbolo.
 
 #### Tipos de Gráficos
 
-Vamos então explorar diferentes tipos de gráficos:
+Vamos então explorar diferentes tipos de gráficos. Destacamos que o maior foco está nos gráficos de pontos e de colunas, dada suas relevâncias na análise de insumo-produto. No entanto, na literatura econômica gráficos de linha também são muito comuns, e também podem ser usados na análise insumo-produto caso, por exemplo, você tenha séries de tempo mais longo (como, por exemplo, as tabelas de recursos e usos, ou até mesmo as estimativas de matrizes de insumo-produto anuais).
 
 #### Gráficos de Pontos
 
-Um gráfico muito usado no pacote `ggplot2` é o `geom_poit()`. Ele permite
+Um gráfico muito usado no pacote `ggplot2` é o `geom_point()`. Ele permite apresentar as relações entre duas variáveis (que estão no eixo x e y) com as observações sendo pontos no gráfico. Isso é particulamente útil para avaliar se os dados estão concentrados em alguma parte do quadrante, se apresenta alguma tendência, etc.
+
+Vamos, por exemplo, ver a relação entre os multiplicadores entre os anos 2010 e 2015: primeiro o do emprego e depois do valor adicionado
 
 ```{r}
 PsiDF <- tibble::tibble("y2010" = matrizes2010$Psi,
@@ -1046,15 +1048,83 @@ ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
 ```
 
 ```{r, eval=F, include=F}
-Gráfico comparando multiplicadores do emprego e do va
+VADF <- tibble::tibble("y2010" = matrizes2010$Psi,
+                        "y2015" = matrizes2015$Psi)
+
+ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
 ```
 
 
-#### Gráficos de Barras
+#### Gráficos de Colunas
 
-`geom_bar()`
+Este é decerto o principal gráfico para análises de decomposição, tendo em vista que é a melhor forma de se avaliar contribuições para um total. Inclusive, os gráficos já visualizados anteriormente (e que serão replicados aqui de forma simplificada) são gráficos de colunas e gerados por `geom_col`.
 
 Usar o exemplo do deltax3.
+```{r plotDeltaPsi}
+
+plotdeltaPsiMedia <- deltaPsiMedia %>%
+  setNames(c("Setores", "\U03BB", "L", "f"))
+plotdeltaPsiMedia$Setores <- as.character(c(1:12))
+plotdeltaPsiMedia$Setores <- factor(plotdeltaPsiMedia$Setores,
+                                    levels = as.character(c(1:12)))
+plotdeltaPsiMedia <- plotdeltaPsiMedia %>%
+  pivot_longer(-Setores, 
+               names_to = "Variavel") %>% 
+  ggplot(aes(y = value, x = Setores, fill = Variavel)) +
+  geom_col(position = "stack") + 
+  ggtitle("Decomposição do nível de emprego de cada setor") +
+  theme(axis.title.y = element_blank())
+
+plotdeltaPsiMedia  
+```
+
+
+
+```{r plotDeltaX}
+library(ggplot2)
+library(rlang)
+library(gridExtra)
+#library(magrittr)
+
+DLf0 <-   expression(Delta * L * f^{0})
+DLf1 <-  expression(Delta * L * f^{1})
+DLf01 <- expression( (1/2) * Delta * (f^{0} + f^{1}))
+
+plotdeltaX_L <- data.frame("delta1" = sum(deltaX1[[1]]),
+           "delta2" = sum(deltaX2[[1]]),
+           "delta3" = sum(deltaX3[[1]]))  %>%
+  pivot_longer(cols = starts_with("delta"),
+               names_to = "Decomposição")  %>%
+  ggplot(aes(x = Decomposição, y = value)) +
+    geom_bar(stat = "identity", fill = c("blue", "green", "red")) +
+  scale_x_discrete(labels = c("delta1" = DLf0,
+                              "delta2" = DLf1,
+                              "delta3" = DLf01)) +
+  ggtitle("Contribuição de \u0394L para a \u0394 x") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
+L1Df <-   expression(L^{1} * Delta *f)
+L0Df <-  expression(L^{0} * Delta *f)
+L01Df <- expression( (1/2) * (L^{0} + L^{1}) * Delta * f)
+
+plotdeltaX_f <- data.frame("delta1" = sum(deltaX1[[2]]),
+           "delta2" = sum(deltaX2[[2]]),
+           "delta3" = sum(deltaX3[[2]]))  %>%
+  pivot_longer(cols = starts_with("delta"),
+               names_to = "Decomposição")  %>%
+  ggplot(aes(x = Decomposição, y = value)) +
+    geom_bar(stat = "identity", fill = c("blue", "green", "red")) +
+  scale_x_discrete(labels = c("delta1" = L1Df,
+                              "delta2" = L0Df,
+                              "delta3" = L01Df)) +
+  ggtitle("Contribuição de \u0394f para a \u0394 x") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y = element_blank())
+
+grid.arrange(plotdeltaX_L, plotdeltaX_f, ncol =2)
+```
+
 
 
 #### Gráficos de Linhas
@@ -1081,8 +1151,30 @@ comparar os multiplicadores do emprego em 2010 e 2015.
 
 `geom_smooth()`
 
-#### Salvando os Resultados
+#### Guardando e Salvando os Resultados
 
+Assim como uma base de dados, você pode guardar um gráfico em um objeto e visualiza-lo depois. Para isso basta realizar o mesmo procedimento indicando qual será o nome do objeto que receberá o gráfico:
+
+```{r, eval=F}
+objeto <- ggpplot(base)+
+          geom_?()+
+          aes(x,y)
+```
+
+No entanto, não é possível visualizar o gráfico somente colocando o nome do objeto no console, mas fazendo também uso da função `print()`:
+
+```{r, eval=F}
+print(objeto)
+```
+
+Agora que já aprendemos algumas possibilidades para a criação de gráficos no `ggplot2`, o passo final é você salvar seus gráficos, caso queiram tranferi-los para alguma outra plataforma (por exemplo, colocar no seu artigo ou algum trabalho de conclusão). A função responsável por isso é a `ggsave()`, que é da forma:
+
+```{r, eval=F}
+# Salvando um arquivo png
+ggsave("gráfico.png", gráfico, width = ?, height = ?)
+```
+
+Perceba que para salvar um gráfico a criação de um objeto para o gráfico é particulamente útil pois, caso contrário, seria necessário replicar todo o código que gerou o gráfico dentro da função `ggsave()`. Como forma de minimizar erros e deixar o código mais limpo, é sempre interessante criar objetos para os gráficos que você for salvar ao final. Mas, obviamente, caso não for salvá-lo ao final é melhor evitar encher seu `environment` com arquivos indesejados.
 
 ## Agradecimentos
 
