@@ -850,13 +850,13 @@ Para escolher a cor das bordas, do preenchimento, ou ambas, existem algumas opç
 
 Os tipos de linhas são configurados pela opção `linetype=`, que podem ser um número inteiro ou um nome na seguinte lista:
 
-0 = vazio, 1 = sólido, 2 = tracejado, 3 = pontilhado, 4 = ponto e traço, 5 = tracejado longo, 6 = tracejado curto e longo
+0 = blank, 1 = solid, 2 = dashed, 3 = dotted, 4 = dotdash, 5 = longdash, 6 = twodash
 
 Esses tipos de linha podem  ser visualizados tal como figura inspirada na vignette do aesthetics:
 
 
 ```{r, echo=F}
-lty <- c("sólido", "tracejado", "pontilhado", "ponto e traço", "tracejado longo", "tracejado curto e longo")
+lty <- c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash")
 linetypes <- data.frame(
   y = seq_along(lty),
   lty = lty
@@ -887,9 +887,9 @@ ggplot(linetypes, aes(0, y)) +
 
 #### Ponto
 
-Shapes take five types of values:
+Para definir o tipo de ponto escolhido usamos a opção `shape=`, que recebe 5 tipos de comandos diferentes:
 
-- An integer in [0,25]:
+- Primeiramente pode ser um número inteiro no intervalo [0,25] com o resultado dos 25 primeiros (exceto o último, dado que o zero está contido):
 ```{r, echo=F}
 shapes <- data.frame(
   shape = c(0:19, 22, 21, 24, 23, 20),
@@ -951,22 +951,41 @@ PsiDF <- tibble::tibble("y2010" = matrizes2010$Psi,
 ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
 ```
 
+```{r, eval=F, include=F}
+Gráfico comparando multiplicadores do emprego e do va
+```
 
-#### Linha de Suavização
-
-`geom_smooth()`
-
-#### Gráficos de Linhas
-
-`geom_line()`
 
 #### Gráficos de Barras
 
 `geom_bar()`
 
+Usar o exemplo do deltax3.
+
+
+#### Gráficos de Linhas
+
+`geom_line()`
+
+```{r coment, eval=F}
+Buscar exemplo de alguma série temporal
+
+possivelmente taxa de crescimento do pib e de outro componente (taxa de investimento)
+```
+
+
 #### Gráficos de Caminho
 
 `geom_path()`
+
+```{r, eval=F}
+comparar os multiplicadores do emprego em 2010 e 2015.
+```
+
+
+#### Linha de Suavização
+
+`geom_smooth()`
 
 #### Salvando os Resultados
 
