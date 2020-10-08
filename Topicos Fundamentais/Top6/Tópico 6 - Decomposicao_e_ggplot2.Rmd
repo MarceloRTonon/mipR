@@ -1,7 +1,7 @@
 ---
 title: "Tópico 6 - Visualizando resultados de Decomposições Estruturais no ggplot2"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "29/09/2020"
+date: "07/10/2020"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -418,56 +418,6 @@ plotdeltaX_f <- data.frame("delta1" = sum(deltaX1[[2]]),
 grid.arrange(plotdeltaX_L, plotdeltaX_f, ncol =2)
 ```
 
-
-
-Na equação acima, temos que a parcela $(1/2) \Delta L (f^0 + f^1)$ é referente à mudança tecnológica enquanto $(1/2) (L^0 + L^1) \Delta f$ é referente à mudanças na demanda final.
-
-Graficamente podemos ver que:
-
-```{r plotDeltaX, echo=F}
-library(ggplot2)
-library(rlang)
-library(gridExtra)
-#library(magrittr)
-
-DLf0 <-   expression(Delta * L * f^{0})
-DLf1 <-  expression(Delta * L * f^{1})
-DLf01 <- expression( (1/2) * Delta * (f^{0} + f^{1}))
-
-plotdeltaX_L <- data.frame("delta1" = sum(deltaX1[[1]]),
-           "delta2" = sum(deltaX2[[1]]),
-           "delta3" = sum(deltaX3[[1]]))  %>%
-  pivot_longer(cols = starts_with("delta"),
-               names_to = "Decomposição")  %>%
-  ggplot(aes(x = Decomposição, y = value)) +
-    geom_bar(stat = "identity", fill = c("blue", "green", "red")) +
-  scale_x_discrete(labels = c("delta1" = DLf0,
-                              "delta2" = DLf1,
-                              "delta3" = DLf01)) +
-  ggtitle("Contribuição de \u0394L para a \u0394 x") +
-  theme(axis.title.x = element_blank(),
-        axis.title.y = element_blank())
-
-L1Df <-   expression(L^{1} * Delta *f)
-L0Df <-  expression(L^{0} * Delta *f)
-L01Df <- expression( (1/2) * (L^{0} + L^{1}) * Delta * f)
-
-plotdeltaX_f <- data.frame("delta1" = sum(deltaX1[[2]]),
-           "delta2" = sum(deltaX2[[2]]),
-           "delta3" = sum(deltaX3[[2]]))  %>%
-  pivot_longer(cols = starts_with("delta"),
-               names_to = "Decomposição")  %>%
-  ggplot(aes(x = Decomposição, y = value)) +
-    geom_bar(stat = "identity", fill = c("blue", "green", "red")) +
-  scale_x_discrete(labels = c("delta1" = L1Df,
-                              "delta2" = L0Df,
-                              "delta3" = L01Df)) +
-  ggtitle("Contribuição de \u0394f para a \u0394 x") +
-  theme(axis.title.x=element_blank(),
-        axis.title.y = element_blank())
-
-grid.arrange(plotdeltaX_L, plotdeltaX_f, ncol =2)
-```
 
 ### Decomposições aditivas com mais de 2 variáveis
 
@@ -950,7 +900,7 @@ Podemos então substituir $\Delta A_n = \Delta A_{n1} + \Delta A_{n2}$ em $\Delt
 
 ## ggplot2
 
-Vamos agora aproveitar os dados elavorados para a decomposição e visualizá-los aplicando o pacote `ggplot2`. Trata-se de um pacote com várias possibilidades de configurações, de forma que será impossível explorar todo o pacote, mas ao menos as principais configurações possíveis.
+Vamos agora aproveitar os dados elaborados para a decomposição e visualizá-los aplicando o pacote `ggplot2`. Trata-se de um pacote com várias possibilidades de configurações, de forma que será impossível explorar todo o pacote, mas ao menos as principais configurações possíveis.
 
 ### Como criar gráficos no ggplot2
 
@@ -958,9 +908,6 @@ A ideia central é formar os gráficos por camadas, adicionando elementos sequen
 
 -   **geom\_(?)**: aqui você vai indicar a forma que seu gráfico terá, modificando o final da função com, por exemplo, "point", "line", "bar", entre outros.
 -   **aes(x,y)**: representam a estética dos gráficos (aesthetics) onde se inclui os elementos que formarão os nossos eixos e também possíveis outros elementos estéticos (cores, tamanhos, traços, etc) .
-
-- **geom_(?)**: aqui você vai indicar a forma que seu gráfico terá, modificando o final da função com, por exemplo, "point", "line", "bar", entre outros.
-- **aes(x,y)**: representam a estética dos gráficos (aesthetics) onde se inclui os elementos que formarão os nossos eixos e também possíveis outros elementos estéticos (cores, tamanhos, traços, etc) .
 
 A figura abaixo traz uma representação de como se estrutura um gráfico pelo ggplot:
 
@@ -971,7 +918,8 @@ No console do R, qualquer representação gráfica no ggplot2 é formada por, pe
 ```{r, eval=F}
 
 ggplot(dados))+
-aes(x = valores eixo x, y = valores do eixo y, outros elementos)
+aes(x = valores eixo x, y = valores do eixo y, outros elementos)+
+geom_tipografico()  
 
 ```
 
@@ -983,12 +931,6 @@ Diversos aspectos podem ser modificados, podemos definir a cor dos pontos, das l
 
 Para escolher a cor das bordas, do preenchimento, ou ambas, existem algumas opções a serem inseridos na opção `colour=`:
 
-
--   Pode ser através do **nome** da cor, tal como "red", "blue", etc. Lembrando que a lista de cores possíveis pode ser obtida por `colours()`.
-
--   Pode ser uma especificação RGB (red, green and blue) por meio de uma string da forma "\#RRGGBB", com cada par representando a escala de cada cor.
-
--   Para deixar sem cor (transparente), usar o `NA`.
 - Pode ser através do __nome__ da cor, tal como "red", "blue", etc. Lembrando que a lista de cores possíveis pode ser obtida por `colours()`.
 
 - Pode ser uma especificação RGB (red, green and blue) por meio de uma string da forma "#RRGGBB", com cada par representando a escala de cada cor. 
@@ -1112,7 +1054,7 @@ Vamos então explorar diferentes tipos de gráficos:
 
 Um gráfico muito usado no pacote `ggplot2` é o `geom_point()`. Ele permite apresentar as relações entre duas variáveis (que estão no eixo x e y) com as observações sendo pontos no gráfico. Isso é particulamente útil para avaliar se os dados estão concentrados em alguma parte do quadrante, se apresenta alguma tendência, etc.
 
-Vamos, por exemplo, ver a relação entre os multiplicadores entre os anos 2010 e 2015 da variável emprego já apresentada anteriormente.
+Vamos, por exemplo, ver a relação entre os anos 2010 e 2015 da variável emprego já apresentada anteriormente.
 
 ```{r}
 PsiDF <- tibble::tibble("y2010" = matrizes2010$Psi,
@@ -1121,50 +1063,40 @@ PsiDF <- tibble::tibble("y2010" = matrizes2010$Psi,
 ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
 ```
 
-Era de se esperar uma correlação positiva e próxima de uma reta com inclunação de 45 graus, dado que os multiplicadores refletem informações estruturais que demoram mais tempo para apresentarem mudanças significativas. Vamos agora fazer outro exercício, que é comparar o multiplicador do emprego com o do VA e o dos Salários. Antes disso é necessário criar ps multiplicadores do VA e W, com uam definição semelhante à que foi usada para o emprego:
+Era de se esperar uma correlação positiva e próxima de uma reta com inclinação de 45 graus, dado que o perfil de emprego refletem informações estruturais que demoram mais tempo para apresentarem mudanças significativas. Vamos agora fazer outro exercício, que é comparar, para o ano de 2015, a quantidade emprego com o VA e o os Salários. Somente lembrando que essas variáveis estão nos dados da TRU.
 
-```{r, eval=F, include=F}
-VADF <- tibble::tibble("y2010" = matrizes2010$Psi,
-                        "y2015" = matrizes2015$Psi)
+A relação entre VA e Emprego:
 
-ggplot(PsiDF, aes(y2010, y2015)) + geom_point()
+```{r}
+PsiVA <- tibble::tibble("Emprego" = matrizes2015$Psi,
+                        "VA" = t(tab2_2015$valorAd))
+
+ggplot(PsiVA, aes(VA, Emprego)) + geom_point()
 ```
 
+E entre o Salário e o Emprego:
 
+```{r}
+PsiW <- tibble::tibble("Emprego" = matrizes2015$Psi,
+                        "W" = t(tab2_2015$W))
+
+ggplot(PsiW, aes(W, Emprego)) + geom_point()
+```
+
+Perceba que apesar de ainda parecer ter uma correlação positiva, ela já não é mais tão clara. Um dos principais usos desse tipo de gráfico é a apresentação inicial de uma relação que será explorada ao longo de um trabalho, tendo já visualizar alguma relação clara entre as variáveis.
 
 #### Gráficos de Colunas
 
 Este é decerto o principal gráfico para análises de decomposição, tendo em vista que é a melhor forma de se avaliar contribuições para um total. Inclusive, os gráficos já visualizados anteriormente (e que serão replicados aqui de forma simplificada) são gráficos de colunas e gerados por `geom_col`.
 
-Usar o exemplo do `deltax3`.
-
-```{r plotDeltaPsi2}
-
-plotdeltaPsiMedia <- deltaPsiMedia %>%
-  setNames(c("Setores", "\U03BB", "L", "f"))
-plotdeltaPsiMedia$Setores <- as.character(c(1:12))
-plotdeltaPsiMedia$Setores <- factor(plotdeltaPsiMedia$Setores,
-                                    levels = as.character(c(1:12)))
-plotdeltaPsiMedia <- plotdeltaPsiMedia %>%
-  pivot_longer(-Setores, 
-               names_to = "Variavel") %>% 
-  ggplot(aes(y = value, x = Setores, fill = Variavel)) +
-  geom_col(position = "stack") + 
-  ggtitle("Decomposição do nível de emprego de cada setor") +
-  theme(axis.title.y = element_blank())
-
-plotdeltaPsiMedia  
-```
+Agora explorando um dos outros gráficos criados. No exemplo original apresentamos dois gráficos lado a lado, mas para focalizar no ggplot2 não iremos explorar esse recurso, que advém do pacote `gridExtra` e a função `gridArrange()`. 
 
 ```{r plotDeltaX2}
-library(ggplot2)
-library(rlang)
-library(gridExtra)
-#library(magrittr)
-
+# Essa primeira parte é para colocar fórmulas matemáticas no título e não será explorada aqui
 DLf0 <-   expression(Delta * L * f^{0})
 DLf1 <-  expression(Delta * L * f^{1})
 DLf01 <- expression( (1/2) * Delta * (f^{0} + f^{1}))
+
 
 plotdeltaX_L <- data.frame("delta1" = sum(deltaX1[[1]]),
            "delta2" = sum(deltaX2[[1]]),
@@ -1180,48 +1112,74 @@ plotdeltaX_L <- data.frame("delta1" = sum(deltaX1[[1]]),
   theme(axis.title.x = element_blank(),
         axis.title.y = element_blank())
 
-L1Df <-   expression(L^{1} * Delta *f)
-L0Df <-  expression(L^{0} * Delta *f)
-L01Df <- expression( (1/2) * (L^{0} + L^{1}) * Delta * f)
-
-plotdeltaX_f <- data.frame("delta1" = sum(deltaX1[[2]]),
-           "delta2" = sum(deltaX2[[2]]),
-           "delta3" = sum(deltaX3[[2]]))  %>%
-  pivot_longer(cols = starts_with("delta"),
-               names_to = "Decomposição")  %>%
-  ggplot(aes(x = Decomposição, y = value)) +
-    geom_bar(stat = "identity", fill = c("blue", "green", "red")) +
-  scale_x_discrete(labels = c("delta1" = L1Df,
-                              "delta2" = L0Df,
-                              "delta3" = L01Df)) +
-  ggtitle("Contribuição de \u0394f para a \u0394 x") +
-  theme(axis.title.x=element_blank(),
-        axis.title.y = element_blank())
-
-grid.arrange(plotdeltaX_L, plotdeltaX_f, ncol =2)
+plotdeltaX_L
 ```
+
+
+O segundo exemplo é o gráfico da decomposição do emprego em três componentes, inserindo comentários ao longo do código indicando a tarefa que está sendo realizada para obter o gráfico.
+
+```{r plotDeltaPsi2}
+
+# Criação dos dados
+plotdeltaPsiMedia <- deltaPsiMedia %>%
+  setNames(c("Setores", "\U03BB", "L", "f"))
+plotdeltaPsiMedia$Setores <- as.character(c(1:12))
+# Para que os setores não sejam ordenados pelo primeiro elemento do character (que ficaria 1, 10, 11, etc)
+plotdeltaPsiMedia$Setores <- factor(plotdeltaPsiMedia$Setores,
+                                    levels = as.character(c(1:12)))
+
+# Gerando o gráfico
+plotdeltaPsiMedia <- plotdeltaPsiMedia %>%
+  pivot_longer(-Setores, 
+               names_to = "Variavel") %>% 
+  ggplot(aes(y = value, x = Setores, fill = Variavel)) +
+  geom_col(position = "stack") + #Essa opção é para empilhar as
+  ggtitle("Decomposição do nível de emprego de cada setor") + # Inserindo o título do gráfico
+  theme(axis.title.y = element_blank()) # eliminando o título do eixo y
+
+plotdeltaPsiMedia  
+```
+
 
 #### Gráficos de Linhas
 
-`geom_line()`
+Este é um dos gráficos mais utilizados na economia, principalmente para representar séries temporais. Como já citado, a análise de insumo-produto, em geral, não trabalhamm com séries muito longas. Iremos aqui usar uma base de dados nativa do R para representar esse tipo de gráfico, que é a `economics` com dados da economia estadunidense. Este exemplo é semelhante ao realizado em Wickham, Navarro e Pedersen (2016). Para criar gráficos de linha usamos a função `geom_line()`, tal como será apresentada a série de desempregados nos Estados Unidos:
 
-```{r coment, eval=F}
-Buscar exemplo de alguma série temporal
-
-possivelmente taxa de crescimento do pib e de outro componente (taxa de investimento)
+```{r}
+ggplot(economics)+
+  aes(date,unemploy)+
+  geom_line()
 ```
 
-#### Gráficos de Caminho
+Lembrando que no caso de uma série temporal, o eixo x deverá ser sempre o índice com a frequência temporal da sua série.
 
-`geom_path()`
+Podemos também criar um gráfico com mais de uma série e estabelecer diferentes cores, tipos de linha, etc. Vamos usar um dado que já consta na base de dados economics, a taxa de poupança (psavert) e criar a taxa de desemprego (unemploy/pop):
 
-```{r, eval=F}
-comparar os multiplicadores do emprego em 2010 e 2015.
+```{r}
+economics$tx_desemp <- 100*economics$unemploy/economics$pop
 ```
 
-#### Linha de Suavização
+As séries podem ser inseridas sequencialmente, tal como o exemplo a seguir:
+```{r}
+ggplot(economics)+
+  geom_line(aes(date, tx_desemp), color="red")+
+  geom_line(aes(date, psavert), color="blue")+
+  labs(x='tempo',y='percentual')
+```
 
-`geom_smooth()`
+
+Ainda seguindo o exemplo do "ggplot2: Elegant Graphics for Data Analysis" um gráfico interessante é o de `geo_path()` que vai apresentar a sequência das observações de uma relação.
+
+```{r}
+year <- function(x) as.POSIXlt(x)$year + 1900 # Esta é uma função extrairá o valor do ano
+
+ggplot(economics)+
+  aes(psavert,unemploy)+
+  geom_path(colour= "grey")+
+  geom_point(aes(colour=year(date)))
+  
+```
+
 
 #### Guardando e Salvando os Resultados
 
@@ -1264,7 +1222,7 @@ MILLER, Ronald E.; BLAIR, Peter D. Input-output analysis: foundations and extens
 
 ### ggplot2
 
-WICKHAM, Hadley. ggplot2: elegant graphics for data analysis. springer, 2016. Acesse a versão online em: <https://ggplot2-book.org>
+WICKHAM, Hadley; NAVARRO, Danielle; and PEDERSEN, Thomas Lin. ggplot2: elegant graphics for data analysis. springer, 2016. Acesse a versão online em: <https://ggplot2-book.org>
 
 ## Confira também!
 
@@ -1281,3 +1239,5 @@ KREPSKY, Camila. Output growth and household consumption in Brazil from 2000 to 
 [How to make any plot in ggplot2?](http://r-statistics.co/ggplot2-Tutorial-With-R.html)
 
 [The R Graph Gallery](https://www.r-graph-gallery.com/)
+
+
