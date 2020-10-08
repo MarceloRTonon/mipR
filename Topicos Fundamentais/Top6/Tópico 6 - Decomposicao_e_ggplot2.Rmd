@@ -1248,9 +1248,12 @@ DE BOER, Paul. Additive structural decomposition analysis and index number theor
 
 DIETZENBACHER, Erik; LOS, Bart. Structural decomposition analyses with dependent determinants. Economic Systems Research, v. 12, n. 4, p. 497-514, 2000.
 
+KREPSKY, Camila. Output growth and household consumption in Brazil from 2000 to 2016: a structural decomposition analysis, 2019. Dissertação de Mestrado. UFRJ
+
+
 LAHR, Michael L.; DIETZENBACHER, Erik. Structural decomposition and shift-share analyses: let the parallels converge. In: Regional Research Frontiers-Vol. 2. Springer, Cham, 2017. p. 209-220.
 
-KREPSKY, Camila. Output growth and household consumption in Brazil from 2000 to 2016: a structural decomposition analysis, 2019. Dissertação de Mestrado. UFRJ
+
 
 ### ggplot2
 
