@@ -1131,7 +1131,7 @@ plotdeltaPsiMedia$Setores <- factor(plotdeltaPsiMedia$Setores,
 # Gerando o gráfico
 plotdeltaPsiMedia <- plotdeltaPsiMedia %>%
   pivot_longer(-Setores, 
-               names_to = "Variavel") %>% 
+               names_to = "Variavel") %>% # transformar a base de wider para long
   ggplot(aes(y = value, x = Setores, fill = Variavel)) +
   geom_col(position = "stack") + #Essa opção é para empilhar as
   ggtitle("Decomposição do nível de emprego de cada setor") + # Inserindo o título do gráfico
@@ -1162,11 +1162,25 @@ economics$tx_desemp <- 100*economics$unemploy/economics$pop
 As séries podem ser inseridas sequencialmente, tal como o exemplo a seguir:
 ```{r}
 ggplot(economics)+
-  geom_line(aes(date, tx_desemp), color="red")+
-  geom_line(aes(date, psavert), color="blue")+
+  geom_line(aes(date, tx_desemp), color="blue")+
+  geom_line(aes(date, psavert), color="red")+
   labs(x='tempo',y='percentual')
 ```
 
+No entanto, a melhor forma de se trabalhar no ggplot2 é com uma base longa, com os dados empilhados. Uma potencial maneira de ajustar os seus dados do formado `wide` para `long` é pela função `pivot_longer()`. No caso da base `economics` já existe essa base de forma nativa no banco de dados do R como `economics_long`, mas iremos rapidamente explicar o uso da pivot_longer:
+
+```{r}
+economics_long2 <- economics %>% select(date, tx_desemp, psavert) %>% pivot_longer(-date, names_to = "Variavel")
+```
+
+Agora gerando o mesmo gráfico
+
+```{r}
+ggplot(economics_long2)+
+  geom_line(aes(x=date, y=value, colour=Variavel))
+```
+
+Perceba que agora a configuração do gráfico, inclusive incluindo a legenda e ajustando as cores foi feita de forma automática. Essa é uma maneira de apresentar múltiplos gráficos de forma mais estruturada e automática.
 
 Ainda seguindo o exemplo do "ggplot2: Elegant Graphics for Data Analysis" um gráfico interessante é o de `geo_path()` que vai apresentar a sequência das observações de uma relação.
 
