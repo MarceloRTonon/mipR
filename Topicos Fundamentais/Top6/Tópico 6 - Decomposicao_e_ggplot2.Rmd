@@ -511,8 +511,8 @@ $$\Delta_{(---)} X = \begin{cases}
 \Delta_{(312)}\begin{cases}x_1^1 \Delta x_2 x_3^1 + x_1^1 x_2^0 \Delta x_3 + \Delta x_1 x_2^0 x_3^0 \end{cases}
 \end{cases} \\ \\
 \Delta_{(--1)}\begin{cases}
-\Delta_{(321)}\begin{cases}x_1^1 x_2^1\Delta x_3 + \Delta x_1 x_2^1 x_3^0 + x_1^0 \Delta x_2 x_3^0 \end{cases} \\
-\Delta_{(231)}\begin{cases}x_1^1 x_2^1\Delta x_3 + x_1^1 \Delta x_2 x_3^0 + \Delta x_1 x_2^0 x_3^0 \end{cases}
+\Delta_{(312)}\begin{cases}x_1^1 x_2^1\Delta x_3 + \Delta x_1 x_2^1 x_3^0 + x_1^0 \Delta x_2 x_3^0 \end{cases} \\
+\Delta_{(321)}\begin{cases}x_1^1 x_2^1\Delta x_3 + x_1^1 \Delta x_2 x_3^0 + \Delta x_1 x_2^0 x_3^0 \end{cases}
 \end{cases}
 \end{cases}
 $$
@@ -1244,7 +1244,11 @@ Outras bibliografias de artigos e sites para você acessar e aprender mais coisa
 
 ### Decomposição Estrutural
 
-Dietzenbacher, E. and B. Los (2000) Structural decomposition with dependent determinants, Economic Systems Research, 12, pp. 498-514.
+DE BOER, Paul. Additive structural decomposition analysis and index number theory: an empirical application of the Montgomery decomposition. Economic Systems Research, v. 20, n. 1, p. 97-109, 2008.
+
+DIETZENBACHER, Erik; LOS, Bart. Structural decomposition analyses with dependent determinants. Economic Systems Research, v. 12, n. 4, p. 497-514, 2000.
+
+LAHR, Michael L.; DIETZENBACHER, Erik. Structural decomposition and shift-share analyses: let the parallels converge. In: Regional Research Frontiers-Vol. 2. Springer, Cham, 2017. p. 209-220.
 
 KREPSKY, Camila. Output growth and household consumption in Brazil from 2000 to 2016: a structural decomposition analysis, 2019. Dissertação de Mestrado. UFRJ
 
