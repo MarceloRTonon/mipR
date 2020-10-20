@@ -819,7 +819,7 @@ deltaL_int2 <- matrizes2015$Leontief %*% reduce(deltaAn2, `+`) %*% matrizes2010$
 all.equal(deltaL, deltaL_int2)
 ```
 
-Se fizermos as distribuição dos valores internos aos colchetes $[]$, teremos que:
+Se fizermos as distribuições dos valores internos aos colchetes, $[]$, teremos que:
 
 $$\Delta L = \left(\tfrac{1}{2}\right)\left[L^1 \Delta D \left(B_n^0 + B_n^1 \right) L^0\right] + \left(\tfrac{1}{2}\right)\left[L^1\left(D^0 + D^1\right) \Delta B_n L^0\right]$$
 
