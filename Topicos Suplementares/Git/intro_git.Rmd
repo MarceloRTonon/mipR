@@ -11,7 +11,7 @@ knitr::opts_chunk$set(include = T, eval=F)
 
 No mundo atual, é prática comum, e recomendada, que você tenha um backup na nuvem do seu projeto atual. Parece obvio, mas muita gente acaba sendo displicente em relação a manter um backup online do seu trabalho. Assim, a melhor forma de lidar com isso, é deixar o processo de backup o mais cômodo possível. E após alguma prática, o uso do Git/Github irá te proporcionar exatamente isso!
 
-Além disso usar o Git ideal para quem mexe com códigos, uma vez que ele te permite realizar controles de alteração. Isso para projetos muito longos e/ou que você irá trabalhar em equipe. Foi pensando nisso que o Git foi concebido, por ninguém menos que Linus Torvalds, o criador do Linux!
+Além disso usar o Git ideal para quem mexe com códigos, uma vez que ele te permite realizar controles de alteração. Isso para projetos muito longos e/ou que você irá trabalhar em equipe. Foi pensando nisso que o Git foi concebido, por ninguém menos que Linus Torvalds, o criador do Linux! **Porém calma**, antes de você *Microsoftista radical* fechar essa página pensando que isso é uma coisa de Linux, saiba que vamos aqui usar o Github (mais disso no próximo parágrafo). E sabe quem comprou o Github em 2018? A Microsoft. Houve um alvoroço na época, especialmente entre os Linuxeiros mais velhos (e mais desconfiados), porém a Microsoft investiu muito no Github e hoje usar o Git é cada vez mais uma prática mesmo no mundo corporativo.
 
 O aproveitamento do Git é muito fortalecido quando usado com o Github, por se tratar do site mais popular e abrangente a oferecer o serviço Git. Assim, aqui irei usar as duas coisas juntas, porém há outras opções. Neste guia eu vou me basear muito, mas não só, no [capítulo escrito pelo Hadley Wickham](http://r-pkgs.had.co.nz/git.html). Existe uma grande infinidade de tutoriais na internet que ensinam isso.
 
@@ -25,13 +25,13 @@ Entre no [site](https://github.com/) e terá já na página inicial os campos pa
 
 Coloque seu  usuário ( _Username_), seu email e a sua senha ( _Password_). Veja que sua senha deve ter ao menos 15 caracteres ou 8 caracteres incluindo números e letras minusculas. Aí se der tudo certo, no email que você colocou lá, você vai receber uma mensagem para confirmar o cadastro. E pronto. Podemos ir para a instalação do Git! Pense num nome legal e minimamente sério para o seu usuário, pois todos os outros verão você a partir dele.
 
-Para fins de exemplo, vamos considerar aqui que o seguinte que os três são:
+Para fins de **exemplo**, vamos considerar aqui que o seguinte que os três são:
 
 **Usuário:** mipRusuario
 **Email:** mipRusuario@mip.R
 **Senha:** UmaSenhaQualquer
 
-É muito importante que você troque o desses exemplos para os seus! E dê um jeito de lembrar a sua senha!
+***É muito importante*** que você troque o desses exemplos pelos *SEUS*! E dê um jeito de lembrar a sua senha!
 
 # Instalando o Git!
 
@@ -43,7 +43,8 @@ Se você nunca usou e instalou o Git, a primeira coisa a fazer é instalar o Git
  - Debian/Ubuntu: ```sudo apt-get install git```
  - Outras distros do Linux: http://git-scm.com/download/linux
 
-Vou me basear muito na parte de instalação no material deste [site](https://www.hostinger.com.br/tutoriais/tutorial-do-git-basics-introducao/). Não vou falar da instalação de outras distros do Linux que não sejam baseadas em Debian/Ubuntu, porque se você tem uma delas você tá bem mestrado no _The SeViration_.
+
+Entrarei em mais detalhes sobre o download e instalação de cada sistema operacional nas próximas subseções. Já apontei acima os links para para que o download possa ocorrer enquanto você lê os procedimentos. Vou me basear muito na parte de instalação no material deste [site](https://www.hostinger.com.br/tutoriais/tutorial-do-git-basics-introducao/). Não vou falar da instalação de outras distros do Linux que não sejam baseadas em Debian/Ubuntu, até porque, quem usa uma que não seja estas está mais bem do que mestrado no _The SeViration_^[Vulgo, V.S. é um herói, ou uma heroína, para este que vos escreve.]. 
 
 ## No windows
 
