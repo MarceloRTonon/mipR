@@ -200,7 +200,12 @@ as.character(vetor_exemplo) # transforma o vetor em tipo character.
 
 ```
 
-É relevante dizer que nem toda coerção é possível (ou desejável). Se tentarmos coergir um vetor `character` que contenha letras num vetor `double`, teremos como resultado valores `NA`s (missing values). Desse modo, devemos tomar cuidado ao trasnformarmos um tipo de dado em outro. Por consequência, devemos também ficar atento ao tipo de dados que estaremos combinando com `c()`. Isso porque `c()` sempre irá obrigar os valores a serem de um mesmo tipo.
+É relevante dizer que nem toda coerção é possível (ou desejável). Se tentarmos coergir um vetor `character` que contenha letras num vetor `double`, teremos como resultado valores `NA`s (missing values). Desse modo, devemos tomar cuidado ao trasnformarmos um tipo de dado em outro. Por consequência, devemos também ficar atento ao tipo de dados que estaremos combinando com `c()`. Isso porque `c()` sempre irá obrigar os valores a serem de um mesmo tipo. Existem tipos mais e menos flexíveis. O tipo mais flexível pode sempre ser coergido para um tipo menos flexível, mas o contrario nem sempre é verdade. Do tipo mais flexivel para o tipo menos flexível:
+
+ - logical
+ - integer
+ - double
+ - character
 
 ## Listas
 

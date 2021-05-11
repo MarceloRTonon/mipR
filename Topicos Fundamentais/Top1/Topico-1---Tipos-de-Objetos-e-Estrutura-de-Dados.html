@@ -339,7 +339,13 @@ is.double(vetor_exemplo) #confere se o vetor é do tipo double
 # o mesmo vale para is.integer e is.logical.
 
 as.character(vetor_exemplo) # transforma o vetor em tipo character.</code></pre>
-<p>É relevante dizer que nem toda coerção é possível (ou desejável). Se tentarmos coergir um vetor <code>character</code> que contenha letras num vetor <code>double</code>, teremos como resultado valores <code>NA</code>s (missing values). Desse modo, devemos tomar cuidado ao trasnformarmos um tipo de dado em outro. Por consequência, devemos também ficar atento ao tipo de dados que estaremos combinando com <code>c()</code>. Isso porque <code>c()</code> sempre irá obrigar os valores a serem de um mesmo tipo.</p>
+<p>É relevante dizer que nem toda coerção é possível (ou desejável). Se tentarmos coergir um vetor <code>character</code> que contenha letras num vetor <code>double</code>, teremos como resultado valores <code>NA</code>s (missing values). Desse modo, devemos tomar cuidado ao trasnformarmos um tipo de dado em outro. Por consequência, devemos também ficar atento ao tipo de dados que estaremos combinando com <code>c()</code>. Isso porque <code>c()</code> sempre irá obrigar os valores a serem de um mesmo tipo. Existem tipos mais e menos flexíveis. O tipo mais flexível pode sempre ser coergido para um tipo menos flexível, mas o contrario nem sempre é verdade. Do tipo mais flexivel para o tipo menos flexível:</p>
+<ul>
+<li>logical</li>
+<li>integer</li>
+<li>double</li>
+<li>character</li>
+</ul>
 </div>
 <div id="listas" class="section level2">
 <h2>Listas</h2>
