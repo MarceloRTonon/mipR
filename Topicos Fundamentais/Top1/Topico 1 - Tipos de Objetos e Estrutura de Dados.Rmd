@@ -15,7 +15,7 @@ A lista de exercicios associada a este Tópico pressupõe a leitura das partes *
 
 ## Sua primeira vez no **R**!
 
-*Ou melhor dizendo*: no **RStudio**! Se você abrir o programa que vem escrito apenas **R**, você não irá se sentir muito convidado. Por outro lado, como já dissemos antes, o **RStudio** por ser um IDE foi feito para ser intuitivo, simples e interativo.
+*Ou melhor dizendo*: no **RStudio**! Se você abrir o programa que vem escrito apenas **R**, você não irá se sentir muito convidado. Por outro lado, como já dissemos antes, o **RStudio** por ser um IDE foi feito para ser intuitivo, simples e interativo.^[Na primeira monitoria nós também iremos apresentar o RStudio de forma melhor. Um bom video tutorial, em inglês,]
 
 Com o **RStudio** ligado, se você apertar ``ctrl + shift + n`` irá abrir um novo `R Script`, chamado "Untitled1" (ou 2 se já havia um Untitled1 aberto). O `R Script` é o arquivo que serve para escrevermos e salvarmos o nosso código. No caso do **R**, todos os arquivos com o sufixo `.R` no final são um `R Script`.
 
@@ -57,6 +57,12 @@ novo_objeto_2 <- solve(novo_objeto)
 
 # Podemos reescrever tudo isso como:
 objeto <- solve(sum(1:4))
+
+## Usando pipe
+
+objeto <- 1:4 %>%
+   sum %>%
+   solve
 
 # Descubra para o que serve a função solve() digitando ?solve no console.
 ?solve
