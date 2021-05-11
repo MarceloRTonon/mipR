@@ -44,7 +44,7 @@ teste_2 <- c_0 == c_2
 
 teste_3 <- c_0 >  c_1 # Maior (ou menor "<")
 teste_4 <- c_0 >= c_1 # Maior ou igual (ou menor ou igual "<=")
-teste_5 <- c_0 != c_1 # Testa se os valores s?o diferentes
+teste_5 <- c_0 != c_1 # Testa se os valores sao diferentes
 
 
 # Criando uma funcao no R ####

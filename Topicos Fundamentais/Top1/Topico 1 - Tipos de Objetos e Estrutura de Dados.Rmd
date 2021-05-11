@@ -74,7 +74,7 @@ objeto <- 1:4 %>%
 
 Se vamos escrever tudo na mesma linha ou em linhas diferentes fica a cargo da comodidade e praticidade. Poupar linhas faz o seu código ficar mais direto ao ponto, o que sem dúvidas é bom. Por outro lado, uma linha de comando muito longa, especialmente com o código escrito do modo *nested*, pode se tornar confusa demais. Além disso, muitas vezes podemos querer no futuro o `novo_objeto` e o `novo_objeto_2`.
 
-Uma interrogação `?` acessa os documentos de help, baixados no seu computador. Ao digitarmos duas interrogações, `??`, o *RStudio* procura via internet os documentos presentes no CRAN.  
+Uma interrogação `?` acessa os documentos de help, baixados no seu computador. Ao digitarmos duas interrogações, `??`, o *RStudio* procura via internet os documentos presentes no CRAN. Ao passo que `?solve` funciona, se tentarmos aplicar diretamente com símbolos, como `?%<-%` ou `?:`, não irá funcionar. Para tanto, basta colocar o símbolo entre aspas, como  `?"<-"` ou `?":"`.
 
 Até agora falamos muitas vezes sobre os *pacotes*, então vamos agora deixar claro o que é um pacote. O **R** e o **RStudio** que você baixou e instalou na sua casa, vem com uma serie de funções. Os pacotes nos dá funções, e também base de dados em alguns casos, adicionais criadas por outros usuários de **R**. Criar uma função nos permite realizar uma cadeia de comandos de uma vez, como podemos ver no quadro abaixo. Além disso, vamos ver como realizar as operações matemáticas básicas no **R**:
 
