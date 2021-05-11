@@ -1,32 +1,34 @@
-# Topico 1 - Vetores e Opera??es b?sicas ####
+# Topico 1 - Vetores e Operacoes basicas ####
 
 # Autores: Marcelo Tonon e Felipe Cornelio
-# Disciplina: T?picos especiais em t?cnicas insumo-produto
+# Disciplina: Topicos especiais em tecnicas insumo-produto
 # Profs: Esther Dweck e Kaio Vital.
 
-# Conceitos de Valor, Vari?vel e Fun??o
+# Conceitos de Valor, Variavel e Funcao.
 
-2 # Valor ? uma informa??o que pode ser associada ? alguma vari?vel ou fun??o
-a <- 2 # "a" ? uma vari?vel que recebe o valor "2
-b <- c(a,4) # "b" ? uma vari?vel que recebe o resultado da fun??o "c()" aplicada ? vari?vel "a" e o valor "4"
+2 # Valor e uma informacao que pode ser associada a alguma variavel ou funcao
+a <- 2 # "a" e uma variavel que recebe o valor "2"
+b <- c(a,4) # "b" e uma variavel que recebe o resultado da funcao "c()" aplicada a variavel "a" e o valor "4"
 b
 
-c <- sum(b) # "sum()" ? uma fun??o que retorna a soma de todos elementos do conjunto de dados.
+c_0 <- sum(b) # "sum()" e uma funcao que retorna a soma de todos elementos do conjunto de dados.
 ?sum
 
-# Opera??es b?sicas
+# Operacoes basicas
 
-a+c 
-a-c
-a/c
-a*c
-a^c
+a+c_0 
+a-c_0 
+a/c_0 
+a*c_0 
+a^c_0 
 
-# Pergunta: O que aconteceria se fizessemos as opera??es com "b" e n?o com "c"?
+# Pergunta: O que aconteceria se fizessemos as operacoes com "b" e nao com "c"?
 
-# Formas de se aplicar uma fun??o ####
+# Formas de se aplicar uma funcao ####
 
 # "nested" ou "Pipe"
+# Para instalar o pacote, exclua o "#" da próxima linha:
+#install.packages("purrr")
 library(purrr)
 
 # Podemos reescrever o valor de "c" nas duas formas:
@@ -34,30 +36,30 @@ library(purrr)
 c_1 <- sum(c(a,4))
 c_2 <- c(a,4) %>% sum()
 
-# Como saber se os valores s?o iguais?
-teste_1 <- c == c_1
-teste_2 <- c == c_2
+# Como saber se os valores sao iguais?
+teste_1 <- c_0 == c_1
+teste_2 <- c_0 == c_2
 
-# Da mesma forma, podemos tamb?m perguntar se os valores s?o diferentes:
+# Da mesma forma, podemos tambem perguntar se os valores sao diferentes:
 
-teste_3 <- c > c_1 # Maior (ou menor "<")
-teste_4 <- c >= c_1 # Maior ou igual (ou menor ou igual "<=")
-teste_5 <- c != c_1 # Testa se os valores s?o diferentes
+teste_3 <- c_0 >  c_1 # Maior (ou menor "<")
+teste_4 <- c_0 >= c_1 # Maior ou igual (ou menor ou igual "<=")
+teste_5 <- c_0 != c_1 # Testa se os valores s?o diferentes
 
 
-# Criando uma fun??o no R ####
+# Criando uma funcao no R ####
 
-# H? tamb?m a possibilidade de se criar uma fun??o para realizar alguma tarefa:
+# Ha tambem a possibilidade de se criar uma funcao para realizar alguma tarefa:
 
 soma <- function(x,y) {
   z <- x + y
   return(z)
 }
 
-soma(a,c)
-soma(a,c) == sum(a,c)
+soma(a,c_0)
+soma(a,c_0) == sum(a,c_0)
 
-# Nesse caso vc pode tomar a liberdade de criar alguma fun??o da forma que precisar
+# Nesse caso vc pode tomar a liberdade de criar alguma funcao da forma que precisar
 
 # Tipos de Objetos no R ####
 
@@ -65,7 +67,7 @@ soma(a,c) == sum(a,c)
 MIP <- c("Leontief", "Matriz")
 typeof(MIP)
 
-# N?meros Reais (Double)
+# Numeros Reais (Double)
 r <- c(1, 2, 3)
 typeof(r)
 
@@ -74,11 +76,11 @@ typeof(a)
 typeof(b)
 
 
-# N?meros inteiros s?o expressos com L no final
+# Numeros inteiros sao expressos com L no final
 e <- c(-1L, 1L, 2L, 3L)
 typeof(e)
 
-# resultados l?gicos indicando se dois valores s?o iguais
+# resultados logicos indicando se dois valores sao iguais
 l <- c(TRUE, FALSE, T, F) # TRUE e FALSE podem ser escritos somente por T ou F
 typeof(l)
 
@@ -86,9 +88,9 @@ Exemplo
 typeof(teste_1)
 typeof(teste_2)
 
-# Estrutura b?sica dos dados ####
+# Estrutura basica dos dados ####
 
-# Existem duas principais formas de se estruturar os dados: vetores at?micos e listas:
+# Existem duas principais formas de se estruturar os dados: vetores atomicos e listas:
 
 # Vetores
 
@@ -98,26 +100,26 @@ View(vetor_exemplo)
 # se eu quiser saber quantos elementos existem no meu vetor:
 length(vetor_exemplo)
 
-# Agora, eu desejo saber qual ? o segundo valor do meu vetor:
+# Agora, eu desejo saber qual e o segundo valor do meu vetor:
 vetor_exemplo[2] 
-# No caso o [] ? usado para indicar a posi??o dentro do vetor (ou matriz, como veremos mais a frente):
+# No caso o [] e usado para indicar a posicao dentro do vetor (ou matriz, como veremos mais a frente):
 
 # outras opera??es
-vetor_exemplo[5:8] # retorna um intervalo (cont?nuo) dentro do vetor
-vetor_exemplo[c(1,9)] # retorna o valor nas posi??es espec?ficas (o primeiro e o nono, no caso)
+vetor_exemplo[5:8] # retorna um intervalo (continuo) dentro do vetor
+vetor_exemplo[c(1,9)] # retorna o valor nas posicoes especificas (o primeiro e o nono, no caso)
 vetor_exemplo[-c(5,7:10)] # retorna todos os valores exceto os especificados
 
-# Para saber a "estrutura" dos dados, ou seja suas infos b?sicas:
+# Para saber a "estrutura" dos dados, ou seja suas infos basicas:
 str(vetor_exemplo)
 
-# Podemos tamb?m associar "nomes" aos valores do vetor:
+# Podemos tambem associar "nomes" aos valores do vetor:
 names(vetor_exemplo) <- letters[1:11]
 View(vetor_exemplo)
 
-# Ap?s inserir esse dado, vamos ver novamente a estrutura:
+# Apos inserir esse dado, vamos ver novamente a estrutura:
 str(vetor_exemplo)
 
-# Apresentar? os metadados, aqui representado pelos "nomes"
+# Apresentar os metadados, aqui representado pelos "nomes"
 attributes(vetor_exemplo)
 
 # Avaliando qual o tipo do vetor:
@@ -138,7 +140,7 @@ typeof(vetor_exemplo)
 
 # Listas
 
-# ? uma forma muito ?til de se lidar com os dados, pois ? poss?vel unir dados de diferentes tipos em um ?nico objeto:
+# E uma forma muito util de se lidar com os dados, pois e possivel unir dados de diferentes tipos em um unico objeto:
 
 lista_1 <- list("MIP", 2020, "UFRJ", TRUE)
 lista_1[2]
@@ -147,15 +149,15 @@ str(lista_1)
 vetor_1 <- c("MIP", 2020, "UFRJ", TRUE)
 str(vetor_1)
 
-# fun??o unlist() traformar? sua lista em um vetor at?mico
+# funcao unlist() traformara sua lista em um vetor atomico
 
-# Uma lista tamb?m pode ser formada recursivamente por elementos que s?o listas:
+# Uma lista tambem pode ser formada recursivamente por elementos que sao listas:
 lista_2 <- list(list(list(list(list()))),list())
 str(lista_2)
 
 # Dataframes e matrizes ####
 
-# Assim como os vetores podemos criar uma matriz no R. Nesse caso, usa-se a fun??o matrix()
+# Assim como os vetores podemos criar uma matriz no R. Nesse caso, usa-se a funcao matrix()
 ?matrix
 
 matriz_a <- matrix(data = c(1:24), nrow = 8, ncol = 3)
@@ -168,14 +170,14 @@ df_a <- data.frame(letters[1:8], c(1:8), c(9:16), c(17:24))
 # ou de forma equivalente:
 df_b <- data.frame(letters[1:8], matriz_a)
 
-# Tamb?m ? poss?vel transformar uma matriz em data.frame (e vice-versa) usando as.matrix e as.data.frame:
+# Tambem e possivel transformar uma matriz em data.frame (e vice-versa) usando as.matrix e as.data.frame:
 
 df_a_matriz <- as.matrix(df_a)
 str(df_a_matriz)
 typeof(df_a_matriz)
 
 
-# Visualizando informa??es de matrizes
+# Visualizando informacoes de matrizes
 
 head(df_a) # mostra as primeiras linhas de uma tabela
 colnames(df_a)
@@ -188,8 +190,7 @@ row.names(matriz_a)
 row.names(matriz_a) <- letters[1:8]
 row.names(matriz_a)
 # o mesmo para as colunas
-
-# Extraindo informa??es da matriz ou data.frame:
+# Extraindo informacoes da matriz ou data.frame:
 
 df_a[1,]
 df_a[,1]
@@ -197,3 +198,50 @@ df_a[,-1]
 df_a[,1:3]
 df_a[c(1,3,5),]
 df_a[2,4]
+
+#### Operações Matriciais. ===========
+
+# Temos três funcões e um operador matricial fundamentais para lidar com matrizes no R:
+
+## 1. Transposição de matriz: função t()
+
+matriz_a %>% t()
+t(matriz_a)
+
+# Para entender melhor t() vamos ver as linhas e colunas com a função dim()
+
+matriz_a %>% t() %>% dim()
+matriz_a %>% dim()
+# Lembrando que a transposta de uma transposta de uma matriz é a própria matriz.
+
+
+## 2. A função diag()
+
+# A função diag pode ter vários usos.
+
+# Criar uma matriz identidade: (se o input for apenas um escalar)
+
+diag(3)
+
+# Criar uma matriz diagonal (se o input for um vetor estritamente atômico)
+
+diag(1:3)
+
+# Extrair a diagonal principal de uma matriz (se o input for uma matriz)
+
+matrix(1:9, nrow = 3, ncol = 3) %>% diag()
+
+## 3. A multiplicação matricial com o operador %*%
+
+matriz_a %*% matrix(1:9, nrow = 3, ncol = 3) 
+
+# Se as dimensões não forem compatíveis, retornará um erro!
+matrix(1:9, nrow = 3, ncol = 3) %*% matriz_a
+
+## 4. Inversão de matrizes com a função solve
+
+matrix(1:4, nrow =2, ncol =2) %>% solve
+
+# Se a matriz for singular, e portanto não tiver inversa, irá retornar erro!
+
+matrix(1:9, nrow = 3, ncol = 3) %>% solve()
