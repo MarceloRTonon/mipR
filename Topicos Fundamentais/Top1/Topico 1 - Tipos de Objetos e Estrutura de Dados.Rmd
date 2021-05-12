@@ -1,7 +1,7 @@
 ---
 title: "Tópico 1 - Básico: Tipos de Objetos e Estruturas de Dados"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "16/06/2020"
+date: "11/05/2021"
 output: html_document
 ---
 
@@ -15,7 +15,7 @@ A lista de exercicios associada a este Tópico pressupõe a leitura das partes *
 
 ## Sua primeira vez no **R**!
 
-*Ou melhor dizendo*: no **RStudio**! Se você abrir o programa que vem escrito apenas **R**, você não irá se sentir muito convidado. Por outro lado, como já dissemos antes, o **RStudio** por ser um IDE foi feito para ser intuitivo, simples e interativo.^[Na primeira monitoria nós também iremos apresentar o RStudio de forma melhor. Um bom video tutorial, em inglês,]
+*Ou melhor dizendo*: no **RStudio**! Se você abrir o programa que vem escrito apenas **R**, você não irá se sentir muito convidado. Por outro lado, como já dissemos antes, o **RStudio** por ser um IDE foi feito para ser intuitivo, simples e interativo.^[Na primeira monitoria nós também iremos apresentar o RStudio de forma melhor.]
 
 Com o **RStudio** ligado, se você apertar ``ctrl + shift + n`` irá abrir um novo `R Script`, chamado "Untitled1" (ou 2 se já havia um Untitled1 aberto). O `R Script` é o arquivo que serve para escrevermos e salvarmos o nosso código. No caso do **R**, todos os arquivos com o sufixo `.R` no final são um `R Script`.
 
@@ -47,7 +47,7 @@ a <- 1:4 %>% c() %>% sum
 #Perceba, que podemos escrever 1,2,3,4 como 1:4
 ```
 
-O pacote `magrittr`, que estabelece o *pipe*, é automaticamente carregado por todos os pacotes que compõem  o `tidyverse`, que são pacotes que facilitam muito a sua vida. Neste curso não iremos usar o *pipe*, `%>%`, mas explicita-lo ajuda a entender como a escrita tradicional (*nested*) do R funciona. Nesta forma, nós temos do lado direito a seguinte estrutura `função_2(função_1(objeto))`, enquanto no modo *pipe* nós temos `objeto %>% função_1 %>% função_2`. Desse modo, podemos perceber que no caso do modo *nested* uma `função()` sempre irá atuar sobre o objeto que esta entre o seu parênteses. Assim sendo, num mesmo comando do script podemos escrever multiplas funções.
+O pacote `magrittr`, que estabelece o *pipe*, é automaticamente carregado por todos os pacotes que compõem  o `tidyverse`, que são pacotes que facilitam muito a sua vida. Neste curso não iremos usar o *pipe*, `%>%`, sempre que julgarmos ser mas interessente, principalmente por conta de como esta forma ajuda a entender como a escrita tradicional (*nested*) do R funciona. Nesta forma, nós temos do lado direito a seguinte estrutura `função_2(função_1(objeto))`, enquanto no modo *pipe* nós temos `objeto %>% função_1 %>% função_2`. Desse modo, podemos perceber que no caso do modo *nested* uma `função()` sempre irá atuar sobre o objeto que esta entre o seu parênteses. Assim sendo, num mesmo comando do script podemos escrever multiplas funções.
 
 ```{r eval=FALSE}
 
@@ -76,7 +76,7 @@ Se vamos escrever tudo na mesma linha ou em linhas diferentes fica a cargo da co
 
 Uma interrogação `?` acessa os documentos de help, baixados no seu computador. Ao digitarmos duas interrogações, `??`, o *RStudio* procura via internet os documentos presentes no CRAN. Ao passo que `?solve` funciona, se tentarmos aplicar diretamente com símbolos, como `?%<-%` ou `?:`, não irá funcionar. Para tanto, basta colocar o símbolo entre aspas, como  `?"<-"` ou `?":"`.
 
-Até agora falamos muitas vezes sobre os *pacotes*, então vamos agora deixar claro o que é um pacote. O **R** e o **RStudio** que você baixou e instalou na sua casa, vem com uma serie de funções. Os pacotes nos dá funções, e também base de dados em alguns casos, adicionais criadas por outros usuários de **R**. Criar uma função nos permite realizar uma cadeia de comandos de uma vez, como podemos ver no quadro abaixo. Além disso, vamos ver como realizar as operações matemáticas básicas no **R**:
+Até agora falamos muitas vezes sobre os *pacotes*, então vamos agora deixar claro o que é um pacote. O **R** e o **RStudio** que você baixou e instalou na sua casa, vem com uma série de funções. Os pacotes nos dá funções, e também base de dados em alguns casos, adicionais criadas por outros usuários de **R**. Criar uma função nos permite realizar uma cadeia de comandos de uma vez, como podemos ver no quadro abaixo. Além disso, vamos ver como realizar as operações matemáticas básicas no **R**:
 
 ```{r}
 a <- c(1,3,2,4)
@@ -148,18 +148,18 @@ Não trataremos aqui de outros dois tipos `complex` (para números complexos) an
 
 # Estrutura básica dos dados no **R**
 
-A estrutura básica de estruturar os dados no **R** são os vetores, que podem ser subdivididos em duas categorias: Vetores Atómicos e Listas. Vetores Atómicos obrigam que todos os seus elementos sejam de mesmo tipo, enquanto uma lista permite que eles possam variar. Para criar um vetor atómico usamos `c()`, enquanto para criarmos uma lista usamos `list()`. Além disso, ao contrário dos vetores atómicos, uma lista pode ser *recursiva*, ou seja podemos ter listas de listas que estão contidas em uma lista (e assim por diante).
+A estrutura básica de estruturar os dados no **R** são os vetores, que podem ser subdivididos em duas categorias: Vetores atômicos e Listas. Vetores atômicos obrigam que todos os seus elementos sejam de mesmo tipo, enquanto uma lista permite que eles possam variar. Para criar um vetor atômico usamos `c()`, enquanto para criarmos uma lista usamos `list()`. Além disso, ao contrário dos vetores atômicos, uma lista pode ser *recursiva*, ou seja podemos ter listas de listas que estão contidas em uma lista (e assim por diante).
 
-Existem 3 propriedades fundamentais que tanto listas quanto vetores atómicos possuem:
+Existem 3 propriedades fundamentais que tanto listas quanto vetores atômicos possuem:
 
 - Tipo: o que ele é e pode ser descoberto a partir de `typeof()`, como podemos ver.
 
 - Comprimento: a sua quantidade de elementos `length()`
 
-- Atributos: metadados adicionais arbitrarios `attributes()`
+- Atributos: metadados adicionais arbitrários `attributes()`
 
 
-## Vetores Atómicos
+## Vetores Atômicos
 
 Algumas funcionalidades que podemos fazer com vetores:
 
@@ -177,7 +177,7 @@ vetor_exemplo[-c(1,3)] # retorna todos os valores menos 1 e 3.
 str(vetor_exemplo) # retorna as informações básicas sobre o objeto 
 
 
-length(vetor_exemplo) # retorna a quantidade de elementos do vetor atómico
+length(vetor_exemplo) # retorna a quantidade de elementos do vetor atômico
 
 
 names(vetor_exemplo) <- letters[1:11] # names(vetor)<- associa os objetos a direita de "<-" aos nomes de cada elemento do vetor
@@ -200,7 +200,7 @@ as.character(vetor_exemplo) # transforma o vetor em tipo character.
 
 ```
 
-É relevante dizer que nem toda coerção é possível (ou desejável). Se tentarmos coergir um vetor `character` que contenha letras num vetor `double`, teremos como resultado valores `NA`s (missing values). Desse modo, devemos tomar cuidado ao trasnformarmos um tipo de dado em outro. Por consequência, devemos também ficar atento ao tipo de dados que estaremos combinando com `c()`. Isso porque `c()` sempre irá obrigar os valores a serem de um mesmo tipo. Existem tipos mais e menos flexíveis. O tipo mais flexível pode sempre ser coergido para um tipo menos flexível, mas o contrario nem sempre é verdade. Do tipo mais flexivel para o tipo menos flexível:
+É relevante dizer que nem toda coerção é possível (ou desejável). Se tentarmos coergir um vetor `character` que contenha letras num vetor `double`, teremos como resultado valores `NA`s (missing values). Desse modo, devemos tomar cuidado ao trasnformarmos um tipo de dado em outro. Por consequência, devemos também ficar atento ao tipo de dados que estaremos combinando com `c()`. Isso porque `c()` sempre irá obrigar os valores a serem de um mesmo tipo. Existem tipos mais e menos flexíveis. O tipo mais flexível pode sempre ser coergido para um tipo menos flexível, mas o contrario nem sempre é verdade. Do tipo mais flexível para o tipo menos flexível:
 
  - logical
  - integer
@@ -209,7 +209,7 @@ as.character(vetor_exemplo) # transforma o vetor em tipo character.
 
 ## Listas
 
-Ao contrario dos vetores atómicos, as listas não forçam que seus elementos sejam do mesmo tipo. Além disso, uma lista pode ser recursiva  indefinidamente. Vejamos o que isso quer dizer:
+Ao contrário dos vetores atômicos, as listas não forçam que seus elementos sejam do mesmo tipo. Além disso, uma lista pode ser recursiva  indefinidamente. Vejamos o que isso quer dizer:
 
 ```{r}
 lista_1 <- list("aaaa", 2, "ssss", 1L, TRUE)
@@ -218,7 +218,7 @@ lista_1[4] # TRUE continua como lógico.
 
 vetor_1[[4]] # TRUE se tornou character.
 
-unlist(lista_1) # Você pode tornar uma lista em um vetor atómico a partir da função unlist.
+unlist(lista_1) # Você pode tornar uma lista em um vetor atômico a partir da função unlist.
 
 # Da mesma forma, você pode usar as.list() para transformar um objeto numa lista.
 
@@ -233,7 +233,7 @@ str(lista_2)
 
 ## Dataframes e matrizes
 
-A maioria dos dados em **R** estão por sua vez salvos em tabelas da classe `data.frame`. Tabelas também podem ser da classe `matrix`. A diferença entre ambas é que `data.frame` pode conter vetores de diferentes tipos, enquanto `matrix` não. Pense em `data.frame` como uma lista de vetores e `matrix` como um vetor atómico que foi dividido em multiplas colunas. Vale notar que cada coluna de um `data.frame` é um vetor atómico, logo, os seus elementos tem que ser do mesmo tipo. Podemos criar ambos objetos usando as matrizes `data.frame()` e `matrix()`
+A maioria dos dados em **R** estão por sua vez salvos em tabelas da classe `data.frame`. Tabelas também podem ser da classe `matrix`. A diferença entre ambas é que `data.frame` pode conter vetores de diferentes tipos, enquanto `matrix` não. Pense em `data.frame` como uma lista de vetores e `matrix` como um vetor atômico que foi dividido em multiplas colunas. Vale notar que cada coluna de um `data.frame` é um vetor atômico, logo, os seus elementos tem que ser do mesmo tipo. Podemos criar ambos objetos usando as matrizes `data.frame()` e `matrix()`
 
 ```{r eval=FALSE}
 # criando uma matriz com 8 linhas e 3 colunas, a partir de um vetor double de 1:24.
@@ -256,7 +256,7 @@ as.data.frame(matrix_a)
 
 ```
 
-Cada uma das duas nos serve à um propósito. Quando estamos organizando e selecionando a base de dados a classe `data.frame` nos serve muito melhor, pois de modo geral iremos precisar de valores `character` ou `logical` no processo. Agora, durante algumas operações, `matrix` é mais conveniente, pois garante a uniformidade dos dados. Além disso, temos mais alguns comandos para ambas:
+Cada uma das duas nos serve a um propósito. Quando estamos organizando e selecionando a base de dados a classe `data.frame` nos serve muito melhor, pois de modo geral iremos precisar de valores `character` ou `logical` no processo. Agora, durante algumas operações, `matrix` é mais conveniente, pois garante a uniformidade dos dados. Além disso, temos mais alguns comandos para ambas:
 
 ```{r eval= FALSE}
 # Mostra apenas as primeiras linhas de uma tabela

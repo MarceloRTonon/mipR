@@ -1,7 +1,7 @@
 ---
-title: "Exercicios Tópico 1"
+title: "Exercícios Tópico 1"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "16/06/2020"
+date: "11/05/2021"
 output: html_document
 ---
 
@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
 
-Os exercicios aqui são voltados para a assimilação e solidificação dos conceitos que foram passados no material direcionado. É importante faze-los para que o aprendizado seja efetivo. 
+Os exercícios aqui são voltados para a assimilação e solidificação dos conceitos que foram passados no material direcionado. É importante faze-los para que o aprendizado seja efetivo. 
 
 ## Pacotes necessários para o exercicio.
 
@@ -28,7 +28,7 @@ library(matlib)
 
 Talvez você fique com dúvidas e dificuldades. É normal. Especialmente quando você está aprendendo uma coisa nova. Assim, tente seguir o roteiro abaixo para resolver suas questões:
 
-1. É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma virgula, parentêses, aspas... 
+1. É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma vírgula, parentêses, aspas... 
 
 2. Dedique um tempo tentando elaborar esse erro ou dúvida. Organizar a sua dúvida na sua cabeça, muitas vezes já resolve o problema por si só.
 
@@ -76,7 +76,7 @@ R.0.4: Vá em `Help` na barra superior e depois em `R Help`.
 
 ## 1. Se introduzindo ao help: Pedindo ajuda sem sair do R
 
-Tem dois caminhas principais para acessar a documentação do R via o `Help` no RStudio, e elas passam pela aba do Help no canto inferior direito da tela:
+Tem dois caminhos principais para acessar a documentação do R via o `Help` no RStudio, e elas passam pela aba do Help no canto inferior direito da tela:
 
 
  1. Abrindo a aba do Help e então pesquisando: Como antes você pode ir na barra superior do programa clicar em `Help` e depois `R Help`. Você vai ver que na parte direita inferior, aba foi mudada para `Help`^[Nada impede que você abra ela diretamente ou use o atalho de teclado `Ctrl + 3`]. No espaço de busca, você pode colocar o nome do que você está em dúvida.
@@ -104,7 +104,7 @@ c(..., recursive = FALSE, use.names = TRUE)
 ```
 * Nisso temos que:
     + Os três pontinhos indicam que não há limite para o número de valores sobre as quais `c()` atuará. Ou seja, você pode fazer `c(1,2,3)` ou `c(1:1000)`. Não há um limite pela linguagem nessa questão.
-    + Se você aplicar o modelo "Configurável" da forma como está escrito na Documentação, você terá o mesmo resultado que se aplicar o "Genérico", uma vez que as configurações de `c()` expressas ali são as *Default*, de modo que *neste caso* a Genérica e Configurável são a mesma coisa. Quando um argumento aparece com um `=` seguido de um valor, neste caso `TRUE` ou  `FALSE`, está indicado que aquele argumento já tem um valor Default configurado previamente.
+    + Se você aplicar o modelo "Configurável" da forma como está escrito na documentação, você terá o mesmo resultado que se aplicar o "Genérico", uma vez que as configurações de `c()` expressas ali são as *Default*, de modo que *neste caso* a Genérica e Configurável são a mesma coisa. Quando um argumento aparece com um `=` seguido de um valor, neste caso `TRUE` ou  `FALSE`, está indicado que aquele argumento já tem um valor Default configurado previamente.
     + Assim não há impossibilidade de se mudar as configurações expressas ali se assim o for desejado. Apenas que isso deve ser expressado na função.
 * ***Arguments:*** Explica quais são os argumentos da função e o que cada um deles diz respeito.
 * ***Value:*** qual é o valor retornado pelo comando.
@@ -112,7 +112,7 @@ c(..., recursive = FALSE, use.names = TRUE)
 * ***See Also:*** Coloca outros tópicos correlatos que podem ser utéis ao leitor. Às vezes você vai na documentação de uma função achando que ela poderia ser configurada de uma certa maneira, porém ela não pode.  O que está indicado no *See Also* pode te ajudar a entender porque ela não fazer o que você quer, mas também pode ser lá que você vai encontrar que pode te ajudar.
 * ***Examples:*** Mostra as diversas formas como aquele comando pode ser utilizado.
 
-Assim, muitas vezes a própria documentação do R tem em si tudo o que você precisa para tirar suas dúvidas sobre um determinado comando. A função `help()` funciona com todos os comandos do `R-base` e os pacotes que você tiver carregado na seção. Nem sempre será automático, porém algumas vezes
+Assim, muitas vezes a própria documentação do R tem tudo o que você precisa para tirar suas dúvidas sobre um determinado comando. A função `help()` funciona com todos os comandos do `R-base` e os pacotes que você tiver carregado na seção.
 
 Agora, como já foi dito no material da aula, existe uma outra forma de você acessar a Documentação do R por meio do Console, usando `?`. Veja:
 ```{r}
