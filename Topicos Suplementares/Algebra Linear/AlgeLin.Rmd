@@ -1,0 +1,283 @@
+---
+title: "Algebra Linear no R"
+author:
+  - Marcelo Tonon^[Aluno de Doutorado do PPGE-IE/UFRJ]
+  - Felipe Cornelio^[Aluno de Doutorado do PPGE-IE/UFRJ]
+    
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+options(scipen = 999, digits = 2)
+```
+
+```{r, include=FALSE}
+library(purrr)
+```
+
+
+# Aspectos Gerais
+
+Ao longo dos anos vários pacotes foram sendo criados para tratar da álgebra linear no R. Alguns foram criados para garantir uma maior performance quando se trata de bases de dados maiores, em especial aqueles baseados no pacote `RcppArmadillo`, que usa em segundo plano o pacote `Armadillo` da linguagem `C++` no uso do R. Talvez o mais relevante desses seja o pacote `Rfast`[^5]. Por outro lado, também foram criados pacotes cujo objetivo é servir de instrumento didático para o aprendizado de álgebra linear, ficando a performance em segundo plano. É o caso dos pacotes `matlib` e `matrixcalc`. Também tem o pacote `Matrix`, que auxilia em algumas questões, especialmente em relação a definição da matriz, usando muito o paradigma de orientação a objeto. Portanto, existe um variado ferramental para a aplicação de álgebra linear no R, através dos pacotes. É válido notar também que o próprio base R é relativamente eficiente para operações matriciais.
+
+[^5]: O pacote pode ser acessado no CRAN por meio do link: <https://cran.r-project.org/web/packages/Rfast/>.]
+
+Nesta seção, iremos usar o termo vetor no sentido algébrico, em que por exemplo $\mathbf{v} = (v_1, v_2, \dots , v_{n-1} v_n )$ é um vetor com $n$ elementos. Quando se referir a vetores atômicos ou no sentido mais geral, será indicado. Para criar um vetor com valores reais no R basta criar um vetor atômico do tipo `double`:
+
+```{r criar vetor}
+a <- c(1:3)
+b <- c(1.1,2.6,6.2)
+```
+
+Para realizar somas e subtrações entre dois vetores, basta usar os operadores `+` e `-`, respectivamente.
+
+```{r}
+a+b
+
+b-a
+```
+
+Importante notar que é também possível somar ou subtrair um mesmo valor a todos os valores de um vetor fazendo `a+2` ou `b-1`. Além disso, se pode usar o operador `-` para mudar o sinal dos valores do vetor, como `-b`.
+
+É possível multiplicar um vetor por um escalar[^6], como na equação \@ref(eq:escalarmult) abaixo, no R usando simplesmente o operador `*`:
+
+[^6]: Importante notar que tecnicamente não há no R uma estrutura de dados própria para escalares. Uma variável que for definida como `escalar <- 1`, é na realidade um vetor atômico de comprimento 1. O mesmo pode ser dito do caso de uma lista. Uma prova disso é ser possível realizar uma operação como `escalar[2] <- 2` por exemplo, em que alocamos mais um elemento no vetor atômico. De todo modo, sempre que usarmos aqui o termo escalar, estamos tratando de um vetor atômico de comprimento igual à 1.
+
+\begin{equation} 
+\alpha \mathbf{v} = \alpha \begin{pmatrix}  v_1\\ v_2 \\  \vdots \\ v_{n-1} \\ v_n \end{pmatrix} =\begin{pmatrix} \alpha v_1\\ \alpha v_2 \\  \vdots \\ \alpha v_{n-1} \\ \alpha v_n \end{pmatrix} (\#eq:escalarmult)
+\end{equation}
+
+```{r vetMultEsc}
+2*a
+```
+
+É também possivel dividir por um escalar, $\frac{1}{\alpha} \mathbf{v} = (\frac{1}{\alpha} v_1, \dots, \frac{1}{\alpha}v_n)$, usando o operador `/`:
+
+```{r vetDivEsc}
+a/2
+```
+
+O operador `*` quando usado em dois elementos que possuem o comprimento maior do que um, irá realizar operações célula à célula, ou seja o que chamamos de multiplicação de Hadamard, exposta pela equação \@ref(eq:hadMulVet) abaixo:
+
+\begin{equation}
+\mathbf{v} \otimes \mathbf{u} = \begin{pmatrix} v_1 \times u_1 \\ \vdots \\ v_n \times u_n \end{pmatrix}
+(\#eq:hadMulVet) \end{equation}
+
+```{r hadMulVet}
+#Multiplicação e divisão de dois vetores célula à célula
+a * b
+```
+
+O mesmo acontece para o operador `/`, que gera uma divisão de Hadamard, $\mathbf{v} \oslash \mathbf{u} = (\frac{v_1}{u_1}, \dots, \frac{v_n}{u_n})$, quando usado em dois vetores atômicos de comprimento maior do que um.
+
+```{r hadDivVet}
+a / b
+```
+
+O que permite que os operadores `+`, `-`, `*` e `/` façam tanto operações entre um vetor e um escalar e também entre dois vetores do mesmo comprimento, é que a condição para a realização da operação é que o comprimento dos dois vetores atômico deve ser múltiplo um do outro. Uma vez que todo número inteiro é múltiplo de 1 (escalar) e valores iguais são também múltiplos um do outro, isso é permitido pelo `R`. Porém, há um risco que faz com que haja alguma atenção ao usar esses operadores, pois não terá um erro retornado se realizarmos uma operação em que supomos que o comprimento dos vetores atômicos são de determinada maneira, mas não são e são múltiplos um do outro. Para deixar isso mais claro, vamos colocar o exemplo abaixo, em que o usuário erroneamente supõe que o comprimento de `falsoEscalar` é `1` quando na realidade é `2`.
+
+```{r}
+falsoEscalar <- c(0.4, 0.8)
+vetorAtom <- c(1:4)
+
+contaErrada <- falsoEscalar * vetorAtom
+
+contaErrada
+```
+
+Essa operação não é a que se quer, porém uma vez que o comprimento de `vetorAtom` é múltiplo de `falsoEscalar` ela será feita sem retornar nenhum erro, aviso ou mensagem. A detecção das consequências problema podem ser percebidas apenas muito mais a frente, e até entendermos o que gerou esse problema, pode-se demorar muito tempo. Isso pode ocorrer em qualquer um dos quatro operadores básicos listados até agora. Uma solução para evitar este problema, é transformar os vetores atômicos em `matrix`, como podemos ver abaixo:
+
+```{r, error=TRUE}
+matrix(falsoEscalar) * matrix(vetorAtom)
+```
+
+Ao retornar o erro, somos avisados que os valores não são como estavamos esperando. A operação entre duas matrizes[^7] permite apenas que os comprimentos sejam iguais ou que um deles seja um escalar. Para realizar a multiplicação entre duas matrizes é necessário na realidade usar o operador `%*%`:
+
+[^7]: O mesmo ocorre se apenas o vetor atômico de menor comprimento for transformado numa matriz. Isso porém pressupõe saber qual é o comprimento dos dois vetores o que já resolveria o problema.
+
+```{r vetoresAlgLin}
+#Soma e subtração de dois vetores de forma matricial
+a %*% b
+```
+
+Mais a frente iremos apresentar de forma mais completa as operações matriciais no R. Antes de avançar, vamos criar um alguns objetos a serem usadas como exemplo:
+
+
+```{r}
+matrizExemplo <- matrix(c(1:9), nrow =3, ncol =3)
+matrizExemplo2 <- matrix(c(1:8,8), nrow =3)
+escalar <- 1
+```
+
+
+## A função diag
+
+Se tratando da álgebra linear no R, a função `diag` merece uma atenção a mais dado que ela retorna como resultado coisas diferentes a depender do que é usado como insumo. Ela tem três produtos possíveis.
+
+O **primeiro** caso é ao utilizar a função `diag` num objeto da classe `matrix`. Neste caso, a função extrai a diagonal principal da matriz e a retorna como um vetor atômico. O processo pelo qual ela faz isso é retornando apenas os valores da matriz que o índice da coluna é igual ao da linha.
+
+```{r}
+diag(matrizExemplo)
+```
+
+O **segundo** caso é no qual ela é aplicada num vetor atômico númerico, criando uma matriz em que a diagonal principal é exatamente o vetor colocado como input da função:
+
+\begin{align} diag(v) = \hat{v} =
+\begin{pmatrix} v_{1} & 0 & \dots & 0 \\
+0 & v_{2} & \dots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \dots & v_n
+\end{pmatrix} (\#eq:diagonalmatrix) \end{align}
+
+```{r diag}
+diag(a)
+```
+
+O **terceiro** caso é quando não se fornece uma matriz ou um vetor atômico de comprimento maior do que 1, mas sim um escalar. Nesse caso a função `diag` irá retornar uma matriz identidade `I_{nxn}` com o valor de `n` sendo igual ao escalar utilizado. \begin{align}
+\hat{I} =
+\begin{pmatrix} 1 & 0 & \dots & 0 \\
+0 & 1 & \dots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \dots & 1
+\end{pmatrix} (\#eq:diagonalmatrix)
+\end{align}
+
+```{r, eval=F}
+diag(3)
+diag(escalar)
+```
+
+```{r, include=F}
+diag(3)
+```
+
+Entendendo este três casos, podemos tratar aqui rapidamente dos problemas que aparecem algumas vezes ao usar a função `diag`. O primeiro é utilizar uma matriz de uma coluna esperando que a função irá se comportar como se fosse um vetor atômico. Nesse caso, a função `diag` retornará apenas o primeiro elemento da coluna, e não uma matriz diagonal com todos os elementos da coluna. Ou seja, ao invés de se comportar como o segundo caso como se pretendia, a função `diag` se comportou como o primeiro caso, em que procurou extrair os valores da diagonal principal da matriz. Como a matriz tem apenas uma coluna, ela tem apenas um elemento que é o índice da coluna é igual ao da linha ela retornará apenas um vetor atômico de comprimento `1`.
+
+```{r}
+matrix(c(1:3), nrow = 3) %>% diag()
+```
+
+Uma forma simples de se contornar esse problema é usar a função `c()` ou mesmo uma função de coerção como `as.double` (ou qualquer outra que coaja para um tipo de dado `numeric`). Isso resolverá o problema, como podemos ver abaixo.
+
+```{r}
+matrix(c(1:3), nrow = 3) %>% as.double() %>% diag()
+```
+
+Outro problema que pode emergir é quando querendo criar uma matriz diagonal se cria uma matriz identidade. Isso ocorre quando inadvertidamente se usa um vetor atômico de comprimento igual à 1, ou seja, um escalar. Desse modo, ao invés de criar uma matriz diagonal de uma coluna e linha, se cria uma matriz identidade cujas dimensões são dadas pelo valor do escalar.
+
+```{r}
+diag(escalar)
+```
+
+Isso pode ocorrer quando se está fazendo cálculos e não se sabe qual será o comprimento do vetor atômico gerado no final. A forma de não correr este risco é atribuir aos argumentos `nrow` e `ncol` da função `diag` o comprimento do vetor atômico.
+
+```{r}
+diag(escalar, nrow = length(escalar), ncol = length(escalar))
+```
+
+É importante notar que os valores dados à função `diag` não podem ser uma lista, e consequentemente, nem um `data.frame`. Assim sendo, pode ser interessante usar a função `unlist` para uma lista que não é um `data.frame` e `as.matrix` caso seja.
+
+## Operações matriciais
+
+Dando continuidade à exposição, uma das operações mais usadas em álgebra linear é a transposição de um vetor ou matriz. No caso do R, isto é realizado por uma função simples e bem sugestiva, chamada `t()`, com único argumento sendo o próprio vetor ou matriz. Uma matriz transposta é tal que as dimensões de uma matriz $n x m$ passam a ser $m x n$ quando esta é transposta. O mesmo ocorre com vetores.
+
+```{r transpor}
+#Transpor vetor
+t(a)
+
+#Transpor matriz
+matrizExemplo %>% t()
+```
+
+Importante notar que a transposta da transposta de uma matriz é igual a matriz original, $(M')' = M$, como podemos ver abaixo:
+
+```{r transportransposta}
+all.equal(t(t(matrizExemplo)), matrizExemplo)
+```
+
+Como já falamos anteriormente, a multiplicação matricial de uma matriz no R é feita usando o operador `%*%`. Uma multiplicação de matriz convecional das matrizes $\underset{(m \times n)}{G} \times \underset{(o \times p)}{H} = \underset{(m \times p)}{J}$ necessita que $n = o$. Um exemplo disso abaixo seria:
+
+```{r}
+matrizExemplo %*% matrizExemplo2
+```
+
+O R também possui funções nativas específicas, e mais rápidas, para lidar com multiplicação matricial em que uma das matrizes está transposta.
+
+```{r TmultiMatriz}
+#Multiplicação de matrizes transpostas
+
+# t(x) %*% y
+crossprod(matrizExemplo, matrizExemplo2)
+
+# x %*% t(y)
+tcrossprod(matrizExemplo, matrizExemplo2)
+```
+
+Para realizar multiplicações ou divisões de Hadamard[^8] entre duas matrizes basta usar os operadores `*` e `\`.
+
+[^8]: Lembrando que, como dito anteriormente, são operações realizadas célula a célula e não necessariamente operações matriciais. Evidentemente que você pode fazer essas operações entre matrizes, mas não são multiplicações ou divisões matriciais.
+
+```{r Hadamard}
+#Multiplicação de Hadamard
+
+matrizExemplo * matrizExemplo2
+
+#Divisão de Hadamard
+
+matrizExemplo / matrizExemplo2
+```
+
+Duas operações matriciais que são bastante utilizadas no contexto de Insumo Produto é a soma de linhas e a de colunas das matrizes. Para tanto o R possui duas funções específicas. No caso da soma de linhas, representada, pela equação \@ref(eq:rowSums), temos a função `rowSums`:
+
+\begin{align}
+\sum_i^n v_{ij} = v i (\#eq:rowSums)
+\end{align}
+
+```{r somarlinhas}
+rowSums(matrizExemplo)
+```
+
+No caso da soma de colunas, representada pela equação \@ref(eq:colSums), é a função `colSums`:
+
+\begin{align} \sum_j^m v_{ij} = i'v (\#eq:colSums)
+\end{align}
+
+```{r somarcolunas}
+colSums(matrizExemplo)
+```
+
+Uma função que não existe no `baseR`, mas está disponível no pacote `matlib` é a função `matlib::tr`, que calcula o traço de uma matriz.[^9]
+
+[^9]: É no entanto, relativamente simples calcular o traço no base R, basta fazer `matrizExemplo %>% diag %>% sum`.
+
+```{r traco}
+library(matlib)
+matlib::tr(matrizExemplo)
+
+```
+
+Para calcular o determinante de uma matriz basta usar a função `det()`. Por sua vez, para calcular a inversa de uma matriz, usa-se a função `solve`, como podemos ver abaixo:
+
+```{r inversa}
+solve(matrizExemplo2)
+```
+
+Para conseguir os autovalores e os autovetores, podemos usar a função `eigen()` que retorna uma lista com um vetor atômico contendo os autovalores e uma matriz contendo os autovetores.
+
+```{r eigen}
+# Autovalor e autovetores de uma matriz
+matrizExemplo2 %>% eigen()
+```
+
+Outra função particulamente útil é a `minor()` que está no pacote `matlib`. Nela são calculados os determinantes de matrizes reduzidas, a partir da escolha de quais linhas e colunas serão excluídas.
+
+```{r minors}
+#Lembrando que na função minor a gente indica qual serão as linhas e colunas a serem excluídas
+matlib::minor(matrizExemplo, 3, 3)
+
+all.equal(det(matrizExemplo[1:2,1:2]),
+          matlib::minor(matrizExemplo, 3, 3))
+```
+
