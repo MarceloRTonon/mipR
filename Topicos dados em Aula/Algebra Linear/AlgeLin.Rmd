@@ -1,5 +1,6 @@
 ---
 title: "Algebra Linear no R"
+date: "14/05/2021"
 author:
   - Marcelo Tonon^[Aluno de Doutorado do PPGE-IE/UFRJ]
   - Felipe Cornelio^[Aluno de Doutorado do PPGE-IE/UFRJ]
@@ -167,12 +168,12 @@ diag(matrizExemplo)
 
 O **segundo** caso é no qual ela é aplicada num vetor atômico númerico, criando uma matriz em que a diagonal principal é exatamente o vetor colocado como input da função:
 
-\begin{align} diag(v) = \hat{v} =
+\begin{equation} diag(v) = \hat{v} =
 \begin{pmatrix} v_{1} & 0 & \dots & 0 \\
 0 & v_{2} & \dots & 0 \\
 \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & \dots & v_n
-\end{pmatrix} (\#eq:diagonalmatrix) \end{align}
+\end{pmatrix} (\#eq:diagonalmatrix) \end{equation} 
 ```{r opts.label= 'template_aula'}
 a
 ```
@@ -181,14 +182,16 @@ a
 diag(a)
 ```
 
-O **terceiro** caso é quando não se fornece uma matriz ou um vetor atômico de comprimento maior do que 1, mas sim um escalar. Nesse caso a função `diag` irá retornar uma matriz identidade `I_{nxn}` com o valor de `n` sendo igual ao escalar utilizado. \begin{align}
+O **terceiro** caso é quando não se fornece uma matriz ou um vetor atômico de comprimento maior do que 1, mas sim um escalar. Nesse caso a função `diag` irá retornar uma matriz identidade `I_{nxn}` com o valor de `n` sendo igual ao escalar utilizado. 
+
+\begin{equation}
 \hat{I} =
 \begin{pmatrix} 1 & 0 & \dots & 0 \\
 0 & 1 & \dots & 0 \\
 \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & \dots & 1
-\end{pmatrix} (\#eq:diagonalmatrix)
-\end{align}
+\end{pmatrix} (\#eq:identmatrix)
+\end{equation}
 
 ```{r}
 diag(3)
@@ -292,9 +295,9 @@ matrizExemplo / matrizExemplo2
 
 Duas operações matriciais que são bastante utilizadas no contexto de Insumo Produto é a soma de linhas e a de colunas das matrizes. Para tanto o R possui duas funções específicas. No caso da soma de linhas, representada, pela equação \@ref(eq:rowSums), temos a função `rowSums`:
 
-\begin{align}
-\sum_i^n v_{ij} = v i (\#eq:rowSums)
-\end{align}
+\begin{equation}
+\sum_i^n v_{ij} = v i  (\#eq:rowSums)
+\end{equation}
 
 ```{r opts.label= 'template_aula'}
 matrizExemplo
@@ -305,8 +308,9 @@ rowSums(matrizExemplo)
 
 No caso da soma de colunas, representada pela equação \@ref(eq:colSums), é a função `colSums`:
 
-\begin{align} \sum_j^m v_{ij} = i'v (\#eq:colSums)
-\end{align}
+\begin{equation} 
+\sum_j^m v_{ij} = i'v (\#eq:colSums)
+\end{equation}
 
 ```{r somarcolunas}
 colSums(matrizExemplo)
