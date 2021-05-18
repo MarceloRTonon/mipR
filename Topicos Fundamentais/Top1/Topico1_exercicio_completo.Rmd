@@ -302,6 +302,16 @@ listaQ6.1[[2]] <- matrix(c(2,5,1,9), nrow =2)
 listaQ6.1[[3]] <- matrix(c(3,8,4,2,2,1,1,4,2), nrow = 3)
 listaQ6.1[[4]] <- matrix(c(2,0,1,1), nrow = 2)
 ```
+```{r include=F, eval=F}
+list(
+matrix(c(4,3,3,2), nrow =2),
+matrix(c(2,5,1,9), nrow =2),
+matrix(c(3,8,4,2,2,1,1,4,2), nrow = 3),
+matrix(c(2,0,1,1), nrow = 2)
+)
+```
+
+
 
 #### Q.6.2 Faça uma lista `listaQ6.2` a partir da `listaQ6.1`, com os determinantes de cada uma das matrizes.
 

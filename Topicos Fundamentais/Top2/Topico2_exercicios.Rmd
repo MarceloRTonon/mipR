@@ -6,7 +6,8 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(include = FALSE, eval = FALSE)
+aula <- FALSE
+knitr::opts_chunk$set(include = aula, eval = aula)
 ```
 
 Essa lista de exercicios é para treinar as suas habilidades na leitura de dados. Repare que a sessão *The SeViration* está aqui, o porquê disso é o fato de ser uma importante lembrança do método de aprendizado.
@@ -28,33 +29,37 @@ library(openxlsx)
 #install.packages("openxlsx")
 ```
 
-
 ## ***The SeViration:*** Enfrentando os seus erros.
 
 Talvez você fique com dúvidas e dificuldades. É normal. Especialmente quando você está aprendendo uma coisa nova. Assim, tente seguir o roteiro abaixo para resolver suas questões:
 
-1. É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma virgula, parentêses, aspas... 
+1.  É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma virgula, parentêses, aspas...
 
-2. Dedique um tempo tentando elaborar esse erro ou dúvida. Organizar a sua dúvida na sua cabeça, muitas vezes já resolve o problema por si só.
+2.  Dedique um tempo tentando elaborar esse erro ou dúvida. Organizar a sua dúvida na sua cabeça, muitas vezes já resolve o problema por si só.
 
-3. Se tratando de uma dúvida referente a um objeto natural do R, ou de seus pacotes, use e abuse do `Help`. A documentação do R tenta ser a mais explicativa e direta ao ponto o possível. Não se preocupe, parte dos exercicios sempre será ler o que o próprio R tem a dizer sobre o assunto.
+3.  Se tratando de uma dúvida referente a um objeto natural do R, ou de seus pacotes, use e abuse do `Help`. A documentação do R tenta ser a mais explicativa e direta ao ponto o possível. Não se preocupe, parte dos exercicios sempre será ler o que o próprio R tem a dizer sobre o assunto.
 
-4. Persistindo os erros e as dificuldades, tente jogar no Google o problema. De modo geral, se você pesquisar "R" juntamente com a descrição do problema muito provavelmente aparecerá alguém pedindo ajuda sobre o tema.^[Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto [1.6](https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more) do *R for Data Science*.]
+4.  Persistindo os erros e as dificuldades, tente jogar no Google o problema. De modo geral, se você pesquisar "R" juntamente com a descrição do problema muito provavelmente aparecerá alguém pedindo ajuda sobre o tema.[^1]
 
-***IMPORTANTE***: Será sempre perguntado na sala de aula se alguém pesquisou na internet para resolver seus problemas e queremos saber como cada um se saiu. Assim, pedimos que você 
+[^1]: Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto [1.6](https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more) do *R for Data Science*.
 
-5. Se você não conseguir se resolver por meio do Google ou em outros canais da internet, aí então peça ajuda a um amigo. 
+***IMPORTANTE***: Será sempre perguntado na sala de aula se alguém pesquisou na internet para resolver seus problemas e queremos saber como cada um se saiu. Assim, pedimos que você
 
-Se você ainda não dominou bem o passo **3** dessa lista confira se você fez bem a lição. 
+5.  Se você não conseguir se resolver por meio do Google ou em outros canais da internet, aí então peça ajuda a um amigo.
+
+Se você ainda não dominou bem o passo **3** dessa lista confira se você fez bem a lição.
 
 # Exercícios
 
 ## 1. Lendo os dados em Excel
 
-Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE_2015**
+Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE_2015.**
+
+**Importante:** Se você não conseguir baixar por esse link, entre no site do IBGE e baixe diretamente de lá!
 
 #### Q.1.1 Crie um tibble `dfQ1.1` com os dados da matriz de coeficientes técnicos intersetoriais (aba 14 de IBGE_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas
-```{r}
+
+```{r respostaQ1_1}
 library(readxl)
 colnames_dfQ1.1 <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", 
                                  sheet = "14", range = "A4:BQ4", col_names = FALSE)
@@ -67,18 +72,18 @@ dfQ1.1 <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",
 
 #### Q.1.2 Crie um tibble `dfq1.2` com a matriz de Leontief (aba 15 de IBGE_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas
 
-```{r}
+```{r respostaQ1_2}
 
 dfQ1.2 <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",                               sheet = "15", range = "A6:BQ72", col_names = unlist(colnames_dfQ1.1))
 ```
 
-**Atenção:** Abaixo estamos abstraindo os carácteres `\n` dos nomes das primeiras duas colunas de `dfQ1.1` e `dfQ1.2`. Na questão 
+**Atenção:** Abaixo estamos abstraindo os carácteres `\n` dos nomes das primeiras duas colunas de `dfQ1.1` e `dfQ1.2`. Na questão
 
 #### Q.1.3 Crie um tibble `cod67` contendo apenas os dados da coluna `"Código da atividade nível 67"` da matriz `dfQ1.1`. Crie também um tibble `des67` contendo apenas os dados da coluna `"Descrição da atividade nível 67"` da matriz `dfQ1.1`; Mantenha os colnames de ambas.
 
 **Dica:** A função `is_tibble` confere se um objeto é `tibble` ou não tal qual `is.logical` confere se o dado é lógico.
 
-```{r}
+```{r repostaQ1_3}
 cod67 <- dfQ1.1[,1]
 is_tibble(cod67)
 
@@ -88,7 +93,7 @@ is_tibble(des67)
 
 ##### D.1.1 - ***Desafio:*** Rode `is.tibble()` ao invés de `is_tibble` em `cod67`. O que retornou? Procure saber sobre o pacote `lifecycle` com `??`.
 
-```{r}
+```{r respostaD_1_1}
 # Fazendo is.tible(cod67)
 is.tibble(cod67)
 #Indo no R Documentation do is.tibble
@@ -102,26 +107,24 @@ vignette(package ="lifecycle")
 vignette("lifecycle")
 ```
 
-
 #### Q.1.5 Usando a função `as.data.frame`, crie `dfQ1.5` a partir de `dfQ1.1`, de modo que:
- - `dfQ1.5` seja um data.frame e não um tibble.
- - `dfQ1.5` tenha row.names com a Descrição de atividades.
- - `dfQ1.5` seja uma matriz quadrada (67 x 67), apenas com os dados númericos
+
+-   `dfQ1.5` seja um data.frame e não um tibble.
+-   `dfQ1.5` tenha row.names com a Descrição de atividades.
+-   `dfQ1.5` seja uma matriz quadrada (67 x 67), apenas com os dados númericos
 
 **Dica:** Ao contrario do que foi exposto na Aula 2, há um modo em que não é necessário uma nova linha apenas para mudar os `row.names` de `dfQ1.5`. Veja a documentação de `as.data.frame` para ver como. **Isso está errado**
 
-
-
-```{r}
+```{r respostaQ_1_5}
 dfQ1.5 <- as.data.frame(dfQ1.1[,-c(1:2)])
 rownames(dfQ1.5) <- unlist(dfQ1.1[,2])
 
 
 ```
 
-#### Q.1.6 Usando a função `column_to_rownames`, crie um data.frame `dfQ1.6` a partir de `dfQ1.2` que siga as mesma 
-**Dica 1:** O argumento `var =` precisa estar explicito na função `column_to_rownames`. Ou seja, `var = "name_of_the_column"`, precisa estar escrito. Se você não escrever `var =`, a função irá pensar que esse segundo argumento é uma base de dados. Se precisar, veja como ela é usada nos exemplos da documentação.
-**Dica 2:** Usando a função `colnames()` você não tem que escrever o nome da coluna. Veja abaixo:
+#### Q.1.6 Usando a função `column_to_rownames`, crie um data.frame `dfQ1.6` a partir de `dfQ1.2` que siga as mesma
+
+**Dica 1:** O argumento `var =` precisa estar explicito na função `column_to_rownames`. Ou seja, `var = "name_of_the_column"`, precisa estar escrito. Se você não escrever `var =`, a função irá pensar que esse segundo argumento é uma base de dados. Se precisar, veja como ela é usada nos exemplos da documentação. **Dica 2:** Usando a função `colnames()` você não tem que escrever o nome da coluna. Veja abaixo:
 
 ```{r, include = TRUE}
 colnames(dfQ1.1[,5])
@@ -129,20 +132,19 @@ colnames(dfQ1.1)[4:6]
 colnames(dfQ1.1)[1]
 ```
 
-
-```{r}
+```{r respostaQ_1_6}
 library(tibble)
 dfQ1.6 <-  column_to_rownames(dfQ1.2[,-1], var = colnames(dfQ1.2[,2]))
 ```
 
 ##### D.1.2 - **Desafio:** Crie uma função `tb_to_df(data, column, RowNames)` que:
 
- - Transforme um tibble em um `data.frame`
- - O primeiro argumento `data` é referente ao objeto original
- - O segundo argumento `column` diz respeito à um vetor com o número das colunas que (não) vão estar lá. Se nada for colocado lá, vai o objeto inteiro.
- - O terceiro argumento `RowNames` indica qual das colunas se tornará o rownames. Se nada for indicado, não serão adicionados `RowNames`.
- 
-```{r}
+-   Transforme um tibble em um `data.frame`
+-   O primeiro argumento `data` é referente ao objeto original
+-   O segundo argumento `column` diz respeito à um vetor com o número das colunas que (não) vão estar lá. Se nada for colocado lá, vai o objeto inteiro.
+-   O terceiro argumento `RowNames` indica qual das colunas se tornará o rownames. Se nada for indicado, não serão adicionados `RowNames`.
+
+```{r respostaD_1_2}
 tb_to_df <- function(data, column, RowNames = NULL){
   as.data.frame(data[, column], row.names = RowNames)
 }
@@ -150,7 +152,7 @@ tb_to_df <- function(data, column, RowNames = NULL){
 
 #### Q.1.7 Faça uma inversa de Leontief a partir de `dfQ1.5`. Nomeie-a `dfQ1.7` e coerce-a em um `data.frame`.
 
-```{r}
+```{r respostaQ_1_7}
 dfQ1.7 <- solve(diag(nrow(dfQ1.5))- dfQ1.5) %>% as.data.frame()
 
 ```
@@ -159,14 +161,13 @@ dfQ1.7 <- solve(diag(nrow(dfQ1.5))- dfQ1.5) %>% as.data.frame()
 
 **Dica:** Mude a configuração do argumento `check.attributes`.
 
-```{r}
+```{r respostaD_1_3}
 all.equal(dfQ1.7, dfQ1.6, check.attributes = FALSE)
 all.equal(dfQ1.7, dfQ1.6, check.attributes = FALSE, tolerance = 0)
 identical(dfQ1.7, dfQ1.6)
 ```
 
 ##### D.1.4 - **Desafio:** O que explica a diferença entre os valores obtidos em D.1.3 pelas funções `all.equal` e `identical`?
-
 
 ## Treinando manipulação de matrizes.
 
@@ -179,19 +180,16 @@ rep(0, 3)
 rep(c(1:3), 2)
 ```
 
-
 #### Q.2.1 Usando a função `rep` crie um vetor unitario chamado `i_67`, com de comprimento 67 e estime os encadeamentos para trás de `dfQ1.6`. Chame-os de `dfQ2.1`
 
-**Dica:** Você precisa mudar duas coisas em `i_67 %*% dfQ2.1` para obter o que precisa. Uma delas envolve álgebra linear (veja a formula), a outra envolve estrutura de dados (confira a documentação de `%*%`). 
+**Dica:** Você precisa mudar duas coisas em `i_67 %*% dfQ2.1` para obter o que precisa. Uma delas envolve álgebra linear (veja a formula), a outra envolve estrutura de dados (confira a documentação de `%*%`).
 
 ```{r}
 i_67 <- rep(1, 67)
 dfQ2.1 <- t(i_67) %*% as.matrix(dfQ1.6)
 ```
 
-
 #### Q.2.2 Usando `i_67` estime os encadeamentos para frente de `dfQ1.6`. Chame-os de `dfQ2.2`:
-
 
 ```{r}
 dfQ2.2 <- as.matrix(dfQ1.6) %*% i_67
@@ -211,6 +209,7 @@ dfQ2.2 <- rowSums(dfQ1.6)
 ```
 
 #### Q.2.5 Use a função `max` e `min` em `dfQ2.1` e `dfQ2.2`.
+
 ```{r}
 max(dfQ2.1)
 max(dfQ2.2)
@@ -219,6 +218,7 @@ min(dfQ2.2)
 ```
 
 #### Q.2.6 Use `which.max` e `which.min` em `dfQ2.1` e `dfQ2.2`. Qual é a diferença?
+
 ```{r}
 which.max(dfQ2.1)
 which.max(dfQ2.2)
@@ -226,7 +226,7 @@ which.min(dfQ2.1)
 which.min(dfQ2.2)
 ```
 
-#### Q.2.7 Usando `colSums` e `which.max` crie uma função `which.max.para.tras` que tendo como insumo uma Inversa de Leontief  retorne qual é o setor com maior encadeamento para trás.
+#### Q.2.7 Usando `colSums` e `which.max` crie uma função `which.max.para.tras` que tendo como insumo uma Inversa de Leontief retorne qual é o setor com maior encadeamento para trás.
 
 ```{r}
 which.max.para.tras <- function(x){
@@ -248,7 +248,7 @@ dfQ3.1 <- data.frame(dfQ2.1, dfQ2.2)
 colnames(dfQ3.1) <- c("Para Frente", "Para trás")
 ```
 
-#### Q.3.3 Confira o comprimento de `cod67` a partir da função length nas  situações a seguir, e veja se você entende o porquê. (Tem relação com o Tópico 1)
+#### Q.3.3 Confira o comprimento de `cod67` a partir da função length nas situações a seguir, e veja se você entende o porquê. (Tem relação com o Tópico 1)
 
 ```{r q33_demo, include = TRUE}
 cod67
@@ -275,9 +275,7 @@ cod67[[1]] %>% length
 unlist(cod67) %>% length
 ```
 
-
 #### Q.3.4 Nomeie as linhas de `dfQ3.1` com `cod67`.
-
 
 ```{r}
 rownames(dfQ3.1) <- unlist(cod67)
@@ -287,19 +285,19 @@ rownames(dfQ3.1) <- unlist(cod67)
 rownames(dfQ3.1) <- cod67[[1]]
 ```
 
-#### Q.3.5 Exporte ``dfQ3.1` no formato csv separado por **virgulas** e decimal com `.`. Chame o arquivo de `dfQ31.csv`
+#### Q.3.5 Exporte \``dfQ3.1` no formato csv separado por **virgulas** e decimal com `.`. Chame o arquivo de `dfQ31.csv`
 
 ```{r}
 write.csv(dfQ3.1, file = "dfQ31.csv")
 ```
 
-#### Q.3.6 Exporte ``dfQ3.1` novamente só que agora no formato csv separado por **ponto e virgula** e decimal por **virgulas**. Chame o arquivo de `dfQ31b.csv`
+#### Q.3.6 Exporte \``dfQ3.1` novamente só que agora no formato csv separado por **ponto e virgula** e decimal por **virgulas**. Chame o arquivo de `dfQ31b.csv`
 
 ```{r}
 write.csv2(dfQ3.1, file = "dfQ31b.csv")
 ```
 
-#
+# 
 
 ```{r}
 library(openxlsx)
