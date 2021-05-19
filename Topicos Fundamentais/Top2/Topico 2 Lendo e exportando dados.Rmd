@@ -1,13 +1,14 @@
 ---
 title: "Tópico 2 - Leitura e Exportação de Dados"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "07/06/2020"
+date: "18/05/2021"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
+
 ## Pacotes necessários para esse tópico
 
 ```{r, eval = FALSE}
@@ -18,29 +19,34 @@ library(readr, readxl)
 library(tibble)
 ```
 
-
 ## 0. Objetivo do Tópico
 
-O foco deste tópico é apresentar as diferentes funções responsáveis pela leitura dos dados e também a sua exportação de dados. Repare que neste caso específico quando falamos aqui de exportação de dados estamos nos referindo a salvar arquivos no Disco Rígido Local que contenham os dados produzidos por nós no R. Existem outras formas de exportar dados, como produzir tabelas para *LaTeX*^[Ver pacote `tabulizer`] e Word^[Veja esse [guia](https://sejdemyr.github.io/r-tutorials/basics/tables-in-r/)] e dar `Commit` e `Push` via `Git`^[Existe o livro online [*Happy Git and GitHub for the useR*](https://happygitwithr.com/) ou o [material em português da Beatriz Milz em um evento da  `#Rladies`](https://beatrizmilz.github.io/RLadies-Git-RStudio-2019/#1). Temos também um material nosso sobre o tema, que foi baseado no Happy Git, o qual vocês podem baixar [aqui](https://raw.githubusercontent.com/MarceloRTonon/mipR/master/Topicos%20Suplementares/Git/intro_git.html), dando o ctrl+s na página.].
+O foco deste tópico é apresentar as diferentes funções responsáveis pela leitura dos dados e também a sua exportação de dados. Repare que neste caso específico quando falamos aqui de exportação de dados estamos nos referindo a salvar arquivos no Disco Rígido Local que contenham os dados produzidos por nós no R. Existem outras formas de exportar dados, como produzir tabelas para *LaTeX*[^1] e Word[^2] e dar `Commit` e `Push` via `Git`[^3].
+
+[^1]: Ver pacote `tabulizer`
+
+[^2]: Veja esse [guia](https://sejdemyr.github.io/r-tutorials/basics/tables-in-r/)
+
+[^3]: Existe o livro online [*Happy Git and GitHub for the useR*](https://happygitwithr.com/) ou o [material em português da Beatriz Milz em um evento da `#Rladies`](https://beatrizmilz.github.io/RLadies-Git-RStudio-2019/#1). Temos também um material nosso sobre o tema, que foi baseado no Happy Git, o qual vocês podem baixar [aqui](https://raw.githubusercontent.com/MarceloRTonon/mipR/master/Topicos%20Suplementares/Git/intro_git.html), dando o ctrl+s na página.
 
 Para além disso, iremos discutir os desafios especificos associados a leitura de dados de Matriz Insumo Produto.
 
 Outros materiais que tratam disso, e foram em partes usados neste material, são:
 
- - As subseções [5.9-11](https://rstudio-education.github.io/hopr/r-objects.html#loading) e [o apêndice B](https://rstudio-education.github.io/hopr/dataio.html) do **Hands-on Programming with R** do Hadley Wickham;
- - Esse [post](http://www.botanicaamazonica.wiki.br/labotam/doku.php?id=bot89:precurso:4matrizes:inicio) do site do Grupo de Pesquisa Ecologia e Evolução de Plantas Amazônicas do Instituto Nacional de Pesquisas da Amazônia. Ele foi feito como um précurso de uma disciplina ministrada pelos professores Alberto Vicentini e Ricardo Perdiz.  De todos os materiais em Português conferidos, este **se destacou**. Quem quiser ver mais materiais desse pré curso pode [conferir aqui](http://www.botanicaamazonica.wiki.br/labotam/doku.php?id=disciplinas:bot89:tutorial);
- - O [post](https://felipegalvao.com.br/blog/2015/11/16/r-basico-importacao-de-dados-para-o-r/) do blog Felipe Galvão sobre a importação de dados para o R (em português);
- - A [aula sobre leitura e exportação de dados em csv](https://swcarpentry.github.io/r-novice-inflammation/11-supp-read-write-csv/index.html) do curso *Programming with R* do The Carpentries. Importante notar que após a atualização `4.0.0` do R (que aconteceu em abril de 2020), o argumento `stringAsFactors` deixou de ter como valor padrão `TRUE` e passou a ter o valor `FALSE`. Por conta disso, uma seção dessa aula está desatualizada. 
+-   As subseções [5.9-11](https://rstudio-education.github.io/hopr/r-objects.html#loading) e [o apêndice B](https://rstudio-education.github.io/hopr/dataio.html) do **Hands-on Programming with R** do Hadley Wickham;
+-   Esse [post](http://www.botanicaamazonica.wiki.br/labotam/doku.php?id=bot89:precurso:4matrizes:inicio) do site do Grupo de Pesquisa Ecologia e Evolução de Plantas Amazônicas do Instituto Nacional de Pesquisas da Amazônia. Ele foi feito como um pré curso de uma disciplina ministrada pelos professores Alberto Vicentini e Ricardo Perdiz. De todos os materiais em Português conferidos, este **se destacou**. Quem quiser ver mais materiais desse pré curso pode [conferir aqui](http://www.botanicaamazonica.wiki.br/labotam/doku.php?id=disciplinas:bot89:tutorial);
+-   O [post](https://felipegalvao.com.br/blog/2015/11/16/r-basico-importacao-de-dados-para-o-r/) do blog Felipe Galvão sobre a importação de dados para o R (em português);
+-   A [aula sobre leitura e exportação de dados em csv](https://swcarpentry.github.io/r-novice-inflammation/11-supp-read-write-csv/index.html) do curso *Programming with R* do The Carpentries. Importante notar que após a atualização `4.0.0` do R (que aconteceu em abril de 2020), o argumento `stringAsFactors` deixou de ter como valor padrão `TRUE` e passou a ter o valor `FALSE`. Por conta disso, uma seção dessa aula está desatualizada.
 
 O porém levantado sobre a aula do curso *Programming with R* é relevante de modo geral. Muitos dos materiais que podem ser encontrados na internet foram produzidos **antes** de se anunciar a mudança do argumento `stringAsFactors` na versão `4.0.0`, logo deve-se permanecer atento quanto a essa questão. Aqui trataremos já na versão atualizada.
 
 ## 1. O onde
 
-Para importar e exportar dados precisamos delimitar *onde* isso será feito no seu disco rígido. De modo geral, é de bom tom que você coloque os seus dados na pasta do seu projeto. Se for 1 ou 2 arquivos a serem lidos, não precisa criar uma pasta `data/` não. Se for mais, talvez valha a pena. O mesmo vale para os arquivos exportados. 
+Para importar e exportar dados precisamos delimitar *onde* isso será feito no seu disco rígido. De modo geral, é de bom tom que você coloque os seus dados na pasta do seu projeto. Se for 1 ou 2 arquivos a serem lidos, não precisa criar uma pasta `data/` não. Se for mais, talvez valha a pena. O mesmo vale para os arquivos exportados.
 
 *Boas Práticas:* Exceto que seja o seu objetivo, nunca salve um objeto modificado com o mesmo nome e tipo que o arquivo importado indicado no seu RScript. Se você quer consertar o arquivo original, vale você indicar isso no seu código principal, e deixar tudo relacionado a isso num RScript em separado do resto, de modo que quando alguém for pegar o seu código principal do inicio ao fim, não terá problemas por conta de estar faltando um dado a ser importado.
 
-De todo modo, o R apenas irá ler arquivos que ele encontre no diretorio (pasta/folder) indicado por você. É nisso que entra o conceito de Diretório de Trabalho (*working directory*, ou wd). Sempre que você for ler um arquivo que está fora do seu `wd`, você terá que indicar todo o caminho até o arquivo, é o que é chamado de *absolute path*. Quando for o caso do arquivo estár no `wd`, basta que você use o nome do arquivo, precedido se for o caso, de pastas que estejam dentro dele. Há um terceiro caso ainda, como vamos ver no exemplo abaixo:
+De todo modo, o R apenas irá ler arquivos que ele encontre no diretorio (pasta/folder) indicado por você. É nisso que entra o conceito de Diretório de Trabalho (*working directory*, ou wd). Sempre que você for ler um arquivo que está fora do seu `wd`, você terá que indicar todo o caminho até o arquivo, é o que é chamado de *absolute path*. Quando for o caso do arquivo estar no `wd`, basta que você use o nome do arquivo, precedido se for o caso, de pastas que estejam dentro dele. Há um terceiro caso ainda, como vamos ver no exemplo abaixo:
 
 ```{r, eval = FALSE}
 
@@ -56,11 +62,11 @@ De todo modo, o R apenas irá ler arquivos que ele encontre no diretorio (pasta/
 
 Perceba que em todos esses casos estamos falando do mesmo arquivo `arquivo.Rdata`. Este arquivo está na pasta `mipR`, que é o wd atual. O RStudio tem um diretorio padrão (*default directory*) que usa de wd quando não está com um projeto carregado. No caso acima esse diretorio é `R_Projetos/`. Assim, temos a seguinte regra para lidar com a localização de um arquivo ou pasta:
 
-- Se o que você for usar estiver dentro do wd, use o  *Relative Path*.
+-   Se o que você for usar estiver dentro do wd, use o *Relative Path*.
 
-- Se estiver fora do wd, porém **dentro** do *default directory* do RStudio, use o *Absolute Path a partir do default directory*.
+-   Se estiver fora do wd, porém **dentro** do *default directory* do RStudio, use o *Absolute Path a partir do default directory*.
 
-- Se estiver **fora** do wd e do *default directory* use o *Absolute Path*.
+-   Se estiver **fora** do wd e do *default directory* use o *Absolute Path*.
 
 ### 1.1 Mudando o wd
 
@@ -68,7 +74,7 @@ Existe um modo de mudar o working directory (wd). É pela função `setwd(dir)`,
 
 **Importante**: Evite mudar o wd. Só evite. Dá mais trabalho e confusão do que beneficio.
 
-**Importante 2**: Se for mudar o wd, antes disso rode `wdOriginal <- getwd()`. Assim você pode depois voltar para o diretorio original apenas fazendo `setwd(wdOriginal)`. Veja 
+**Importante 2**: Se for mudar o wd, antes disso rode `wdOriginal <- getwd()`. Assim você pode depois voltar para o diretorio original apenas fazendo `setwd(wdOriginal)`. Veja
 
 ```{r, eval =F, include=T}
 #Vendo qual é o WD atual.
@@ -82,8 +88,7 @@ setwd(wdOriginal)
 getwd()
 ```
 
-
-Se você tiver que ficar mudando de `wd` toda hora, algo que desaconselhamos, use o *Absolute Path*. Se você estiver trabalhando num projeto de equipe ou em mais de um computador, **evite mais do que tudo** usar o absolute path, e se tiver que usar, que seja a partir do default directory. O *Absolute Path* num computador não é o mesmo no computador de outra pessoa. Nesse caso, mantenha o mesmo `wd` a todo custo, e 
+Se você tiver que ficar mudando de `wd` toda hora, algo que desaconselhamos, use o *Absolute Path*. Se você estiver trabalhando num projeto de equipe ou em mais de um computador, **evite mais do que tudo** usar o absolute path, e se tiver que usar, que seja a partir do default directory. O *Absolute Path* num computador não é o mesmo no computador de outra pessoa. Nesse caso, mantenha o mesmo `wd` a todo custo, e
 
 O ideal é que seu `wd` seja o local do seu projeto, e que você tenha nele tudo que precise. A exceção para esse idela, é se você tiver que usar dados muito pesados que sair copiando a torto e à direito não é uma boa ideia,
 
@@ -91,9 +96,13 @@ Por fim, vale dizer que você pode criar uma pasta a partir do R, pela função 
 
 ## 2. Os arquivos .Rdata
 
-Quem fez os exercicios indicados para aula 1 completamente, se deparou com as funções `save` e `load`.^[Se você ainda não fez, dê `?load` e `?save`] Essas são as funções principais para salvar objetos no formato ideal do R, o `.Rdata`. Esse formato comprime o espaço exigido do disco rígido com bastante eficiência. Além disso, o `R` lê com mais velocidade arquivos que já estão no próprio formato. 
+Quem fez os exercicios indicados para aula 1 completamente, se deparou com as funções `save` e `load`.[^4] Essas são as funções principais para salvar objetos no formato ideal do R, o `.Rdata`. Esse formato comprime o espaço exigido do disco rígido com bastante eficiência. Além disso, o `R` lê com mais velocidade arquivos que já estão no próprio formato.
 
-Uma vantagem do `.Rdata` é que ele te permite salvar vários objetos de uma só vez. Existe uma variação da função `save` inclusive que diz para salvar todos os objetos presentes no seu `Global Environment`^[Present na aba `Environment`, que na configuração padrão fica no lado direito superior do Rstudio.]: `save.image`. Veja abaixo, o exemplo baseado no vindo da `R documentation` da função `save`:
+[^4]: Se você ainda não fez, dê `?load` e `?save`
+
+Uma vantagem do `.Rdata` é que ele te permite salvar vários objetos de uma só vez. Existe uma variação da função `save` inclusive que diz para salvar todos os objetos presentes no seu `Global Environment`[^5]: `save.image`. Veja abaixo, o exemplo baseado no vindo da `R documentation` da função `save`:
+
+[^5]: Present na aba `Environment`, que na configuração padrão fica no lado direito superior do Rstudio.
 
 ```{r, eval = FALSE}
 x <- c(1:20)
@@ -111,7 +120,9 @@ save.image2 <- function(x){
 }
 ```
 
-O argumento `envir` no caso da função `save` diz respeito de qual Environment são os objetos a serem salvos. Não trataremos aqui de explicar em detalhes o que é o `Environment` e como fazer melhor uso deles, se você quiser saber mais, veja o capítulo [8](https://rstudio-education.github.io/hopr/environments.html) do *Hands-On Programming with R* ou o capítulo [7](https://adv-r.hadley.nz/environments.html) do *Advanced R*^[Sugiro você esperar estar num nível mais avançado para se aventurar em profundidade neste conceito.]. Para nossos propósitos basta que você entenda que o `Environment` é onde o R guarda os seus dados enquanto você está usando o R. Assim, basta você entender que o `.GlobalEnv` é o `Environment` padrão e geral que você usa no R. Isso tudo para dizer que algumas vezes, que a principio parecerão aleatórias, você precisará expressar que `envir = .GlobalEnv`. Além disso, é uma Boa Prática usar a função `rm(x)` para remover o objeto `x` do seu `Environment`, quando este não for mais ser usado. Arquivos pesados e inutéis no seu `Environment` serão um fardo para o seu computador.
+O argumento `envir` no caso da função `save` diz respeito de qual Environment são os objetos a serem salvos. Não trataremos aqui de explicar em detalhes o que é o `Environment` e como fazer melhor uso deles, se você quiser saber mais, veja o capítulo [8](https://rstudio-education.github.io/hopr/environments.html) do *Hands-On Programming with R* ou o capítulo [7](https://adv-r.hadley.nz/environments.html) do *Advanced R*[^6]. Para nossos propósitos basta que você entenda que o `Environment` é onde o R guarda os seus dados enquanto você está usando o R. Assim, basta você entender que o `.GlobalEnv` é o `Environment` padrão e geral que você usa no R. Isso tudo para dizer que algumas vezes, que a principio parecerão aleatórias, você precisará expressar que `envir = .GlobalEnv`. Além disso, é uma Boa Prática usar a função `rm(x)` para remover o objeto `x` do seu `Environment`, quando este não for mais ser usado. Arquivos pesados e inutéis no seu `Environment` serão um fardo para o seu computador.
+
+[^6]: Sugiro você esperar estar num nível mais avançado para se aventurar em profundidade neste conceito.
 
 Por outro lado, para carregar objetos a partir da função `load`. Uma questão especifica das funções `save` e `load` é que elas carregam não só os valores dos dados e a função, mas também o nome de objetos a serem associados a eles. Vamos ver o exemplo abaixo:
 
@@ -132,13 +143,11 @@ Repare que ao dar `rm(z, save.image2)`, ambos os objetos somem do `Global Enviro
 
 Além de `.Rdata` também existe um outro tipo de arquivo próprio ao R, o `.rds`. O arquivo `.rds` é menos comum de ser visto pelo usuário na ponta, sendo mais usado pelo `R` internamente. O `.rds` tem duas caracteristicas principais:
 
- - Só salva 1 objeto por vez;
- - Só salva o conteúdo do objeto, não o seu nome.
- 
- 
- Assim, suponha que façamos:
- 
- 
+-   Só salva 1 objeto por vez;
+-   Só salva o conteúdo do objeto, não o seu nome.
+
+Assim, suponha que façamos:
+
 ```{r, eval= FALSE}
 
 # usamos a função saveRDS para salvar um arquivo referente a z
@@ -149,7 +158,7 @@ rm(z)
 # usamos a função readRDS para ler o arquivo "z.rds"
 readRDS("z.rds")
 ```
- 
+
 Repare que ao usarmos `readRDS("z.rds")` o objeto é impresso no console ao invés de ser gravado no `Environment`. Assim, para salvar precisamos fazer:
 
 ```{r}
@@ -191,7 +200,7 @@ exemplo_iris2 <- read.csv("top2/exemplo_iris.csv", row.names= 1)
 
 Especificando no argumento `row.names` que os nomes das linhas se encontram na linha 1. Para entender essas e outras questões, é valido dar uma passada na Documentação do R da função `read.csv` e `write.csv`.
 
-O arquivo `exemplo_iris.csv` está de acordo com os padrões de lingua inglesa. Por outro lado, há um padrão muito comum em países cuja lingua oficial não é o Inglês. Nesse padrão temos que os decimais são separados por `,` de modo que não há como separar então as colunas por virgulas. Assim, se separa as colunas  por `;`.
+O arquivo `exemplo_iris.csv` está de acordo com os padrões de lingua inglesa. Por outro lado, há um padrão muito comum em países cuja lingua oficial não é o Inglês. Nesse padrão temos que os decimais são separados por `,` de modo que não há como separar então as colunas por virgulas. Assim, se separa as colunas por `;`.
 
 No R, quando se usa essa variação, usa-se o 2 no final para indicar que `dec = ",", sep = ";"`. Assim, temos já uma função `read.csv2` e `write.csv2` para esse caso e não precisamos configurar `read.csv` e `write.csv`. Veja abaixo:
 
@@ -236,14 +245,13 @@ Não adianta fingir que não: boa parte dos dados de Matriz Insumo Produto que v
 
 Dados MIP no Excel dificultam sua vida da seguinte forma:
 
- 1. Muitas vezes os dados começam de 3 a 5 linhas abaixo, com as primeiras linhas bagunçando tudo;
- 2. Há muitas vezes uma linha vazia entre os nomes das colunas e a primeira linha de dados;
- 3. Também muitas vezes aparece uma coluna ou, especialmente, uma linha vazia entre os dados de cada setor e a soma total deles;
- 4. Os dados referentes a demanda intermediaria e demanda final estão por via de regra na mesma aba (*sheet*) e então serão carregadas juntas num mesmo objeto;
- 5. Os nomes da colunas muitas vezes fica bagunçado pois muitas vezes as linhas deles estão mesclados com as de cima em alguma situação;
+1.  Muitas vezes os dados começam de 3 a 5 linhas abaixo, com as primeiras linhas bagunçando tudo;
+2.  Há muitas vezes uma linha vazia entre os nomes das colunas e a primeira linha de dados;
+3.  Também muitas vezes aparece uma coluna ou, especialmente, uma linha vazia entre os dados de cada setor e a soma total deles;
+4.  Os dados referentes a demanda intermediaria e demanda final estão por via de regra na mesma aba (*sheet*) e então serão carregadas juntas num mesmo objeto;
+5.  Os nomes da colunas muitas vezes fica bagunçado pois muitas vezes as linhas deles estão mesclados com as de cima em alguma situação;
 
-O item 4 é uma questão de comodidade pura, há de se admitir. O item 3 pode ou não atrapalhar. O item 1 por si só seria algo facilmente resolvido, Agora... os itens 2 e 5 te dão uma bela dor de cabeça no inicio e no geral te exigem uma bela de uma atenção sempre que você pega uma base nova. Por isso, essa seção iremos dividir por partes. 
-
+O item 4 é uma questão de comodidade pura, há de se admitir. O item 3 pode ou não atrapalhar. O item 1 por si só seria algo facilmente resolvido, Agora... os itens 2 e 5 te dão uma bela dor de cabeça no inicio e no geral te exigem uma bela de uma atenção sempre que você pega uma base nova. Por isso, essa seção iremos dividir por partes.
 
 ### 5.0 Baixando a matriz
 
@@ -253,28 +261,27 @@ E iremos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las](ftp.ibge
 
 Antes que você pense outra coisa, estamos aqui falando do arquivo do excel mesmo, não o ods. Abra o arquivo com o Excel ou outro programa similar de vizualizar planilhas como ele. Vamos examinar esse arquivo. A primeira coisa que vemos na aba 1 é:
 
-- A linha 1 tem apenas uma célula. Isso por si só faria o R se confundir por conta da primeira linha ter apenas uma coluna.
-- Os nomes das colunas estão divididos em duas linhas (3 e 4), sendo que as linhas em algumas dessas colunas estão mescladas.
-- Há uma linha em branco entre os nomes das colunas e os valores (a linha 5).
-- Os dados referentes a "Oferta de bens e serviços", "Produção de atividades"  estão juntos. O que os diferencia está na linha 3, de modo que a principio, um `data.frame` ou `tibble` na mesma estrutura que os dados atuais não poderá ser feito se você quiser separar os dois. 
-- Temos também a coluna final com "Importação de bens e serviços".
-- Há uma linha em branco entre a soma total dos produtos e os valores desagregados.
+-   A linha 1 tem apenas uma célula. Isso por si só faria o R se confundir por conta da primeira linha ter apenas uma coluna.
+-   Os nomes das colunas estão divididos em duas linhas (3 e 4), sendo que as linhas em algumas dessas colunas estão mescladas.
+-   Há uma linha em branco entre os nomes das colunas e os valores (a linha 5).
+-   Os dados referentes a "Oferta de bens e serviços", "Produção de atividades" estão juntos. O que os diferencia está na linha 3, de modo que a principio, um `data.frame` ou `tibble` na mesma estrutura que os dados atuais não poderá ser feito se você quiser separar os dois.
+-   Temos também a coluna final com "Importação de bens e serviços".
+-   Há uma linha em branco entre a soma total dos produtos e os valores desagregados.
 
 Repare que na primeira aba já demos de cara com os 5 pontos que levantamos inicialmente. Baixar esses dados desse modo não é assim tão trivial.
 
 ### 5.2 First things first: Decidindo a organização dos dados no R.
 
-Você então precisa decidir o que vai querer fazer com os dados ao passar do formato de excel para o R. 
+Você então precisa decidir o que vai querer fazer com os dados ao passar do formato de excel para o R.
 
-1. Os dados da "Oferta de bens e serviços", "Produção de Bens" e "Importações..." ficarão tods juntos? 
-2. Você faz questão dos nomes da colunas e linhas originais do arquivo?
-3. Você quer todos os dados?
-
+1.  Os dados da "Oferta de bens e serviços", "Produção de Bens" e "Importações..." ficarão tods juntos?
+2.  Você faz questão dos nomes da colunas e linhas originais do arquivo?
+3.  Você quer todos os dados?
 
 Vamos aprofundar agora na primeira questão. Não como você fazer essa separação para o R dos dados como foi feito no Excel. Não tem como colocar mais de 1 nome num vetor. Há duas soluções que se pode recorrer:
 
- a.  Separar os dois tipos de dados em duas sublistas;
- b.  Modificar os nomes das colunas originais e nesse caso colocar `OFE.` e `PRO.` como prefixo de todas as variáveis. 
+a.  Separar os dois tipos de dados em duas sublistas;
+b.  Modificar os nomes das colunas originais e nesse caso colocar `OFE.` e `PRO.` como prefixo de todas as variáveis.
 
 Eu prefiro a solução **a** à solução **b**, uma vez que a primeira permite você manter os nomes originais (menos trabalho), e te permite uma forma mais organizada da base de dados em listas e sublistas. Além disso, como lidariamos com importações? Que não está em nenhum dos dois grupos? Assim iremos criar o objeto `aba1` que será uma lista e duas sublistas.
 
@@ -282,7 +289,9 @@ Eu prefiro a solução **a** à solução **b**, uma vez que a primeira permite 
 aba1 <- list("OfertaDeBensServicos"= list(), "ProducaoDeAtividades" = list(), "Importacoes" = list())
 ```
 
-Assim, se quisermos acessar uma base de dados ou outra, basta fazermos `aba1$OfertaDeBensServicos`, `aba1$ProduçãoDeAtividades` ou `aba1$Importações`. Você tem assim uma forma de diferenciar e acessar ambas ao mesmo tempo.^[Neste caso, colocamos o nome por extenso, porém você pode escrever uma sigla se você não for esquecer do que se trata.]
+Assim, se quisermos acessar uma base de dados ou outra, basta fazermos `aba1$OfertaDeBensServicos`, `aba1$ProduçãoDeAtividades` ou `aba1$Importações`. Você tem assim uma forma de diferenciar e acessar ambas ao mesmo tempo.[^7]
+
+[^7]: Neste caso, colocamos o nome por extenso, porém você pode escrever uma sigla se você não for esquecer do que se trata.
 
 ### 5.3 Lidando com Colnames
 
@@ -302,8 +311,8 @@ col_3parte <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",
 ?read_excel
 ```
 
-Os avisos de `New names:` apesar de chatos, são normais mesmo. Quando formos ensinar as aulas com repetição, vamos ensinar um método para você silencia-lo.  
-Olhe a documentação do R aberto pelo `?read_excel`, em especial sobre as definições dos argumentos  `range`, `sheet`, `skip`, `na`, `col_names`. Também perceba, que ele retorna um tibble e não um dataframe como indicado na parte **Value**.
+Os avisos de `New names:` apesar de chatos, são normais mesmo. Quando formos ensinar as aulas com repetição, vamos ensinar um método para você silencia-lo.\
+Olhe a documentação do R aberto pelo `?read_excel`, em especial sobre as definições dos argumentos `range`, `sheet`, `skip`, `na`, `col_names`. Também perceba, que ele retorna um tibble e não um dataframe como indicado na parte **Value**.
 
 Assim, agora vamos unir todos os `colnames`:
 
@@ -348,7 +357,7 @@ aba1$ProducaoDeAtividades <- aba1_inteira[, c(1:2, 8:(ncol(aba1_inteira)-1))]
 aba1$Importacoes <- aba1_inteira[, c(1:2, ncol(aba1_inteira))]
 ```
 
-O que fizemos em `aba1_inteira[, c(1:2, 3:7)]` foi a partir da função `c()` criar um vetor que indica os números das colunas de `aba1_inteira` que queremos alocar para a sublista `aba1$OfertaDeBensServicos`. A vantagem de usar `c()` dentro de um `objeto[]` é que podemos indicar números distantes um do outro. como é o caso em `aba1$ProducaoDeAtividades` e `aba1$Importacoes`. Se tentassemos fazer isso sem usar `c()` teriamos que usar uma sequência initerrupta de numeros naturais. Isso é uma das nuances do *subsetting*. No tópico 3 iremos ensinar múltiplas formas de realizar esse subsetting. Algumas mais clássicas, vulgo antigas, e outras mais modernas _trendy_.
+O que fizemos em `aba1_inteira[, c(1:2, 3:7)]` foi a partir da função `c()` criar um vetor que indica os números das colunas de `aba1_inteira` que queremos alocar para a sublista `aba1$OfertaDeBensServicos`. A vantagem de usar `c()` dentro de um `objeto[]` é que podemos indicar números distantes um do outro. como é o caso em `aba1$ProducaoDeAtividades` e `aba1$Importacoes`. Se tentassemos fazer isso sem usar `c()` teriamos que usar uma sequência initerrupta de numeros naturais. Isso é uma das nuances do *subsetting*. No tópico 3 iremos ensinar múltiplas formas de realizar esse subsetting. Algumas mais clássicas, vulgo antigas, e outras mais modernas *trendy*.
 
 ## Abas no Excel
 
@@ -378,6 +387,7 @@ Podemos conseguir os nomes de todas as abas de um arquivo de excel, ao usar a fu
 ```{r, eval=T}
 readxl::excel_sheets("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls")
 ```
+
 Isso pode ser armazenado e usado quando queremos ler os elementos de muitas abas. Nesse caso, Uma outra coisa interessante de se usar o nome ao invés do índice, é que se pode definir as abas dentro do próprio argumento `range`, se usarmos o `!` para separar o nome da aba do range:
 
 ```{r, eval=FALSE}

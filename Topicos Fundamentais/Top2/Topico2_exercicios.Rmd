@@ -1,7 +1,7 @@
 ---
 title: "Exercícios - Tópico 2"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "16/06/2020"
+date: "18/05/2021"
 output: html_document
 ---
 
@@ -53,11 +53,11 @@ Se você ainda não dominou bem o passo **3** dessa lista confira se você fez b
 
 ## 1. Lendo os dados em Excel
 
-Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE_2015.**
+Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE\_2015.**
 
 **Importante:** Se você não conseguir baixar por esse link, entre no site do IBGE e baixe diretamente de lá!
 
-#### Q.1.1 Crie um tibble `dfQ1.1` com os dados da matriz de coeficientes técnicos intersetoriais (aba 14 de IBGE_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas
+#### Q.1.1 Crie um tibble `dfQ1.1` com os dados da matriz de coeficientes técnicos intersetoriais (aba 14 de IBGE\_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas
 
 ```{r respostaQ1_1}
 library(readxl)
@@ -70,7 +70,7 @@ dfQ1.1 <- read_excel("top2/Matriz_de_Insumo_Produto_2015_Nivel_67.xls",
                                  sheet = "14", range = "A6:BQ72", col_names = unlist(colnames_dfQ1.1))
 ```
 
-#### Q.1.2 Crie um tibble `dfq1.2` com a matriz de Leontief (aba 15 de IBGE_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas
+#### Q.1.2 Crie um tibble `dfq1.2` com a matriz de Leontief (aba 15 de IBGE\_2015) e também as duas colunas com o código e a descrição das atividades. Nomeie também as colunas
 
 ```{r respostaQ1_2}
 
@@ -171,7 +171,7 @@ identical(dfQ1.7, dfQ1.6)
 
 ## Treinando manipulação de matrizes.
 
-Nas análises de Matriz Insumo Produto, um dos primeiros indicadores que você irá encontrar é o encadeamento para trás e para frente de determinado setor. Seja $i$ um vetor unitario, se calcula os encadeamentos para trás e para frente de cada setor das seguintes maneiras $i'[I-A]^{-1}$ (para trás) e $[I-A]^{-1}i$ (para frente).
+Nas análises de Matriz Insumo Produto, um dos primeiros indicadores que você irá encontrar é o encadeamento para trás e para frente de determinado setor. Eles serão explorados com mais detalhes no curos, mas, em linhas gerais, eles representam os setores capazes de gerar maior impacto na cadeia produtiva. Seja $i$ um vetor unitario, se calcula os encadeamentos para trás e para frente de cada setor^[Esta seria a versão de Rasmussen-Hirschmann dos indicadores de encadeamento.] das seguintes maneiras $i'[I-A]^{-1}$ (para trás) e $[I-A]^{-1}i$ (para frente). Em outras palavras, a soma das colunas (para trás) e das linhas (para frente) de uma determinada matriz (por exemplo, a de coeficientes técnicos ou a de Leontief).
 
 A função `rep` te permite criar um vetor repetindo um valor (ou conjunto de valores) uma quantidade de vezes:
 
