@@ -135,6 +135,11 @@ colnames(dfQ1.1)[1]
 ```{r respostaQ_1_6}
 library(tibble)
 dfQ1.6 <-  column_to_rownames(dfQ1.2[,-1], var = colnames(dfQ1.2[,2]))
+
+#ou
+
+#dfQ1.6 <-  column_to_rownames(dfQ1.2[,-1], var = "Descrição da atividade\nnível 67")
+
 ```
 
 ##### D.1.2 - **Desafio:** Crie uma função `tb_to_df(data, column, RowNames)` que:
@@ -171,7 +176,9 @@ identical(dfQ1.7, dfQ1.6)
 
 ## Treinando manipulação de matrizes.
 
-Nas análises de Matriz Insumo Produto, um dos primeiros indicadores que você irá encontrar é o encadeamento para trás e para frente de determinado setor. Eles serão explorados com mais detalhes no curos, mas, em linhas gerais, eles representam os setores capazes de gerar maior impacto na cadeia produtiva. Seja $i$ um vetor unitario, se calcula os encadeamentos para trás e para frente de cada setor^[Esta seria a versão de Rasmussen-Hirschmann dos indicadores de encadeamento.] das seguintes maneiras $i'[I-A]^{-1}$ (para trás) e $[I-A]^{-1}i$ (para frente). Em outras palavras, a soma das colunas (para trás) e das linhas (para frente) de uma determinada matriz (por exemplo, a de coeficientes técnicos ou a de Leontief).
+Nas análises de Matriz Insumo Produto, um dos primeiros indicadores que você irá encontrar é o encadeamento para trás e para frente de determinado setor. Eles serão explorados com mais detalhes no curos, mas, em linhas gerais, eles representam os setores capazes de gerar maior impacto na cadeia produtiva. Seja $i$ um vetor unitario, se calcula os encadeamentos para trás e para frente de cada setor[^2] das seguintes maneiras $i'[I-A]^{-1}$ (para trás) e $[I-A]^{-1}i$ (para frente). Em outras palavras, a soma das colunas (para trás) e das linhas (para frente) de uma determinada matriz (por exemplo, a de coeficientes técnicos ou a de Leontief).
+
+[^2]: Esta seria a versão de Rasmussen-Hirschmann dos indicadores de encadeamento.
 
 A função `rep` te permite criar um vetor repetindo um valor (ou conjunto de valores) uma quantidade de vezes:
 
