@@ -748,9 +748,9 @@ Psi_geoAv %>%
   all.equal(txPsi)
 ```
 
-### Decomposição de "Matrizes Internas"
+### Decomposição  Não Linear
 
-Essa parte é baseada no capítulo 13 do Miller e Blair (2009, p. 603-604). Nela os autores chamam isso de decomposição da matriz de coeficientes diretos. No entanto esse ferramental também pode servir para decompor gastos endógenos (como o consumo induzido). Por isso, por falta de definição melhor, escolhemos usar o termo *matriz interna*[^6], que no fim se refere à uma matriz $M$ qualquer de matriz interna em relação à $N$ se ela define $N$ da seguinte forma: $$N = [I-M]^{-1}$$
+Essa parte é baseada no capítulo 13 do Miller e Blair (2009, p. 603-604), usando o termo de . Nela os autores chamam isso de decomposição da matriz de coeficientes diretos. No entanto esse ferramental também pode servir para decompor gastos endógenos (como o consumo induzido). Por isso, por falta de definição melhor, escolhemos usar o termo *matriz interna*[^6], que no fim se refere à uma matriz $M$ qualquer de matriz interna em relação à $N$ se ela define $N$ da seguinte forma: $$N = [I-M]^{-1}$$
 
 [^6]: Esse nome foi criado por nós, logo pode ser mudado. Queremos apenas expressar aqui a relação.
 
