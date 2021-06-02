@@ -381,26 +381,104 @@ a > 2 | b == 2
 # Como a é menor que 2 e b é diferente de 2, o resultado é FALSE
 ```
 
-
-Em alguns casos, outra opção é usar dois operadores em sequência `&&` ou `||` que realizaram a mesma tarefa mas pouparão a capacidade computacional do seu computador. Na caso de `&&`, o resultado é automaticamente dado como `FALSE` caso a primeira condição já não seja atendida. Já para `||`, caso a primeira condição seja atendida, o resultado automaticamente é `TRUE`.
-
-Outros possíveis casos de operações lógicas envolvem:
-
-```{r, eval=FALSE}
-
+Temos também o operador `xor`, que serve quando vocẽ quer saber se os valores lógicos são diferentes ou não. Veja abaixo:
+```{r}
 # Caso você queira que apenas UMA das condições seja atendida use xor(cond1, cond 2) 
 xor(a > 2, b == 2)
 xor(a > 2, b > 2)
+```
 
+Outro operador interessante é o `!`, que simplesmente inverte o sinal lógico do elemento:
+
+```{r}
 # Caso você queira extrair o resultado de uma condição escolhida use "!":
 !(a > 2) # Que equivale a receber o resultado lógico do teste TRUE ou FALSE
+```
 
-# Caso você tenha várias condições, você pode perguntar se qualquer uma delas é atendida usando o "any()" ou se todas são atendidas com "all()":
-any(a > 2, b == 2, 6 %in% d) # nenhuma é atendido logo devemos receber "FALSE"
-any(a >= 2, b == 2, 6 %in% d) # mudando a condição, agora "a >= 2" é atendida
+
+Em alguns casos, outra opção é usar dois operadores em sequência `&&` ou `||` que realizaram a mesma tarefa mas pouparão a capacidade computacional do seu computador. Na caso de `&&`, o resultado é automaticamente dado como `FALSE` caso a primeira condição já não seja atendida. Já para `||`, caso a primeira condição seja atendida, o resultado automaticamente é `TRUE`. Uma boa analogia de `||` e `&&` é de `identical` e `==`, que caso você tenha feito os desafios do Tópico 1 você se lembrará que:
+
+<center> **Testando igualdade no R** </center>
+|           | Célula à Célula |      Objeto      |
+|-----------|:---------------:|:----------------:|
+| Exato     |      `a==b`     | `identical(a,b)` |
+| Tolerante |    $\nexists$   | `all.equal(a,b)` |
+
+|                         | Para retornar `TRUE` é necessário:                                                                                 |                     Célula à Célula                     |               Primeira Célula              |
+|-------------------------|--------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------:|:------------------------------------------:|
+|         E (and)         | **Todas** as Condições devem ser satisfeitas (`TRUE`)                                                              |                           `&`                           |                    `&&`                    |
+|        E/OU (or)        | **Ao menos uma** condição tem que ser satisfeita (`TRUE`);<br><br>a outra **não precisa** ser satisfeita (`TRUE`). |                           `\|`                          |                   `\|\|`                   |
+| OU EXCLUSIVAMENTE (xor) | Apenas uma condição deve ser satisfeitar (`TRUE`);<br><br>a outra **não pode** ser satisfeita (`TRUE`).            |                          `xor`                          |                 $\nexists$                |
+|          Todos          |                                       Todos os valores do vetor serem `TRUE`                                       |  Condiçao Suficiente<br> **se** usado dentro de `all()` | Condição Necessária,<br>mas não Suficiente |
+|          Algum          |                                       Pelo menos um valor do vetor ser `TRUE`                                      |  Condição Suficiente<br>**se** usado dentro de `any()`  |                 Condição Suficiente,<br>mas não Necessária |
+
+A coluna "Primeira Célula" da linhas "Todos" e "Algum" diz respeito aos resultados de `&&` e `||` em relação a preposição lógica da linha.
+
+**É muito importante** que você entenda que `&&` e `||` retornar `TRUE` **NÃO** quer dizer que o teste foi feito para todo o vetor analisado e portanto ele é `TRUE`. Só que o teste para os primeiros valores responderam `TRUE`. Por outro lado, se o resultado retorna `FALSE` você sabe que os vetores não são suficientes.
+Para ficar mais claro, vamos considerar os seguintes vetores:
+```{r, eval= TRUE}
+vetor_a <- c(TRUE, FALSE, FALSE, TRUE)
+vetor_b <- c(TRUE, TRUE, TRUE, FALSE)
+vetor_c <- c(FALSE, TRUE, TRUE, FALSE)
+vetor_d <- c(FALSE, FALSE, TRUE, FALSE)
+```
+
+Agora vamos aplicar os operadores em `vetor_a` e `vetor_b`:
+
+```{r}
+list("E" = vetor_a & vetor_b,
+     "E/OU" = vetor_a | vetor_b,
+     "OU_Exc" = xor(vetor_a, vetor_b))
+
+list(vetor_a && vetor_b,
+     vetor_a || vetor_b)
+```
+Sabemos que nem todos os valores do teste célula à célula para `vetor_a` e `vetor_b` retornam `TRUE`, mas mesmo assim os teste `&&` e `||` retornam `TRUE` pois tem TRUE na primeira célula. Assim sendo, nesse caso acima, não podemos dizer nada sobre a relação do `vetor_a` e `vetor_b` como um todo. No caso de `vetor_c` e `vetor_d`, temos que:
+```{r}
+list("E" = vetor_c & vetor_d,
+     "E/OU" = vetor_c | vetor_d,
+     "OU_Exc" = xor(vetor_c, vetor_d))
+
+list(vetor_c && vetor_d,
+     vetor_c || vetor_d)
+```
+Ou seja, quando a primeiras células dos resultados dos testes de `&` e `|` for `FALSE`, teremos que o mesmo ocorrerá com `&&` e `||` respectivamente. Assim, podemos dizer que nem todos os valores do resultado serão `TRUE`.
+
+Para saber se todos os valores de um vetor são `TRUE`, é possível realizar um teste usando a função `all()`:
+
+```{r}
 all(a >= 2, b == 2, 6 %in% d) # ao menos uma não é atendida resultado deve ser FALSE
 all(a >= 2, b > 2, 5 %in% d) # agora com todas sendo antendidas
 ```
+
+Vamos ver isso agora para reforçar a ideia de `&&` e `||` serem necessária mas não suficiente:
+
+```{r}
+all(vetor_a & vetor_b) == (vetor_a && vetor_b)
+```
+
+O resultado é `FALSE`, pois `all` retorna `FALSE` ao avaliar que os resultados de `&` não são todos `TRUE`, enquanto `&&`avaliou apenas os primeiros valores, assim sendo, a comparação `TRUE ==FALSE` retorna `FALSE`. Por outro lado, para o caso de `vetor_c&& vetor_d`, temos:
+```{r}
+all(vetor_c & vetor_d) == (vetor_c && vetor_d)
+```
+Como ambos os resultados dão `FALSE`, temos que a comparação retorna `TRUE`. Ou seja, quando `&&` retorna `FALSE`, `all` necessariamente retornará o mesmo valor. Condição necessária, mas não suficiente. A extensão disso para o caso de `||` é deixado como exercicio para o leitor.
+
+Temos também o caso de `any`, em que retorna `TRUE` se algum dos valores analisados for `TRUE`.
+
+```{r, eval=FALSE}
+# Caso você tenha várias condições, você pode perguntar se qualquer uma delas é atendida usando o "any()" ou se todas são atendidas com "all()":
+any(a > 2, b == 2, 6 %in% d) # nenhuma é atendido logo devemos receber "FALSE"
+any(a >= 2, b == 2, 6 %in% d) # mudando a condição, agora "a >= 2" é atendida
+```
+
+Temos agora o caso inverso de antes. Se `a||b` ou `a&&b` retornar `TRUE`, então a análise de `any(a|b)` ou `any(a&b)` necessariamente retornará `TRUE`. Porém, se  os testes de `&&` ou `||` retornar `FALSE`, não pode-se dizer que `any()` retornará `FALSE`. Veja os casos abaixo:
+```{r}
+#Ambos dão TRUE
+any(vetor_a & vetor_b) == (vetor_a && vetor_b)
+#&& retorna FALSE, mas any() retorna TRUE
+any(vetor_c & vetor_d) == (vetor_c && vetor_d)
+```
+
 
 Por fim, novamente, todas essas operações podem ser usadas conjuntamente com `if`, `else` e `ifelse`. Isso amplia seu leque de opções quando deseja automatizar algumas tarefas, bem como realizar testes na sua base de dados.
 

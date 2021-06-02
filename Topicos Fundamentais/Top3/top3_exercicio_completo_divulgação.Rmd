@@ -76,7 +76,7 @@ Quando você acessa a lista de vignettes disponíveis você irá ver que cada vi
 
 Se você quer acessar essa documentação de um pacote que você ainda não instalou você pode ir na página do pacote no repositorio [CRAN do R](https://cran.r-project.org/web/packages/available_packages_by_name.html) e acessar a vignette, se esta existir. Nas páginas dos pacotes também se encontram os arquivos README e os manuais de referência, estes contendo, além de outras coisas, a R Documentation de todas as funções do pacote.
 
-## Exercicios
+# Exercicios
 
 
 ### 1. Lendo a NIOT 2016 para a Italia (WIOD) pela primeira vez
@@ -105,7 +105,7 @@ Existem vantagens e desvantagens de você baixar as coisas diretamente do seu te
 Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter problemas. Rode o código acima para seguir no exercicio a seguir.
 
 
-### Parte 1 - Operadores Lógicos e Booleanos
+## Parte 1 - Operadores Lógicos e Booleanos
 
 #### Q.1.1 - Revise a [Table 7.1](https://rstudio-education.github.io/hopr/modify.html#tab:logop) do **HOPR** para deixar claro como funciona cada operador lógico.
 
@@ -113,7 +113,57 @@ Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter p
 
 #### Q.1.3 - Atribua valores arbitrários para "a", "b" e "c" na Table 7.1 e explique com suas palavras o resultado de cada teste.
 
-#### Q.1.4 - Explique as diferenças entre `&`, `&&`, `|` e `||`
+ - 
+#### Q.1.4 - Teste a condição (x > 5 & < 10). Por que ela não funciona? Como você resolveria?
+
+```{r, include=FALSE}
+x <- 7
+x > 5 & x < 10
+```
+
+### Questões dos Operadores Booleanos
+
+Suponha que você conhece 5 pessoas. E que vocẽ então listou 4 caracteristicas binárias^[Ou seja, cujas respostas são sim ou não. 
+Pergunta Binária: Fulano é loiro?
+Pergunta não binária: Qual a cor do cabelo de Fulano?]
+~quaisquer e atribuiu um valor lógico de verdadeiro ou falso se elas tem ou não aquela caracteristica.. Não vamos dar nomes as pessoas nem caracteristicas, apenas vamos chamar tudo pelo número. Abaixo vamos criar um vetor para cada pessoa, colocando `TRUE` ou `FALSE` se ela tem ou não a caracteristica (`Car_`).
+
+```{r, eval= FALSE}
+pessoa  <- c("Car_1", "Car_2", "Car_3", "Car_4")
+pessoa_1 <- c(TRUE, FALSE, FALSE, TRUE)
+pessoa_2 <- c(TRUE, TRUE, TRUE, FALSE)
+pessoa_3 <- c(FALSE, TRUE, TRUE, FALSE)
+pessoa_4 <- c(FALSE, FALSE, TRUE, FALSE)
+pessoa_5 <- c(FALSE, FALSE, FALSE, FALSE)
+```
+
+Façamos uma tabela para ficar mais claro:
+```{r}
+tibble("Caracteristicas" = c("Car_1", "Car_2", "Car_3", "Car_4"),
+       "pessoa_1" = c(TRUE, FALSE, FALSE, TRUE),
+       "pessoa_2" = c(TRUE, TRUE, TRUE, FALSE),
+       "pessoa_3" = c(FALSE, TRUE, TRUE, FALSE),
+       "pessoa_4" = c(FALSE, FALSE, TRUE, FALSE),
+       "pessoa_5" = c(FALSE, FALSE, FALSE, FALSE))
+```
+
+**IMPORTANTE:** Nas próximas questões queremos apenas os resultados com os valores lógicos. Não precisa fazer um código tentando indicar automaticamente um valor `character` para isso. Um resultado como `r  c(FALSE, TRUE, FALSE, TRUE)`, ou mesmo `r FALSE` quando for o caso, está de ótimo tamanho. Se tiver como  `r  c(FALSE, TRUE, FALSE, TRUE)` já é entendido por exemplo que para `Car_1` a resposta é não, para `Car_2` sim, `Car_3` não e `Car_4` sim. Não precisa tentar falar o nome da caracteristica como `r c("Car_2", "Car_4")`. Que fique claro: **Não precisa**, _mas se quiser pode._
+
+**PRESTE ATENÇÃO** quando queremos resultados específicos sobre cada uma das `caracterististicas` ou quando queremos comparação geral sobre as `pessoas`. Se você não entendeu essa dica, volte para o material na parte da tabela dos operadores booleanos.
+
+#### Q.1.5 Teste quais caracteristicas que `pessoa_1` tem que a `pessoa_2` também tem.
+
+#### Q.1.6 Teste para saber quais caracteristicas podem estar presentes em `pessoa_2` ou em `pessoa_3` (considere as que ambas dividem também).
+
+#### Q.1.7 Teste para saber quais caracterisitacas estão presente apenas em `pessoa_2` ou apenas em `pessoa_3`
+
+#### Q.1.8 Teste para saber se `pessoa_1` e `pessoa_3` tem alguma caracteristica em comum.
+
+#### Q.1.9
+#### Q.1.8 Crie uma `anti_pessoa_3` que possuí todas 
+
+
+#### Q.1. - Explique as diferenças entre `&`, `&&`, `|` e `||`.
 
 ```{r, eval=FALSE, include=FALSE}
 
@@ -123,15 +173,7 @@ Já && e || irão avaliar as condições (da esquerda para direita) e caso algum
 
 ```
 
-#### Q.1.5 - Teste a condição (x > 5 & < 10). Por que ela não funciona? Como você resolveria?
-
-```{r, include=FALSE}
-x <- 7
-x > 5 & x < 10
-```
-
-
-### Parte 2 - If Else
+## Parte 2 - If Else
 
 #### Q.2.1 - Quais as diferenças entre usar if, else e ifelse? Quais as melhores situações para usar cada uma delas?
 
@@ -169,7 +211,7 @@ tem_inversa <- function(x){
 ```
 
 
-### Parte 3 - Subsetting Base R
+## Parte 3 - Subsetting Base R
 
 Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em matrizes insumo-produto dado que sua estrutura de dados são mais "quadradas", no máximo retangulares. Esse é o caso, por exemplo, da MIP extraída diretamente do IBGE. No entanto, tabelas mais amplas, como a própria base da "WIOD", traz uma série temporal de matrizes empilhadas. Usaremos a mesma base para a manipulação no base R e pelo tidyverse, de forma que fique mais clara as alternativas.
 
@@ -229,7 +271,7 @@ total_output <- niotITA_3.2[niotITA_3.2$Year == "2008" & niotITA_3.2$Description
 #### Q.3.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.
 
 
-### Parte 4 - Tidyverse
+## Parte 4 - Tidyverse
 
 #### Q.1.0 Vizualize `niotITA`. Qual é o problema com os valores?
 
