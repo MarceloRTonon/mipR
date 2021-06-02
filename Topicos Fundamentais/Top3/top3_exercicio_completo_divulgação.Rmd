@@ -113,7 +113,6 @@ Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter p
 
 #### Q.1.3 - Atribua valores arbitrários para "a", "b" e "c" na Table 7.1 e explique com suas palavras o resultado de cada teste.
 
- - 
 #### Q.1.4 - Teste a condição (x > 5 & < 10). Por que ela não funciona? Como você resolveria?
 
 ```{r, include=FALSE}
@@ -121,12 +120,14 @@ x <- 7
 x > 5 & x < 10
 ```
 
-### Questões dos Operadores Booleanos
+### Avaliando Vetores 
 
-Suponha que você conhece 5 pessoas. E que vocẽ então listou 4 caracteristicas binárias^[Ou seja, cujas respostas são sim ou não. 
-Pergunta Binária: Fulano é loiro?
-Pergunta não binária: Qual a cor do cabelo de Fulano?]
-~quaisquer e atribuiu um valor lógico de verdadeiro ou falso se elas tem ou não aquela caracteristica.. Não vamos dar nomes as pessoas nem caracteristicas, apenas vamos chamar tudo pelo número. Abaixo vamos criar um vetor para cada pessoa, colocando `TRUE` ou `FALSE` se ela tem ou não a caracteristica (`Car_`).
+Suponha que você conhece 5 pessoas. E que vocẽ então listou 4 caracteristicas binárias^[
+
+Ou seja, cujas respostas são sim ou não. 
+**Pergunta Binária:** _Fulano é loiro?_ **Pergunta não binária:** _Qual a cor do cabelo de Fulano?_
+]
+quaisquer e atribuiu um valor lógico de verdadeiro ou falso se elas tem ou não aquela caracteristica. Abaixo estão os valores nos quais vocẽ chegou no final.
 
 ```{r, eval= FALSE}
 pessoa  <- c("Car_1", "Car_2", "Car_3", "Car_4")
@@ -135,6 +136,7 @@ pessoa_2 <- c(TRUE, TRUE, TRUE, FALSE)
 pessoa_3 <- c(FALSE, TRUE, TRUE, FALSE)
 pessoa_4 <- c(FALSE, FALSE, TRUE, FALSE)
 pessoa_5 <- c(FALSE, FALSE, FALSE, FALSE)
+pessoa_6 <- c(TRUE, TRUE, TRUE, FALSE)
 ```
 
 Façamos uma tabela para ficar mais claro:
@@ -144,12 +146,15 @@ tibble("Caracteristicas" = c("Car_1", "Car_2", "Car_3", "Car_4"),
        "pessoa_2" = c(TRUE, TRUE, TRUE, FALSE),
        "pessoa_3" = c(FALSE, TRUE, TRUE, FALSE),
        "pessoa_4" = c(FALSE, FALSE, TRUE, FALSE),
-       "pessoa_5" = c(FALSE, FALSE, FALSE, FALSE))
+       "pessoa_5" = c(FALSE, FALSE, FALSE, FALSE),
+       "pessoa_6" = c(TRUE, TRUE, TRUE, FALSE))
 ```
 
-**IMPORTANTE:** Nas próximas questões queremos apenas os resultados com os valores lógicos. Não precisa fazer um código tentando indicar automaticamente um valor `character` para isso. Um resultado como `r  c(FALSE, TRUE, FALSE, TRUE)`, ou mesmo `r FALSE` quando for o caso, está de ótimo tamanho. Se tiver como  `r  c(FALSE, TRUE, FALSE, TRUE)` já é entendido por exemplo que para `Car_1` a resposta é não, para `Car_2` sim, `Car_3` não e `Car_4` sim. Não precisa tentar falar o nome da caracteristica como `r c("Car_2", "Car_4")`. Que fique claro: **Não precisa**, _mas se quiser pode._
+**IMPORTANTE:** Nas próximas questões queremos apenas os resultados com os valores lógicos. Não precisa fazer um código tentando indicar automaticamente um valor `character` para isso. Um resultado como `r  c(FALSE, TRUE, FALSE, TRUE)`, ou mesmo `r FALSE` quando for o caso, está de ótimo tamanho. Se tiver como  `r  c(FALSE, TRUE, FALSE, TRUE)` já é entendido por exemplo que a resposta é: nãopara `Car_1`; sim para `Car_2`; não para `Car_3`; e sim para `Car_4`. Não precisa tentar falar o nome da caracteristica como `r c("Car_2", "Car_4")`. Que fique claro: **Não precisa**, _mas se quiser pode._
 
-**PRESTE ATENÇÃO** quando queremos resultados específicos sobre cada uma das `caracterististicas` ou quando queremos comparação geral sobre as `pessoas`. Se você não entendeu essa dica, volte para o material na parte da tabela dos operadores booleanos.
+**PRESTE ATENÇÃO** quando queremos resultados específicos sobre cada uma das `caracterististicas` ou quando queremos comparação geral sobre as `pessoas`. (vulgo: qual o comprimento do vetor que eu quero) Se você não entendeu essa dica, volte para o material na parte da tabela dos operadores booleanos.
+
+**DICA DE OURO** você provavelmente vai saber responder os valores sem precisar do R. Logo, se você não souber a resposta (tente ler a documentação antes) vá tentando os operadores. Se ao final desse exercicio você ainda tiver dúvida, tente fazer as combinações listas.
 
 #### Q.1.5 Teste quais caracteristicas que `pessoa_1` tem que a `pessoa_2` também tem.
 
@@ -159,9 +164,33 @@ tibble("Caracteristicas" = c("Car_1", "Car_2", "Car_3", "Car_4"),
 
 #### Q.1.8 Teste para saber se `pessoa_1` e `pessoa_3` tem alguma caracteristica em comum.
 
-#### Q.1.9
-#### Q.1.8 Crie uma `anti_pessoa_3` que possuí todas 
+#### Q.1.8 Crie uma `anti_pessoa_3` que é, como o nome já sugere, o inverso de `pessoa_3` em termos das quatro caracteristicas listadas.
 
+#### Q.1.9 Teste para saber se `pessoa_2` e `pessoa_6` tem as mesmas caracteristicas.
+
+Dica: Use dois operadores booleanos para tanto e então compare o resultado com `identical`.
+
+
+#### Q.1.10 Considere `pessoa_1` e `pessoa_2` como uma dupla que se complementa. Teste para saber se a dupla possuí, em qualquer um de seus membros,  todas as caracteristicas listadas. 
+
+Detalhe: o vetor da resposta correta tem comprimento `1`.
+
+#### Q.1.11 Para qualquer combinação de pessoas listadas o operador `&&` sempre retornará o mesmo resultado. Olhe para os dados e diga: por que não pode ser diferente? Quais características nos vetores seriam necessárias para usar isso. Por que isso não é o caso de `||`?
+
+#### Desafio D.1.1 O que o código abaixo está testando? Como você poderia substituir isso de forma muito simples?
+
+```{r, eval=FALSE}
+(pessoa_1 | pessoa_2) & !(pessoa_1 & pessoa_2)
+```
+```{r, eval=FALSE, include=FALSE}
+xor(pessoa_1, pessoa_2)
+```
+
+**Dica:** Avalie o que são os testes dentro dos parêntesis e veja então o que está sendo comparado.
+
+#### Desafio D.2.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como `TRUE`). Como você faria isso? Por que não dá para vocẽ usar 
+
+**Detalhe:** O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.
 
 #### Q.1. - Explique as diferenças entre `&`, `&&`, `|` e `||`.
 

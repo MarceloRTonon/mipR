@@ -251,35 +251,39 @@ unlink(arq_temp)</code></pre>
 </div>
 <div id="q.1.3---atribua-valores-arbitrários-para-a-b-e-c-na-table-7.1-e-explique-com-suas-palavras-o-resultado-de-cada-teste." class="section level4">
 <h4>Q.1.3 - Atribua valores arbitrários para “a”, “b” e “c” na Table 7.1 e explique com suas palavras o resultado de cada teste.</h4>
-<ul>
-<li><h4 id="q.1.4---teste-a-condição-x-5-10.-por-que-ela-não-funciona-como-você-resolveria">Q.1.4 - Teste a condição (x &gt; 5 &amp; &lt; 10). Por que ela não funciona? Como você resolveria?</h4></li>
-</ul>
 </div>
-<div id="questões-dos-operadores-booleanos" class="section level3">
-<h3>Questões dos Operadores Booleanos</h3>
-<p>Suponha que você conhece 5 pessoas. E que vocẽ então listou 4 caracteristicas binárias<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> ~quaisquer e atribuiu um valor lógico de verdadeiro ou falso se elas tem ou não aquela caracteristica.. Não vamos dar nomes as pessoas nem caracteristicas, apenas vamos chamar tudo pelo número. Abaixo vamos criar um vetor para cada pessoa, colocando <code>TRUE</code> ou <code>FALSE</code> se ela tem ou não a caracteristica (<code>Car_</code>).</p>
+<div id="q.1.4---teste-a-condição-x-5-10.-por-que-ela-não-funciona-como-você-resolveria" class="section level4">
+<h4>Q.1.4 - Teste a condição (x &gt; 5 &amp; &lt; 10). Por que ela não funciona? Como você resolveria?</h4>
+</div>
+<div id="avaliando-vetores" class="section level3">
+<h3>Avaliando Vetores</h3>
+<p>Suponha que você conhece 5 pessoas. E que vocẽ então listou 4 caracteristicas binárias^[</p>
+<p>Ou seja, cujas respostas são sim ou não. <strong>Pergunta Binária:</strong> <em>Fulano é loiro?</em> <strong>Pergunta não binária:</strong> <em>Qual a cor do cabelo de Fulano?</em> ] quaisquer e atribuiu um valor lógico de verdadeiro ou falso se elas tem ou não aquela caracteristica. Abaixo estão os valores nos quais vocẽ chegou no final.</p>
 <pre class="r"><code>pessoa  &lt;- c(&quot;Car_1&quot;, &quot;Car_2&quot;, &quot;Car_3&quot;, &quot;Car_4&quot;)
 pessoa_1 &lt;- c(TRUE, FALSE, FALSE, TRUE)
 pessoa_2 &lt;- c(TRUE, TRUE, TRUE, FALSE)
 pessoa_3 &lt;- c(FALSE, TRUE, TRUE, FALSE)
 pessoa_4 &lt;- c(FALSE, FALSE, TRUE, FALSE)
-pessoa_5 &lt;- c(FALSE, FALSE, FALSE, FALSE)</code></pre>
+pessoa_5 &lt;- c(FALSE, FALSE, FALSE, FALSE)
+pessoa_6 &lt;- c(TRUE, TRUE, TRUE, FALSE)</code></pre>
 <p>Façamos uma tabela para ficar mais claro:</p>
 <pre class="r"><code>tibble(&quot;Caracteristicas&quot; = c(&quot;Car_1&quot;, &quot;Car_2&quot;, &quot;Car_3&quot;, &quot;Car_4&quot;),
        &quot;pessoa_1&quot; = c(TRUE, FALSE, FALSE, TRUE),
        &quot;pessoa_2&quot; = c(TRUE, TRUE, TRUE, FALSE),
        &quot;pessoa_3&quot; = c(FALSE, TRUE, TRUE, FALSE),
        &quot;pessoa_4&quot; = c(FALSE, FALSE, TRUE, FALSE),
-       &quot;pessoa_5&quot; = c(FALSE, FALSE, FALSE, FALSE))</code></pre>
-<pre><code>## # A tibble: 4 x 6
-##   Caracteristicas pessoa_1 pessoa_2 pessoa_3 pessoa_4 pessoa_5
-##   &lt;chr&gt;           &lt;lgl&gt;    &lt;lgl&gt;    &lt;lgl&gt;    &lt;lgl&gt;    &lt;lgl&gt;   
-## 1 Car_1           TRUE     TRUE     FALSE    FALSE    FALSE   
-## 2 Car_2           FALSE    TRUE     TRUE     FALSE    FALSE   
-## 3 Car_3           FALSE    TRUE     TRUE     TRUE     FALSE   
-## 4 Car_4           TRUE     FALSE    FALSE    FALSE    FALSE</code></pre>
-<p><strong>IMPORTANTE:</strong> Nas próximas questões queremos apenas os resultados com os valores lógicos. Não precisa fazer um código tentando indicar automaticamente um valor <code>character</code> para isso. Um resultado como FALSE, TRUE, FALSE, TRUE, ou mesmo FALSE quando for o caso, está de ótimo tamanho. Se tiver como FALSE, TRUE, FALSE, TRUE já é entendido por exemplo que para <code>Car_1</code> a resposta é não, para <code>Car_2</code> sim, <code>Car_3</code> não e <code>Car_4</code> sim. Não precisa tentar falar o nome da caracteristica como Car_2, Car_4. Que fique claro: <strong>Não precisa</strong>, <em>mas se quiser pode.</em></p>
-<p><strong>PRESTE ATENÇÃO</strong> quando queremos resultados específicos sobre cada uma das <code>caracterististicas</code> ou quando queremos comparação geral sobre as <code>pessoas</code>. Se você não entendeu essa dica, volte para o material na parte da tabela dos operadores booleanos.</p>
+       &quot;pessoa_5&quot; = c(FALSE, FALSE, FALSE, FALSE),
+       &quot;pessoa_6&quot; = c(TRUE, TRUE, TRUE, FALSE))</code></pre>
+<pre><code>## # A tibble: 4 x 7
+##   Caracteristicas pessoa_1 pessoa_2 pessoa_3 pessoa_4 pessoa_5 pessoa_6
+##   &lt;chr&gt;           &lt;lgl&gt;    &lt;lgl&gt;    &lt;lgl&gt;    &lt;lgl&gt;    &lt;lgl&gt;    &lt;lgl&gt;   
+## 1 Car_1           TRUE     TRUE     FALSE    FALSE    FALSE    TRUE    
+## 2 Car_2           FALSE    TRUE     TRUE     FALSE    FALSE    TRUE    
+## 3 Car_3           FALSE    TRUE     TRUE     TRUE     FALSE    TRUE    
+## 4 Car_4           TRUE     FALSE    FALSE    FALSE    FALSE    FALSE</code></pre>
+<p><strong>IMPORTANTE:</strong> Nas próximas questões queremos apenas os resultados com os valores lógicos. Não precisa fazer um código tentando indicar automaticamente um valor <code>character</code> para isso. Um resultado como FALSE, TRUE, FALSE, TRUE, ou mesmo FALSE quando for o caso, está de ótimo tamanho. Se tiver como FALSE, TRUE, FALSE, TRUE já é entendido por exemplo que a resposta é: nãopara <code>Car_1</code>; sim para <code>Car_2</code>; não para <code>Car_3</code>; e sim para <code>Car_4</code>. Não precisa tentar falar o nome da caracteristica como Car_2, Car_4. Que fique claro: <strong>Não precisa</strong>, <em>mas se quiser pode.</em></p>
+<p><strong>PRESTE ATENÇÃO</strong> quando queremos resultados específicos sobre cada uma das <code>caracterististicas</code> ou quando queremos comparação geral sobre as <code>pessoas</code>. (vulgo: qual o comprimento do vetor que eu quero) Se você não entendeu essa dica, volte para o material na parte da tabela dos operadores booleanos.</p>
+<p><strong>DICA DE OURO</strong> você provavelmente vai saber responder os valores sem precisar do R. Logo, se você não souber a resposta (tente ler a documentação antes) vá tentando os operadores. Se ao final desse exercicio você ainda tiver dúvida, tente fazer as combinações listas.</p>
 <div id="q.1.5-teste-quais-caracteristicas-que-pessoa_1-tem-que-a-pessoa_2-também-tem." class="section level4">
 <h4>Q.1.5 Teste quais caracteristicas que <code>pessoa_1</code> tem que a <code>pessoa_2</code> também tem.</h4>
 </div>
@@ -292,11 +296,28 @@ pessoa_5 &lt;- c(FALSE, FALSE, FALSE, FALSE)</code></pre>
 <div id="q.1.8-teste-para-saber-se-pessoa_1-e-pessoa_3-tem-alguma-caracteristica-em-comum." class="section level4">
 <h4>Q.1.8 Teste para saber se <code>pessoa_1</code> e <code>pessoa_3</code> tem alguma caracteristica em comum.</h4>
 </div>
-<div id="q.1.9" class="section level4">
-<h4>Q.1.9</h4>
+<div id="q.1.8-crie-uma-anti_pessoa_3-que-é-como-o-nome-já-sugere-o-inverso-de-pessoa_3-em-termos-das-quatro-caracteristicas-listadas." class="section level4">
+<h4>Q.1.8 Crie uma <code>anti_pessoa_3</code> que é, como o nome já sugere, o inverso de <code>pessoa_3</code> em termos das quatro caracteristicas listadas.</h4>
 </div>
-<div id="q.1.8-crie-uma-anti_pessoa_3-que-possuí-todas" class="section level4">
-<h4>Q.1.8 Crie uma <code>anti_pessoa_3</code> que possuí todas</h4>
+<div id="q.1.9-teste-para-saber-se-pessoa_2-e-pessoa_6-tem-as-mesmas-caracteristicas." class="section level4">
+<h4>Q.1.9 Teste para saber se <code>pessoa_2</code> e <code>pessoa_6</code> tem as mesmas caracteristicas.</h4>
+<p>Dica: Use dois operadores booleanos para tanto e então compare o resultado com <code>identical</code>.</p>
+</div>
+<div id="q.1.10-considere-pessoa_1-e-pessoa_2-como-uma-dupla-que-se-complementa.-teste-para-saber-se-a-dupla-possuí-em-qualquer-um-de-seus-membros-todas-as-caracteristicas-listadas." class="section level4">
+<h4>Q.1.10 Considere <code>pessoa_1</code> e <code>pessoa_2</code> como uma dupla que se complementa. Teste para saber se a dupla possuí, em qualquer um de seus membros, todas as caracteristicas listadas.</h4>
+<p>Detalhe: o vetor da resposta correta tem comprimento <code>1</code>.</p>
+</div>
+<div id="q.1.11-para-qualquer-combinação-de-pessoas-listadas-o-operador-sempre-retornará-o-mesmo-resultado.-olhe-para-os-dados-e-diga-por-que-não-pode-ser-diferente-quais-características-nos-vetores-seriam-necessárias-para-usar-isso.-por-que-isso-não-é-o-caso-de" class="section level4">
+<h4>Q.1.11 Para qualquer combinação de pessoas listadas o operador <code>&amp;&amp;</code> sempre retornará o mesmo resultado. Olhe para os dados e diga: por que não pode ser diferente? Quais características nos vetores seriam necessárias para usar isso. Por que isso não é o caso de <code>||</code>?</h4>
+</div>
+<div id="desafio-d.1.1-o-que-o-código-abaixo-está-testando-como-você-poderia-substituir-isso-de-forma-muito-simples" class="section level4">
+<h4>Desafio D.1.1 O que o código abaixo está testando? Como você poderia substituir isso de forma muito simples?</h4>
+<pre class="r"><code>(pessoa_1 | pessoa_2) &amp; !(pessoa_1 &amp; pessoa_2)</code></pre>
+<p><strong>Dica:</strong> Avalie o que são os testes dentro dos parêntesis e veja então o que está sendo comparado.</p>
+</div>
+<div id="desafio-d.2.2-seguindo-o-desafio-anterior-suponha-que-você-quer-criar-uma-função-para-saber-se-o-vetor-como-um-todo-passa-nesse-teste-ou-seja-se-ele-retorna-tudo-como-true.-como-você-faria-isso-por-que-não-dá-para-vocẽ-usar" class="section level4">
+<h4>Desafio D.2.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como <code>TRUE</code>). Como você faria isso? Por que não dá para vocẽ usar</h4>
+<p><strong>Detalhe:</strong> O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.</p>
 </div>
 <div id="q.1.---explique-as-diferenças-entre-e-." class="section level4">
 <h4>Q.1. - Explique as diferenças entre <code>&amp;</code>, <code>&amp;&amp;</code>, <code>|</code> e <code>||</code>.</h4>
@@ -589,7 +610,6 @@ dfQ5.11 &lt;- dfQ5</code></pre>
 <hr />
 <ol>
 <li id="fn1"><p>Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto <a href="https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more">1.6</a> do <em>R for Data Science</em>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>Ou seja, cujas respostas são sim ou não. Pergunta Binária: Fulano é loiro? Pergunta não binária: Qual a cor do cabelo de Fulano?<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
