@@ -1,7 +1,7 @@
 ---
 title: "Tópico 3 - Exercicio"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "21/06/2020"
+date: "04/06/2021"
 output: html_document
 ---
 
@@ -192,7 +192,7 @@ xor(pessoa_1, pessoa_2)
 
 **Detalhe:** O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.
 
-#### Q.1. - Explique as diferenças entre `&`, `&&`, `|` e `||`.
+#### Q.1.12 - Explique as diferenças entre `&`, `&&`, `|` e `||`.
 
 ```{r, eval=FALSE, include=FALSE}
 
@@ -253,8 +253,10 @@ nomes_colunas <- c("Year", "Code", "Description", "Origin", niotITA[1,5:67])
 
 #### Q.3.2 - Elimine a linha que contém `NA` e renomeie as colunas de `niotITA`. Salve como `niotITA_3.2`.
 
+*Obs*: Depois de obter os dados, use a função `readr::type_convert()` para ajustar os dados e sobrescreva sua base original. Mais a frente na lista, essa função será abordada com mais detalhes. De qualquer forma, vale ler a documentação para entender o seu uso. Mais ainda, tente avaliar o tipo de dados que a `niotITA_3.2` apresenta antes de usar a função `type_convert()`.
+
 ```{r, include=FALSE}
-niotITA_3.2 <- niotITA[2:1081,]
+niotITA_3.2 <- niotITA[2:1081,] %>% type_convert()
 colnames(niotITA_3.2) <- nomes_colunas
 ```
 
@@ -294,10 +296,45 @@ niotITA_3.6 <- niotITA_3.5[,-c(61:67)]
 **Dica**: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.
 
 ```{r, include=FALSE}
+
 total_output <- niotITA_3.2[niotITA_3.2$Year == "2008" & niotITA_3.2$Description == "Output at basic prices",]
+
+total_output_diag <- diag(1/as.double(total_output[,5:60]))
+
+Dem_Int_matrix <- niotITA_3.6[,-c(1:4)] %>% as.matrix()
+
+coef_tec <- Dem_Int_matrix%*%total_output_diag
+  
 ```
 
 #### Q.3.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.
+
+```{r, eval = FALSE, include = FALSE}
+#exemplo sala
+matrix_a <- matrix(c(1:4), nrow = 2)
+
+sum(matrix_a)
+
+colSums(matrix_a)
+
+rowSums(matrix_a)
+
+
+A <- c(TRUE, "A")
+
+as.logical(A[-2])
+
+```
+
+```{r, include=FALSE}
+Dem_Int <-rowSums((as.data.frame(niotITA_3.5))[,5:60])
+
+Dem_Fin <-rowSums((as.data.frame(niotITA_3.5))[,61:66])
+
+Dem_Tot <-Dem_Int+Dem_Fin
+
+niotITA_3.7 <- cbind(niotITA_3.5[,1:4],Dem_Int,Dem_Fin,Dem_Tot) 
+```
 
 
 ## Parte 4 - Tidyverse

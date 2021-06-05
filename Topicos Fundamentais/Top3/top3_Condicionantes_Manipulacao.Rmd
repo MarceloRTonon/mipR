@@ -1,7 +1,7 @@
 ---
 title: "Tópico 3 - Condicionalidades e Manipulação de Dados"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "25/06/2020"
+date: "04/06/2021"
 output: html_document
 ---
 
@@ -13,18 +13,18 @@ O Tópico 3 propõe introduzir duas questões principais aos alunos: o uso de Co
 
 ## [3.0 - O `tidyverse`: Instalação](#tidyverse_instalacao)
 
-Como iremos tratar de muitos pacotes dentro do *tidyverse*, vale baixar a familia de pacote como um todo. Por ser muito grande, pode demorar um tempo, então sugiro que se vocês ainda não estiverem instalado eles, que o façam logo se vocês ainda não tiverem a familia instalada. Se você tiver que instala-lo, você pode esperar isso enquanto:
+Como iremos tratar de muitos pacotes dentro do *tidyverse*, vale baixar a família de pacote como um todo. Por ser muito grande, pode demorar um tempo, então sugiro que se vocês ainda não estiverem instalado eles, que o façam logo. Se você tiver que instala-lo, você pode esperar isso enquanto:
 
-  1. Ir no banheiro ou lavar ao menos parte da louça enquanto escuto o Podcast do IE;
-  2. Ler o resto do Tópico, enquanto espera o R instalar o tidyverse.
+1.  Ir no banheiro ou lavar ao menos parte da louça enquanto escuto o Podcast do IE;
+2.  Ler o resto do Tópico, enquanto espera o R instalar o tidyverse.
 
 ```{r, eval = FALSE}
 install.packages("tidyverse")
 ```
 
-A vantagem de assinalar o `tidyverse` é que o R irá baixar e instalar todos os pacotes do tidyverse. Ao usar `library(tidyverse)`, todos os pacotes do *"nucleo duro"* do `tidyverse` são carregados. Repare que se você instalou o `tidyverse` inteiro, ele irá carregar o `dplyr` e o`tidyr`^[O inverso não seria verdadeiro por outro lado. A instalação do `dplyr` não garante a instalação do resto da do resto dos pacotes.].
+A vantagem de assinalar o `tidyverse` é que o R irá baixar e instalar todos os pacotes do tidyverse. Ao usar `library(tidyverse)`, todos os pacotes do *"núcleo duro"* do `tidyverse` são carregados. Repare que se você instalou o `tidyverse` inteiro, ele irá carregar o `dplyr` e o`tidyr`[^1].
 
-
+[^1]: O inverso não seria verdadeiro por outro lado. A instalação do `dplyr` não garante a instalação do resto dos pacotes.
 
 ```{r eval=TRUE, warning=FALSE, message= FALSE}
 #Carregando os pacotes nucleares tidyverse
@@ -40,50 +40,41 @@ library(magrittr)
 library(readr)
 ```
 
-
-
-
-
-
 ## [3.1 - Os objetivos do Tópico 3](#objetivos)
 
-A introdução ao uso dos Condicionantes e à Manipulação de Dados estão sendo expostas no mesmo Tópico pelo fato de que a combinação de ambos te permite realizar muita coisa na hora de extrair os dados que você quer.
+A introdução ao uso dos Condicionantes e à Manipulação de Dados serão expostas no mesmo Tópico pelo fato de que a combinação de ambos permite realizar muita coisa na hora de extrair os dados que você quer.
 
 Ao longo das seções [3.2](32oplogicas), [3.3](33ifstatements) e [3.4](34booleans) deste Tópico, iremos apresentar situações em que você necessite realizar operações lógicas para tomar decisões ou realizar tarefas especificas de acordo com determinadas condições. Essas operações podem ser importantes para avaliar resultados obtidos e automatizar ações condicionais aos resultados. Englobam-se aqui as operações lógicas e as condicionais (usando as funções `if`, `else` e `ifelse`).
 
-Por sua vez, a seção [3.5][35subsetRbase] Neste parte discutiremos a forma de se manipular uma base de dados dentro do `base R`. Isto é particulamente útil se você está trabalhando com uma base de dados extensa e com várias observações, mas também para base de dados menores mas heterogêneas. No caso da matriz insumo-produto, estamos em geral trabalhando com base de dados que não apresentam elevados números de observações tanto no tempo quanto em países, pessoas ou empresas. Ainda assim, base de dados no estilo insumo-produto que, por exemplo, lidem com fluxo de comércio entre países, que apresentam informações setoriais mais específicas ou que até mesmo a frequência temporal dos dados está aumentada. Assim sendo, bases assim podem ser manipuladas e refinar somente as informações necessárias para você trabalhar no R.
+Por sua vez, a seção [3.5][35subsetRbase] Neste parte discutiremos a forma de se manipular uma base de dados dentro do `base R`. Isto é particulamente útil se você está trabalhando com uma base de dados extensa e com várias observações, mas também para base de dados menores mas heterogêneas. No caso da matriz insumo-produto, estamos em geral trabalhando com base de dados que não apresentam elevados números de observações tanto no tempo quanto em países, pessoas ou empresas. Ainda assim, bases de dados no estilo insumo-produto que, por exemplo, lidem com fluxo de comércio entre países, que apresentam informações setoriais mais específicas ou que até mesmo a frequência temporal dos dados está aumentada. Assim sendo, bases assim podem ser manipuladas e refinadas somente com as informações necessárias para você trabalhar no R.
 
 Muitas das coisas que o `base R` faz podem ser feitas de forma mais verbosa com os pacotes do `tidyverse`. Apesar de no fim acabar que se escreve mais, o código pode ficar mais claro para quem escreve e lê o código. Desse modo, a manipulação de dados é mais baseada em verbos e nome de colunas do que em colchetes, chaves e índices das colunas. Além disso, o `tidyverse` dá uma gama de elementos para as suas funções do subsetting que não é tão trivial assim usar no `base R`. Além disso, muitas funções do `tidyverse` foram escritas em `C++` e isso faz com que elas sejam *muito* rápidas.
 
-Por conta disso, na seção [3.6](tidyverseintro) iremos falar um pouco mais do `tidyverse` de modo geral, apresentando os seus pacotes principais e como ele se relaciona com as propostas desse curso. Na seção [3.7](tidyversesubset) vamos apresentar algumas das formas de se extrair a base de dados usando majoritariamente  o `dplyr` e um pouco do `tidyr`. Na seção [3.8] vamos atentar para como manipular a base de dados de acordo com o nosso interesse, usando o `tidyr` e o `dplyr`
-
-
-
+Por conta disso, na seção [3.6](tidyverseintro) iremos falar um pouco mais do `tidyverse` de modo geral, apresentando os seus pacotes principais e como ele se relaciona com as propostas desse curso. Na seção [3.7](tidyversesubset) vamos apresentar algumas das formas de se extrair a base de dados usando majoritariamente o `dplyr` e um pouco do `tidyr`. Na seção [3.8] vamos atentar para como manipular a base de dados de acordo com o nosso interesse, usando o `tidyr` e o `dplyr`
 
 ### [3.1.1 Materiais alternativos que foram inspirados na criação deste Tópico](#311matalternativo)
 
 Para as seções [3.2](32oplogicas), [3.3](33ifstatements) e [3.4](34booleans):
 
- - A subseção [7.0.2](https://rstudio-education.github.io/hopr/modify.html#logical-subsetting) do **Hands-on Programming with R** do Hadley Wickham para a parte de *Operações Lógicas*.
- - Para a parte de condicionais e escolhas foram usadas as subseções [9.2](https://rstudio-education.github.io/hopr/programs.html#if-statements) do *Hans-On Programming with R* e a subseção [5.2](https://adv-r.hadley.nz/control-flow.html#choices) do **Advanced R** do Hadley Wickham.
+-   A subseção [7.0.2](https://rstudio-education.github.io/hopr/modify.html#logical-subsetting) do **Hands-on Programming with R** do Hadley Wickham para a parte de *Operações Lógicas*.
+-   Para a parte de condicionais e escolhas foram usadas as subseções [9.2](https://rstudio-education.github.io/hopr/programs.html#if-statements) do *Hans-On Programming with R* e a subseção [5.2](https://adv-r.hadley.nz/control-flow.html#choices) do **Advanced R** do Hadley Wickham.
 
 Para a seção [3.5](35subsetRbase):
 
- - Destaque aqui para a [seção 4](https://adv-r.hadley.nz/subsetting.html) do **Advanced R**.
- - Também importante a [seção 6.1](https://rstudio-education.github.io/hopr/r-notation.html#selecting-values)
-  do **Hands-On Programming with R**.
+-   Destaque aqui para a [seção 4](https://adv-r.hadley.nz/subsetting.html) do **Advanced R**.
+-   Também importante a [seção 6.1](https://rstudio-education.github.io/hopr/r-notation.html#selecting-values) do **Hands-On Programming with R**.
 
-No que tange as seções referentes ao `tidyverse`, vale notar que várias funções muito poderosas desses pacotes, especialmente do `dplyr`, não são abordadas neste tópico.  É o caso de funções como `mutate`, `summary`, `group_by`e coisas que aumentam o poder do pacote como  [`across`](https://dplyr.tidyverse.org/reference/across.html). Por conta disso vale pontuar:
+No que tange as seções referentes ao `tidyverse`, vale notar que várias funções muito poderosas desses pacotes, especialmente do `dplyr`, não são abordadas neste tópico. É o caso de funções como `mutate`, `summary`, `group_by`e coisas que aumentam o poder do pacote como [`across`](https://dplyr.tidyverse.org/reference/across.html). Por conta disso vale pontuar:
 
-- O `tidyverse` é incrível e faz muita coisa, tanto é que escreveram um livro em que você basicamente só usa ele do inicio ao fim, o *R for Data Science*. 
-- Para uma visão especifica do `dplyr` vale conferir os capítulos [5](https://r4ds.had.co.nz/transform.html) e [13](https://r4ds.had.co.nz/relational-data.html) do *R for Data Science*
+-   O `tidyverse` é incrível e faz muita coisa, tanto é que escreveram um livro em que você basicamente só usa ele do inicio ao fim, o *R for Data Science*.
 
-- Para uma visão especifica do `tidyr` ver o capítulo [12](https://r4ds.had.co.nz/tidy-data.html) do *R for Data Science*.
+-   Para uma visão especifica do `dplyr` vale conferir os capítulos [5](https://r4ds.had.co.nz/transform.html) e [13](https://r4ds.had.co.nz/relational-data.html) do *R for Data Science*
+
+-   Para uma visão especifica do `tidyr` ver o capítulo [12](https://r4ds.had.co.nz/tidy-data.html) do *R for Data Science*.
 
 ## [3.2 - Operações Lógicas](#32oplogicas)
 
 Para você realizar operações que os resultados são respostas lógicas, existem algumas opções a serem usadas. Veja abaixo exemplos dos chamados *Relational Operators*:
-
 
 ```{r}
 #Maior que:
@@ -106,8 +97,7 @@ c(1:3) >= c(3:1)
 
 ```
 
-Ps.: Um ótimo resumo sobre o que cada operador faz pode ser encontrado na [Table 7.1](https://rstudio-education.github.io/hopr/modify.html#tab:logop) do **Hands-On Programming with R**. 
-
+Ps.: Um ótimo resumo sobre o que cada operador faz pode ser encontrado na [Table 7.1](https://rstudio-education.github.io/hopr/modify.html#tab:logop) do **Hands-On Programming with R**.
 
 ## [3.3 - Escolhas e Condições (If Statements)](33ifstatements)
 
@@ -130,7 +120,6 @@ if (condição) {
 
 ```
 
-
 No modo como está escrito acima, para `if` retornar algum valor, é necessário que a condição seja igual à TRUE. Vamos ver abaixo:
 
 ```{r}
@@ -152,9 +141,9 @@ if(b == 2){
 
 Quando usamos `a == 2` como condição, `if` nos retorna o valor `"Condição válida"` expresso entre as chaves `{}`. No entanto quando usamos `b == 2`, como condição, não obtemos nenhum valor de retorno. Isso ocorre por dois motivos:
 
-- O valor de `a==2` é `TRUE`, enquanto de `b ==2` é `FALSE`. Assim sendo,  apenas no caso de `a==2` é que temos que a Condição como verdadeira, de modo que o que vale entre as chaves será retornado.
+-   O valor de `a==2` é `TRUE`, enquanto de `b ==2` é `FALSE`. Assim sendo, apenas no caso de `a==2` é que temos que a Condição como verdadeira, de modo que o que vale entre as chaves será retornado.
 
-- Não estabelecemos nada para retornar no caso da condição ser falsa. Por tanto, no caso de `b==2`, `if` não retornará nada.
+-   Não estabelecemos nada para retornar no caso da condição ser falsa. Por tanto, no caso de `b==2`, `if` não retornará nada.
 
 De modo cru, pode-se entender `if` como:
 
@@ -164,10 +153,9 @@ if(TRUE){
 }
 
 if(FALSE){
-  "Condição válida"
+  "Condição inválida"
 }
 ```
-
 
 ### 3.3.2 - if e else
 
@@ -183,7 +171,7 @@ if (condição){
     }
 ```
 
-Voltando ao exemplo usado em `3.3.2`, nesse caso teremos:
+Voltando ao exemplo usado em `3.3.1`, nesse caso teremos:
 
 ```{r}
 a <- 2
@@ -237,7 +225,6 @@ As opções não se resumem apenas à mensagens indicando o resultado da condiç
 
 Vamos fazer um exemplo que caso a condição `a > b` seja atendida realiza-se a soma desses valores e, caso contrário, realiza-se a subtração:
 
-
 ```{r}
 
 a <- 2
@@ -252,7 +239,7 @@ if(a > b){
 
 ### 3.3.3 - A função ifelse
 
-Existe a função ifelse que pode ser mais prática do que escrever o `if` `else` como foi feito. Mais importante ainda, o `ifelse` funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente.  No Tópico 4 falaremos mais sobre funções vetoriais.
+Existe uma função que pode ser mais prática do que escrever o `if` e `else`, tal como foi feito até agora, é a função `ifelse`. Mais importante ainda, o `ifelse` funciona também com vetores e não apenas com escalares. Para o nosso caso de Matriz Insumo-Produto, tal diferença é fundamental de se ter em mente. No Tópico 4 falaremos mais sobre funções vetoriais.
 
 A estrutura da `ifelse` é semelhante ao caso de `if` e `else` separado, no entanto, todos os argumentos são escritos numa mesma linha:
 
@@ -275,7 +262,7 @@ ifelse(a > b, a + b, a - b)
 
 Um importante detalhe a ser lembrado é que a própria condição pode ser a existência de algum resultado lógico. Ou seja, caso se um encontre um `TRUE` ou `FALSE`, faça determinada tarefa.
 
-```{r, eval = FALSE} 
+```{r, eval = FALSE}
 
 ifelse (a == TRUE, "faça isso", "faça outra coisa")
 ifelse (b == FALSE, "faça isso", "faça outra coisa")
@@ -318,11 +305,11 @@ is.data.frame2(i)
 
 ## [3.4 - Operações em Conjuntos (Booleans)](34booleans)
 
-Para essa parte é importante relembrar a ideia de conjuntos, em que iremos incluir mais de uma condição. Poderemos especificar determinadas tarefas para o caso em que diversas condições necessitam ser atendidas. 
+Para essa parte é importante relembrar a ideia de conjuntos, em que iremos incluir mais de uma condição. Poderemos especificar determinadas tarefas para o caso em que diversas condições necessitam ser atendidas.
 
 Veja abaixo alguns exemplos dos chamados *Logical Operators*, em especial os do tipo `and ( & )`e `or ( | )`.
 
-O operador & vai representar se duas ou mais condições são verdadeiros ou não:
+O operador & vai representar se duas ou mais condições são verdadeiras ou não:
 
 ```{r}
 # Se uma delas é FALSE, automaticamente o resultado é FALSE
@@ -332,6 +319,7 @@ FALSE & FALSE
 # Somente ocorrerá TRUE, caso ambas condições sejam TRUE:
 TRUE & TRUE
 ```
+
 Vamos ver uns exemplos numéricos:
 
 ```{r}
@@ -382,6 +370,7 @@ a > 2 | b == 2
 ```
 
 Temos também o operador `xor`, que serve quando vocẽ quer saber se os valores lógicos são diferentes ou não. Veja abaixo:
+
 ```{r}
 # Caso você queira que apenas UMA das condições seja atendida use xor(cond1, cond 2) 
 xor(a > 2, b == 2)
@@ -395,27 +384,31 @@ Outro operador interessante é o `!`, que simplesmente inverte o sinal lógico d
 !(a > 2) # Que equivale a receber o resultado lógico do teste TRUE ou FALSE
 ```
 
+Em alguns casos, outra opção é usar dois operadores em sequência `&&` ou `||` que realizaram a mesma tarefa mas poupará a capacidade computacional do seu computador. Na caso de `&&`, o resultado é automaticamente dado como `FALSE` caso a primeira condição já não seja atendida. Já para `||`, caso a primeira condição seja atendida, o resultado automaticamente é `TRUE`. Uma boa analogia de `||` e `&&` é de `identical` e `==`, que caso você tenha feito os desafios do Tópico 1 você se lembrará que:
 
-Em alguns casos, outra opção é usar dois operadores em sequência `&&` ou `||` que realizaram a mesma tarefa mas pouparão a capacidade computacional do seu computador. Na caso de `&&`, o resultado é automaticamente dado como `FALSE` caso a primeira condição já não seja atendida. Já para `||`, caso a primeira condição seja atendida, o resultado automaticamente é `TRUE`. Uma boa analogia de `||` e `&&` é de `identical` e `==`, que caso você tenha feito os desafios do Tópico 1 você se lembrará que:
+<center>
 
-<center> **Testando igualdade no R** </center>
+**Testando igualdade no R**
+
+</center>
+
 |           | Célula à Célula |      Objeto      |
 |-----------|:---------------:|:----------------:|
 | Exato     |      `a==b`     | `identical(a,b)` |
 | Tolerante |    $\nexists$   | `all.equal(a,b)` |
 
-|                         | Para retornar `TRUE` é necessário:                                                                                 |                     Célula à Célula                     |               Primeira Célula              |
-|-------------------------|--------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------:|:------------------------------------------:|
-|         E (and)         | **Todas** as Condições devem ser satisfeitas (`TRUE`)                                                              |                           `&`                           |                    `&&`                    |
-|        E/OU (or)        | **Ao menos uma** condição tem que ser satisfeita (`TRUE`);<br><br>a outra **não precisa** ser satisfeita (`TRUE`). |                           `\|`                          |                   `\|\|`                   |
-| OU EXCLUSIVAMENTE (xor) | Apenas uma condição deve ser satisfeitar (`TRUE`);<br><br>a outra **não pode** ser satisfeita (`TRUE`).            |                          `xor`                          |                 $\nexists$                |
-|          Todos          |                                       Todos os valores do vetor serem `TRUE`                                       |  Condiçao Suficiente<br> **se** usado dentro de `all()` | Condição Necessária,<br>mas não Suficiente |
-|          Algum          |                                       Pelo menos um valor do vetor ser `TRUE`                                      |  Condição Suficiente<br>**se** usado dentro de `any()`  |                 Condição Suficiente,<br>mas não Necessária |
+|                         | Para retornar `TRUE` é necessário:                                                                                 |                     Célula à Célula                    |               Primeira Célula              |
+|-------------------------|--------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------:|:------------------------------------------:|
+| E (and)                 | **Todas** as Condições devem ser satisfeitas (`TRUE`)                                                              |                           `&`                          |                    `&&`                    |
+| E/OU (or)               | **Ao menos uma** condição tem que ser satisfeita (`TRUE`);<br><br>a outra **não precisa** ser satisfeita (`TRUE`). |                          `\|`                          |                   `\|\|`                   |
+| OU EXCLUSIVAMENTE (xor) | Apenas uma condição deve ser satisfeitar (`TRUE`);<br><br>a outra **não pode** ser satisfeita (`TRUE`).            |                          `xor`                         |                 $\nexists$                 |
+| Todos                   | Todos os valores do vetor serem `TRUE`                                                                             | Condiçao Suficiente<br> **se** usado dentro de `all()` | Condição Necessária,<br>mas não Suficiente |
+| Algum                   | Pelo menos um valor do vetor ser `TRUE`                                                                            |  Condição Suficiente<br>**se** usado dentro de `any()` | Condição Suficiente,<br>mas não Necessária |
 
 A coluna "Primeira Célula" da linhas "Todos" e "Algum" diz respeito aos resultados de `&&` e `||` em relação a preposição lógica da linha.
 
-**É muito importante** que você entenda que `&&` e `||` retornar `TRUE` **NÃO** quer dizer que o teste foi feito para todo o vetor analisado e portanto ele é `TRUE`. Só que o teste para os primeiros valores responderam `TRUE`. Por outro lado, se o resultado retorna `FALSE` você sabe que os vetores não são suficientes.
-Para ficar mais claro, vamos considerar os seguintes vetores:
+**É muito importante** que você entenda que `&&` e `||` retornar `TRUE` **NÃO** quer dizer que o teste foi feito para todo o vetor analisado e portanto ele é `TRUE`. Só que o teste para os primeiros valores responderam `TRUE`. Por outro lado, se o resultado retorna `FALSE` você sabe que os vetores não são suficientes. Para ficar mais claro, vamos considerar os seguintes vetores:
+
 ```{r, eval= TRUE}
 vetor_a <- c(TRUE, FALSE, FALSE, TRUE)
 vetor_b <- c(TRUE, TRUE, TRUE, FALSE)
@@ -433,7 +426,9 @@ list("E" = vetor_a & vetor_b,
 list(vetor_a && vetor_b,
      vetor_a || vetor_b)
 ```
+
 Sabemos que nem todos os valores do teste célula à célula para `vetor_a` e `vetor_b` retornam `TRUE`, mas mesmo assim os teste `&&` e `||` retornam `TRUE` pois tem TRUE na primeira célula. Assim sendo, nesse caso acima, não podemos dizer nada sobre a relação do `vetor_a` e `vetor_b` como um todo. No caso de `vetor_c` e `vetor_d`, temos que:
+
 ```{r}
 list("E" = vetor_c & vetor_d,
      "E/OU" = vetor_c | vetor_d,
@@ -442,6 +437,7 @@ list("E" = vetor_c & vetor_d,
 list(vetor_c && vetor_d,
      vetor_c || vetor_d)
 ```
+
 Ou seja, quando a primeiras células dos resultados dos testes de `&` e `|` for `FALSE`, teremos que o mesmo ocorrerá com `&&` e `||` respectivamente. Assim, podemos dizer que nem todos os valores do resultado serão `TRUE`.
 
 Para saber se todos os valores de um vetor são `TRUE`, é possível realizar um teste usando a função `all()`:
@@ -458,9 +454,11 @@ all(vetor_a & vetor_b) == (vetor_a && vetor_b)
 ```
 
 O resultado é `FALSE`, pois `all` retorna `FALSE` ao avaliar que os resultados de `&` não são todos `TRUE`, enquanto `&&`avaliou apenas os primeiros valores, assim sendo, a comparação `TRUE ==FALSE` retorna `FALSE`. Por outro lado, para o caso de `vetor_c&& vetor_d`, temos:
+
 ```{r}
 all(vetor_c & vetor_d) == (vetor_c && vetor_d)
 ```
+
 Como ambos os resultados dão `FALSE`, temos que a comparação retorna `TRUE`. Ou seja, quando `&&` retorna `FALSE`, `all` necessariamente retornará o mesmo valor. Condição necessária, mas não suficiente. A extensão disso para o caso de `||` é deixado como exercicio para o leitor.
 
 Temos também o caso de `any`, em que retorna `TRUE` se algum dos valores analisados for `TRUE`.
@@ -471,7 +469,8 @@ any(a > 2, b == 2, 6 %in% d) # nenhuma é atendido logo devemos receber "FALSE"
 any(a >= 2, b == 2, 6 %in% d) # mudando a condição, agora "a >= 2" é atendida
 ```
 
-Temos agora o caso inverso de antes. Se `a||b` ou `a&&b` retornar `TRUE`, então a análise de `any(a|b)` ou `any(a&b)` necessariamente retornará `TRUE`. Porém, se  os testes de `&&` ou `||` retornar `FALSE`, não pode-se dizer que `any()` retornará `FALSE`. Veja os casos abaixo:
+Temos agora o caso inverso de antes. Se `a||b` ou `a&&b` retornar `TRUE`, então a análise de `any(a|b)` ou `any(a&b)` necessariamente retornará `TRUE`. Porém, se os testes de `&&` ou `||` retornar `FALSE`, não pode-se dizer que `any()` retornará `FALSE`. Veja os casos abaixo:
+
 ```{r}
 #Ambos dão TRUE
 any(vetor_a & vetor_b) == (vetor_a && vetor_b)
@@ -479,12 +478,10 @@ any(vetor_a & vetor_b) == (vetor_a && vetor_b)
 any(vetor_c & vetor_d) == (vetor_c && vetor_d)
 ```
 
-
 Por fim, novamente, todas essas operações podem ser usadas conjuntamente com `if`, `else` e `ifelse`. Isso amplia seu leque de opções quando deseja automatizar algumas tarefas, bem como realizar testes na sua base de dados.
 
-Ps.: Um ótimo resumo sobre o que cada operador Booleano faz pode ser encontrado na [Table 7.2](https://rstudio-education.github.io/hopr/modify.html#tab:boole) do **Hands-On Programming with R**. 
+Ps.: Um ótimo resumo sobre o que cada operador Booleano faz pode ser encontrado na [Table 7.2](https://rstudio-education.github.io/hopr/modify.html#tab:boole) do **Hands-On Programming with R**.
 
- 
 ## [3.5 - Manipulação de Dados no base R](#35subsetRbase)
 
 Aqui iremos explicar como realizar a manipulação de dados usando os comandos básicos do R. Essa parte tem relação direta com o tópico anterior em que foi ensinado sobre a leitura de dados no R. Agora iremos explorar como trabalhar base de dados importadas ou geradas no próprio R.
@@ -497,7 +494,6 @@ Em primeiro lugar, a forma de extração ou seleção de valores no R é feito m
 a[] # se for um objeto de uma dimensão
 a[,] # se for um objeto de duas dimensões
 ```
-
 
 Antes disso vamos relembrar alguns conceitos já apresentados em tópicos anteriores, mas que são fundamentais para esse tópico. Temos, basicamente, seis formas de escolher valores dentro de um vetor atômico:
 
@@ -542,12 +538,11 @@ b[c(TRUE, FALSE),] # Linha 1 (TRUE) e Linha 2 (FALSE)
 b["Linha 1",] # Pegar somente a Linha 1
 ```
 
-
 Podemos citar três operadores para selecionar valores em um objeto: `[]` e `[[]]` e `$`. O `[]` é decerto o mais útil e mais usado, enquanto os outros dois cumprem funções mais especificas, em especial quando usado em listas.
 
-  - `[]` retornará as informações especificadas, como uma sublista, uma coluna, uma linha, etc. Essa opção vai trazer os resultados na menor dimensão possível.
-  - `[[]]`retornará uma informação especifica que está contida, por exemplo, em uma lista ou data.frame. 
-  - `$` retornará uma lista ou objeto especificado em uma lista ou data.frame.
+-   `[]` retornará as informações especificadas, como uma sublista, uma coluna, uma linha, etc. Essa opção vai trazer os resultados na menor dimensão possível.
+-   `[[]]`retornará uma informação especifica que está contida, por exemplo, em uma lista ou data.frame.
+-   `$` retornará uma lista ou objeto especificado em uma lista ou data.frame.
 
 O `$` e `[[]]` são basicamente a mesma coisa, com o primeiro sendo uma forma mais "direta" de realizar a extração. No entanto, o `$` é mais indicado quando se está trabalhando com colunas que estão nomeadas, enquanto o `[[]]` é preferível quando as colunas não estão nomeadas (e que você deva colocar a posição escolhida dentro do objeto).
 
@@ -578,7 +573,7 @@ No caso, retornou apenas os elementos da segunda linhas e das duas primeiras col
 
 ### 3.5.2 - Manipulando Base de Dados usando Condições
 
-Uma das melhores formas de se manipular uma base de dados é fazendo uso dos diversos operadores condicionais ou relacionais explicados anteriormente. Tais operações podem facilitar muito a limpeza de dados, ao estabelecer para o R as "regras" que você deseja. Inúmeras combinações podem ser utilizadas, tais como selecionar observações que são maiores que determinado valores, países especificios por meio de seu nome ou até mesmo "outliers" da sua série. 
+Uma das melhores formas de se manipular uma base de dados é fazendo uso dos diversos operadores condicionais ou relacionais explicados anteriormente. Tais operações podem facilitar muito a limpeza de dados, ao estabelecer para o R as "regras" que você deseja. Inúmeras combinações podem ser utilizadas, tais como selecionar observações que são maiores que determinado valores, países especificios por meio de seu nome ou até mesmo "outliers" da sua série.
 
 Como exemplo, vamos aqui trabalhar com uma das base de dados padrão do R, a `iris`. Vamos avaliar qual é o tipo de base de dados, e fazer uma visualização parcial dos dados:
 
@@ -647,22 +642,27 @@ A familia de pacotes do `tidyverse` fortalece bastante a análise e manipulaçã
 
 Os pacotes do núcleo duro do *tidyverse* são:
 
-- ***tibble***: Já falamos, brevemente, desse pacote no Tópico 2. Um `tibble` é como um `data.frame` só que, na propria definição do site do [`tidyverse`](https://tibble.tidyverse.org/), mais preguiçoso e ranzinza. Ele não facilita sua vida como o `data.frame` o faz. Por exemplo, ele não muda nem o nome nem o tipo das variáveis e irão reclamar mais. Importante notar que antes um `tibble` e um `data.frame` eram mais diferentes do que são hoje^[Até agora (Junho de 2020) nem o [site](https://tibble.tidyverse.org/) nem a documentação do `tibble` no R foram atualizadas nesse sentido.], pois a função `data.frame` por default convertia `strings` em `factor`, o que mudou na atualização 4.0.0 do R.^[Veja mais na documentação de `data.frame`, em especial no argumento de `stringAsFactors`.] A principio, o `tibble` não será mais abordado aqui no curso, (pelo fato de que teremos um ) assim que desejar se aprofundar mais nele pode conferir o capitulo 10 do [*R for Data Science*](https://r4ds.had.co.nz/tibbles.html) e [neste artigo](https://tibble.tidyverse.org/articles/tibble.html).
+-   ***tibble***: Já falamos, brevemente, desse pacote no Tópico 2. Um `tibble` é como um `data.frame` só que, na propria definição do site do [`tidyverse`](https://tibble.tidyverse.org/), mais preguiçoso e ranzinza. Ele não facilita sua vida como o `data.frame` o faz. Por exemplo, ele não muda nem o nome nem o tipo das variáveis e irão reclamar mais. Importante notar que antes um `tibble` e um `data.frame` eram mais diferentes do que são hoje[^2], pois a função `data.frame` por default convertia `strings` em `factor`, o que mudou na atualização 4.0.0 do R.[^3] A principio, o `tibble` não será mais abordado aqui no curso, (pelo fato de que teremos um ) assim que desejar se aprofundar mais nele pode conferir o capitulo 10 do [*R for Data Science*](https://r4ds.had.co.nz/tibbles.html) e [neste artigo](https://tibble.tidyverse.org/articles/tibble.html).
 
-- ***readr***: No Tópico 2, também já falamos sobre o pacote `readr`, e como ele é muito mais rápido que o `base` R para importar uma base de dados. É importante considerar apenas que ele importa a base como um `tibble` e não um `data.frame`. Vamos falar um pouco dele aqui também.
+-   ***readr***: No Tópico 2, também já falamos sobre o pacote `readr`, e como ele é muito mais rápido que o `base` R para importar uma base de dados. É importante considerar apenas que ele importa a base como um `tibble` e não um `data.frame`. Vamos falar um pouco dele aqui também.
 
-- ***dplyr***: O pacote `dplyr` é **O** pacote para manipular os dados. Ele irá te ajudar a lidar conscientemente com problemas comuns na hora de manipular a base de dados. Uma parte das suas utilidades será apresentada no Tópico 3^[A mais relacionada com `subsetting`]. Os capítulos [5](https://r4ds.had.co.nz/transform.html) e [13](https://r4ds.had.co.nz/relational-data.html) do *R for Data Science* introduzem uma boa parte das funções que `dplyr` oferece, inclusive algumas das que não falaremos aqui.
+-   ***dplyr***: O pacote `dplyr` é **O** pacote para manipular os dados. Ele irá te ajudar a lidar conscientemente com problemas comuns na hora de manipular a base de dados. Uma parte das suas utilidades será apresentada no Tópico 3[^4]. Os capítulos [5](https://r4ds.had.co.nz/transform.html) e [13](https://r4ds.had.co.nz/relational-data.html) do *R for Data Science* introduzem uma boa parte das funções que `dplyr` oferece, inclusive algumas das que não falaremos aqui.
 
-- ***tidyr***: O pacote `tidyr` é por sua vez focado em deixar uma base de dados mais bem comportada, especificamente no modo `tidy`. Assim, o `tidyr` é muito voltado para base de dados retangulares. Algumas poucas funções do `tidyr` serão apresentadas no Tópico 3, em especial as mais úteis para Matriz Insumo Produto. Para uma visão (bem) mais abrangente do `tidyr` olhe o capítulo [12](https://r4ds.had.co.nz/tidy-data.html) do *R for Data Science*
+-   ***tidyr***: O pacote `tidyr` é por sua vez focado em deixar uma base de dados mais bem comportada, especificamente no modo `tidy`. Assim, o `tidyr` é muito voltado para base de dados retangulares. Algumas poucas funções do `tidyr` serão apresentadas no Tópico 3, em especial as mais úteis para Matriz Insumo Produto. Para uma visão (bem) mais abrangente do `tidyr` olhe o capítulo [12](https://r4ds.had.co.nz/tidy-data.html) do *R for Data Science*
 
-- ***purrr***: O pacote `purrr` traz consigo um poderoso ferramental para lidar com automação de tarefas e com estruturas de dados muito recursivas (listas). Sua abordagem radicalmente funcional te dá uma grande vantagem frente ao loop tradicional do base R. Uma parte deste pacote será abordado no Tópico 4, sendo também abordado no capítulo [21](https://r4ds.had.co.nz/iteration.html) do *R for Data Science* e no [9](https://adv-r.hadley.nz/functionals.html) do *Advanced R*.
+-   ***purrr***: O pacote `purrr` traz consigo um poderoso ferramental para lidar com automação de tarefas e com estruturas de dados muito recursivas (listas). Sua abordagem radicalmente funcional te dá uma grande vantagem frente ao loop tradicional do base R. Uma parte deste pacote será abordado no Tópico 4, sendo também abordado no capítulo [21](https://r4ds.had.co.nz/iteration.html) do *R for Data Science* e no [9](https://adv-r.hadley.nz/functionals.html) do *Advanced R*.
 
-- ***stringr***: Esse pacote lida com dados que na realidade são textos, as chamadas `strings`. Assim sendo, é uma ferramenta muito poderosa, que para além de questões óbvias, serve de apoio para o `subsetting` e a automação de determinadas tarefas. O pacote `stringr` e suas aplicações será discutido no Tópico 5. As funcionalidades do pacote são explicadas no capítulo
-[14](https://r4ds.had.co.nz/strings.html) do *R for Data Science*.
+-   ***stringr***: Esse pacote lida com dados que na realidade são textos, as chamadas `strings`. Assim sendo, é uma ferramenta muito poderosa, que para além de questões óbvias, serve de apoio para o `subsetting` e a automação de determinadas tarefas. O pacote `stringr` e suas aplicações será discutido no Tópico 5. As funcionalidades do pacote são explicadas no capítulo [14](https://r4ds.had.co.nz/strings.html) do *R for Data Science*.
 
-- ***ggplot2***: A ferramente mais poderosa de construção de gráficos do R. É o que se tem para falar do `ggplot2`. Ele será introduzido no Tópico 6. Uma abordagem mais ampla de todo o seu poder pode ser vista no livro [*ggplot2: Elegant Graphics for Data Analysis*](https://ggplot2-book.org/) feito pelo Hadley Wickham.
+-   ***ggplot2***: A ferramente mais poderosa de construção de gráficos do R. É o que se tem para falar do `ggplot2`. Ele será introduzido no Tópico 6. Uma abordagem mais ampla de todo o seu poder pode ser vista no livro [*ggplot2: Elegant Graphics for Data Analysis*](https://ggplot2-book.org/) feito pelo Hadley Wickham.
 
-- ***forcats***: Este pacote é útil para lidar com `factors` (*forcats* é um anagrama de *factors*), que é uma `classe` de vetores que servem para dar categorias à um `data.frame`. `factors` já foram mais comuns no R do que são hoje, em especial após a expansão do *Tidyverse* e da versão 4.0.0 da linguagem. Por conta disso, não vamos entrar em `factors` nesse curso à principio, sendo que com o `stringr` se consegue fazer tudo e mais um pouco que se faz com `factors`. Para quem tiver interesse, vale acessar o capitulo [15 do R for Data Science](https://r4ds.had.co.nz/factors.html) para aprender sobre o *forcats*. Para usar *factors* com um maior enfoque no base-R, vale a leitura da subseção [5.5.2](https://rstudio-education.github.io/hopr/r-objects.html#factors) do *Hands-on Programming with R*, e das subseções [3.4](https://adv-r.hadley.nz/vectors-chap.html#s3-atomic-vectors) e [4.2.1](https://adv-r.hadley.nz/subsetting.html#atomic-vectors-1) do *Advanced R*. 
+-   ***forcats***: Este pacote é útil para lidar com `factors` (*forcats* é um anagrama de *factors*), que é uma `classe` de vetores que servem para dar categorias à um `data.frame`. `factors` já foram mais comuns no R do que são hoje, em especial após a expansão do *Tidyverse* e da versão 4.0.0 da linguagem. Por conta disso, não vamos entrar em `factors` nesse curso à principio, sendo que com o `stringr` se consegue fazer tudo e mais um pouco que se faz com `factors`. Para quem tiver interesse, vale acessar o capitulo [15 do R for Data Science](https://r4ds.had.co.nz/factors.html) para aprender sobre o *forcats*. Para usar *factors* com um maior enfoque no base-R, vale a leitura da subseção [5.5.2](https://rstudio-education.github.io/hopr/r-objects.html#factors) do *Hands-on Programming with R*, e das subseções [3.4](https://adv-r.hadley.nz/vectors-chap.html#s3-atomic-vectors) e [4.2.1](https://adv-r.hadley.nz/subsetting.html#atomic-vectors-1) do *Advanced R*.
+
+[^2]: Até agora (Junho de 2020) nem o [site](https://tibble.tidyverse.org/) nem a documentação do `tibble` no R foram atualizadas nesse sentido.
+
+[^3]: Veja mais na documentação de `data.frame`, em especial no argumento de `stringAsFactors`.
+
+[^4]: A mais relacionada com `subsetting`
 
 ### [3.6.1 Escrevendo com o **pipe**](#361pipe)
 
@@ -703,13 +703,17 @@ mtcars %$% mean(drat)
 # Repare que ao usar %$% não é necessario usar "" para ser referir ao nome das colunas! 
 ```
 
-Quanto mais longo a linha de comando, melhor será aplicar o modo *pipe* em detrimento do *nested*. O modo *pipe* que usamos foi desenvolvido no pacote `magrittr`, sendo que o operador *pipe forward* `%>%` estará disponível para uso sempre que você carregar um pacote do `tidyverse`. Isso não é o caso do operador *exposition pipe*, que é necessário que você carregue explicitamente o pacote `magrittr`, pois este não é um dos pacotes do "núcleo" do *Tidyverse*. Existem outros dois operadores dentro do pacote `magrittr`^[E ficam disponíveis apenas se você carregar o `magrittr` explicitamente.] que são o *tee pipe* `%T>%` e o *compound assignment pipe* `%<>%`, mas que não serão discutidos aqui^[Para mais informações sobre o `magrittr` veja https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html].
+Quanto mais longo a linha de comando, melhor será aplicar o modo *pipe* em detrimento do *nested*. O modo *pipe* que usamos foi desenvolvido no pacote `magrittr`, sendo que o operador *pipe forward* `%>%` estará disponível para uso sempre que você carregar um pacote do `tidyverse`. Isso não é o caso do operador *exposition pipe*, que é necessário que você carregue explicitamente o pacote `magrittr`, pois este não é um dos pacotes do "núcleo" do *Tidyverse*. Existem outros dois operadores dentro do pacote `magrittr`[^5] que são o *tee pipe* `%T>%` e o *compound assignment pipe* `%<>%`, mas que não serão discutidos aqui[^6].
+
+[^5]: E ficam disponíveis apenas se você carregar o `magrittr` explicitamente.
+
+[^6]: Para mais informações sobre o `magrittr` veja <https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html>
 
 ## [3.7 - Subsetting com o `tidyverse`](#tidyversesubset)
 
 ### 3.7.1 - Extraindo colunas a partir dos seus nomes
 
-Existe duas funções para você retirar colunas a partir dos seus nomes, `select` e `pull`. O `select` irá manter a estrutura de dados, enquanto `pull` irá alocar todos os dados selecionados  num vetor atômico. Veja os exemplos abaixo:
+Existe duas funções para você retirar colunas a partir dos seus nomes, `select` e `pull`. O `select` irá manter a estrutura de dados, enquanto `pull` irá alocar todos os dados selecionados num vetor atômico. Veja os exemplos abaixo:
 
 ```{r, eval = FALSE}
 # Selecionando apenas a coluna 5
@@ -756,11 +760,11 @@ Existem outros elementos que fazem parte dos `select_helpers` se você quiser sa
 
 ### 3.7.2 - Linhas
 
-No que tange o subsetting via as linhas, temos três funções relevantes: `filter`, `distinct` e `arrange`. 
+No que tange o subsetting via as linhas, temos três funções relevantes: `filter`, `distinct` e `arrange`.
 
 #### 3.7.2.1 - filter
 
-A função `filter` irá filtrar as linhas a partir de uma condição. Que fique claro, quando falarmos abaixo em *filtrar* determinadas linhas, é que apenas essas linhas serão selecionadas. Você pode usar e abusar das comparações lógicas ( `==`, `!=`,  `>`, `>=`, `<`, `<=`). Veja os exemplos abaixo para usar `filter` com apenas uma condição e repare que a ordem dos argumentos não importa:
+A função `filter` irá filtrar as linhas a partir de uma condição. Que fique claro, quando falarmos abaixo em *filtrar* determinadas linhas, é que apenas essas linhas serão selecionadas. Você pode usar e abusar das comparações lógicas ( `==`, `!=`, `>`, `>=`, `<`, `<=`). Veja os exemplos abaixo para usar `filter` com apenas uma condição e repare que a ordem dos argumentos não importa:
 
 ```{r}
 
@@ -793,7 +797,9 @@ CO2 %>% filter(250 < conc)
 CO2 %>% filter(uptake <= 10)
 ```
 
-Repare que a ordem que você escreve os elementos a serem comparados não alteram o funcionamento da função. Você pode então Você pode deixa o uso de `filter` muito mais complexo. Veja abaixo um exemplo com as funções `mean`, `median` e moda^[Feita a partir deste código: https://www.tutorialspoint.com/r/r_mean_median_mode.htm]:
+Repare que a ordem que você escreve os elementos a serem comparados não alteram o funcionamento da função. Você pode então Você pode deixa o uso de `filter` muito mais complexo. Veja abaixo um exemplo com as funções `mean`, `median` e moda[^7]:
+
+[^7]: Feita a partir deste código: <https://www.tutorialspoint.com/r/r_mean_median_mode.htm>
 
 ```{r}
 CO2 %>% filter(conc > mean(conc))
@@ -820,12 +826,11 @@ Podemos colocar mais de uma condição em `filter` para não ter que fazer uma s
 CO2 %>% filter(conc ==moda(conc), uptake <= median(uptake))
 ```
 
-No caso acima foram selecionadas as linhas que ao mesmo tempo eram iguais à moda da coluna `conc` e eram menores que a  mediana de `uptake`. Poderíamos ir além e colocar um terceiro elemento:
+No caso acima foram selecionadas as linhas que ao mesmo tempo eram iguais à moda da coluna `conc` e eram menores que a mediana de `uptake`. Poderíamos ir além e colocar um terceiro elemento:
 
 ```{r}
 CO2 %>% filter(conc ==moda(conc), uptake <= median(uptake), Treatment == "chilled")
 ```
-
 
 Já tratamos do uso da função `filter` com as comparações lógicas, agora vamos falar dela com os ***operadores lógicos***. O poder de filter aumenta e muito quando usamos eles, veja só:
 
@@ -934,7 +939,7 @@ ex_df %>% distinct()
 
 #### 3.7.2.3 - Reordenando as linhas com `arrange`
 
-A função `arrange` serve para reordenar as linhas de acordo com uma coluna. 
+A função `arrange` serve para reordenar as linhas de acordo com uma coluna.
 
 ```{r}
 # Forma crescente (menores primeiro)
@@ -958,11 +963,11 @@ Se queremos apenas remover linhas que tem `NA`, há uma forma mais direta do que
 airquality %>% tidyr::drop_na() %>% head()
 ```
 
-Você pode escolher inclusive se você quer que sejam eliminadas linhas  com `NA` de uma coluna especifica.
+Você pode escolher inclusive se você quer que sejam eliminadas linhas com `NA` de uma coluna especifica.
+
 ```{r}
 airquality %>% tidyr::drop_na("Ozone") %>% head()
 ```
-
 
 ## [3.8 - Arrumando dados.](#arrumandodadostidyverse)
 
@@ -1031,14 +1036,14 @@ Agora suponha que queremos criar um `data.frame` que tenha todos os inscritos e 
 ```{r}
 df_inscritos %>% left_join(df_km)
 ```
-A função `left_join(x,y)` aloca todas as linhas de x, e todas as colunas de x e y. Assim sendo, no caso acima ela retornou todas as linhas de `df_inscritos` e alocou as linhas de `df_km` de acordo. Assim, as linhas de `df_inscritos` que não estavam presentes em `df_km` foram preservadas.  Veja o que ocorre se trocarmos a ordem dos argumentas na função:
+
+A função `left_join(x,y)` aloca todas as linhas de x, e todas as colunas de x e y. Assim sendo, no caso acima ela retornou todas as linhas de `df_inscritos` e alocou as linhas de `df_km` de acordo. Assim, as linhas de `df_inscritos` que não estavam presentes em `df_km` foram preservadas. Veja o que ocorre se trocarmos a ordem dos argumentas na função:
 
 ```{r}
 df_km %>% left_join(df_inscritos)
 ```
 
-No caso acima, as linhas de `df_km` foram preservadas, mas as linhas de `df_inscritos` que não estavam presentes em `df_km` foram excluídas. 
-A função `right_join` inverte a ordem dos argumentos, de modo que:
+No caso acima, as linhas de `df_km` foram preservadas, mas as linhas de `df_inscritos` que não estavam presentes em `df_km` foram excluídas. A função `right_join` inverte a ordem dos argumentos, de modo que:
 
 ```{r, eval = FALSE}
 #NÃO RODE
@@ -1061,8 +1066,8 @@ df_km2 %>% full_join(df_inscritos)
 
 Agora suponha que você tem apenas `df_inscritos` e `df_km2` (ou seja, não tem `df_km`). E que você não sabe a priori quem foi o "penetra". Assim, suponhamos que você quer duas coisas:
 
-- Uma lista apenas com os inscritos que foram participar
-- Desconsiderar a idade dos corredores e apenas saber o seu tempo.
+-   Uma lista apenas com os inscritos que foram participar
+-   Desconsiderar a idade dos corredores e apenas saber o seu tempo.
 
 Para conseguir essas duas coisas num único comando, basta usar a função `semi_join`:
 
@@ -1084,7 +1089,7 @@ Vamos supor mais uma situação: houve uma partida de futebol no dia seguinte, c
 df_futebol <- data.frame("Time" = rep(c(1,2), 6), "Jogador" = c("João", "José", "Ana", "Joana", "Gustavo", "Maria", "Silvia", "Jonas", "Henrique", "Bruno", "Julia", "Jade"))
 ```
 
-Agora suponha que se quer saber quais dos corredores inscritos foram jogar bolar no dia seguinte. Para tanto, podemos usar a função `inner_join`. No entanto há um problema. De modo geral, as funções do grupo `join` funcionam usando  colunas nos dois `data.frames` que tem o mesmo nome. No entanto, `df_futebol` não têm a variável `Nomes`, e sim `Jogadores`. Assim, temos que usar o argumento `by`, de modo que:
+Agora suponha que se quer saber quais dos corredores inscritos foram jogar bolar no dia seguinte. Para tanto, podemos usar a função `inner_join`. No entanto há um problema. De modo geral, as funções do grupo `join` funcionam usando colunas nos dois `data.frames` que tem o mesmo nome. No entanto, `df_futebol` não têm a variável `Nomes`, e sim `Jogadores`. Assim, temos que usar o argumento `by`, de modo que:
 
 ```{r}
 # Daria Erro
@@ -1092,7 +1097,6 @@ Agora suponha que se quer saber quais dos corredores inscritos foram jogar bolar
 
 df_futebol %>% inner_join(df_inscritos, by = c( "Jogador" = "Nomes"))
 ```
-
 
 ### 3.8.4 - Alterando tipos de colunas
 
@@ -1148,22 +1152,16 @@ df2 <- readr::type_convert(df)
 
 A função `type_convert()` converte os tipos de cada coluna naquelas que ela acredita ser a mais conveniente para o uso. Importante notar que no `Base R` existe o `type.convert()` que faz o mesmo serviço porém, enquanto a versão do `readr` tende a converter tudo para `double` e `characther`, a versão do `Base R` converter as coisas também para `integer` e `factor`. E *factors* são chatos.
 
-
 ## Fontes:
 
+Hands-on Programming with R: <https://rstudio-education.github.io/hopr/>
 
-Hands-on Programming with R: https://rstudio-education.github.io/hopr/
+R for Data Science: <https://r4ds.had.co.nz/>
 
-R for Data Science: https://r4ds.had.co.nz/
+Advanced-R: <https://adv-r.hadley.nz/>
 
-Advanced-R: https://adv-r.hadley.nz/
+Pacotes do tidyverse: <https://www.tidyverse.org/packages/>
 
-Pacotes do tidyverse: https://www.tidyverse.org/packages/
+Código para função moda: <https://www.tutorialspoint.com/r/r_mean_median_mode.htm>
 
-
-Código para função moda: https://www.tutorialspoint.com/r/r_mean_median_mode.htm
-
-Explicação de `across`:
-https://dplyr.tidyverse.org/reference/across.html
-
-
+Explicação de `across`: <https://dplyr.tidyverse.org/reference/across.html>
