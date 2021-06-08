@@ -129,7 +129,7 @@ Ou seja, cujas respostas são sim ou não.
 ]
 quaisquer e atribuiu um valor lógico de verdadeiro ou falso se elas tem ou não aquela caracteristica. Abaixo estão os valores nos quais vocẽ chegou no final.
 
-```{r, eval= FALSE}
+```{r}
 pessoa  <- c("Car_1", "Car_2", "Car_3", "Car_4")
 pessoa_1 <- c(TRUE, FALSE, FALSE, TRUE)
 pessoa_2 <- c(TRUE, TRUE, TRUE, FALSE)
@@ -158,7 +158,12 @@ tibble("Caracteristicas" = c("Car_1", "Car_2", "Car_3", "Car_4"),
 
 #### Q.1.5 Teste quais caracteristicas que `pessoa_1` tem que a `pessoa_2` também tem.
 
+```{r, include=F}
+pessoa_1 & pessoa_2
+```
+
 #### Q.1.6 Teste para saber quais caracteristicas podem estar presentes em `pessoa_2` ou em `pessoa_3` (considere as que ambas dividem também).
+
 
 #### Q.1.7 Teste para saber quais caracterisitacas estão presente apenas em `pessoa_2` ou apenas em `pessoa_3`
 
@@ -166,16 +171,32 @@ tibble("Caracteristicas" = c("Car_1", "Car_2", "Car_3", "Car_4"),
 
 #### Q.1.8 Crie uma `anti_pessoa_3` que é, como o nome já sugere, o inverso de `pessoa_3` em termos das quatro caracteristicas listadas.
 
+```{r, include=F}
+anti_pessoa_3 <- !pessoa_3
+```
+
 #### Q.1.9 Teste para saber se `pessoa_2` e `pessoa_6` tem as mesmas caracteristicas.
 
 Dica: Use dois operadores booleanos para tanto e então compare o resultado com `identical`.
 
 
-#### Q.1.10 Considere `pessoa_1` e `pessoa_2` como uma dupla que se complementa. Teste para saber se a dupla possuí, em qualquer um de seus membros,  todas as caracteristicas listadas. 
+#### Q.1.10 Considere `pessoa_1` e `pessoa_2` como uma dupla que se complementa. Teste para saber se a dupla possuí, em pelo menos um de seus membros, cada caracteristica listada. 
 
 Detalhe: o vetor da resposta correta tem comprimento `1`.
 
-#### Q.1.11 Para qualquer combinação de pessoas listadas o operador `&&` sempre retornará o mesmo resultado. Olhe para os dados e diga: por que não pode ser diferente? Quais características nos vetores seriam necessárias para usar isso. Por que isso não é o caso de `||`?
+```{r, include =F}
+# Passo a passo
+teste_Q1_10 <- pessoa_1 | pessoa_2 
+teste_Q1_10
+all(teste_Q1_10)
+
+# Em uma linha de comando
+teste_Q1_10 <- all(pessoa_1 | pessoa_2)
+teste_Q1_10
+```
+
+
+%#### Q.1.11 Para qualquer combinação de pessoas listadas o operador `&&` sempre retornará o mesmo resultado. Olhe para os dados e diga: por que não pode ser diferente? Quais características nos vetores seriam necessárias para usar isso. Por que isso não é o caso de `||`?
 
 #### Desafio D.1.1 O que o código abaixo está testando? Como você poderia substituir isso de forma muito simples?
 
