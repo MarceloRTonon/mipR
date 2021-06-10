@@ -164,10 +164,23 @@ pessoa_1 & pessoa_2
 
 #### Q.1.6 Teste para saber quais caracteristicas podem estar presentes em `pessoa_2` ou em `pessoa_3` (considere as que ambas dividem também).
 
+```{r, include=F}
+pessoa_2 | pessoa_3
+```
 
 #### Q.1.7 Teste para saber quais caracterisitacas estão presente apenas em `pessoa_2` ou apenas em `pessoa_3`
 
+```{r, include=F}
+xor(pessoa_2, pessoa_3)
+```
+
+
 #### Q.1.8 Teste para saber se `pessoa_1` e `pessoa_3` tem alguma caracteristica em comum.
+
+```{r, include=F}
+pessoa_1 & pessoa_3
+```
+
 
 #### Q.1.8 Crie uma `anti_pessoa_3` que é, como o nome já sugere, o inverso de `pessoa_3` em termos das quatro caracteristicas listadas.
 
@@ -178,6 +191,10 @@ anti_pessoa_3 <- !pessoa_3
 #### Q.1.9 Teste para saber se `pessoa_2` e `pessoa_6` tem as mesmas caracteristicas.
 
 Dica: Use dois operadores booleanos para tanto e então compare o resultado com `identical`.
+```{r, include=FALSE}
+pessoa_2 == pessoa_6
+identical(pessoa_2, pessoa_6)
+```
 
 
 #### Q.1.10 Considere `pessoa_1` e `pessoa_2` como uma dupla que se complementa. Teste para saber se a dupla possuí, em pelo menos um de seus membros, cada caracteristica listada. 
@@ -210,8 +227,17 @@ xor(pessoa_1, pessoa_2)
 **Dica:** Avalie o que são os testes dentro dos parêntesis e veja então o que está sendo comparado.
 
 #### Desafio D.2.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como `TRUE`). Como você faria isso? Por que não dá para vocẽ usar 
-
+_
 **Detalhe:** O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.
+
+```{r, include=F}
+func_D_2_2 <- function(x,y) {
+              ifelse(all(xor(x, y)), TRUE, FALSE)
+}
+func_D_2_2(pessoa_1, pessoa_2)
+func_D_2_2(pessoa_1, pessoa_3)
+```
+
 
 #### Q.1.12 - Explique as diferenças entre `&`, `&&`, `|` e `||`.
 
