@@ -190,10 +190,19 @@ anti_pessoa_3 <- !pessoa_3
 
 #### Q.1.9 Teste para saber se `pessoa_2` e `pessoa_6` tem as mesmas caracteristicas.
 
-Dica: Use dois operadores booleanos para tanto e então compare o resultado com `identical`.
+Dica: Use três operadores booleanos para tanto e então compare o resultado com `identical`.
+Dica 2: queremos um resultado com comprimento 1 (TRUE ou FALSE).
 ```{r, include=FALSE}
+
+# Opções simples
 pessoa_2 == pessoa_6
+all(pessoa_2, pessoa_6) # "Errado"
+all(pessoa_2 == pessoa_6)
 identical(pessoa_2, pessoa_6)
+
+# Resposta
+all((pessoa_2 & pessoa_6) | !(pessoa_2 & pessoa_6))
+
 ```
 
 
@@ -226,16 +235,16 @@ xor(pessoa_1, pessoa_2)
 
 **Dica:** Avalie o que são os testes dentro dos parêntesis e veja então o que está sendo comparado.
 
-#### Desafio D.2.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como `TRUE`). Como você faria isso? Por que não dá para vocẽ usar 
+#### Desafio D.1.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como `TRUE`). Como você faria isso? Por que não dá para vocẽ usar 
 _
 **Detalhe:** O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.
 
 ```{r, include=F}
-func_D_2_2 <- function(x,y) {
-              ifelse(all(xor(x, y)), TRUE, FALSE)
+func_D_1_2 <- function(x,y) {
+              all(xor(x, y))
 }
-func_D_2_2(pessoa_1, pessoa_2)
-func_D_2_2(pessoa_1, pessoa_3)
+func_D_1_2(pessoa_1, pessoa_2)
+func_D_1_2(pessoa_1, pessoa_3)
 ```
 
 
@@ -291,7 +300,7 @@ tem_inversa <- function(x){
 
 Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em matrizes insumo-produto dado que sua estrutura de dados são mais "quadradas", no máximo retangulares. Esse é o caso, por exemplo, da MIP extraída diretamente do IBGE. No entanto, tabelas mais amplas, como a própria base da "WIOD", traz uma série temporal de matrizes empilhadas. Usaremos a mesma base para a manipulação no base R e pelo tidyverse, de forma que fique mais clara as alternativas.
 
-#### Q.3.1 - Visualize `niotITA` e perceba que existem valores `NA` por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando uma lista com o nome das variáveis.
+#### Q.3.1 - Visualize `niotITA` e perceba que existem valores `NA` por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando um vetor atômico com o nome das variáveis.
 
 ```{r, include=FALSE}
 nomes_colunas <- c("Year", "Code", "Description", "Origin", niotITA[1,5:67])
@@ -303,8 +312,10 @@ nomes_colunas <- c("Year", "Code", "Description", "Origin", niotITA[1,5:67])
 *Obs*: Depois de obter os dados, use a função `readr::type_convert()` para ajustar os dados e sobrescreva sua base original. Mais a frente na lista, essa função será abordada com mais detalhes. De qualquer forma, vale ler a documentação para entender o seu uso. Mais ainda, tente avaliar o tipo de dados que a `niotITA_3.2` apresenta antes de usar a função `type_convert()`.
 
 ```{r, include=FALSE}
-niotITA_3.2 <- niotITA[2:1081,] %>% type_convert()
-colnames(niotITA_3.2) <- nomes_colunas
+#niotITA_3.2 <- niotITA[2:1081,] %>% type_convert()
+#niotITA_3.2 <- niotITA[2:nrow(niotITA),] %>% type_convert()
+niotITA_3.2 <- niotITA[-1,] %>% type_convert()
+#colnames(niotITA_3.2) <- nomes_colunas
 ```
 
 #### Q.3.3 - Extraia da sua base valores somente para o ano de 2008. Salve como `niotITA_3.3`

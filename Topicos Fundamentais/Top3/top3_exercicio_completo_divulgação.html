@@ -522,7 +522,7 @@ pessoa_6 &lt;- c(TRUE, TRUE, TRUE, FALSE)</code></pre>
 </div>
 <div id="q.1.9-teste-para-saber-se-pessoa_2-e-pessoa_6-tem-as-mesmas-caracteristicas." class="section level4">
 <h4>Q.1.9 Teste para saber se <code>pessoa_2</code> e <code>pessoa_6</code> tem as mesmas caracteristicas.</h4>
-<p>Dica: Use dois operadores booleanos para tanto e então compare o resultado com <code>identical</code>.</p>
+<p>Dica: Use três operadores booleanos para tanto e então compare o resultado com <code>identical</code>. Dica 2: queremos um resultado com comprimento 1 (TRUE ou FALSE).</p>
 </div>
 <div id="q.1.10-considere-pessoa_1-e-pessoa_2-como-uma-dupla-que-se-complementa.-teste-para-saber-se-a-dupla-possuí-em-pelo-menos-um-de-seus-membros-cada-caracteristica-listada." class="section level4">
 <h4>Q.1.10 Considere <code>pessoa_1</code> e <code>pessoa_2</code> como uma dupla que se complementa. Teste para saber se a dupla possuí, em pelo menos um de seus membros, cada caracteristica listada.</h4>
@@ -534,9 +534,9 @@ pessoa_6 &lt;- c(TRUE, TRUE, TRUE, FALSE)</code></pre>
 <pre class="r"><code>(pessoa_1 | pessoa_2) &amp; !(pessoa_1 &amp; pessoa_2)</code></pre>
 <p><strong>Dica:</strong> Avalie o que são os testes dentro dos parêntesis e veja então o que está sendo comparado.</p>
 </div>
-<div id="desafio-d.2.2-seguindo-o-desafio-anterior-suponha-que-você-quer-criar-uma-função-para-saber-se-o-vetor-como-um-todo-passa-nesse-teste-ou-seja-se-ele-retorna-tudo-como-true.-como-você-faria-isso-por-que-não-dá-para-vocẽ-usar" class="section level4">
-<h4>Desafio D.2.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como <code>TRUE</code>). Como você faria isso? Por que não dá para vocẽ usar</h4>
-<p><strong>Detalhe:</strong> O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.</p>
+<div id="desafio-d.1.2-seguindo-o-desafio-anterior-suponha-que-você-quer-criar-uma-função-para-saber-se-o-vetor-como-um-todo-passa-nesse-teste-ou-seja-se-ele-retorna-tudo-como-true.-como-você-faria-isso-por-que-não-dá-para-vocẽ-usar" class="section level4">
+<h4>Desafio D.1.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como <code>TRUE</code>). Como você faria isso? Por que não dá para vocẽ usar</h4>
+<p>_ <strong>Detalhe:</strong> O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.</p>
 </div>
 <div id="q.1.12---explique-as-diferenças-entre-e-." class="section level4">
 <h4>Q.1.12 - Explique as diferenças entre <code>&amp;</code>, <code>&amp;&amp;</code>, <code>|</code> e <code>||</code>.</h4>
@@ -560,8 +560,8 @@ b &lt;- matrix(c(4,3,0,6,2,0,5,1,0), 3, 3)</code></pre>
 <div id="parte-3---subsetting-base-r" class="section level2">
 <h2>Parte 3 - Subsetting Base R</h2>
 <p>Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em matrizes insumo-produto dado que sua estrutura de dados são mais “quadradas”, no máximo retangulares. Esse é o caso, por exemplo, da MIP extraída diretamente do IBGE. No entanto, tabelas mais amplas, como a própria base da “WIOD”, traz uma série temporal de matrizes empilhadas. Usaremos a mesma base para a manipulação no base R e pelo tidyverse, de forma que fique mais clara as alternativas.</p>
-<div id="q.3.1---visualize-niotita-e-perceba-que-existem-valores-na-por-conta-do-cabeçalho-da-base-de-dados.-ajuste-o-cabeçalho-de-acordo-com-o-conhecimento-adquirido-no-tópico-anterior-criando-uma-lista-com-o-nome-das-variáveis." class="section level4">
-<h4>Q.3.1 - Visualize <code>niotITA</code> e perceba que existem valores <code>NA</code> por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando uma lista com o nome das variáveis.</h4>
+<div id="q.3.1---visualize-niotita-e-perceba-que-existem-valores-na-por-conta-do-cabeçalho-da-base-de-dados.-ajuste-o-cabeçalho-de-acordo-com-o-conhecimento-adquirido-no-tópico-anterior-criando-um-vetor-atômico-com-o-nome-das-variáveis." class="section level4">
+<h4>Q.3.1 - Visualize <code>niotITA</code> e perceba que existem valores <code>NA</code> por conta do cabeçalho da base de dados. Ajuste o cabeçalho de acordo com o conhecimento adquirido no tópico anterior, criando um vetor atômico com o nome das variáveis.</h4>
 </div>
 <div id="q.3.2---elimine-a-linha-que-contém-na-e-renomeie-as-colunas-de-niotita.-salve-como-niotita_3.2." class="section level4">
 <h4>Q.3.2 - Elimine a linha que contém <code>NA</code> e renomeie as colunas de <code>niotITA</code>. Salve como <code>niotITA_3.2</code>.</h4>
