@@ -1,7 +1,7 @@
 ---
 title: "POF 2010 - Leitura"
 author: "Marcelo Tonon"
-date: "28/07/2020"
+date: "16/06/2021"
 output: html_document
 ---
 
@@ -224,7 +224,7 @@ Um detalhe que pode ser útil a quem quiser baixar pelo `R` (para fins de automa
 
 Estando `Dados.zip`  baixado e localizado no Diretório de Trabalho, podemos então descompacta-lo parcialmente pelo R.
 
-```{r, eval = FALSE}
+```{r, eval = T}
 unzip("Dados.zip")
 ```
 
@@ -803,7 +803,7 @@ col.pos5 <- fwf_widths(pof3.reg11.caderneta.desp$tamanho, col_names = pof3.reg11
 
 Considerado as variáveis **comuns mais as especificas** dessa base em questão temos:
 
-```{r, echo = F, results='asis'}
+```{r, echo = F, results='asis', eval=F, include=F}
 library(knitr)
 kable(pof1.reg10.aluguel[,1:2], caption = "Variáveis presentes em pof1.reg10.aluguel")
 ```
