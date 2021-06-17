@@ -9,7 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo= TRUE)
 ```
 
-
 ## Pacotes necessários para esse exercício.
 
 ```{r, include = FALSE}
@@ -28,22 +27,23 @@ library(readxl)
 
 Talvez você fique com dúvidas e dificuldades. É normal. Especialmente quando você está aprendendo uma coisa nova. Assim, tente seguir o roteiro abaixo para resolver suas questões:
 
-1. É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma virgula, parentêses, aspas... 
+1.  É importante que, **ao menos num primeiro momento**, você tente fazer tudo que está aqui por sua conta, sem a ajuda de nenhum conhecido. ***Quebre um pouco a cabeça mesmo.*** Leia o erro que o R está te retornando se for o caso. Veja se você escreveu tudo certo, se faltou ou sobrou uma virgula, parentêses, aspas...
 
-2. Dedique um tempo tentando elaborar esse erro ou dúvida. Organizar a sua dúvida na sua cabeça, muitas vezes já resolve o problema por si só.
+2.  Dedique um tempo tentando elaborar esse erro ou dúvida. Organizar a sua dúvida na sua cabeça, muitas vezes já resolve o problema por si só.
 
-3. Se tratando de uma dúvida referente a um objeto natural do R, ou de seus pacotes, use e abuse do `Help`. A documentação do R tenta ser a mais explicativa e direta ao ponto o possível. Não se preocupe, parte dos exercicios sempre será ler o que o próprio R tem a dizer sobre o assunto.
+3.  Se tratando de uma dúvida referente a um objeto natural do R, ou de seus pacotes, use e abuse do `Help`. A documentação do R tenta ser a mais explicativa e direta ao ponto o possível. Não se preocupe, parte dos exercicios sempre será ler o que o próprio R tem a dizer sobre o assunto.
 
-4. Persistidas os erros e as dificuldades, tente jogar no Google o problema. De modo geral, se você pesquisar "R" juntamente com a descrição do problema muito provavelmente aparecerá alguém pedindo ajuda sobre o tema.^[Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto [1.6](https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more) do *R for Data Science*.]
+4.  Persistidas os erros e as dificuldades, tente jogar no Google o problema. De modo geral, se você pesquisar "R" juntamente com a descrição do problema muito provavelmente aparecerá alguém pedindo ajuda sobre o tema.[^1]
 
-***IMPORTANTE***: Será sempre perguntado na sala de aula se alguém pesquisou na internet para resolver seus problemas e queremos saber como cada um se saiu. Assim, pedimos que você 
+[^1]: Pesquise em inglês para ter resultados muitos melhores. Leia mais sobre isso no ponto [1.6](https://r4ds.had.co.nz/introduction.html#getting-help-and-learning-more) do *R for Data Science*.
 
-5. Se você não conseguir se resolver por meio do Google ou em outros canais da internet, aí então peça ajuda a um amigo. 
+***IMPORTANTE***: Será sempre perguntado na sala de aula se alguém pesquisou na internet para resolver seus problemas e queremos saber como cada um se saiu. Assim, pedimos que você
 
+5.  Se você não conseguir se resolver por meio do Google ou em outros canais da internet, aí então peça ajuda a um amigo.
 
 ## Acessando guias de pacotes: a função `vignette`
 
-Tal qual as funções tem um guia especifico, `R Documentation`, alguns pacotes do R possuem um guia mais longo, `vignette`. Vignettes servem para apresentar o pacote e os problemas para os quais eles foram feitos para resolver.  É importante notar que alguns pacotes tem mais mais de uma vignette. E para complicar um pouco mais, a função `vignette("nome_de_pacote")` não irá te fazer acessa alguma `vignette` de um pacotes. Por exemplo, se você fizer `vignette("dplyr")` você acessará uma documentação deste tipo na aba Help do RStudio. Por outro lado se você fizer `vignette("purrr")` o R te retornará um aviso dizendo que não foi encontrada vignette alguma.
+Tal qual as funções tem um guia especifico, `R Documentation`, alguns pacotes do R possuem um guia mais longo, `vignette`. Vignettes servem para apresentar o pacote e os problemas para os quais eles foram feitos para resolver. É importante notar que alguns pacotes tem mais mais de uma vignette. E para complicar um pouco mais, a função `vignette("nome_de_pacote")` não irá te fazer acessa alguma `vignette` de um pacotes. Por exemplo, se você fizer `vignette("dplyr")` você acessará uma documentação deste tipo na aba Help do RStudio. Por outro lado se você fizer `vignette("purrr")` o R te retornará um aviso dizendo que não foi encontrada vignette alguma.
 
 Há no entanto uma solução para isso. Se você fizer simplesmente `vignette()`, o pacote lhe retornará a lista de todas as vignettes por pacote. Veja abaixo:
 
@@ -78,7 +78,6 @@ Se você quer acessar essa documentação de um pacote que você ainda não inst
 
 # Exercicios
 
-
 ### 1. Lendo a NIOT 2016 para a Italia (WIOD) pela primeira vez
 
 Vamos agora usar a base de dados NIOT para praticar o que foi passado nos últimos tópicos. As NIOT (em inglês National Input Output Tables) estão disponíveis no [site da WIOD](http://www.wiod.org/). Para acessar a página de download das NIOT', clique na aba `Release 2016` opção `Input-Output Tables` e numa coluna na parte direita da tela escrito `Related Tables` clique na opção `National Tables`([Clique aqui](http://www.wiod.org/database/niots16) para acessar a página). Lá terá a opção `Italy NIOT` para baixar, ou [clique aqui](http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx).
@@ -104,7 +103,6 @@ Existem vantagens e desvantagens de você baixar as coisas diretamente do seu te
 
 Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter problemas. Rode o código acima para seguir no exercicio a seguir.
 
-
 ## Parte 1 - Operadores Lógicos e Booleanos
 
 #### Q.1.1 - Revise a [Table 7.1](https://rstudio-education.github.io/hopr/modify.html#tab:logop) do **HOPR** para deixar claro como funciona cada operador lógico.
@@ -113,21 +111,18 @@ Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter p
 
 #### Q.1.3 - Atribua valores arbitrários para "a", "b" e "c" na Table 7.1 e explique com suas palavras o resultado de cada teste.
 
-#### Q.1.4 - Teste a condição (x > 5 & < 10). Por que ela não funciona? Como você resolveria?
+#### Q.1.4 - Teste a condição (x \> 5 & \< 10). Por que ela não funciona? Como você resolveria?
 
 ```{r, include=FALSE}
 x <- 7
 x > 5 & x < 10
 ```
 
-### Avaliando Vetores 
+### Avaliando Vetores
 
-Suponha que você conhece 5 pessoas. E que vocẽ então listou 4 caracteristicas binárias^[
+Suponha que você conhece 5 pessoas. E que vocẽ então listou 4 caracteristicas binárias\^[
 
-Ou seja, cujas respostas são sim ou não. 
-**Pergunta Binária:** _Fulano é loiro?_ **Pergunta não binária:** _Qual a cor do cabelo de Fulano?_
-]
-quaisquer e atribuiu um valor lógico de verdadeiro ou falso se elas tem ou não aquela caracteristica. Abaixo estão os valores nos quais vocẽ chegou no final.
+Ou seja, cujas respostas são sim ou não. **Pergunta Binária:** *Fulano é loiro?* **Pergunta não binária:** *Qual a cor do cabelo de Fulano?* ] quaisquer e atribuiu um valor lógico de verdadeiro ou falso se elas tem ou não aquela caracteristica. Abaixo estão os valores nos quais vocẽ chegou no final.
 
 ```{r}
 pessoa  <- c("Car_1", "Car_2", "Car_3", "Car_4")
@@ -140,6 +135,7 @@ pessoa_6 <- c(TRUE, TRUE, TRUE, FALSE)
 ```
 
 Façamos uma tabela para ficar mais claro:
+
 ```{r}
 tibble("Caracteristicas" = c("Car_1", "Car_2", "Car_3", "Car_4"),
        "pessoa_1" = c(TRUE, FALSE, FALSE, TRUE),
@@ -150,7 +146,7 @@ tibble("Caracteristicas" = c("Car_1", "Car_2", "Car_3", "Car_4"),
        "pessoa_6" = c(TRUE, TRUE, TRUE, FALSE))
 ```
 
-**IMPORTANTE:** Nas próximas questões queremos apenas os resultados com os valores lógicos. Não precisa fazer um código tentando indicar automaticamente um valor `character` para isso. Um resultado como `r  c(FALSE, TRUE, FALSE, TRUE)`, ou mesmo `r FALSE` quando for o caso, está de ótimo tamanho. Se tiver como  `r  c(FALSE, TRUE, FALSE, TRUE)` já é entendido por exemplo que a resposta é: nãopara `Car_1`; sim para `Car_2`; não para `Car_3`; e sim para `Car_4`. Não precisa tentar falar o nome da caracteristica como `r c("Car_2", "Car_4")`. Que fique claro: **Não precisa**, _mas se quiser pode._
+**IMPORTANTE:** Nas próximas questões queremos apenas os resultados com os valores lógicos. Não precisa fazer um código tentando indicar automaticamente um valor `character` para isso. Um resultado como `r  c(FALSE, TRUE, FALSE, TRUE)`, ou mesmo `r FALSE` quando for o caso, está de ótimo tamanho. Se tiver como `r  c(FALSE, TRUE, FALSE, TRUE)` já é entendido por exemplo que a resposta é: nãopara `Car_1`; sim para `Car_2`; não para `Car_3`; e sim para `Car_4`. Não precisa tentar falar o nome da caracteristica como `r c("Car_2", "Car_4")`. Que fique claro: **Não precisa**, *mas se quiser pode.*
 
 **PRESTE ATENÇÃO** quando queremos resultados específicos sobre cada uma das `caracterististicas` ou quando queremos comparação geral sobre as `pessoas`. (vulgo: qual o comprimento do vetor que eu quero) Se você não entendeu essa dica, volte para o material na parte da tabela dos operadores booleanos.
 
@@ -174,13 +170,11 @@ pessoa_2 | pessoa_3
 xor(pessoa_2, pessoa_3)
 ```
 
-
 #### Q.1.8 Teste para saber se `pessoa_1` e `pessoa_3` tem alguma caracteristica em comum.
 
 ```{r, include=F}
 pessoa_1 & pessoa_3
 ```
-
 
 #### Q.1.8 Crie uma `anti_pessoa_3` que é, como o nome já sugere, o inverso de `pessoa_3` em termos das quatro caracteristicas listadas.
 
@@ -190,8 +184,8 @@ anti_pessoa_3 <- !pessoa_3
 
 #### Q.1.9 Teste para saber se `pessoa_2` e `pessoa_6` tem as mesmas caracteristicas.
 
-Dica: Use três operadores booleanos para tanto e então compare o resultado com `identical`.
-Dica 2: queremos um resultado com comprimento 1 (TRUE ou FALSE).
+Dica: Use três operadores booleanos para tanto e então compare o resultado com `identical`. Dica 2: queremos um resultado com comprimento 1 (TRUE ou FALSE).
+
 ```{r, include=FALSE}
 
 # Opções simples
@@ -205,8 +199,7 @@ all((pessoa_2 & pessoa_6) | !(pessoa_2 & pessoa_6))
 
 ```
 
-
-#### Q.1.10 Considere `pessoa_1` e `pessoa_2` como uma dupla que se complementa. Teste para saber se a dupla possuí, em pelo menos um de seus membros, cada caracteristica listada. 
+#### Q.1.10 Considere `pessoa_1` e `pessoa_2` como uma dupla que se complementa. Teste para saber se a dupla possuí, em pelo menos um de seus membros, cada caracteristica listada.
 
 Detalhe: o vetor da resposta correta tem comprimento `1`.
 
@@ -221,23 +214,23 @@ teste_Q1_10 <- all(pessoa_1 | pessoa_2)
 teste_Q1_10
 ```
 
-
-%#### Q.1.11 Para qualquer combinação de pessoas listadas o operador `&&` sempre retornará o mesmo resultado. Olhe para os dados e diga: por que não pode ser diferente? Quais características nos vetores seriam necessárias para usar isso. Por que isso não é o caso de `||`?
+%\#\#\#\# Q.1.11 Para qualquer combinação de pessoas listadas o operador `&&` sempre retornará o mesmo resultado. Olhe para os dados e diga: por que não pode ser diferente? Quais características nos vetores seriam necessárias para usar isso. Por que isso não é o caso de `||`?
 
 #### Desafio D.1.1 O que o código abaixo está testando? Como você poderia substituir isso de forma muito simples?
 
 ```{r, eval=FALSE}
 (pessoa_1 | pessoa_2) & !(pessoa_1 & pessoa_2)
 ```
+
 ```{r, eval=FALSE, include=FALSE}
 xor(pessoa_1, pessoa_2)
 ```
 
 **Dica:** Avalie o que são os testes dentro dos parêntesis e veja então o que está sendo comparado.
 
-#### Desafio D.1.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como `TRUE`). Como você faria isso? Por que não dá para vocẽ usar 
-_
-**Detalhe:** O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.
+#### Desafio D.1.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como `TRUE`). Como você faria isso? Por que não dá para vocẽ usar
+
+\_ **Detalhe:** O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.
 
 ```{r, include=F}
 func_D_1_2 <- function(x,y) {
@@ -246,7 +239,6 @@ func_D_1_2 <- function(x,y) {
 func_D_1_2(pessoa_1, pessoa_2)
 func_D_1_2(pessoa_1, pessoa_3)
 ```
-
 
 #### Q.1.12 - Explique as diferenças entre `&`, `&&`, `|` e `||`.
 
@@ -279,8 +271,6 @@ par_impar(2)
 par_impar(3)
 ```
 
-
-
 #### Q.2.2 - No material de Algebra Linear, discutimos que para uma matriz ser invertível é necessário que ela atenda à algumas condições. Escreva uma função que diga se as matrizes abaixo são invertíveis ou não, e diga se as matrizes abaixo tem inversa.
 
 ```{r, include=TRUE}
@@ -295,7 +285,6 @@ tem_inversa <- function(x){
 }
 ```
 
-
 ## Parte 3 - Subsetting Base R
 
 Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em matrizes insumo-produto dado que sua estrutura de dados são mais "quadradas", no máximo retangulares. Esse é o caso, por exemplo, da MIP extraída diretamente do IBGE. No entanto, tabelas mais amplas, como a própria base da "WIOD", traz uma série temporal de matrizes empilhadas. Usaremos a mesma base para a manipulação no base R e pelo tidyverse, de forma que fique mais clara as alternativas.
@@ -305,7 +294,6 @@ Como veremos ao longo do curso, o subsetting pelo base R é amplamente usado em 
 ```{r, include=FALSE}
 nomes_colunas <- c("Year", "Code", "Description", "Origin", niotITA[1,5:67])
 ```
-
 
 #### Q.3.2 - Elimine a linha que contém `NA` e renomeie as colunas de `niotITA`. Salve como `niotITA_3.2`.
 
@@ -340,32 +328,46 @@ identical(niotITA_3.4,niotITA_3.5)
 View(niotITA_3.5)
 ```
 
-#### Q.3.6 - Crie um novo conjunto de dados somente com as informações da Demanda Intermediária (i.e faça um subsetting para eliminar as colunas a partir de "Final Consumption Expenditure by Households").
-
+#### Q.3.6 - Crie um novo conjunto de dados somente com as informações da Demanda Intermediária Doméstica a partir da `niotITA_3.5` (i.e faça um subsetting para eliminar as colunas a partir de "Final Consumption Expenditure by Households").
 
 ```{r, include=FALSE}
 niotITA_3.6 <- niotITA_3.5[,-c(61:67)]
+niotITA_3.6a <- niotITA_3.5[,1:60]
+
+
+niotITA_3.6b <- niotITA_3.2[,-c(61:67)]
+niotITA_3.6c <- niotITA_3.2[,1:60]
+
+niotITA_3.6d <- niotITA_3.5[,1:(ncol(niotITA_3.5)-7)]
 ```
-
-
 
 #### **Desafio 3.1**: Monte uma matriz de coeficientes técnicos a partir das informaçoes extraídas. Lembrando que os coeficientes são a divisão de um elemento da matriz de demanda intermediária em relação ao setor (que está na coluna).
 
-**Dica**: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.
+**Dica**: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial (`niotITA_3.2`) a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.
+
 
 ```{r, include=FALSE}
 
 total_output <- niotITA_3.2[niotITA_3.2$Year == "2008" & niotITA_3.2$Description == "Output at basic prices",]
 
-total_output_diag <- diag(1/as.double(total_output[,5:60]))
+solveDiag <- function(x){
+  dbl_x <- 1/c(as.double(x))
+  dbl_x[is.nan(dbl_x)|is.infinite(dbl_x)] <- 0
+  return(diag(dbl_x))
+}
 
+total_output_diag <- diag(1/as.double(total_output[,5:60])); total_output_diag[is.nan(total_output_diag)|is.infinite(total_output_diag)] <-0
+
+solveDiag(total_output[,5:60]) %>% all.equal(total_output_diag, check.attributes = FALSE)
 Dem_Int_matrix <- niotITA_3.6[,-c(1:4)] %>% as.matrix()
 
-coef_tec <- Dem_Int_matrix%*%total_output_diag
+coef_tec <- Dem_Int_matrix %*% total_output_diag
   
 ```
 
-#### Q.3.7 - Vamos criar um novo conjunto de dados composto apenas pela soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.
+#### Q.3.7 - Vamos criar um novo conjunto de dados composto apenas pelos vetores com a soma da Demanda Intemediária, soma da Demanda Final e a Demanda Total. Não esqueça de nomear as colunas.
+
+Detalhe: queremos os dados por setor, e não agregado em apenas um valor!
 
 ```{r, eval = FALSE, include = FALSE}
 #exemplo sala
@@ -385,15 +387,16 @@ as.logical(A[-2])
 ```
 
 ```{r, include=FALSE}
-Dem_Int <-rowSums((as.data.frame(niotITA_3.5))[,5:60])
+Dem_Int <-rowSums((as.data.frame(niotITA_3.5[,5:60])))
 
 Dem_Fin <-rowSums((as.data.frame(niotITA_3.5))[,61:66])
 
 Dem_Tot <-Dem_Int+Dem_Fin
 
+all.equal(Dem_Tot, as.double(niotITA_3.5$GO))
+
 niotITA_3.7 <- cbind(niotITA_3.5[,1:4],Dem_Int,Dem_Fin,Dem_Tot) 
 ```
-
 
 ## Parte 4 - Tidyverse
 
@@ -416,7 +419,6 @@ typeof(niotITA)
 class(niotITA)
 ```
 
-
 #### Q.1.3 Usando o pacote `dplyr`, crie um objeto `ItaQ1.3` que exclui de `niotITA` as linhas que possuem NA.
 
 ```{r, include=FALSE}
@@ -437,14 +439,15 @@ ItaQ1.4 <- niotITA %>% tidyr::drop_na()
 identical(ItaQ1.3, ItaQ1.4)
 ```
 
-#### Q.1.6 Crie um data.frame `vecQ1.6` com a linha de `niotITA` que possui  `NA`.
+#### Q.1.6 Crie um data.frame `vecQ1.6` com a linha de `niotITA` que possui `NA`.
+
 ```{r, include=FALSE}
 vecQ1.6 <- niotITA %>% filter(is.na(Year))
 
 vecQ1.6 <- niotITA %>% filter_all(any_vars(is.na(.)))
 ```
 
-#### Q.1.7 Crie um **vetor atômico** `vecQ1.7`, de tal modo que os valores de `vecQ1.6` que contém `NA` fiquem com os nomes das suas respectivas colunas. 
+#### Q.1.7 Crie um **vetor atômico** `vecQ1.7`, de tal modo que os valores de `vecQ1.6` que contém `NA` fiquem com os nomes das suas respectivas colunas.
 
 *Dica 1:* Crie `vecQ1.7` como cópia de `vecQ1.6` (`vecQ1.7 <- vecQ1.6`) para iniciar a resolução. Porém, fique atento, pois tem não uma, mas duas pegadinhas.
 
@@ -452,7 +455,6 @@ vecQ1.6 <- niotITA %>% filter_all(any_vars(is.na(.)))
 vecQ1.7 <- vecQ1.6 %>% c()
 vecQ1.7[1:4] <- names(vecQ1.7)[1:4]
 ```
-
 
 #### D.1.1 **DESAFIO COMPLICADO:** Crie, **a partir de `vecQ1.6`**, um vetor atómico `vecD1.1` que fique igual à `vecQ1.6`. **PORÉM**, o faça sem escrever arbitrariamente o índice das colunas. Ou seja, não escreva número algum para além dos usados nos nomes dos objetos.
 
@@ -487,9 +489,7 @@ typeof(ItaQ1.9[[5]])
 
 Vamos agora separar as varíaveis de demanda final da tabela `ItaQ1.3` do restante delas.
 
-
-
-#### Q.2.1 Crie um objeto `ItaQ2.1` a partir de `ItaQ1.9` em que  as linhas da coluna `Origin` que tem os valores `"TOT"` são excluidas. Você consegue fazer tanto pelo Base R quanto pelo tidyverse?
+#### Q.2.1 Crie um objeto `ItaQ2.1` a partir de `ItaQ1.9` em que as linhas da coluna `Origin` que tem os valores `"TOT"` são excluidas. Você consegue fazer tanto pelo Base R quanto pelo tidyverse?
 
 ```{r, include=FALSE}
 ItaQ2.1 <- ItaQ1.9[ItaQ1.9$Origin != "TOT",]
@@ -554,7 +554,6 @@ Nas questões a seguir, exceto se indicado, a tabela `ItaQ1.9` será a base de d
 
 #### Q.3.1 Crie um objeto `ItaQ3.1`, que contenha apenas os valores `"Imports"` do ano de 2000. De quais formas você consegue fazer isso?
 
-
 ```{r, include=FALSE}
 ItaQ3.1 <- ItaQ1.9 %>% filter(Year == 2000, Origin == "Imports")
 
@@ -575,7 +574,7 @@ ItaQ3.2c <- ItaQ1.9 %>% filter(Origin == "Domestic",
 
 ```
 
-#### Q.3.3 Crie `ItaQ3.3` de modo que tenha apenas os valores para o ano 2000 e que os valores  do *Gross Output* (código `GO`) sejam maiores ou iguais a média de `GO`.
+#### Q.3.3 Crie `ItaQ3.3` de modo que tenha apenas os valores para o ano 2000 e que os valores do *Gross Output* (código `GO`) sejam maiores ou iguais a média de `GO`.
 
 ```{r, include=FALSE}
 ItaQ3.3 <- ItaQ1.9 %>% filter(Year == 2000) %>% .$GO %>% typeof()
@@ -587,7 +586,7 @@ ItaQ3.3 <- ItaQ1.9 %>% filter(Year == 2000) %>% .$GO %>% typeof()
 ItaQ3.4 <- ItaQ1.9 %>% filter(near(GO, 20000, tol= 15000))
 ```
 
-#### Q.3.5 Some os valores de todas as linhas da base filtrada com as seguintes caracteristicas:  `Origin = Domestic`; `Year = 2000`. Chame o objeto de `vecQ3.5`
+#### Q.3.5 Some os valores de todas as linhas da base filtrada com as seguintes caracteristicas: `Origin = Domestic`; `Year = 2000`. Chame o objeto de `vecQ3.5`
 
 ```{r, include=FALSE}
 vecQ3.5 <- ItaQ1.9 %>% filter(Origin == "Domestic", Year == 2000) %>%
@@ -614,21 +613,19 @@ dfQ4.1 <- dplyr::full_join(ganhadores, americadoSul)
 
 #### Q.4.1 Crie:
 
-- `dfQ4.2a`: `americadoSul` países ordenados por número de participações em ordem crescente.
+-   `dfQ4.2a`: `americadoSul` países ordenados por número de participações em ordem crescente.
 
 ```{r, include=FALSE}
 dfQ4.2a <- americadoSul %>% arrange(Participações)
 ```
 
-
--`dfQ4.2b`:  `americadoSul` ordenados por número de titulos, em ordem decrescente.
-
+\-`dfQ4.2b`: `americadoSul` ordenados por número de titulos, em ordem decrescente.
 
 ```{r, include=FALSE}
 dfQ4.2b <- americadoSul %>% arrange(Titulos)
 ```
 
--`dfQ4.2c`: `ganhadores` ordenada por número de títulos em ordem decrescente.
+\-`dfQ4.2c`: `ganhadores` ordenada por número de títulos em ordem decrescente.
 
 ```{r, include=FALSE}
 dfQ4.2c <- ganhadores %>% arrange(desc(Titulos))
@@ -647,7 +644,6 @@ edicoes <- data.frame("Copa"=c(2018, 2014, 2010, 2006, 2002, 1998,1994, 1990, 19
 ```
 
 #### Q.4.4 Usando o `dplyr` Exclua a coluna `Vice` e filtre apenas a as edições depois de 1990 em diante. Nomeie essa tabela de `dfQ4.4`.
-
 
 ```{r, include=FALSE}
 dfQ4.4 <- edicoes %>% select(-Vice) %>% filter(Copa > 1990)
@@ -715,9 +711,6 @@ Q51 <- list(T, T, F, F, F, F)
 names(Q51) <-letters[1:6]
 ```
 
-
-
-
 #### Q.5.2 Use `typeof` em `dfQ5`, `lstQ5`, `matQ5`, `atmQ5`. Como isso se relaciona com as afirmações `Q.5.1.a`,`Q.5.1.b`, `Q.5.1.d`, `Q.5.1.e` e `Q.5.1.f`?
 
 ```{r, include=FALSE}
@@ -783,8 +776,7 @@ class(dfQ5$A)
 
 #### Q.5.10 Verifique o tipo e classe de `t(dfQ5)`. Sendo que `dfQ5` tem 3 linhas e 2 colunas, você consegue deduzir, **sem rodar a função**, o `length` de `t(dfQ5)` ? E o de `as.data.frame(t(dfQ5))`
 
-
-#### Q.5.11 Sejam `df.nomes`, `df.nomes2`, `df.nomes3` e `dfQ5.11`  definidos como:
+#### Q.5.11 Sejam `df.nomes`, `df.nomes2`, `df.nomes3` e `dfQ5.11` definidos como:
 
 ```{r, include= TRUE}
 df.nomes <- data.frame("Nomes" = c("D", "F", "E"), "Nomes_B" = c("W", "X", "Y"))
@@ -801,6 +793,7 @@ NULL or a single integer or character string specifying a column to be used as r
 O que irá ocorrer em cada uma dessas situações? Você consegue dizer o porquê? Tente dizer antes de rodar o código.
 
 ##### Q.5.11.1
+
 ```{r, include = TRUE, eval = FALSE}
 dfQ5.11.1 <- data.frame(dfQ5.11, row.names = df.nomes["Nomes"])
 ```
@@ -840,7 +833,3 @@ dfQ5.11.6 <- data.frame(dfQ5.11, row.names = df.nomes2[1,])
 ```{r}
 dfQ5.11.7 <- data.frame(dfQ5.11, row.names = t(df.nomes2[1,]))
 ```
-
-
-
-
