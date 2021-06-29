@@ -744,16 +744,20 @@ Os exemplos acima fazem de forma bastante similar aquilo que o base R também fa
 
 ```{r}
 # starts_with
-selExemplo6 <- mtcars %>% select( starts_with("m"))
+selExemplo6 <- mtcars %>%
+  select( starts_with("m"))
 
 # ends_with
-selExemplo7 <- mtcars %>% select(ends_with("t"))
+selExemplo7 <- mtcars %>%
+  select(ends_with("t"))
 
 # contains
-selExemplo8 <- mtcars %>% select(contains("s"))
+selExemplo8 <- mtcars %>%
+  select(contains("s"))
 
-# matches (ignora se é maiusculo ou minusculo)
-selExemplo9 <- mtcars %>% select(matches("MPG"))
+# matches (serve para regex)
+selExemplo9 <- mtcars %>%
+  select(matches("MPG"))
 ```
 
 Existem outros elementos que fazem parte dos `select_helpers` se você quiser saber mais.

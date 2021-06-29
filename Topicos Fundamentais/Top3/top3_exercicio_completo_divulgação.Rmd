@@ -456,12 +456,17 @@ vecQ1.7 <- vecQ1.6 %>% c()
 vecQ1.7[1:4] <- names(vecQ1.7)[1:4]
 ```
 
-#### D.1.1 **DESAFIO COMPLICADO:** Crie, **a partir de `vecQ1.6`**, um vetor atómico `vecD1.1` que fique igual à `vecQ1.6`. **PORÉM**, o faça sem escrever arbitrariamente o índice das colunas. Ou seja, não escreva número algum para além dos usados nos nomes dos objetos.
+#### D.1.1 **DESAFIO COMPLICADO:** Crie, **a partir de `vecQ1.6`**, um vetor atómico `vecD1.1` que fique igual à `vecQ1.7`. **PORÉM**, o faça sem escrever arbitrariamente o índice das colunas. Ou seja, não escreva número algum para além dos usados nos nomes dos objetos.
 
 ```{r, include=FALSE}
-vecD1.1 <- vecQ1.6 %>% c()
+vecD1.1 <- vecQ1.6 %>%
+  c()
+
 valores_na <- is.na(vecD1.1)
-vecD1.1[valores_na] <- vecD1.1 %>% names() %>% .[valores_na]
+
+vecD1.1[valores_na] <- vecD1.1 %>%
+  names() %>%
+  .[valores_na]
 ```
 
 #### Q.1.8 Coloque `vecQ1.7` como os `colnames` de `ItaQ1.4`.
@@ -473,13 +478,16 @@ colnames(ItaQ1.4) <- vecQ1.7
 #### D.1.2 Confira o tipo de dados presentes da 5a coluna de ItaQ1.3. `list` não é a resposta que você quer.
 
 ```{r, include=FALSE}
-ItaQ1.3 %>% .[[5]] %>% is.character()
+ItaQ1.3 %>%
+  .[[5]] %>%
+  is.character()
 ```
 
 #### Q.1.9 Converta em `double` todas as colunas de `ItaQ1.3` que são pássiveis de serem convertidas. Faça isso com apenas um comando. Nomeie de `ItaQ1.9`
 
 ```{r, include=FALSE}
-ItaQ1.9 <- ItaQ1.3 %>% type_convert()
+ItaQ1.9 <- ItaQ1.3 %>%
+  type_convert()
 
 typeof(ItaQ1.9[[4]])
 typeof(ItaQ1.9[[5]])
@@ -493,17 +501,23 @@ Vamos agora separar as varíaveis de demanda final da tabela `ItaQ1.3` do restan
 
 ```{r, include=FALSE}
 ItaQ2.1 <- ItaQ1.9[ItaQ1.9$Origin != "TOT",]
-ItaQ2.1 <- ItaQ1.9 %>% filter(Origin != "TOT")
+
+ItaQ2.1 <- ItaQ1.9 %>%
+  filter(Origin != "TOT")
 ```
 
 #### Q.2.2 Crie o objeto `CodeQ2.2` a partir da coluna `Code` de `ItaQ2.1` de modo que esta não tenha nenhum valor repetido. Pense no máximo de formas possíveis que você consegue fazer isso.
 
 ```{r, include=FALSE}
-CodeQ2.2 <- ItaQ2.1 %>% select(Code) %>% distinct() 
+CodeQ2.2 <- ItaQ2.1 %>%
+  select(Code) %>%
+  distinct() 
 
-CodeQ2.2 <- ItaQ2.1[, "Code"] %>% distinct()
+CodeQ2.2 <- ItaQ2.1[, "Code"] %>%
+  distinct()
 
-CodeQ2.2 <- ItaQ2.1["Code"] %>% distinct()
+CodeQ2.2 <- ItaQ2.1["Code"] %>%
+  distinct()
 
 # Dará errado pois distinct quer pelo menos um vagão (tibble ou df) e não o que tem dentro do vagão (dados em vetores atômicos)
 #CodeQ2.2 <- ItaQ2.1$Code %>% distinct()
@@ -522,16 +536,20 @@ vecQ2.3 <- c(colnames(ItaQ2.1)[1:4], CodeQ2.2$Code)
 #### Q.2.4 Crie uma base de dados `ItaQ2.4` selecionando os dados de `ItaQ1.9` que são da demanda intersetorial (ou seja, não são da demanda final). **Não use nenhum número arbitrário**. De quantas formas você consegue fazer isso? Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.
 
 ```{r, include=FALSE}
-ItaQ2.4 <- ItaQ1.9 %>% select(vecQ2.3)
+ItaQ2.4 <- ItaQ1.9 %>%
+  select(vecQ2.3)
 
-ItaQ2.4 <- ItaQ1.9 %>% select(all_of(vecQ2.3))
+ItaQ2.4 <- ItaQ1.9 %>%
+  select(all_of(vecQ2.3))
+
 ItaQ2.4 <- ItaQ1.9[, vecQ2.3]
 ```
 
-#### Q.2.5 Crie uma base de dados `ItaQ2.5` selecionando as colunas de `ItaQ1.9` que são da demadna final (ou seja, não são da demanda intersetorial). **Não use nenhum número arbitrário**. Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.
+#### Q.2.5 Crie uma base de dados `ItaQ2.5` selecionando as colunas de `ItaQ1.9` que são da demanda final (ou seja, não são da demanda intersetorial). **Não use nenhum número arbitrário**. Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.
 
 ```{r, include=FALSE}
-ItaQ2.5 <- ItaQ1.9 %>% select(-CodeQ2.2$Code)
+ItaQ2.5 <- ItaQ1.9 %>%
+  select(-CodeQ2.2$Code)
 ```
 
 #### Q.2.7 Quantas são as colunas da demanda final? Calcule pela de `ItaQ1.9` diferença em relação à `ItaQ2.4`. Nomeie o valor de `Q2.7`
@@ -555,9 +573,11 @@ Nas questões a seguir, exceto se indicado, a tabela `ItaQ1.9` será a base de d
 #### Q.3.1 Crie um objeto `ItaQ3.1`, que contenha apenas os valores `"Imports"` do ano de 2000. De quais formas você consegue fazer isso?
 
 ```{r, include=FALSE}
-ItaQ3.1 <- ItaQ1.9 %>% filter(Year == 2000, Origin == "Imports")
+ItaQ3.1 <- ItaQ1.9 %>%
+  filter(Year == 2000, Origin == "Imports")
 
-ItaQ3.1b <- ItaQ1.9 %>% filter(Year == 2000 & Origin == "Imports")
+ItaQ3.1b <- ItaQ1.9 %>%
+  filter(Year == 2000 & Origin == "Imports")
 
 ItaQ3.1c <- ItaQ1.9[ItaQ1.9$Year == 2000 & ItaQ1.9$Origin == "Imports",]
 ```
@@ -565,19 +585,28 @@ ItaQ3.1c <- ItaQ1.9[ItaQ1.9$Year == 2000 & ItaQ1.9$Origin == "Imports",]
 #### Q.3.2 Crie um objeto `ItaQ3.2`, contendo os valores `"Domestic"` do setor `B` para os anos entre 2000 e 2005.
 
 ```{r, include=FALSE}
-ItaQ3.2 <- ItaQ1.9 %>% filter(Origin == "Domestic", between(Year, 2000, 2005), Code == "B")
+ItaQ3.2 <- ItaQ1.9 %>%
+  filter(Origin == "Domestic",
+         between(Year, 2000, 2005),
+         Code == "B")
 
-ItaQ3.2b <- ItaQ1.9 %>% filter(Origin == "Domestic" & between(Year, 2000, 2005) & Code == "B")
+ItaQ3.2b <- ItaQ1.9 %>%
+  filter(Origin == "Domestic" & between(Year, 2000, 2005) & Code == "B")
 
-ItaQ3.2c <- ItaQ1.9 %>% filter(Origin == "Domestic",
-                              Year == 2000:2005, Code == "B")
+ItaQ3.2ERRADO <- ItaQ1.9 %>%
+  filter(Origin == "Domestic",
+         Year == 2000:2005, Code == "B")
 
 ```
+
 
 #### Q.3.3 Crie `ItaQ3.3` de modo que tenha apenas os valores para o ano 2000 e que os valores do *Gross Output* (código `GO`) sejam maiores ou iguais a média de `GO`.
 
 ```{r, include=FALSE}
-ItaQ3.3 <- ItaQ1.9 %>% filter(Year == 2000) %>% .$GO %>% typeof()
+ItaQ3.3 <- ItaQ1.9 %>%
+  filter(Year == 2000) %>%
+  .$GO %>%
+  typeof()
 ```
 
 #### Q.3.4 Crie `ItaQ3.4` com os valores do coluna `GO` pertos de `20000` com uma tolerância de `15000`.
