@@ -1,0 +1,512 @@
+---
+title: "Matriz de Fluxos Tecnológicos"
+author: "Marcelo Tonon"
+date: "01/08/2020"
+output: bookdown::html_document2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introdução
+
+Vamos apresentar aqui a Matriz de Fluxos Tecnológicos. Iremos tratar rapidamente do arcabouço teórico implicito na utilização deste ferramental, para então focar na metodologia em si do modelo.
+
+## Pacotes Necessários
+
+Os pacotes necessários para reproduzir esta apresentação são:
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(readxl)
+library(knitr)
+library(kableExtra)
+library(DT)
+```
+
+## Notação
+
+Nesta apresentação, vamos favorecer a notação usada em Silva(2018) em detrimento à notação usada em IBGE(2018). Assim, é necessário que se fique atento à isso ao longo desta leitura.
+
+# Carregando os dados
+
+Os dados utilizados foram cedidos gentilmente pelo Felipe Silva, a quem agradecemos. As matrizes utilizadas foram traduzidas de 42 atividades (Passoni, 2019; Miguez, 2017) para 35.
+
+```{r}
+
+
+nomesProdutos <- read_excel("Dados/Dados.xlsx",
+                            sheet = "Recursos",
+                            range = "B3:B96") %>%
+  tidyr::drop_na()
+
+nomesAtividades <- read_excel("Dados/Dados.xlsx", sheet = "Recursos", range = "C4:AK4", col_names = FALSE) %>%
+  unlist
+
+nomesUsos <- read_excel("Dados/Dados.xlsx",
+                        sheet = "Usos",
+                        range = "C4:AT4",
+                        col_names = F) %>%
+  unlist
+#Tabela 1
+
+recursos <- read_excel("Dados/Dados.xlsx",
+                       sheet = "Recursos",
+                       range = "C6:AK96",
+                       col_names = nomesAtividades)
+
+#Tabela 2
+
+usos <- read_excel("Dados/Dados.xlsx",
+                   sheet = "Usos",
+                   range = "C6:AT96",
+                   col_names = nomesUsos)
+
+# Tabela 3
+CI <- read_excel("Dados/Dados.xlsx",
+                 sheet = "CI",
+                 range = "C6:AT96",
+                 col_names = nomesUsos)
+
+# Valor Adicionado
+VA <- read_excel("Dados/Dados.xlsx",
+                 sheet = "VA",
+                 range = "C6:AK17",
+                 col_names = nomesAtividades)
+
+#MAI
+MAI <- read_excel("Dados/Dados.xlsx",
+                  sheet = "MAI",
+                  range = "B6:AJ96",
+                  col_names = nomesAtividades)
+```
+
+Além disso, usamos os dados de P&D e outras atividades inovativas em níveis setoriais, disponibilizados pelo IBGE por meio da Pesquisa de Inovação (Pintec), que também nos foi cedido pelo Felipe Silva.
+
+```{r, warning= F, message=F}
+nomesPintec <- read_excel("Dados/Dados.xlsx",
+                          sheet = "Pintec",
+                          range = "D3:L3",
+                          col_names = FALSE) %>%
+  unlist
+
+pintec <-read_excel("Dados/Dados.xlsx",
+                    sheet = "Pintec",
+                    range = "D5:L39",
+                    col_names = nomesPintec)
+```
+
+# Fluxos Tecnológicos numa economia multissetorial.
+
+Como abordado por Silva (2018), a matriz de Fluxos Tecnológicos tem como função estimar o processo de criação e difusão de inovações entre os vários setores. Isso porque os efeitos e usos de inovações não ficam limitados ao setor criado por elas, mas muitas vezes à outros setores. Como indicado por Scherer (1982a, apud Scherer, 2003), apenas um quarto do P&D industrial seria orientado ao processo, ou seja, objetivando o aprimorar a perfomance da produção interna da firma inovadora. Desse modo, Scherer (2003) afirma que:
+
+> "Quite generally, **significant benefits from product R&D are derived by those who purchase the goods and services in which the results of the R&D are embodied.** For such product R&D, again, the majority of all industrial R&D, **relating the productivity growth of industry i to the R&D performed in industry i**, as all too many economists have done, **could lead to seriously erroneous insights.**" (p. 328, grifo nosso)
+
+Desse modo, usar a metodologia intersetorial emerge como uma alternativa necessária para explicar o fenômeno da criação e difusão da inovação. Para tanto, é necessário no entanto atentar para a questão não apenas do consumo intermediário, mas também para o capital fixo.
+
+Isso ocorre porque da mesma forma que um setor $i$ precisa de insumos produzidos por outros setores, ele também irá precisa de bens de capital fixo produzidos por outros setores para produzir. Desse modo, Silva (2018) chama a atenção para o conceito de Setores Integrados (Sraffa, 1960; Pasinetti, 1973 e 1981) para realizar essa análise.
+
+Além disso, os efeitos do esforço inovativo pode ir além do próprio setor, como explica Silva (2018, p.28-29):
+
+> "O autor destacou a importância da análise de insumo-produto para o estudo da mudança tecnológica, pois a técnica permite verificar as mudanças nos requerimentos intermediários entre os setores produtivos. Em sua análise histórica, chamava atenção de Rosenberg (2006a) de como a redução de custo através de melhorias e inovações de alguns setores industriais tinham um alcance maior do que o próprio setor, causando também reduções de custos em outras indústrias. Um exemplo clássico desse mecanismo de difusão tecnológica foi o aumento da produtividade do setor de transporte ferroviário da economia norte-americana entre 1870 e 1910, que teve impacto significativo em todos os outros setores da economia do país."
+
+# O modelo Insumo Produto
+
+## Gerando o modelo Insumo Produto
+
+Vamos aqui passar de forma mais rápida pois já tratamos disso na parte de derivar as matrizes.
+
+```{r}
+# V - Matriz de Produção
+V <- recursos %>% as.matrix()
+# v - Total de produção por produto
+v <- rowSums(V)
+
+# D.ms - Matriz de Market Share
+D.ms <- t(V) %*% solve(diag(v))
+
+
+
+# F_p - Matriz de Demanda Final a nível do produto e por setor institucional.
+F_p <- CI[, 37:42] %>% as.matrix()
+
+# x- Vetor de Produção à nivel de atividade
+
+x <- VA[11,] %>% as.numeric() %>% as.matrix
+
+Z <- CI[,1:35] %>% as.matrix(.) %*% solve(diag(c(x)))
+
+```
+
+Para conseguirmos a matriz de coeficientes técnicos, $A$, fazemos:
+
+```{=tex}
+\begin{equation}
+A = D Z
+\end{equation}
+```
+```{r}
+
+A_n <- D.ms %*% Z
+```
+
+Podemos então transformar $F$, `F_p`, em $Y$ (matriz de demanda final a nível de atividade e dividida por setor institucional), fazendo:
+
+```{=tex}
+\begin{equation}
+Y = D F
+\end{equation}
+```
+```{r}
+Y <- D.ms %*% F_p
+```
+
+Para chegarmos no vetor da demanda final total à nivel de atividade fazemos $y = Yi$:
+
+```{r}
+y_35 <- rowSums(Y) %>% as.matrix
+```
+
+Assim sendo, temos na equação \@ref(eq:leontief1) pelo modelo insumo produto tal qual proposto por Leontief, a relação entre o valor da produção, $x$, e a demanda final, $y$[^1]:
+
+[^1]: $y$ neste caso representa a demanda final total por setor, e não o valor adicionado como em IBGE(2018).
+
+```{=tex}
+\begin{equation}
+x = Ax + y (\#eq:leontief1)
+\end{equation}
+```
+Sendo $A$ a matriz de coeficientes técnicos diretos de produção. Os elementos dessa matriz $A$ são dados pela equação \@ref(eq:Aelementos):
+
+```{=tex}
+\begin{equation}
+a_{ij} = \frac{z_{ij}}{x_j} (\#eq:Aelementos)
+\end{equation}
+```
+Sendo que $z_{ij}$ representa o consumo intermediário de produtos provenientes do setor $i$ pelo setor $j$ e $x_j$ é o valor bruto da produção do setor $j$. Assim, $a_{ij}$ é o coeficiente técnico direto que indica quanto de $i$ é diretamente necessário para produzir uma unidade de $j$. Desse modo, ao realizarmos as operações algébricas podemos expressar a determinação de $x$ a partir da Inversa de Leontief, $L$:
+
+```{=tex}
+\begin{equation}
+x = [I-A]^{-1}y = Ly (\#eq:xleontief)
+\end{equation}
+```
+```{r}
+L <- solve(diag(nrow(A_n)) - A_n)
+```
+
+O elemento $l_{ij}$ da Inversa de Leontief, $L$, apresentado na equação \@ref(eq:xleontief) representa a quantidade total de produção do setor $i$ para a produção de $j$.
+
+## A matriz de Absorção de Investimentos
+
+Seja $C_n$ a matriz de uso de bens de capital intermediário, podemos calcular $B_n$ a matriz de coeficientes técnicos:
+
+```{=tex}
+\begin{equation}
+B = D C_n
+\end{equation}
+```
+```{r}
+C_n <- MAI/x %>%
+  replace_na(0)
+
+B_n <- (D.ms %*% as.matrix(C_n)) %>% replace_na(0)
+```
+
+# A matriz de fluxos tecnológicos
+
+Para a estimação dos fluxos tecnológicos, iremos usar o vetor $r$ que é o vetor de gasto em P&D para cada setor. Assim, dado sistema insumo produto representado na equação \@ref(eq:xleontief), podemos, a partir da equação \@ref(eq:Ha) calcular a matriz de fluxos tecnológicos, $H_a$, que realiza a distribuição dos gastos tecnológicos sobre o sistema de produção de toda a economia:
+
+```{=tex}
+\begin{equation}
+H_a = \hat{r} \hat{x}^{-1} L \hat{y} (\#eq:Ha)
+\end{equation}
+```
+```{r}
+r <- pintec[,1] %>%
+  unlist() %>%
+  replace_na(0)
+
+H_a <- diag(r) %*% solve(diag(c(x))) %*% L %*% diag(c(y_35))
+
+names(H_a) <- nomesAtividades 
+
+rownames(H_a) <- nomesAtividades
+
+```
+
+```{r}
+H_a %>%
+  DT::datatable( extensions = 'Scroller', 
+                 options = list(deferRender = TRUE,
+                                scrollY = 600,
+                                scroller = TRUE),
+                 rownames = nomesAtividades,
+                 #colnames = nomesAtividades,
+                 filter = "none",
+                 height = 800
+                 )
+```
+
+Na equação \@ref(eq:Ha) temos por um lado que $\hat{r}\hat{x}^{-1} = \frac{r_j}{x_j}$ representa a intensidade do gasto em P&D em cada setor $j$ da economia. Por outro lado, as colunas da matriz $L\hat{y}$ são os subsistemas de uma economia. Assim, a soma da coluna $j$ da matriz $L\hat{y}$ representa toda a produção necessária para atender a demanda final do setor $j$[^2].
+
+[^2]: É o *backward linkage* do setor $j$ multiplicado pelo valor da demanda final de $j$.
+
+Podemos interpretar os valores de cada elemento $h_{a_{ij}}$ como a quantidade de gastos em P&D efetuada pelo setor $i$ que foi realizada no subsistema $j$. Dito de outra forma: quanto que a demanda final do setor $j$ induziu de gastos de P&D pelo setor $i$.
+
+A matriz $H_a$ calculada na equação \@ref(eq:Ha) é comumente chamada de "estrutura nominal" (*actual-structure*), uma vez que a mesma leva em consideração a demanda final nominal (atual), $\hat{y}$, das matrizes insumo produto. Se deixarmos de lado essa questão, podemos representar a matriz de fluxo tecnológico, $H$ da seguinte forma:
+
+```{=tex}
+\begin{equation}
+H = \hat{r}\hat{x}^{-1}L (\#eq:H)
+\end{equation}
+```
+```{r}
+H <-  diag(r) %*% solve(diag(c(x))) %*% L
+
+colnames(H) <- nomesAtividades
+
+rownames(H) <- nomesAtividades
+```
+
+```{r}
+H %>%
+  DT::datatable( extensions = 'Scroller', 
+                 options = list(deferRender = TRUE,
+                                scrollY = 600,
+                                scroller = TRUE),
+                 rownames = nomesAtividades,
+                # colnames = nomesAtividades,
+                 filter = "none",
+                 height = 800
+                 )
+```
+
+Como definido por Silva(2018, p.95), a matriz de fluxo tecnológico $H$ dada pela equação \@ref(eq:H):
+
+> "... representa as relações puramente tecnológicas do gasto em P&D incorporado entre os setores econômicos, ou seja, na proporção da intensidade do gasto em P&D sobre os coeficientes técnicos diretos e indiretos da matriz $L$, não dependendo do tamanho e da estrutura da demanda final. Por este motivo, a matriz $H$ é comumente denominada na literatura como uma matriz de "estrutura padrão" (*standard-structure*). Schnabl(1995) salienta que esse tipo de abordagem obtêm uma cristalização dos determinantes mais tecnológicos que estão concentrados nos produtos dos insumos dos coeficientes técnicos da matriz $L$ e indicados no vetor de P&D."
+
+A vantagem da abordagem proposta na equação \@ref(eq:H) frente à \@ref(eq:Ha) é a de analisar as relações setoriais de acordo com os coeficientes técnicos das matrizes, sem precisar recorrer aos valores absolutos dos gastos em P&D representado pela matriz $H_a$. Além disso, a partir de $H$ pode-se analisar os potenciais efeitos na economia e nos setores por meio de possíveis variações em suas demandas (multiplicadores).
+
+A partir da análise estrutura padrão dada pela matriz $H$, podemos realizar as seguintes interpreção dos fluxos tecnológicos:
+
+-   $\sum_j h_{ij}$ - A soma das células de cada linha $i$, representaria o total de P&D gastos por cada setor $i$.
+
+```{r}
+H_i <- rowSums(H)
+```
+
+-   $\sum_i h_{ij} - h_{ii}$ - A soma das células de cada linha $i$ descontada do elemento da diagonal principal $h_{ii}$ (de modo que $j = i$), representaria o transbordamento ( *spillover* ) para outros setores a partir do gasto em P&D do setor $i$.
+
+```{r}
+H_liquido <- H- diag(diag(H))
+H_spillover <- rowSums(H) - diag(H)
+H_spillover2 <-rowSums(H- diag(diag(H))) 
+```
+
+-   $\sum_j h_{ij}$ - A soma das células de cada coluna $j$ representaria o total de P&D absorvido pelo setor $j$.
+
+```{r}
+H_j <- colSums(H)
+```
+
+-   $\sum_j h_{ij} - h_{jj}$ - A soma das células de cada coluna $j$ descontada do elemento da diagonal principal $h_{jj}$ (de modo que $i=j$), representaria a incorporação de P&D de outros setores pelo setor $j$ para atender a sua demanda final.
+
+```{r}
+H_j_liq <- colSums(H) - diag(H)
+```
+
+```{r}
+df_H <- data.frame(H_i, H_spillover, H_j, H_j_liq,
+                   row.names = nomesAtividades) %>%
+  setNames(c("Gastos", "Gastos \n Liquidos", "Absorção", "Absorção \n Liquida"))
+```
+
+```{r}
+df_H %>%
+  DT::datatable( extensions = 'Scroller', 
+                 options = list(deferRender = TRUE,
+                                scrollY = 600,
+                                scroller = TRUE),
+                 rownames = nomesAtividades,
+                 filter = "none",
+                 height = 800
+                 )
+```
+
+Os dois últimos casos, podemos considerar como *backwards tecnológicos*, sendo que o último desconsidera os gastos do próprio setor em atividades tecnólogicos. Podemos fazer essas mesmas interpretações de fluxos tecnológicas apresentadas acima para mais dois tipos de Matrizes de Fluxo Tecnológico para além da representada acima.
+
+```{=tex}
+\begin{align}
+M &= \hat{r}\hat{x}^{-1}A (\#eq:M)\\
+K &= \hat{r}\hat{x}^{-1}B (\#eq:K)
+\end{align}
+```
+Nas equações \@ref(eq:M) e \@ref(eq:K) temos, respectivamente, a matriz de consumo intermediário, $A$, e a de demanda por capital, $B$, pré-multiplicadas por $\hat{r}\hat{x}^{-1}$. Assim, as matrizes $M$ e $K$ são matrizes de fluxo tecnológicas onde os gastos em P&D e outras atividades inovativas são incorporados, respectivamente, na compra e venda de insumos intermediários e bens de capital.
+
+```{r}
+M <- diag(r) %*% solve(diag(c(x))) %*% A_n
+
+M_i <- rowSums(M)
+M_spillover <- rowSums(M)-diag(M)
+M_j <- colSums(M)
+M_j_liq <- colSums(M) - diag(M)
+
+
+K <- diag(r) %*% solve(diag(c(x))) %*% B_n
+
+K_i <- rowSums(K)
+K_spillover <- rowSums(K)-diag(K)
+K_j <- colSums(K)
+K_j_liq <- colSums(K) - diag(K)
+```
+
+```{r}
+df_M <- data.frame(M_i, M_spillover, M_j, M_j_liq,
+                   row.names = nomesAtividades) %>%
+  setNames(c("Gastos", "Gastos \n Liquidos", "Absorção", "Absorção \n Liquida"))
+
+df_K <- data.frame(K_i, K_spillover, K_j, K_j_liq,
+                   row.names = nomesAtividades) %>%
+  setNames(c("Gastos", "Gastos \n Liquidos", "Absorção", "Absorção \n Liquida"))
+```
+
+```{r}
+df_M %>%
+  DT::datatable( extensions = 'Scroller', 
+                 options = list(deferRender = TRUE,
+                                scrollY = 600,
+                                scroller = TRUE),
+                 rownames = nomesAtividades,
+                 filter = "none",
+                 height = 800
+                 )
+```
+
+```{r}
+df_K %>%
+  DT::datatable( extensions = 'Scroller', 
+                 options = list(deferRender = TRUE,
+                                scrollY = 600,
+                                scroller = TRUE),
+                 rownames = nomesAtividades,
+                 filter = "none",
+                 height = 800
+                 )
+```
+
+```{r, include=F, eval = F}
+#save(mult_K, mult_M, mult_H, H_a, H, file = "Dados/expor.Rdata")
+```
+
+As interpretações feitas a partir das somas das linhas e colunas das matrizes de fluxo tecnológico $H$, $M$ e $K$ permitem uma análise rigorosa da interdependência do sistema produtivo, contemplando toda a economia de uma região, além de permitir comparações intertemporais e entre países. *Porém*, é necessário ressaltar algumas hipóteses simplificadoras ao realizar essas interpretar os resultados:
+
+-   Todos os gastos em P&D e outras atividades inovativas são supostos de serem incorporados em bens de consumo intermediário e bens de capital produzidos, no qual nenhum outro tipo de transferência ou proximidade tecnológica é considerado
+
+-   A incorporação do gasto em P&D e outras atividades inovativas de um setor por outro é assumida de forma completa e instantânea: não há nenhuma consideração sobre o fato de nenhuma ou só um estágio mais avançado de esforço de P&D ou outras atividades inovativas gerarem melhorias em algum bem produzido;
+
+-   O modelo não prevê que a diversificação tecnológica pode ser maior e diferencialmente distribuída do que a diversificação da produção de uma análise de insumo-produto em si, isto é, firmas que estão envolvidas em atividades de P&D nas áreas em que não são (na mesma medida) economicamente ativas.
+
+De acordo com Silva (2018) as limitações colocadas acima estão relacionadas com as fontes de externalidades ( *spillovers* ) geradas pelas atividades inovativas e de P&D Griliches( 1979, apud Silva, 2018, p. 97). Para Griliches há dois tipos básicos de spillover:
+
+-   *Rent-spillover* é aquele relacionado aos ganhos de produtividade dos setores usuários de inovações por meio da compra de insumos produtivos novos ou melhorados fornecidos pelos setores produtores. Assim esse é o *spillover* capturado pela mensuração das matrizes de fluxos tecnológicos, $H$, $M$ e $K$;
+
+-   *Knowledge-spillover* por outro lado, é o transbordamento do conhecimento que não ocorre a partir da compra e venda de bens e serviços. Esse transbordamento se daria na difusão de conhecimento tácito, como ideias, habilidades, expertise ou até mesmo de arranjos cooperativos para inovação. Ou seja, estaria mais ligado ao conceito de *technological capabilities* elaborado por Lall (2000).
+
+ 
+
+### Forward Linkages com o modelo de Ghosh
+
+Quando somamos as linhas da matriz $H$ para medir os gastos de P&D por cada setor, estamos fazendo isso a partir da matriz $H$ que foi calculada pela matriz de Leontief, que por sua vez usa a matriz de coeficientes técnicos setoriais $A$. Como vimos na equação \@ref(eq:Aelementos), $a_{ij} = \frac{z_{ij}}{x_j}$. No entanto, podemos para o caso de medir os encadeamentos para frente, usar a matriz de coeficientes de produção, $Q$, que se dá por:
+
+```{=tex}
+\begin{equation}
+q_{ij} = \frac{z_ij}{x_i} (\#eq:Qelementos)
+\end{equation}
+```
+```{r, include = F}
+#Q <- CI[-92,1:35] %>% as.matrix(.) %>% crossprod(solve(diag(c(x))), .)
+```
+
+Assim, podemos criar o modelo de Ghosh, que é:
+
+```{=tex}
+\begin{equation}
+G = [I-Q]^{-1} (\#eq:GhoshModel)
+\end{equation}
+```
+Cada elemento $g_{ij}$ do modelo de Ghosh representa o quanto o setor $j$ deve variar, direta e indiretamente, para utilizar o aumento de uma unidade do insumo do setor $i$. Assim, enquanto o modelo de Leontief é *demand-driven* o modelo de Ghosh é *supply-driven*. Desse modo, somando todos os elementos da linha $i$ em $G$ calcula-se o *forward linkage* ($FL_i^G = \sum_{j=1}^n g_{ij}$), que mensura o impacto da variação em uma unidade de $i$ sobre a produção de toda a economia.
+
+A partir de $G$, podemos fazer uma matriz de fluxo tecnológico de outra forma:
+
+```{=tex}
+\begin{equation}
+\tilde{H} = \hat{r}\hat{x}^{-1}G (\#eq:HGhosh)
+\end{equation}
+```
+Na equação \@ref(eq:HGhosh), temos que $\tilde{h}_{ij} = \tfrac{r_i}{x_j}g_{ij}$ representa o aumento do $P&D$ absorvido pelo setor $j$ devido ao gasto em $P&D$ pelo setor $i$. Assim, podemos calcular, equação \@ref(eq:FLHghosh), o aumento dos gastos em P&D ou atividades inovativas incorporados nos bens intermediários de toda uma economia para utilizar, direta e indiretamente, uma unidade adicional da produção de um determinado setor $i$.
+
+```{=tex}
+\begin{equation}
+FL_i^{\tilde{H}}  = \sum_{j=1}^n \tilde{h}_{ij} (\#eq:FLHghosh)
+\end{equation}
+```
+Como feito pelo *backwards linkages* tecnológicos apresentados anteriormente, podemos também descontar os valores do próprio setor $i$ dos *forwards linkages* tecnológicos:
+
+```{=tex}
+\begin{equation}
+FL_i^{\tilde{H}} = \sum_{j=1}^n (\tilde{h}_{ij}) - \tilde{h}_{ii}
+\end{equation}
+```
+Em relação as limitações das interpretações dos efeitos desses indicadores de *forwards linkages* tecnológicos a partir do modelo de Ghosh, Silva(2018, p. 103) chama a atenção:
+
+> "A hipótese levantada é de que toda a economia irá aumentar os seus gastos em P&D, seja este direto ou incorporado em bens e serviços, dado o aumento da produção do setor $i$. Essa hipótese parece plausível se assumirmos mais uma vez que as empresas apresentam alguma regra de gastos em esfoçros inovativos em relação ao valor de suas vendas, mas ainda recorre ao rigor da proporcionalidade oferecida pelos coeficientes das matrizes de insumo-produto e deve ser, mais uma vez, interpretada com cautela."
+
+## Análise Qualitativa
+
+### Cadeia de Fluxos Intermediarios
+
+Como já visto antes, a determinação de $L$ e dada por:
+
+```{=tex}
+\begin{equation}
+L = [I-A]^{-1} = A^0 + A^1 + A^2 + A^3 + \dots (\#eq:LinvertA)
+\end{equation}
+```
+Assim pela equação \@ref(eq:LinvertA), podemos fazer variações das matrizes $H$ como definidas em \@ref(eq:H):
+
+```{=tex}
+\begin{align}
+H_1 &= \hat{r}\hat{x}^{-1}A^1 \\
+H_2 &= \hat{r}\hat{x}^{-1}A^1 \\
+\dots \\
+H_n &= \hat{r}\hat{x}^{-1}A^n
+\end{align}
+```
+Podemos então fazer uma análise qualitativa, ao criarmos matrizes adjacentes à $H_1, \dots, H_n$. Os valores de $W$, matriz adjacente à $A$ são definidos pela equação \@ref(eq:Wn):
+
+```{=tex}
+\begin{equation}
+w_{ij} = \begin{cases}
+1 = se a_{ij} \ge f \\
+0 = se a_{ij} \le f
+\end{cases}(\#eq:Wn)
+\end{equation}
+```
+Sendo $f$ um valor arbitrário qualquer. No caso, Silva aplica os seguintes filtros:
+
+```{r}
+filtros <- c(0.00005, 0.0001, 0.0002, 0.0003, 0.0004, 0.0005)
+```
+
+Assim podemos fazer \# Referências Bibliográficas
+
+IBGE. **Matriz de insumo-produto: Brasil: 2015**. Rio de Janeiro: IBGE, Coordenação de Contas Nacionais, 2018.
+
+MIGUEZ, T., et al. **Uma proposta metodológica para a estimação da Matriz de Absorção de Investimentos para o período 2000-2009**. No. 1977. Texto para Discussão, Instituto de Pesquisa Econômica Aplicada (IPEA), 2017.
+
+PASSONI. P. A. **Deindustrialization and regressive specialization in the Brazilian economy between 2000 and 2014: a critical assessment based on the input-output analysis.** 210 f. Universidade Federal do Rio de Janeiro (Doutorado em Economia -- Instituto de Economia), 2019.
+
+SCHERER, F. **Technology flows matrix estimation revisited.** Economic systems research, v. 15, n. 3, p. 327-358, 2003.
+
+SILVA, F. **Fluxo de tecnologia intersetorial e produtividade no Brasil.** 450 f. Universidade Federal do Rio de Janeiro (Doutorado em Economia -- Instituto de Economia), 2018
