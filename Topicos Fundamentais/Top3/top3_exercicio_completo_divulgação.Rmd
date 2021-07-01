@@ -449,11 +449,46 @@ vecQ1.6 <- niotITA %>% filter_all(any_vars(is.na(.)))
 
 #### Q.1.7 Crie um **vetor atômico** `vecQ1.7`, de tal modo que os valores de `vecQ1.6` que contém `NA` fiquem com os nomes das suas respectivas colunas.
 
-*Dica 1:* Crie `vecQ1.7` como cópia de `vecQ1.6` (`vecQ1.7 <- vecQ1.6`) para iniciar a resolução. Porém, fique atento, pois tem não uma, mas duas pegadinhas.
+*Dica 1:* Crie `vecQ1.7` como cópia de `vecQ1.6` (`vecQ1.7 <- vecQ1.6`) para iniciar a resolução. Porém, fique atento, pois tem não uma, mas duas pegadinhas. (EDITAR!!!!!!!)
+
+```{r, include=F, eval=F}
+# Pegadinha 1: a cópia tem que adaptada logo de cara (o código no enunciado da questão está incompleto)
+# Pegadinha 2: (a lembrar....) "Possivelmente conseguir não fazer de modo arbitrário"
+
+```
+
 
 ```{r, include=FALSE}
+# Resultando em uma lista
 vecQ1.7 <- vecQ1.6 %>% c()
 vecQ1.7[1:4] <- names(vecQ1.7)[1:4]
+
+# Usando unlist()
+vecQ1.7un <- vecQ1.6 %>% unlist()
+vecQ1.7un[1:4] <- names(vecQ1.7un)[1:4]
+
+# Exemplo de como a Daniele Amorim fez (MELHOR que o nosso):
+vecQ1.7_Dani <- as.character (vecQ1.6 [1,])
+vecQ1.7_Dani[1:4] <- names(vecQ1.6)[1:4]
+
+
+# método não arbitrário
+vecQ1.7_Ton <- vecQ1.6 %>% as.character()
+vecQ1.7_Ton[is.na(vecQ1.6)] <- names(vecQ1.6)[is.na(vecQ1.6)]
+
+# criando uma função para facilitar
+
+func_1.7 <- function(x){
+          
+  y <- x %>% as.character()
+  y[is.na(x)] <- names(x)[is.na(x)]
+  return(y) # é necessária para retornar y como um todo e não apenas o lado direito da linha acima
+}
+
+vecQ1.7_func <- func_1.7(vecQ1.6)
+vecQ1.7_func
+
+
 ```
 
 #### D.1.1 **DESAFIO COMPLICADO:** Crie, **a partir de `vecQ1.6`**, um vetor atómico `vecD1.1` que fique igual à `vecQ1.6`. **PORÉM**, o faça sem escrever arbitrariamente o índice das colunas. Ou seja, não escreva número algum para além dos usados nos nomes dos objetos.
@@ -476,7 +511,7 @@ colnames(ItaQ1.4) <- vecQ1.7
 ItaQ1.3 %>% .[[5]] %>% is.character()
 ```
 
-#### Q.1.9 Converta em `double` todas as colunas de `ItaQ1.3` que são pássiveis de serem convertidas. Faça isso com apenas um comando. Nomeie de `ItaQ1.9`
+#### Q.1.9 Converta em `double` todas as colunas de `ItaQ1.3` que são passiveis de serem convertidas. Faça isso com apenas um comando. Nomeie de `ItaQ1.9`
 
 ```{r, include=FALSE}
 ItaQ1.9 <- ItaQ1.3 %>% type_convert()
@@ -537,7 +572,12 @@ ItaQ2.5 <- ItaQ1.9 %>% select(-CodeQ2.2$Code)
 #### Q.2.7 Quantas são as colunas da demanda final? Calcule pela de `ItaQ1.9` diferença em relação à `ItaQ2.4`. Nomeie o valor de `Q2.7`
 
 ```{r, include=FALSE}
+#ERRO: Q2.7 <- ncoll(ItaQ1.9) - ncol(ItaQ2.4)
+# Error in ncoll(ItaQ1.9) : não foi possível encontrar a função "ncoll"
+
+# Correto:
 Q2.7 <- ncol(ItaQ1.9) - ncol(ItaQ2.4)
+
 ```
 
 #### D.2.1 Provido do número de colunas de `ItaQ1.9` e do valor `Q2.7`, crie um objeto chamado `ItaD2.1` que seja igual à `ItaQ2.4`. *Não use nenhum número arbitrário*.
@@ -580,10 +620,13 @@ ItaQ3.2c <- ItaQ1.9 %>% filter(Origin == "Domestic",
 ItaQ3.3 <- ItaQ1.9 %>% filter(Year == 2000) %>% .$GO %>% typeof()
 ```
 
-#### Q.3.4 Crie `ItaQ3.4` com os valores do coluna `GO` pertos de `20000` com uma tolerância de `15000`.
+#### Q.3.4 Crie `ItaQ3.4` com os valores do coluna `GO` pertos de `20000` com uma tolerância de `15000`. *Importante*: mantenha todas as colunas, não apenas `GO`.
 
 ```{r, include=FALSE}
 ItaQ3.4 <- ItaQ1.9 %>% filter(near(GO, 20000, tol= 15000))
+
+ItaQ3.4_Dani <- ItaQ1.9 %>% select("GO") %>% filter(near(GO, 20000, tol = 15000))
+
 ```
 
 #### Q.3.5 Some os valores de todas as linhas da base filtrada com as seguintes caracteristicas: `Origin = Domestic`; `Year = 2000`. Chame o objeto de `vecQ3.5`
@@ -637,6 +680,8 @@ dfQ4.2c <- ganhadores %>% arrange(desc(Titulos))
 dfQ4.3 <- americadoSul %>% inner_join(ganhadores)
 ```
 
+##### Base para os próximos exercícios
+
 Considere agora a base de dados `edicoes`:
 
 ```{r, TRUE}
@@ -649,18 +694,18 @@ edicoes <- data.frame("Copa"=c(2018, 2014, 2010, 2006, 2002, 1998,1994, 1990, 19
 dfQ4.4 <- edicoes %>% select(-Vice) %>% filter(Copa > 1990)
 ```
 
-#### Q.4.5 Crie uma tabela chamada `ganhadores_30anos`, juntando as tabelas `dfQ4.4` e `ganhadores`, mantendo apenas os países que ganharam de 1990 em diante. Faça de modo que `dfQ4.4` não tenha mais de duas linhas por país e mantenha as duas .
+#### Q.4.5 Crie uma tabela chamada `ganhadores_30anos`, juntando as tabelas `dfQ4.4` e `ganhadores`, mantendo apenas os países que ganharam de 1990 em diante. Faça de modo que `dfQ4.4` não tenha mais de duas linhas por país e mantenha as duas colunas (títulos e copa).
 
 **Dica 1:** Lembre do argumento `by`
 
 **Dica 2:** Sem usar `distinc`, há uma função da familia `join` de fazer isso. Usando `distinct` com algumas alterações nos seus argumentos, há mais `três` funções da familia `join` que podem fazer isso.
 
 ```{r, include=FALSE}
-ganhadores_30anos <- dfQ4.4 %>% left_join(ganhadores, by = c("Ganhador"= "Países")) %>% distinct(Ganhador, keep_all = TRUE)
+ganhadores_30anos <- dfQ4.4 %>% left_join(ganhadores, by = c("Ganhador"= "Países")) %>% distinct(Ganhador, .keep_all = TRUE)
 
-ganhadores_30anos_b <- ganhadores %>% right_join(dfQ4.4, by = c("Países" = "Ganhador")) %>% distinct(Países, keep_all = TRUE)
+ganhadores_30anos_b <- ganhadores %>% right_join(dfQ4.4, by = c("Países" = "Ganhador")) %>% distinct(Países, .keep_all = TRUE)
 
-ganhadores_30anos_c <- ganhadores %>% inner_join(dfQ4.4, by = c("Países" = "Ganhador")) %>% distinct(Países,  keep_all = TRUE)
+ganhadores_30anos_c <- ganhadores %>% inner_join(dfQ4.4, by = c("Países" = "Ganhador")) %>% distinct(Países,  .keep_all = TRUE)
 
 ganhadores_30anos_d <- ganhadores %>% semi_join(dfQ4.4, by = c("Países" = "Ganhador"))
 ```
