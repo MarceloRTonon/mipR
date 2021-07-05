@@ -1,7 +1,7 @@
 ---
 title: "Tópico 4 - Automatizando tarefas"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "01/07/2020"
+date: "01/07/2021"
 output: html_document
 ---
 
@@ -487,6 +487,105 @@ Podemos então fazer o mesmo que fizemos para criar `lst_CO2`, só que com a pr�
 ```{r}
 lst_CO2_b <- map(lst_type, function(x) map(lst_CO2, function(y) filter(y, Type ==x)))
 ```
+
+## Introduzindo a map variants
+
+A família map é composta por, até onde sabemos, pelo menos 23 funções(!). Diversas delas já foram apresentadas aqui, dentre as quais destaca-se `map()`, `map2()` e `pmap()`.  Iremos aqui apresentar algumas outras que são úteis, mas que não vamos explorar a fundo. O [capítulo 9 do Advanced R](https://adv-r.hadley.nz/functionals.html) fornece uma descrição ampla da programação funcional (mas também sem exaurir todas a variedade de funções do map).
+
+### Obtendo resultados em vetores atômicos
+
+Em geral o uso da função `map()` e suas extensões diretas (`map2()` e `pmap()`), resultarão também listas. No entanto, podem ter situações em que você queira obter vetores atômicos de diferentes tipos como resultado. Nesse caso, há uma função map para cada um desses tipos, sintetizados nas senguintes funções: `map_lgl()`, `map_int()`, `map_dbl()` e `map_chr()`. Vamos trabalhar com `lst_CO2` para entender melhor como funciona cada função. 
+
+```{r}
+
+# map_chr() retorna um vetor atômico do tipo "character"
+m_chr <- map_chr(lst_CO2[[1]], typeof)
+m_chr
+typeof(m_chr)
+
+# map_lgl() retorna um vetor atômico do tipo "logical"
+m_lgl <- map_lgl(lst_CO2[[1]], is.double)
+m_lgl
+typeof(m_lgl)
+
+# map_int() retorna um vetor atômico do tipo "integer"
+tam_unique <- function(x) length(unique(x))
+m_int <- map_int(lst_CO2[[1]], tam_unique)
+m_int
+typeof(m_int)
+
+```
+
+A função `map_dbl()` retornaria um vetor atômico do tipo "double". No entanto, como nesse caso nem todas as colunas são double e a função mean só se aplica nesse tipo, o resultado para os objetos que não são `double` serão um `NA`.
+
+```{r}
+# Caso que dá erro:
+map_dbl(lst_CO2[[1]], mean)
+
+```
+
+Para a aplicação plenamente correta é necessário primeiro selecionar os que atendem ao requesito, informação esta já foi calculada no objeto `m_lgl`, que foi o exemplo da função `map_lgl()`.
+
+```{r}
+m_dbl <- map_dbl(lst_CO2[[1]][,m_lgl], mean)
+m_dbl
+typeof(m_dbl)
+```
+
+Importante se atentar para que a função a ser usada deve ser compatível com o resultado desejado pois, caso contrário, a função retornará algum erro. Por exemplo, não faz sentido usar `map_dbl()` com uma função `as.character`:
+
+```{r, error=T}
+map_dbl(1:2, as.character)
+```
+
+### Aplicando funções em níveis da lista
+
+Resgatando a ideia da recursividade das listas, em que criamos listas dentro de listas, a função `map_depth` é de grande utilidade nesses casos. Imagine que você deseja aplicar uma função usando o `map` sobre listas que estão no terceiro nível interno de uma lista. Os principais elementos de `map_depth` são: 
+
+
+```{r, eval=F}
+map_depth(.x, .depth, .f, ..., .ragged = FALSE)
+```
+
+- *.x*: assim como nos casos anteriores, aqui colocamos a lista com as informações que serão aplicadas a função.
+- *.depth*: aqui está o ponto central dessa função, em que determinamos o nível em que serão realizadas as operações. No caso a sintaxe é da por meio de um valor numérico, em que valores negativos realizarão a contagem do nível partindo do "final" da lista (do elemento mais interno da lista).No argumento `.depth=` a lógica pode ser interpretada ad seguitne forma
+    - `map_depth(x, 0, fun)`, seria o mesmo que aplicar uma função diretamente sobre x (`fun(x)`);
+    - `map_depth(x, 1, fun)`, equivale à função map sobre a lista, tal como `x <- map(x, fun)`;
+    - `map_depth(x, 2, fun)`, nesse caso seria a aplicação de da função `map` usando a própria `map` tal como `x <- map(x, ~ map(., fun))`;
+    - e assim sucessivamente.
+- *.f*: assim como anteriormente, é a função a ser aplicada.
+- *.ragged*: é um argumento do tipo `logical`, em que se é colocado `TRUE` ele aplicará a função mesmo se tiverem elementos vazios, e caso seja `FALSE` retornará uma mensagem de erro para elementos espaços vazios dentro da lista.
+
+Em termos mais práticos, ela uma boa alternativa para uso de funções dentro da map para atuar dentro de algum elemento da lista. Ou seja, ao invés de criarmos o objeto `lista_recursiva2` usando alguma função, podemos usar a `map_depth`:
+
+```{r}
+# Usando a map_depth:
+
+lista_recursiva2_depth <- map_depth(lista_recursiva, 2, vezes.dois)
+
+# Comparando se são iguais:
+all.equal(lista_recursiva2, lista_recursiva2_depth)
+
+```
+
+
+### Aplicando funções condicionalmente
+
+Outra funcionalidade é o uso de condicionais para realizar operações dentro de suas listas. Tratam-se das funções `map_if()` e `map_at()`. A primeira opera como uma função do `if` e `else`, em que a função somente será aplicada aos elementos da lista que atendem à determinada condição. Já na segunda, é necessário incluir um argumento indicando quais serão os elementos da lista a receberem a função. A sintaxe das funções é da seguinte forma:
+
+```{r, eval=F}
+
+map_if(.x, .p, .f, ..., .else = NULL)
+
+map_at(.x, .at, .f, ...)
+```
+
+- *.x* e *.f* são exatamente iguais aos casos anteriores.
+- *.p* é um predicado (booleano) com um resultado do tipo `TRUE` ou `FALSE` decorrente do estabelecimento de alguma condição ou proposição. Pode ser portanto uma função que avalia se determinada condição é satisfeita ou um vetor lógico com proposições de valores `T` ou `F`. Somente aqueles que apresentam `T` é que terçao a função aplicada.
+- *.else* opera da mesma forma que `.p` no entanto somente para os elementos que obtivem `FALSE` no argumento `.p`. Caso não queira que nenhuma operação seja realizada, basta manter o `NULL` (que é o default da função).
+- *.at* nesse caso, ao contrário de `map_if`, aqui deverá ser introduzida um vetor de nomes, valores positivos a incluir ou valores negativos para excluir determinadas posições. Importante destacar que algumas funções do `tidyverse` podem ser úteis, como a `vars()` e a `tidyselect`.
+
+
 
 ## Fonte
 
