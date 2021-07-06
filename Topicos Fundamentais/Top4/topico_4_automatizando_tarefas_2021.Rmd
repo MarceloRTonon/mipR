@@ -1,7 +1,7 @@
 ---
 title: "Tópico 4 - Automatizando tarefas"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "01/07/2021"
+date: "06/07/2021"
 output: html_document
 ---
 
@@ -568,6 +568,59 @@ all.equal(lista_recursiva2, lista_recursiva2_depth)
 
 ```
 
+### Mantendo o tipo do objeto
+
+Outra opção muito útil para o caso de não estivermos trabalhando diretamente com listas ou não queremos um resultado na forma de lista, é a função `modify()`. Essa função é particularmente útil se estamos por exemplo trabalhando em um `data.frame` e queremos manter dessa forma. Sua operacionalidade é basicamente a mesma da função `map()`, mas vamos explorar rapidamente as diferenças nos resultados das funções. Primeiramente, vamos criar um `data.frame` como exemplo:
+
+```{r}
+df <- data.frame(
+  x = 1:5,
+  y = 3:7,
+  z = 20:24
+)
+```
+
+Vamos agora realizar uma operação de multiplicação e comparar como os resultados saem:
+
+```{r}
+df_map <- df %>% map(., ~ .x * 2)
+df_map
+class(df_map)
+
+df_mod <- df %>% modify(., ~ .x * 2)
+df_mod
+class(df_mod)
+```
+
+Perceba que tanto visualmente quanto pela classe do objeto, é possível perceber que a estrutura dos dados está diferente. As variantes da função `modify()`, as `modify2()`  e `pmodify()`, operam da mesma forma que as suas equivalentes para o `map()`.
+
+
+### Aplicar uma função sem guardar um resultado
+
+Outra classe de map variant é a função `walk()`, a qual não retornará nenhum objeto como resultado. Ela é particulamente útil para funções que não visam realizar uma tarefa que necessite ser guardada no R. O exemplo mais claro para o nosso caso é a criação de arquivos para o excel com os resultados dos procedimentos, por meio, por exemplo, da função `write.csv()`. Mais para frente também será ensinado a criação de gráficos e figuras, as quais também podem se beneficar da função `walk()`.
+
+### Síntese dos tipos de função
+
+Tomando novamente como fonte o Advanced R, existe uma tabela que sintetiza de forma simples quais as funcionalidades dessas map variants que atuam sobre ou resultam em objetos de tipos diferentes. No caso, estão apresentadas as funções `map()`, `map_tipo()`, `modify()` e `walk()`. A `map_tipo()` é uma representação simbólica do grupo `map_dbl`, `map_lgl`, `map_chr` e `map_int`.
+
+|  *Argumentos*      | *Lista* | *Vetor Atômico* | *Mesmo tipo* | *Nenhum*   |
+|--------------------|---------|-----------------|--------------|------------|
+|  Um argumento      | `map()` |   `map_tipo()`  |  `modify()`  |  `walk()`  |
+|Dois argumentos     | `map2()`|   `map2_tipo()` | `modify2()`  |  `walk2()` |
+|Um argumento +índice| `imap()`|   `imap()`      | `imodify()`  | `iwalk()`  |
+|N argumentos        | `pmap()`|   `pmap_tipo()` |     ----     | `pwalk()`  |
+
+No caso, a tabela também descreve as variantes dessas função para mais de uma varíavel (objeto) à ser aplicada a função (2 para 2 objetos e p para p objetos), tal como já descrito anteriormente para `map()`, `map2()` e `pmap()`. Na tabela somente as funções que necessitam de índice é que não foram abordadas até aqui. Vamos explicar brevemente o que são elas, mas por ora sem explorá-las a fundo.
+
+### Interação entre valores e índices
+
+Essa classe de funções trabalha como uma alternativa para loops com o `for`:
+
+Gerar loop nos elementos: `for (x in objeto)`
+Por meio de índices numéricos: `for (i in seq_along(objeto))`
+Através dos nomes: `for (nm in names(objeto))`
+
+A primeira forma é semelhante ao que a função `map()` realiza para os elementos de uma lista, só que no `for` aplicando determinada tarefa (ou função) sobre os elementos de um objeto. As duas últimas formas são semelhantes ao que a `imap()` realizada, operando iterações sobre os valores e os índices do vetor em paralelo colocado no argumento.
 
 ### Aplicando funções condicionalmente
 
