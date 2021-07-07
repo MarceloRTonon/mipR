@@ -622,6 +622,15 @@ Através dos nomes: `for (nm in names(objeto))`
 
 A primeira forma é semelhante ao que a função `map()` realiza para os elementos de uma lista, só que no `for` aplicando determinada tarefa (ou função) sobre os elementos de um objeto. As duas últimas formas são semelhantes ao que a `imap()` realizada, operando iterações sobre os valores e os índices do vetor em paralelo colocado no argumento.
 
+Outra funcionalidade do imap é a criação de frases, como por exemplo indicando o tipo de cada variável:
+
+```{r}
+
+imap_chr(lst_CO2[[1]], ~ paste0("A tipo de ", .y, " é ", typeof(.x)))
+
+```
+
+
 ### Aplicando funções condicionalmente
 
 Outra funcionalidade é o uso de condicionais para realizar operações dentro de suas listas. Tratam-se das funções `map_if()` e `map_at()`. A primeira opera como uma função do `if` e `else`, em que a função somente será aplicada aos elementos da lista que atendem à determinada condição. Já na segunda, é necessário incluir um argumento indicando quais serão os elementos da lista a receberem a função. A sintaxe das funções é da seguinte forma:
@@ -637,6 +646,34 @@ map_at(.x, .at, .f, ...)
 - *.p* é um predicado (booleano) com um resultado do tipo `TRUE` ou `FALSE` decorrente do estabelecimento de alguma condição ou proposição. Pode ser portanto uma função que avalia se determinada condição é satisfeita ou um vetor lógico com proposições de valores `T` ou `F`. Somente aqueles que apresentam `T` é que terçao a função aplicada.
 - *.else* opera da mesma forma que `.p` no entanto somente para os elementos que obtivem `FALSE` no argumento `.p`. Caso não queira que nenhuma operação seja realizada, basta manter o `NULL` (que é o default da função).
 - *.at* nesse caso, ao contrário de `map_if`, aqui deverá ser introduzida um vetor de nomes, valores positivos a incluir ou valores negativos para excluir determinadas posições. Importante destacar que algumas funções do `tidyverse` podem ser úteis, como a `vars()` e a `tidyselect`.
+
+A `map_if`, dentre diversas outras possibilidades, é útil para resolver questões de aplicar determinadas funções somente em variáveis que atendem às condições. Passamos recentemente por esse problema ao tentar aplicar `map_dbl()` sobre uma lista que tinha variáveis de outros tipos que não `double`, mas isso também se aplica a funções básicas como, por exemplo, `sum()` e `mean()`. Vamos nos manter no exemplo de `lst_CO2`
+
+```{r, error=T}
+
+# A map diretamente não seria aplicável sobre uma lista com elementos de diferentes tipos: 
+lst_CO2_map <- lst_CO2[[1]] %>% map(sum)
+
+# Usando agora a map_if e resgatando o objeto m_lgl que testa quais são as variáveis do tipo double
+lst_CO2_map_if <- lst_CO2[[1]] %>% map_if(., m_lgl, sum, .else=unlist(.))
+lst_CO2_map_if
+
+```
+
+Já para o caso da `map_at()` os inputs são mais manuais, necessitando indicar exatamente em quais elementos aplicar a função. No caso anterior, como sabemos que apenas os dois últimos são passíveis de receber a função `sum()` esta operação seria possível, caso contrário seria necessário investigar mais a fundo a lista para saber exatamente onde podem ser aplicadas.
+
+```{r}
+lst_CO2_map_at <- lst_CO2[[1]] %>% map_at(., c(4,5), sum)
+lst_CO2_map_at
+
+```
+
+No entanto, nesse caso ainda estaríamos mantendo a lista completa para aqueles que não foram indicando, necessitanto de outro passo para obter um resultado equivalente ao de `map_if()`:
+
+```{r}
+lst_CO2_map_at <- lst_CO2_map_at %>% map_at(., c(1:3), unlist(.))
+lst_CO2_map_at
+```
 
 
 

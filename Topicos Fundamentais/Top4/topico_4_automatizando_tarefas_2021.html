@@ -11,7 +11,7 @@
 
 <meta name="author" content="Marcelo Tonon e Felipe Cornelio" />
 
-<meta name="date" content="2021-01-07" />
+<meta name="date" content="2021-06-07" />
 
 <title>Tópico 4 - Automatizando tarefas</title>
 
@@ -387,7 +387,7 @@ summary {
 
 <h1 class="title toc-ignore">Tópico 4 - Automatizando tarefas</h1>
 <h4 class="author">Marcelo Tonon e Felipe Cornelio</h4>
-<h4 class="date">01/07/2021</h4>
+<h4 class="date">06/07/2021</h4>
 
 </div>
 
@@ -503,13 +503,13 @@ S[[ano]] &lt;- tY[[ano]] - G[[ano]] - I_Pub[[ano]]
     print(Sys.time())
   }</code></pre>
 <pre><code>## [1] 10 20 30
-## [1] &quot;2021-07-06 01:52:37 -03&quot;
+## [1] &quot;2021-07-07 01:21:00 -03&quot;
 ## [1] 20 40 60
-## [1] &quot;2021-07-06 01:52:38 -03&quot;
+## [1] &quot;2021-07-07 01:21:01 -03&quot;
 ## [1] 30 60 90
-## [1] &quot;2021-07-06 01:52:39 -03&quot;
+## [1] &quot;2021-07-07 01:21:02 -03&quot;
 ## [1]  40  80 120
-## [1] &quot;2021-07-06 01:52:40 -03&quot;</code></pre>
+## [1] &quot;2021-07-07 01:21:03 -03&quot;</code></pre>
 <p>Repare como há a diferença de um segundo entre cada <code>print</code>. Isso porque <strong>os loops ocorrem em sequência</strong> e não todos ao mesmo tempo.</p>
 <p>Quando se trata de um <code>for</code> que irá ocupar mais de uma linha, ou com uma linha grande, o conteúdo a ser repetido no loop deve ser colocado entre as chaves <code>{}</code>. Quando se tratar de uma equação curta e de uma única linha, pode-se escrever na mesma linha após o parentêses. Veja abaixo:</p>
 <pre class="r"><code>s_Y &lt;- list()
@@ -675,7 +675,7 @@ toc()</code></pre>
 <pre class="r"><code>tic()
 lista_mat3 &lt;- map2(lista_mat, lista_escalares, function(x,y) x*y)
 toc()</code></pre>
-<pre><code>## 0 sec elapsed</code></pre>
+<pre><code>## 0.02 sec elapsed</code></pre>
 <p>Desse modo, podemos também usar <code>map2</code> para realizar multiplicação de matrizes, nomear diferentes tipos de matrizes e etc… Importante notar que as duas listas usadas em <code>map2</code> devem ter o mesmo <code>length()</code>. Se for diferente, dará erro.</p>
 </div>
 <div id="atuar-sobre-três-ou-mais-listas-pmap" class="section level3">
@@ -919,6 +919,14 @@ df_mod</code></pre>
 <p>Essa classe de funções trabalha como uma alternativa para loops com o <code>for</code>:</p>
 <p>Gerar loop nos elementos: <code>for (x in objeto)</code> Por meio de índices numéricos: <code>for (i in seq_along(objeto))</code> Através dos nomes: <code>for (nm in names(objeto))</code></p>
 <p>A primeira forma é semelhante ao que a função <code>map()</code> realiza para os elementos de uma lista, só que no <code>for</code> aplicando determinada tarefa (ou função) sobre os elementos de um objeto. As duas últimas formas são semelhantes ao que a <code>imap()</code> realizada, operando iterações sobre os valores e os índices do vetor em paralelo colocado no argumento.</p>
+<p>Outra funcionalidade do imap é a criação de frases, como por exemplo indicando o tipo de cada variável:</p>
+<pre class="r"><code>imap_chr(lst_CO2[[1]], ~ paste0(&quot;A tipo de &quot;, .y, &quot; é &quot;, typeof(.x)))</code></pre>
+<pre><code>##                           Plant                            Type 
+##     &quot;A tipo de Plant é integer&quot;      &quot;A tipo de Type é integer&quot; 
+##                       Treatment                            conc 
+## &quot;A tipo de Treatment é integer&quot;       &quot;A tipo de conc é double&quot; 
+##                          uptake 
+##     &quot;A tipo de uptake é double&quot;</code></pre>
 </div>
 <div id="aplicando-funções-condicionalmente" class="section level3">
 <h3>Aplicando funções condicionalmente</h3>
@@ -932,6 +940,78 @@ map_at(.x, .at, .f, ...)</code></pre>
 <li><em>.else</em> opera da mesma forma que <code>.p</code> no entanto somente para os elementos que obtivem <code>FALSE</code> no argumento <code>.p</code>. Caso não queira que nenhuma operação seja realizada, basta manter o <code>NULL</code> (que é o default da função).</li>
 <li><em>.at</em> nesse caso, ao contrário de <code>map_if</code>, aqui deverá ser introduzida um vetor de nomes, valores positivos a incluir ou valores negativos para excluir determinadas posições. Importante destacar que algumas funções do <code>tidyverse</code> podem ser úteis, como a <code>vars()</code> e a <code>tidyselect</code>.</li>
 </ul>
+<p>A <code>map_if</code>, dentre diversas outras possibilidades, é útil para resolver questões de aplicar determinadas funções somente em variáveis que atendem às condições. Passamos recentemente por esse problema ao tentar aplicar <code>map_dbl()</code> sobre uma lista que tinha variáveis de outros tipos que não <code>double</code>, mas isso também se aplica a funções básicas como, por exemplo, <code>sum()</code> e <code>mean()</code>. Vamos nos manter no exemplo de <code>lst_CO2</code></p>
+<pre class="r"><code># A map diretamente não seria aplicável sobre uma lista com elementos de diferentes tipos: 
+lst_CO2_map &lt;- lst_CO2[[1]] %&gt;% map(sum)</code></pre>
+<pre><code>## Error in Summary.ordered(structure(c(1L, 1L, 1L, 1L, 1L, 1L, 1L, 2L, 2L, : &#39;sum&#39; not defined for ordered factors</code></pre>
+<pre class="r"><code># Usando agora a map_if e resgatando o objeto m_lgl que testa quais são as variáveis do tipo double
+lst_CO2_map_if &lt;- lst_CO2[[1]] %&gt;% map_if(., m_lgl, sum, .else=unlist(.))
+lst_CO2_map_if</code></pre>
+<pre><code>## $Plant
+## NULL
+## 
+## $Type
+## NULL
+## 
+## $Treatment
+## NULL
+## 
+## $conc
+## [1] 18270
+## 
+## $uptake
+## [1] 1287</code></pre>
+<p>Já para o caso da <code>map_at()</code> os inputs são mais manuais, necessitando indicar exatamente em quais elementos aplicar a função. No caso anterior, como sabemos que apenas os dois últimos são passíveis de receber a função <code>sum()</code> esta operação seria possível, caso contrário seria necessário investigar mais a fundo a lista para saber exatamente onde podem ser aplicadas.</p>
+<pre class="r"><code>lst_CO2_map_at &lt;- lst_CO2[[1]] %&gt;% map_at(., c(4,5), sum)
+lst_CO2_map_at</code></pre>
+<pre><code>## $Plant
+##  [1] Qn1 Qn1 Qn1 Qn1 Qn1 Qn1 Qn1 Qn2 Qn2 Qn2 Qn2 Qn2 Qn2 Qn2 Qn3 Qn3 Qn3 Qn3 Qn3
+## [20] Qn3 Qn3 Mn1 Mn1 Mn1 Mn1 Mn1 Mn1 Mn1 Mn2 Mn2 Mn2 Mn2 Mn2 Mn2 Mn2 Mn3 Mn3 Mn3
+## [39] Mn3 Mn3 Mn3 Mn3
+## 12 Levels: Qn1 &lt; Qn2 &lt; Qn3 &lt; Qc1 &lt; Qc3 &lt; Qc2 &lt; Mn3 &lt; Mn2 &lt; Mn1 &lt; ... &lt; Mc1
+## 
+## $Type
+##  [1] Quebec      Quebec      Quebec      Quebec      Quebec      Quebec     
+##  [7] Quebec      Quebec      Quebec      Quebec      Quebec      Quebec     
+## [13] Quebec      Quebec      Quebec      Quebec      Quebec      Quebec     
+## [19] Quebec      Quebec      Quebec      Mississippi Mississippi Mississippi
+## [25] Mississippi Mississippi Mississippi Mississippi Mississippi Mississippi
+## [31] Mississippi Mississippi Mississippi Mississippi Mississippi Mississippi
+## [37] Mississippi Mississippi Mississippi Mississippi Mississippi Mississippi
+## Levels: Quebec Mississippi
+## 
+## $Treatment
+##  [1] nonchilled nonchilled nonchilled nonchilled nonchilled nonchilled
+##  [7] nonchilled nonchilled nonchilled nonchilled nonchilled nonchilled
+## [13] nonchilled nonchilled nonchilled nonchilled nonchilled nonchilled
+## [19] nonchilled nonchilled nonchilled nonchilled nonchilled nonchilled
+## [25] nonchilled nonchilled nonchilled nonchilled nonchilled nonchilled
+## [31] nonchilled nonchilled nonchilled nonchilled nonchilled nonchilled
+## [37] nonchilled nonchilled nonchilled nonchilled nonchilled nonchilled
+## Levels: nonchilled chilled
+## 
+## $conc
+## [1] 18270
+## 
+## $uptake
+## [1] 1287</code></pre>
+<p>No entanto, nesse caso ainda estaríamos mantendo a lista completa para aqueles que não foram indicando, necessitanto de outro passo para obter um resultado equivalente ao de <code>map_if()</code>:</p>
+<pre class="r"><code>lst_CO2_map_at &lt;- lst_CO2_map_at %&gt;% map_at(., c(1:3), unlist(.))
+lst_CO2_map_at</code></pre>
+<pre><code>## $Plant
+## NULL
+## 
+## $Type
+## NULL
+## 
+## $Treatment
+## NULL
+## 
+## $conc
+## [1] 18270
+## 
+## $uptake
+## [1] 1287</code></pre>
 </div>
 </div>
 <div id="fonte" class="section level2">
