@@ -503,13 +503,13 @@ S[[ano]] &lt;- tY[[ano]] - G[[ano]] - I_Pub[[ano]]
     print(Sys.time())
   }</code></pre>
 <pre><code>## [1] 10 20 30
-## [1] &quot;2021-07-07 01:21:00 -03&quot;
+## [1] &quot;2021-07-07 23:40:06 -03&quot;
 ## [1] 20 40 60
-## [1] &quot;2021-07-07 01:21:01 -03&quot;
+## [1] &quot;2021-07-07 23:40:07 -03&quot;
 ## [1] 30 60 90
-## [1] &quot;2021-07-07 01:21:02 -03&quot;
+## [1] &quot;2021-07-07 23:40:08 -03&quot;
 ## [1]  40  80 120
-## [1] &quot;2021-07-07 01:21:03 -03&quot;</code></pre>
+## [1] &quot;2021-07-07 23:40:09 -03&quot;</code></pre>
 <p>Repare como há a diferença de um segundo entre cada <code>print</code>. Isso porque <strong>os loops ocorrem em sequência</strong> e não todos ao mesmo tempo.</p>
 <p>Quando se trata de um <code>for</code> que irá ocupar mais de uma linha, ou com uma linha grande, o conteúdo a ser repetido no loop deve ser colocado entre as chaves <code>{}</code>. Quando se tratar de uma equação curta e de uma única linha, pode-se escrever na mesma linha após o parentêses. Veja abaixo:</p>
 <pre class="r"><code>s_Y &lt;- list()
@@ -670,12 +670,12 @@ for(i in seq_along(lista_escalares)){
   lista_mat3_for[[i]] &lt;- lista_mat[[i]]*lista_escalares[[i]] 
 }
 toc()</code></pre>
-<pre><code>## 0 sec elapsed</code></pre>
+<pre><code>## 0.01 sec elapsed</code></pre>
 <p>No looping acima teriamos que o primeiro (segundo) elemento de <code>lista_mat</code>, a matrix <code>A</code> (<code>B</code>), seria multiplicado pelo primeiro (segundo) elemento da <code>lista_escalares</code>, <code>2</code> (<code>3</code>). Podemos no entanto, usar uma variante de <code>purrr::map</code> para tanto, a função <code>purrr::map2</code>. Veja abaixo:</p>
 <pre class="r"><code>tic()
 lista_mat3 &lt;- map2(lista_mat, lista_escalares, function(x,y) x*y)
 toc()</code></pre>
-<pre><code>## 0.02 sec elapsed</code></pre>
+<pre><code>## 0.01 sec elapsed</code></pre>
 <p>Desse modo, podemos também usar <code>map2</code> para realizar multiplicação de matrizes, nomear diferentes tipos de matrizes e etc… Importante notar que as duas listas usadas em <code>map2</code> devem ter o mesmo <code>length()</code>. Se for diferente, dará erro.</p>
 </div>
 <div id="atuar-sobre-três-ou-mais-listas-pmap" class="section level3">
@@ -864,9 +864,27 @@ df_mod</code></pre>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
 <p>Perceba que tanto visualmente quanto pela classe do objeto, é possível perceber que a estrutura dos dados está diferente. As variantes da função <code>modify()</code>, as <code>modify2()</code> e <code>pmodify()</code>, operam da mesma forma que as suas equivalentes para o <code>map()</code>.</p>
 </div>
+<div id="interação-entre-valores-e-índices" class="section level3">
+<h3>Interação entre valores e índices</h3>
+<p>Essa classe de funções trabalha como uma alternativa para loops com o <code>for</code>:</p>
+<p>Gerar loop nos elementos: <code>for (x in objeto)</code> Por meio de índices numéricos: <code>for (i in seq_along(objeto))</code> Através dos nomes: <code>for (nm in names(objeto))</code></p>
+<p>A primeira forma é semelhante ao que a função <code>map()</code> realiza para os elementos de uma lista, só que no <code>for</code> aplicando determinada tarefa (ou função) sobre os elementos de um objeto. As duas últimas formas são semelhantes ao que a <code>imap()</code> realizada, operando iterações sobre os valores e os índices do vetor em paralelo colocado no argumento. Os elementos da função são semelhantes à map, tal que:</p>
+<pre class="r"><code>imap(.x, .f, ...)</code></pre>
+<p>Outra funcionalidade do imap é a criação de frases, como por exemplo indicando o tipo de cada variável:</p>
+<pre class="r"><code>imap_chr(lst_CO2[[1]], ~ paste0(&quot;A tipo de &quot;, .y, &quot; é &quot;, typeof(.x)))</code></pre>
+<pre><code>##                           Plant                            Type 
+##     &quot;A tipo de Plant é integer&quot;      &quot;A tipo de Type é integer&quot; 
+##                       Treatment                            conc 
+## &quot;A tipo de Treatment é integer&quot;       &quot;A tipo de conc é double&quot; 
+##                          uptake 
+##     &quot;A tipo de uptake é double&quot;</code></pre>
+</div>
 <div id="aplicar-uma-função-sem-guardar-um-resultado" class="section level3">
 <h3>Aplicar uma função sem guardar um resultado</h3>
 <p>Outra classe de map variant é a função <code>walk()</code>, a qual não retornará nenhum objeto como resultado. Ela é particulamente útil para funções que não visam realizar uma tarefa que necessite ser guardada no R. O exemplo mais claro para o nosso caso é a criação de arquivos para o excel com os resultados dos procedimentos, por meio, por exemplo, da função <code>write.csv()</code>. Mais para frente também será ensinado a criação de gráficos e figuras, as quais também podem se beneficar da função <code>walk()</code>.</p>
+<p>Como exemplo, vamos salvar alguns dos dados usados anteriormente e usar a função <code>iwalk()</code> para salvá-las. Vamos resgatar o objeto <code>df_map</code>, que é uma lista de 3 variáveis, para exemplificar:</p>
+<pre class="r"><code>df_map %&gt;% iwalk(.,~ write.csv(.x, file=paste0(&quot;Variável &quot;, .y,&quot;.csv&quot;)))</code></pre>
+<p>No argumento <code>.y</code> estaria operando como o índice do <code>iwalk()</code> (da mesma forma como seria na <code>imap()</code>). Sendo <code>df_map</code> uma lista nomeada, o argumento <code>.y</code> estaria realizando o papel de <code>names()</code>.</p>
 </div>
 <div id="síntese-dos-tipos-de-função" class="section level3">
 <h3>Síntese dos tipos de função</h3>
@@ -913,20 +931,6 @@ df_mod</code></pre>
 </tbody>
 </table>
 <p>No caso, a tabela também descreve as variantes dessas função para mais de uma varíavel (objeto) à ser aplicada a função (2 para 2 objetos e p para p objetos), tal como já descrito anteriormente para <code>map()</code>, <code>map2()</code> e <code>pmap()</code>. Na tabela somente as funções que necessitam de índice é que não foram abordadas até aqui. Vamos explicar brevemente o que são elas, mas por ora sem explorá-las a fundo.</p>
-</div>
-<div id="interação-entre-valores-e-índices" class="section level3">
-<h3>Interação entre valores e índices</h3>
-<p>Essa classe de funções trabalha como uma alternativa para loops com o <code>for</code>:</p>
-<p>Gerar loop nos elementos: <code>for (x in objeto)</code> Por meio de índices numéricos: <code>for (i in seq_along(objeto))</code> Através dos nomes: <code>for (nm in names(objeto))</code></p>
-<p>A primeira forma é semelhante ao que a função <code>map()</code> realiza para os elementos de uma lista, só que no <code>for</code> aplicando determinada tarefa (ou função) sobre os elementos de um objeto. As duas últimas formas são semelhantes ao que a <code>imap()</code> realizada, operando iterações sobre os valores e os índices do vetor em paralelo colocado no argumento.</p>
-<p>Outra funcionalidade do imap é a criação de frases, como por exemplo indicando o tipo de cada variável:</p>
-<pre class="r"><code>imap_chr(lst_CO2[[1]], ~ paste0(&quot;A tipo de &quot;, .y, &quot; é &quot;, typeof(.x)))</code></pre>
-<pre><code>##                           Plant                            Type 
-##     &quot;A tipo de Plant é integer&quot;      &quot;A tipo de Type é integer&quot; 
-##                       Treatment                            conc 
-## &quot;A tipo de Treatment é integer&quot;       &quot;A tipo de conc é double&quot; 
-##                          uptake 
-##     &quot;A tipo de uptake é double&quot;</code></pre>
 </div>
 <div id="aplicando-funções-condicionalmente" class="section level3">
 <h3>Aplicando funções condicionalmente</h3>
