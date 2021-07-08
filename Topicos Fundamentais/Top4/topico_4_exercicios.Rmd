@@ -1,7 +1,7 @@
 ---
-title: "Tópico 4 - exercicios (Prévia)"
+title: "Tópico 4 - Lista de Exercícios"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "03/07/2020"
+date: "07/07/2021"
 output: html_document
 ---
 
@@ -9,9 +9,6 @@ output: html_document
 knitr::opts_chunk$set(include = FALSE, eval = TRUE)
 ```
 
-O que esta aqui é **PRÉVIA** dos exercicios. Estes são os exercicios para até quinta-feira dia 9/07/2020.
-
-**HAVERÁ MAIS QUESTÕES NO FUTURO.**
 
 ## Pacotes necessários para esse exercício.
 

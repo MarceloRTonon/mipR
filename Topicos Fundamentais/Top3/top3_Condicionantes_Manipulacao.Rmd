@@ -397,13 +397,19 @@ Em alguns casos, outra opção é usar dois operadores em sequência `&&` ou `||
 | Exato     |      `a==b`     | `identical(a,b)` |
 | Tolerante |    $\nexists$   | `all.equal(a,b)` |
 
-|                         | Para retornar `TRUE` é necessário:                                                                                 |                     Célula à Célula                    |               Primeira Célula              |
-|-------------------------|--------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------:|:------------------------------------------:|
-| E (and)                 | **Todas** as Condições devem ser satisfeitas (`TRUE`)                                                              |                           `&`                          |                    `&&`                    |
-| E/OU (or)               | **Ao menos uma** condição tem que ser satisfeita (`TRUE`);<br><br>a outra **não precisa** ser satisfeita (`TRUE`). |                          `\|`                          |                   `\|\|`                   |
-| OU EXCLUSIVAMENTE (xor) | Apenas uma condição deve ser satisfeitar (`TRUE`);<br><br>a outra **não pode** ser satisfeita (`TRUE`).            |                          `xor`                         |                 $\nexists$                 |
++-------------------------+--------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------+--------------------------------------------+
+|                         | Para retornar `TRUE` é necessário:                                                                                 | Célula à Célula                                        | Primeira Célula                            |
++=========================+====================================================================================================================+:======================================================:+:==========================================:+
+| E (and)                 | **Todas** as Condições devem ser satisfeitas (`TRUE`)                                                              | `&`                                                    | `&&`                                       |
++-------------------------+--------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------+--------------------------------------------+
+| E/OU (or)               | **Ao menos uma** condição tem que ser satisfeita (`TRUE`);<br><br>a outra **não precisa** ser satisfeita (`TRUE`). | `\|`                                                   | `\|\|`                                     |
++-------------------------+--------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------+--------------------------------------------+
+| OU EXCLUSIVAMENTE (xor) | Apenas uma condição deve ser satisfeitar (`TRUE`);<br><br>a outra **não pode** ser satisfeita (`TRUE`).            | `xor`                                                  | $\nexists$                                 |
++-------------------------+--------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------+--------------------------------------------+
 | Todos                   | Todos os valores do vetor serem `TRUE`                                                                             | Condiçao Suficiente<br> **se** usado dentro de `all()` | Condição Necessária,<br>mas não Suficiente |
-| Algum                   | Pelo menos um valor do vetor ser `TRUE`                                                                            |  Condição Suficiente<br>**se** usado dentro de `any()` | Condição Suficiente,<br>mas não Necessária |
++-------------------------+--------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------+--------------------------------------------+
+| Algum                   | Pelo menos um valor do vetor ser `TRUE`                                                                            | Condição Suficiente<br>**se** usado dentro de `any()`  | Condição Suficiente,<br>mas não Necessária |
++-------------------------+--------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------+--------------------------------------------+
 
 A coluna "Primeira Célula" da linhas "Todos" e "Algum" diz respeito aos resultados de `&&` e `||` em relação a preposição lógica da linha.
 
