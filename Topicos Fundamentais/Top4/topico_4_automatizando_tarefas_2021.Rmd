@@ -257,8 +257,8 @@ toc()
 
 exemplo_g <- vector(mode = "character", length = length(exemplo_f))
 tic()
-for(i in i:length(exemplo_g)){
-  exemplo_g[i] <- paste0("Usando paste0 como se não fosse vetorizado", exemplo_f)
+for(i in 1:length(exemplo_g)){
+  exemplo_g[i] <- paste0("Usando paste0 como se não fosse vetorizado", exemplo_f[i])
 }
 toc()
 ```
