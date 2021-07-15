@@ -438,6 +438,7 @@ No caso em que usamos `map2` dentro de uma função anônima, repare que usamos 
 lista_recursiva3 <- map(lista_recursiva, function(x) map2(x, lista_escalares, function(z,y) z*y))
 
 lista_recursiva3 <- map(lista_recursiva, map2, lista_escalares, function(x,y) x*y)
+#lista_recursiva3a <- map(.x = lista_recursiva, ~ map2(.x, .y = lista_escalares, .f = `*`))
 ```
 
 O que ocorre no exemplo acima, é que mandamos a função `map` aplicar sobre os elementos de `lista_recursiva`, que são listas, a função `map2`. Essa por sua vez, vai multiplicar cada elemento de `lista_recursiva[[i]]`, que são numéricos, com os elementos de `lista_escalares`, que também são númericos.
@@ -496,12 +497,15 @@ A família map é composta por, até onde sabemos, pelo menos 23 funções(!). D
 
 Em geral o uso da função `map()` e suas extensões diretas (`map2()` e `pmap()`), resultarão também listas. No entanto, podem ter situações em que você queira obter vetores atômicos de diferentes tipos como resultado. Nesse caso, há uma função map para cada um desses tipos, sintetizados nas senguintes funções: `map_lgl()`, `map_int()`, `map_dbl()` e `map_chr()`. Vamos trabalhar com `lst_CO2` para entender melhor como funciona cada função. 
 
-```{r}
+```{r, error=T}
 
 # map_chr() retorna um vetor atômico do tipo "character"
 m_chr <- map_chr(lst_CO2[[1]], typeof)
 m_chr
 typeof(m_chr)
+
+# Dará erro
+m_chr_2 <- map_dbl(lst_CO2[[1]], typeof)
 
 # map_lgl() retorna um vetor atômico do tipo "logical"
 m_lgl <- map_lgl(lst_CO2[[1]], is.double)
@@ -548,7 +552,7 @@ map_depth(.x, .depth, .f, ..., .ragged = FALSE)
 ```
 
 - *.x*: assim como nos casos anteriores, aqui colocamos a lista com as informações que serão aplicadas a função.
-- *.depth*: aqui está o ponto central dessa função, em que determinamos o nível em que serão realizadas as operações. No caso a sintaxe é da por meio de um valor numérico, em que valores negativos realizarão a contagem do nível partindo do "final" da lista (do elemento mais interno da lista).No argumento `.depth=` a lógica pode ser interpretada ad seguitne forma
+- *.depth*: aqui está o ponto central dessa função, em que determinamos o nível em que serão realizadas as operações. No caso a sintaxe é da por meio de um valor numérico, em que valores negativos realizarão a contagem do nível partindo do "final" da lista (do elemento mais interno da lista). No argumento `.depth=` a lógica pode ser interpretada ad seguitne forma
     - `map_depth(x, 0, fun)`, seria o mesmo que aplicar uma função diretamente sobre x (`fun(x)`);
     - `map_depth(x, 1, fun)`, equivale à função map sobre a lista, tal como `x <- map(x, fun)`;
     - `map_depth(x, 2, fun)`, nesse caso seria a aplicação de da função `map` usando a própria `map` tal como `x <- map(x, ~ map(., fun))`;
@@ -563,8 +567,13 @@ Em termos mais práticos, ela uma boa alternativa para uso de funções dentro d
 
 lista_recursiva2_depth <- map_depth(lista_recursiva, 2, vezes.dois)
 
+# Usando o argumento negativo
+
+lista_recursiva2_depth_b <- map_depth(lista_recursiva, -1, vezes.dois)
+
 # Comparando se são iguais:
 all.equal(lista_recursiva2, lista_recursiva2_depth)
+all.equal(lista_recursiva2_depth, lista_recursiva2_depth_b)
 
 ```
 
