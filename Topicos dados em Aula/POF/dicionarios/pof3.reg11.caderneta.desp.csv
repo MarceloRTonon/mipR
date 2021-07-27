@@ -1,0 +1,26 @@
+nome;variavel;tamanho;decimais; inicial
+TIPO DE REGISTRO                  ;registro;2;;1
+CODIGO DA UF;uf;2;;3
+NUMERO SEQUENCIAL;n_seq;3;;5
+DV DO SEQUENCIAL;dv_seq;1;;8
+NUMERO DO DOMICIêLIO;n_dom;2;;9
+NUMERO DA UC                      ;n_uc;1;;11
+ESTRATO GEOGRAçFICO;estrato;2;;12
+FATOR DE EXPANSAO 1 (DESENHO AMOSTRAL)           ;fator_exp;14;8;14
+FATOR DE EXPANSAO 2 (AJUSTADO P/ ESTIMATIVAS)           ;fator_exp_2;14;8;28
+NUMERO DO QUADRO                  ;n_quadro;2;;42
+NUMERO DO GRUPO DE DESPESA;n_gru_despe;2;;44
+CODIGO DO ITEM                    ;cod_item;5;;46
+FORMA DE AQUISICAO                ;forma_aqui;2;;51
+VALOR DA DESPESA / AQUISICAO                 ;valor_despe;11;2;53
+FATOR DE ANUALIZACAO                 ;fator_anu;2;;64
+DEFLATOR FATOR                ;deflator;5;2;66
+VALOR DA DESPESA DEFLACIONADO      ;desp_defla;11;2;71
+VALOR DA DESPESA ANUALIZADO E EXPANDIDO (FATOR2)     ;desp_anu_exp;16;2;82
+CODIGO DE IMPUTACAO                   ;cod_impu;2;;98
+RENDA MONETçARIA MENSAL DA UC       ;rend_mon_mes_uc;16;2;100
+RENDA NAO MONETçARIA MENSAL DA UC   ;rend_nmon_mes_uc;16;2;116
+RENDA TOTAL MENSAL DA UC                 ;rend_tot_mes_uc;16;2;132
+METODO DA QUANTIDADE ADQUIRIDA;met_quant_adqui;2;;148
+QUANTIDADE FINAL EM KG;quant_final;8;3;150
+CODIGO DO LOCAL DE AQUISICAO;cod_loc_aqui;5;;158

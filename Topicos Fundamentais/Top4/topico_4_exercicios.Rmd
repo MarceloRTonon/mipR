@@ -261,9 +261,19 @@ toc()
 #Usando map:
 tic()
 lst_Q2.9 <- map(niotQ2, is_tibble)
+toc()
 
+tic()
+lst_Q2.9 <- niotQ2 %>%  map(is_tibble)
+toc()
+
+tic()
+lst_Q2.9 <- map_lgl(niotQ2, is_tibble) %>%
+  all
 toc()
 #Usando for:
+
+lst_Q2.9 <- list()
 tic()
 for (i in seq_along(niotQ2)){
   lst_Q2.9[[i]] <- is_tibble(niotQ2[[i]])
@@ -362,18 +372,18 @@ lstQ2.13 <- lstQ2.12 %>%
 #### Q.2.14 - Crie uma lista `lstQ2.14` contendo vetores atômicos cada um com os 4 primeiros `colnames` dos tibbles de `lstQ.12` e os valores de `lstQ2.13`. Tente fazer via alguma variação de map.
 
 ```{r}
-lstQ2.14 <- map2(lstQ2.12, lstQ2.13, function(x,y) c(colnames(x)[1:4], y$Code))
+lstQ2.14 <- map2(lstQ2.12, lstQ2.13, function(x,y) c(names(x)[1:4], y$Code))
 ```
 
 #### Q.2.15 - Crie uma lista `lstQ2.15` apenas com os valores da demanda intermediária (mantenha as 4 primeiras colunas). Use a variação map e veja se consegue fazer isso tanto pelo `tidyverse` quanto pelo `baseR`.
 
 ```{r}
 tic()
-lstQ2.15 <- map2(lstQ2.12, lstQ2.14, function(x,y) select(x, all_of(y)))
+lstQ2.15 <- map2(lstQ2.12, lstQ2.14, function(x,y) select(x, all_of(as.character(y))))
 toc()
 
 tic()
-lstQ2.15 <- map2(lstQ2.12, lstQ2.14, function(x,y) select(x, unlist(y)))
+lstQ2.15 <- map2(lstQ2.12, lstQ2.14, function(x,y) select(x, y))
 toc()
 
 tic()
@@ -398,19 +408,26 @@ lstQ2.10 <- lstQ2.10 %>% setNames(paisesQ2.1)
 names(lstQ2.10) <- paisesQ2.1
 ```
 
-#### Q.3.2 A partir de um dos `tibbles` da lista `lstQ2.10`, crie um vetor atômico `years` contendo todos os anos que a NIOT engloba. 
+#### Q.3.2 A partir de um dos `tibbles` da lista `lstQ2.10`, crie um **vetor atômico** `years` contendo todos os anos que a NIOT engloba. 
 
-Importante: exclua os valores duplicados e não use nenhum valor arbitrário.
+Importante: exclua os valores duplicados e não use nenhum valor arbitrário. Teste para saber se `years` é uma lista (você quer que **não** seja)
 
 ```{r}
-years <- lstQ2.10$AUS %>% .["Year"] %>% distinct() %>% unlist()
+  years <- lstQ2.10$AUS %>%
+  .["Year"] %>%
+  distinct() %>%
+  # c() gera uma lista
+  unlist() # gera um vetor atômico
+  # flatten_dbl()
 ```
 
 
 #### Q.3.3 A partir dos dados de `AUS` de `lstQ2.10`, crie uma lista `ausYear` com um tibble para cada ano. Ou seja, um `tibble` para os dados de `AUS` para o ano 2000, um `tibble` para o ano 2001 e etc... Nomeie os elementos de `ausYear` com o ano referente a cada um. Use o pacote `tictoc` para medir a perfomance e tente usar a função map.
 
+Importante: existe a função `split` que ajuda. Porém, tente também usar a função `filter`, para treinar o `map`
+
 ```{r}
-ausYear <- as.list(years) %>%
+ausYear <- years %>%
   map(function(x) filter(lstQ2.10$AUS, Year == x)) %>%
   setNames(years)
 
@@ -418,13 +435,15 @@ ausYear <- as.list(years) %>%
 
 #### Q.3.4 Faça o mesmo que em Q.3.3, porém agora criando uma lista `niotQ3` com todos os países.
 
-Use o pacote `tictac` e veja se consegue fazer por `map`
+Use o pacote `tictoc` e veja se consegue fazer por `map`
 
 Considere que fazer usando  `map()` é um desafio. Se não conseguir desse modo faça via `for` mesmo. Se você conseguir fazer via `map()` faça via `for` para comparar a diferença de perfomance!
 
 Dica: Para fazer com `map` crie uma função antes que tem dentro dela um `map`.
 
 Dica da dica: Ao criar uma função antes, não use a mesma letra dentro de `function()` na definição da função que você for usar na função anônima a ser criada dentro dela.
+
+Importante: existe a função `split` que ajuda. Porém, tente também usar a função `filter`, para treinar o `map`
 
 ```{r}
 #Usando for
@@ -456,6 +475,24 @@ rm(niotQ3)
 tic()
 niotQ3 <- lstQ2.10 %>% map(function(Y) map(as.list(years), function(x) filter(Y, Year == x))) %>% map(function(x) setNames(x,years))
 toc()
+
+rm(niotQ3)
+
+tic()
+niotQ3 <- lstQ2.10 %>% map(function(Y){
+  years %>%
+    as.list %>%
+    map(function(x) filter(Y, Year == x))
+})
+toc()
+rm(niotQ3)
+tic()
+espalha_ano <- function(x) x %>% split(x$Year)
+
+niotQ3 <- map(lstQ2.10, espalha_ano)
+toc()
+niotQ3 <- map_depth(lstQ2.10,
+                    -2, function(x) split(x, x$Year))
 ```
 
 #### Q.3.5- Crie agora uma lista `niotQ3Dom` a partir de `niotQ3` tenha apenas os dados com a produção doméstica (coluna `Origin`).
@@ -481,7 +518,18 @@ lstQ3.7 <- lstQ3.6 %>% map(map, function(x) colSums(type_convert(x)[,-c(1:4)]))
 #### Q.3.8 - Eleve a `-1` todos os elementos de `lstQ3.7`. Aloque em `lstQ3.8`
 
 ```{r}
-lstQ3.8 <- lstQ3.7 %>% map(map, function(x) x^(-1))
+
+nan_to_zero <- function(x) {
+  x[is.nan(x)] <-0
+  x}
+
+inf_to_zero <- function(x) {
+  x[is.infinite(x)] <- 0
+  x}
+
+
+lstQ3.8 <- lstQ3.7 %>% map(map, function(x) x^(-1)) %>%
+  map(map, inf_to_zero)
 ```
 
 #### Q.3.9 - Crie uma lista `lstQ3.8` em que os valores de `lstQ3.9` sejam a diagonal principal de matriz quadrada.
@@ -507,7 +555,12 @@ toc()
 #### Q.3.11 - Crie uma lista `InvLeontief` com a Inversa de Leontief obtidas a partir de `AQ3`
 
 ```{r}
-InvLeontief <- map(AQ3, map ,function(x) solve(diag(nrow(x))- x))
+  
+InvLeontief <- map(AQ3, map, function(x) solve(diag(nrow(x))- x))
+
+CalcLeontief <- function(x) solve(diag(nrow(x)) - x)
+
+InvLeontief <- map(AQ3, map, purrr::safely(CalcLeontief))
 ```
 
 
@@ -710,6 +763,7 @@ Vamos definir, `frib` inicialemnte como:
 ```{r, include = TRUE}
 frib <- c(1,1)
 ```
+
 
  Sabendo que o terceiro elemento de `frib` se dará por `frib[1]+ frib[2]`, como você definiria os próximos 10  elementos (ou seja do 3° ao 13°) da sequência de forma automatizada?
  

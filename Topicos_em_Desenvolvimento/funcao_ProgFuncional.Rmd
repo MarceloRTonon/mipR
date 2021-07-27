@@ -1,0 +1,165 @@
+---
+title: "Funções e Programação Funcional"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "08/07/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Vamos aqui passar como usar programação funcional no `R`. Só que antes disso precisamos explicar o que diabos é Programação Funcional. A resposta para isso pode ser bem direta: É um _Paradigma de Programação_ cujo cerne é a aplicação e composição de funções para realizar transformações de um valor para ao outro, evitando a todo custo depender de estados do programa.
+
+"Paradigma de Programação?" "Aplicação e Composição de funções" "Estado do programa?"
+
+[Meme da Nazaré]
+
+Ok, a resposta pode até ser direta, porém você pode estar estranhando todos esses termos jogados. E mais, deve estar se perguntando: por que você deveria se importar? Nesse caso, adiantamos que o código de programação funcional quando escrito corretamente garante mais facilmente que para um mesmo insumo, se retorne o mesmo produto, ou seja sendo $f(x)=y$, para um mesmo $x$, $f()$ retornará sempre o mesmo $y$. Para quem trabalha realizando estimações de dados, isso é de caráter **fundamental**.
+
+Para explicar o porquê disso tudo, vamos realizar aqui um pequeno _detour_ na área de conhecimento da programação, explorando um pouco cada um dos termos que usamos na definição de programação funcional e quais são as suas implicações. Vamos falar então das consequências disso para o R que é uma linguagem **multiparadigma** e por fim, abordar a aplicação de funções no R.
+
+# Paradigmas de Programação
+
+O conceito de _Paradigma de Programação_ é uma forma de classificação para linguagens de programação a partir de suas características e funcionalidades. 
+
+Apesar de não agregar nada em si, tal definição de Paradigma de Programação é importante de entender pois ajuda a entender as diferenças em si da programação. Não existem apenas a distinção de abstração entre linguagens de alto nível ("mais fáceis", porém menos eficientes no geral) ou baixo nível ("mais complicadas", porém mais eficientes no geral). Linguagens com um grau de abstração similar podem ter diferenças. Até porque se não tivessem, acabariam por ser dialetos de uma mesma linguagem.
+
+No caso aqui em especifico, vamos explicar a diferença entre a programação procedural e a funcional. Explicar a diferença entre as duas em termos conceituais é algo relativamente árido. Uma forma que pode ajudar é explicar o conceito de `estados`, que é central para a programação procedural enquanto se tenta evitar a todo custo na programação funcional.
+
+## O que são estados 
+
+Quando se fala de _estados_ na programação queremos nos referir a um conjunto de informações durante a execução de um código ou programa. Novamente, essa definição não é muito clara por si só. Por isso vamos usar um exemplo prático de estados. Vamos supor aqui uma sala física. Nessa sala, tem algumas lâmpadas que são ligadas por três interruptores diferentes. Além disso, temos um disjuntor que controla a energia da sala. O legal da programação representar essa sala em um código! E não é tão difícil! Vamos supor que está tudo apagado, com o disjuntor desligado e também todos os interruptores. Podemos criar uma variável `luzes`, que considera classifica as lâmpadas modificadas por cada um dos 3 interruptores como `TRUE` (ligadas) ou `FALSE` (desligadas).
+
+```{r}
+luzes <- list("Interruptor_1"= FALSE,
+              "Interruptor_2"= FALSE,
+              "Interruptor_3"= FALSE)
+```
+
+Vamos então criar uma variável para o disjuntor e para os três interruptores. Vamos considerar aqui que todos eles estão _desligados_ (`FALSE`):
+
+```{r}
+disjuntor <- FALSE
+
+interruptores <- list("Interruptor_1"= FALSE,
+                      "Interruptor_2"= FALSE,
+                      "Interruptor_3"= FALSE)
+```
+
+Esse conjunto de informações sobre as luzes e os interruptores é um estado. Ao longo de um código ele pode ir se alterando. Podemos até criar uma lista chamada `sala` e colocar essas informações:
+
+```{r}
+sala <- list("luzes" = luzes,
+             "disjuntor" = disjuntor,
+             "interruptores" = interruptores)
+```
+
+### O acender e apagar das luzes
+
+Até aqui apenas enunciamos um conjunto de informações num determinado momento. Porém, vamos imaginar que começou o dia. E então as luzes que estão apagadas serão acessas. Temos então que enunciar uma série de medidas e condições para que o comportamento das informações presentes em `sala` se comportem de forma consistente com a descrição que demos. Vamos criar duas funções aqui, que servirão no caso como uma "ação", um "procedimento": `mexer_disjuntor` e `mexer_interruptor`. Estamos aqui supondo que não tem escrito nem no interruptor nem no disjuntor qual posição liga e qual desliga.
+
+```{r}
+mexer_disjuntor <- function(){
+  sala$disjuntor <<- !sala$disjuntor
+  sala$luzes <<- as.list(sala$disjuntor & unlist(sala$interruptores))
+}
+
+mexer_interruptor <- function(qual){
+  sala$interruptores[qual] <<- as.list(!unlist(sala$interruptores[qual]))
+    sala$luzes <<- sala$disjuntor & unlist(sala$interruptores)
+}
+```
+
+Antes de tudo, vale aqui explicar a diferença entre `<-` e `<<-`: No R, dentro de uma função, o operador `<-` define e modifica as variáves apenas no `Environment` da função, enquanto o operador `<<-` altera e define as variáveis no `Global Envinroment`. Assim, para alterar os valores dentro de `sala` no `Global Environment` por meio de uma função precisamos de `<<-`. De todo modo, ao rodar `mexer_disjuntor()` e `mexer_interruptor`, temos que elas não retornam nada. O que elas fazem é alterar os valores de `sala$luzes`. Vamos ver isso a seguir
+
+```{r}
+sala$luzes
+mexer_disjuntor()
+mexer_interruptor(1)
+sala$luzes
+mexer_interruptor(3)
+sala$luzes
+mexer_disjuntor()
+sala$luzes
+```
+
+## Mesmo Argumento, diferentes resultados
+
+Vamos supor agora, que entra alguém na sala. E esse alguém precisa estudar, porém está com sono. Vamos criar uma função em que se alguma luz da sala estiver acesa, essa pessoa irá estudar, enquanto se estiverem apagadas ela irá dormir. Nesse caso, queremos que a função retorne uma frase falando se a pessoa dormiu ou estudou.
+
+```{r}
+entrar_sala <- function(Pessoa){
+  if(any(unlist(sala$luzes))){
+    paste(Pessoa, "estudou")
+  }else {
+    paste(Pessoa, "dormiu")
+  }
+}
+```
+
+A função `entrar_sala` tem apenas um argumento `Pessoa`. Assim pode ocorrer que:
+
+```{r}
+entrar_sala("José")
+mexer_disjuntor()
+entrar_sala("José")
+```
+
+Repare que dois comandos idênticos retornam resultados diferentes. Isso ocorre porque `entrar_sala` depende de variáveis que são mutáveis por definição e não são argumentos dela. Ou seja, sem saber o estado de `sala$luzes`, não há como saber o resultado de `entrar_sala("José")`. Um caso mais rádical ainda, seria se toda vez que alguém entra na sala ela mexe-se no disjuntor:
+
+```{r}
+entrar_sala2 <- function(Pessoa){
+  mexer_disjuntor()
+  entrar_sala(Pessoa)
+}
+```
+
+A cada aplicação, o resultado seria necessariamente diferente:
+```{r}
+entrar_sala2("José")
+entrar_sala2("José")
+entrar_sala2("José")
+entrar_sala2("José")
+entrar_sala2("José")
+```
+Nesse caso, podemos definir muito bem duas questões:
+
+A frase `"José dormiu"` ou `"José estudou"` é o valor resultante de `entrar_sala2`. Por outro lado, a alteração dos valores de `sala$disjuntor` é o seu **efeito colateral** (*side effect*).
+
+# Contextualizando Programação funcional
+
+A programação funcional evita a todo custo se valer de estados e efeitos-colaterais. Como já dissemos, na programação funcional uma função deve retornar sempre o mesmo valor para os mesmos argumentos. Para entender isso reescrevamos `entrar_sala` como `entrar_local`:
+
+```{r}
+entrar_local <- function(Pessoa, local){
+    if(any(unlist(local$luzes))){
+    paste(Pessoa, "estudou")
+  }else {
+    paste(Pessoa, "dormiu")
+  }
+}
+```
+
+Assim sendo, em situações em que os argumentos `Pessoa` e `local` possuírem valores idênticos, eles terão resultados com valores idênticos.
+
+```{r}
+entrar_local("José", sala)
+entrar_local("José", sala)
+```
+
+Se houver uma mudança, é porque os valores dos seus argumentos mudaram. Nesse sentido, se algum valor de `sala` mudar, temos argumentos diferentes nas duas aplicações. Numa linguagem _puramente_ funcional os valores de uma variável devem ser sempre os mesmos. Assim, se quisessemos mudar os valores de `sala` deveriamos criar uma variável `sala2` com esses novos valores. Assim, `sala` sempre teria o mesmo valor. É a questão de imutabilidade. Por fim, vale notar que `entrar_local` é uma função pura, uma vez que não possuí nenhum tipo de efeito colateral e sempre retorna o mesmo valor se os argumentos forem o mesmo.
+
+Uma das forças da programação funcional é o seu tratamento de funções. Estas são consideradas uma forma de dados por si só, e por tanto podem ser manipuladas, agrupadas e combinadas. Um ponto importante é que em programação funcional existe a preferência pelas funções puras, que por sua vez não admitem efeitos colaterais. Funções puras são mais fáceis de serem corrigidas e também de serem compreendidas. Programação funcional sempre procura manter um alto nível de abstração, procurando manter uma equivalência entre as funções escritas e as funções matemáticas. 
+
+R não é uma linguagem puramente funcional. Assim, é possível alterar o estado do programa e de que funções não sejam puras. No entanto, é possível escrever o seu código majoritariamente de forma  "funcional", mantendo a parte não pura restrita a alguns poucos segmentos, ou controlada.
+
+# Funções no R
+
+C 
+
+## Bibliografia
+
+WICKHAM, Hadley. Advanced r. CRC press, 2019.
+
+MAILUND, Thomas. Functional programming in R: Advanced statistical programming for data science, Analysis and Finance. Apress, 2017.

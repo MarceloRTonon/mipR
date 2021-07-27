@@ -1,0 +1,293 @@
+---
+title: "Top4_Questao 2"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "20/07/2021"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(readxl)
+library(tictoc)
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 2. Automatizando tarefas e o pacote `tictoc`: enfase nos exercicios do Tópico 3.
+
+
+Uma forma inteligente para se automatizar um código é primeiro criar uma versão para apenas um caso e então buscar generalizar. Vejamos o seguinte exemplo, usando `for`:
+
+```{r, include = TRUE}
+#Temos uma lista com diversos elementos
+lista_exemplo <-list("a", 1.1, 2L, TRUE, data.frame(c(1:3), letters[1:3]), matrix(c(1:4), nrow=2))
+
+#Queremos os valores de typeof de cada elemento dela. Porém, antes de automatizar fazemos para o 1o elemento.
+
+# Passo 1: Criamos uma lista vazia
+lst_typeof <- list()
+
+# Passo 2: Fazendo para o primeiro valor
+lst_typeof[[1]] <- typeof(lista_exemplo[[1]])
+
+# Dando certo, podemos então automatizar.
+# Passo 3: Podemos definir um objeto "i" e usar ele ao inves de 1.
+
+i <- 1
+lst_typeof[[i]] <- typeof(lista_exemplo[[i]])
+
+# Passo 4: Agora basta criar um for com i definido numa sequência
+
+for(i in 1:length(lista_exemplo)){
+lst_typeof[[i]] <- typeof(lista_exemplo[[i]])
+}
+```
+
+O passo 3 no exemplo acima pode ser considerado supérfluo e você provavelmente vai apagá-lo ao escrever o passo 4. No entanto, especialmente quando você tiver fazendo automatizações mais complexas (que podem envolver não só um `"i"` mas também um `"j"`, `"h"` e etc), fazer o passo 3 pode dar uma maior clareza no que você está fazendo.
+
+#### Q.2.1 - Crie um vetor atômico `paisesQ2.1`  contendo os seguintes valores: `"AUS", "HUN", "ESP"`.
+
+```{r, include=FALSE}
+paisesQ2.1 <- c("AUS", "HUN", "ESP")
+```
+
+#### Q.2.2 - No exercicio do Tópico 2 foi realizado o download dos dados da niot para a Italia, cujo código era `ITA`. Naquele caso a url era:
+```{r, eval= FALSE, include=TRUE}
+"http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx"
+```
+
+Sabendo que todos os links da niot seguem o mesmo padrão, crie um vetor `urlsQ2.2` usando os valores de `paisesQ2.1` para criar um vetor com os links dos países de `paisesQ2.1`.
+
+```{r, include=FALSE}
+urlsQ2.2 <- paste0("http://www.wiod.org/protected3/data16/niot/", paisesQ2.1,"_niot_nov16.xlsx")
+```
+
+#### Q.2.3 - É necessário usar `for` neste caso? Por que?
+```{r}
+"Não, pois paste0() é uma função vetorizada"
+```
+
+#### Q.2.4 - Crie uma lista vazia chamada `niotQ2`
+
+#### Q.2.5 - Extraia apenas o primeiro valor de `urlsQ2.2` e use-o para importar a base de dados a partir dessa url tal qual foi feito para `niotITA` no inicio do exercicio do Tópico 3. Aloque esse tibble como o primeiro elemento de `niotQ2`
+
+```{r}
+niotQ2 <- list()
+library(readxl)
+#Criando um arquivo temporário
+arq_temp <- tempfile(fileext = ".xlsx")
+#Baixando o arquivo
+# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
+download.file(url = urlsQ2.2[1], destfile = arq_temp, mode = "wb")
+
+# Importando a NIOT para o R:
+niotQ2 <- list()
+niotQ2[[1]] <- read_xlsx(arq_temp, sheet = 2)
+
+# Excluindo arq_temp
+unlink(arq_temp)
+```
+
+#### Q.2.6 Faça o "Passo 3" do exemplo dado no inicio da questão e substitua 1 por i onde é necessário.
+
+```{r}
+i <- 1
+niotQ2 <- list()
+#Criando um arquivo temporário
+arq_temp <- tempfile(fileext = ".xlsx")
+#Baixando o arquivo
+# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
+download.file(url = as.character(urlsQ2.2[i]), destfile = arq_temp, mode = "wb")
+
+# Importando a NIOT para o R:
+niotQ2[[i]] <- read_xlsx(arq_temp, sheet = 2)
+
+# Excluindo arq_temp
+unlink(arq_temp)
+```
+
+#### Q.2.7 Meça o tempo que o R demora para realizar a tarefa de `Q.2.6`
+
+```{r}
+tic()
+i <- 1
+#Criando um arquivo temporário
+arq_temp <- tempfile(fileext = ".xlsx")
+#Baixando o arquivo
+# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
+download.file(url = urlsQ2.2[i], destfile = arq_temp, mode = "wb")
+
+# Importando a NIOT para o R:
+niotQ2[[i]] <- read_xlsx(arq_temp, sheet = 2)
+
+# Excluindo arq_temp
+unlink(arq_temp)
+toc()
+```
+
+#### Q.2.8 Automatize com o for a questão `Q.2.5` e meça o tempo total requerido.
+
+```{r}
+tic()
+for(i in 1:length(urlsQ2.2)){
+  #Criando um arquivo temporário
+arq_temp <- tempfile(fileext = ".xlsx")
+#Baixando o arquivo
+# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
+download.file(url = urlsQ2.2[i], destfile = arq_temp, mode = "wb")
+
+# Importando a NIOT para o R:
+niotQ2[[i]] <- read_xlsx(arq_temp, sheet = 2)
+
+# Excluindo arq_temp
+unlink(arq_temp)
+}
+toc()
+```
+
+#### Q.2.9 - Confira de forma automatizada se todos os elementos de `niotQ2` são `tibble`. Aloque os valores lógicos retornados numa lista denominada `lst_Q2.9`. Faça isso usando tanto a função `map()` quanto a função `for()` e meça o tempo levada por cada uma.
+
+```{r}
+#Usando map:
+tic()
+lst_Q2.9 <- map(niotQ2, is_tibble)
+toc()
+
+tic()
+lst_Q2.9 <- niotQ2 %>%  map(is_tibble)
+toc()
+
+tic()
+lst_Q2.9 <- map_lgl(niotQ2, is_tibble) %>%
+  all
+toc()
+#Usando for:
+
+lst_Q2.9 <- list()
+tic()
+for (i in seq_along(niotQ2)){
+  lst_Q2.9[[i]] <- is_tibble(niotQ2[[i]])
+}
+toc()
+```
+
+#### D.2.1 - **DESAFIO**: Crie uma função `lst.type.class`, que retorna uma lista com `type` e `class` de um elemento.
+
+```{r}
+lst.type.class <- function(x) list(typeof(x), class(x))
+```
+
+#### D.2.2 - Crie uma lista `lstD2.2` aplicando `lst.type.class` sobre `niotQ2`. Faça tanto via `for` quanto para `map`.
+
+```{r}
+#map
+tic()
+lstD2.2 <- niotQ2 %>%
+           map(lst.type.class)
+toc()
+#for
+tic()
+for(i in seq_along(niotQ2))
+lstD2.2[[i]] <- lst.type.class(niotQ2[[i]])
+toc()
+```
+
+#### Q.2.10 Crie uma list `lstQ2.10` excluindo de `niotQ2` as linhas com os valores `NA`. Não esqueça de medir o tempo.
+
+```{r}
+#map
+#usando map com filter
+tic()
+lstQ2.10 <- map(niotQ2, function(x) filter(x, !is.na(Year)))
+toc()
+#usando map com filter_all
+tic()
+lstQ2.10 <- map(niotQ2, ~ filter_all(.x, all_vars(!is.na(.))))
+toc()
+rm(lstQ2.10)
+
+#usando map com drop_na
+tic()
+lstQ2.10 <- map(niotQ2, drop_na)
+toc()
+#usando for
+
+#usando for com filter
+tic()
+lstQ2.10 <- list()
+for(i in seq_along(niotQ2)){
+  lstQ2.10[[i]] <- niotQ2[[i]] %>% filter(!is.na(Year))
+}
+toc()
+rm(lstQ2.10)
+#usando for com filter_all
+tic()
+lstQ2.10 <- list()
+for(i in seq_along(niotQ2)){
+  lstQ2.10[[i]] <- niotQ2[[i]] %>% filter_all(all_vars(!is.na(.)))
+}
+toc()
+rm(lstQ2.10)
+#usando for com drop_na
+tic()
+lstQ2.10 <- list()
+for(i in seq_along(niotQ2)){
+  lstQ2.10[[i]] <- drop_na(niotQ2[[i]])
+}
+toc()
+```
+
+#### Q.2.11 Crie uma lista `lstQ2.11` com os tibbles de `lstQ2.10` tendo as colunas convertidas por double.
+
+```{r}
+lstQ2.11 <- map(lstQ2.10, type_convert)
+```
+
+#### Q.2.12 - Crie um objeto `lstQ2.12` a partir de `lstQ2.11` em que  as linhas da coluna `Origin` que tem os valores `"TOT"` são excluidas.
+
+```{r}
+lstQ2.12 <- lstQ2.11 %>% map(function(x) filter(x, Origin != "TOT"))
+```
+
+#### Q.2.13 - Crie um objeto `lstQ2.13` apenas com a coluna `Code` dos tibbles de `lstQ2.12`, excluindo todos os valores repetidos.
+
+```{r}
+lstQ2.13 <- lstQ2.12 %>%
+  map(select, Code) %>%
+  map(distinct)
+
+
+```
+
+#### Q.2.14 - Crie uma lista `lstQ2.14` contendo vetores atômicos cada um com os 4 primeiros `colnames` dos tibbles de `lstQ.12` e os valores de `lstQ2.13`. Tente fazer via alguma variação de map.
+
+```{r}
+lstQ2.14 <- map2(lstQ2.12, lstQ2.13, function(x,y) c(~names(x)[1:4], y$Code))
+```
+
+#### Q.2.15 - Crie uma lista `lstQ2.15` apenas com os valores da demanda intermediária (mantenha as 4 primeiras colunas). Use a variação map e veja se consegue fazer isso tanto pelo `tidyverse` quanto pelo `baseR`.
+
+```{r}
+tic()
+lstQ2.15 <- map2(lstQ2.12, lstQ2.14, function(x,y) select(x, all_of(as.chracter(y))))
+toc()
+
+tic()
+lstQ2.15 <- map2(lstQ2.12, lstQ2.14, function(x,y) select(x, unlist(y)))
+toc()
+
+tic()
+lstQ2.15 <- map2(lstQ2.12, lstQ2.14, function(x,y) x[,y])
+toc()
+```
+
+#### Q.2.16 - Crie uma lista `lstQ2.16` com os `tibbles` de `lstQ2.12` apenas sem os valores da demanda intermediaria
+
+```{r}
+lstQ2.16 <- map(lstQ2.12, function(x) select(x, -x$Code))
+```
+

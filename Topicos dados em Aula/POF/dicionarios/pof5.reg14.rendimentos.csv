@@ -1,0 +1,40 @@
+nome;variavel;tamanho;decimais;inicial
+TIPO DE REGISTRO                  ;registro;2;;1
+CODIGO DA UF;uf;2;;3
+NUMERO SEQUENCIAL;n_seq;3;;5
+DV DO SEQUENCIAL;dv_seq;1;;8
+NUMERO DO DOMICIêLIO;n_dom;2;;9
+NUMERO DA UC                      ;n_uc;1;;11
+NUMERO DO INFORMANTE             ;n_infor;2;;12
+ESTRATO GEOGRAFICO;estrato;2;;14
+FATOR DE EXPANSAO 1 (DESENHO AMOSTRAL)           ;fator_exp;14;8;16
+FATOR DE EXPANSAO 2 (AJUSTADO P/ ESTIMATIVAS)           ;fator_exp_2;14;8;30
+NUMERO DO QUADRO                  ;n_quadro;2;;44
+TIPO DE TRABALHO;tipo_tra;1;;46
+POSICAO NA OCUPACAO;posi_ocup;2;;47
+FORMA DO ULTIMO RENDIMENTO;for_ult_rend;1;;49
+CODIGO DO ITEM                    ;cod_item;5;;50
+VALOR DO ULTIMO RENDIMENTO;val_ult_rend;11;2;55
+VALOR DA DEDUCAO;mes_ult_rend;2;;66
+CODIGO DA DEDUCAO;num_mes_rec;2;;68
+EXISTENCIA DE DEDUCAO;exis_ded;1;;70
+CODIGO DE PREVIDENCIA PUBLICA                ;cod_prev_pub;5;;71
+VALOR DA PREVIDENCIA PUBLICA;val_prev_pub;11;2;76
+CODIGO DE IMPOSTO DE RENDA                  ;cod_imp_rend;5;;87
+VALOR DO IMPOSTO RENDA;val_imp_rend;11;2;92
+CODIGO DE OUTRAS DEDUCOêES               ;cod_out_ded;5;;103
+VALOR DE OUTRAS DEDUCOES;val_out_ded;11;2;108
+FATOR DE ANUALIZACAO                 ;fator_anu;2;;119
+DEFLATOR FATOR                ;deflator;5;2;121
+VALOR DO ULTIMO RENDIMENTO DEFLACIONADO;val_ult_rend_def;11;2;126
+VALOR DA PREVIDENCIA PUBLICA DEFLACIONADO     ;val_prev_pub_def;11;2;137
+VALOR DO IMPOSTO RENDA DEFLACIONADO     ;val_imp_rend_def;11;2;148
+VALOR DE OUTRAS DEDUCOES DEFLACIONADO     ;val_out_ded_def;11;2;159
+VALOR DO ULTIMO RENDIMENTO ANUALIZADO E EXPANDIDO (FATOR2);val_ult_rend_anu_exp;16;2;170
+VALOR DA PREVIDENCIA PUBLICA ANUALIZADO E EXPANDIDO (FATOR2);val_prev_pub_anu_exp;16;2;186
+VALOR DO IMPOSTO RENDA ANUALIZADO E EXPANDIDO (FATOR2);val_ir_anu_exp;16;2;202
+VALOR DE OUTRAS DEDUCOES ANUALIZADO E EXPANDIDO (FATOR2);val_out_ded_anu_exp;16;2;218
+CODIGO DE IMPUTACAO                   ;cod_impu;2;;234
+RENDA MONETçARIA MENSAL DA UC       ;rend_mon_mes_uc;16;2;236
+RENDA NAO MONETAçRIA MENSAL DA UC   ;rend_nmon_mes_uc;16;2;252
+RENDA TOTAL MENSAL DA UC                 ;rend_tot_mes_uc;16;2;268

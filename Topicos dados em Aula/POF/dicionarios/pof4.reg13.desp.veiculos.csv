@@ -1,0 +1,25 @@
+nome;variavel;tamanho;decimais; inicial
+TIPO DE REGISTRO                  ;registro;2;;1
+CODIGO DA UF;uf;2;;3
+NUMERO SEQUENCIAL;n_seq;3;;5
+DV DO SEQUENCIAL;dv_seq;1;;8
+NUMERO DO DOMICIêLIO;n_dom;2;;9
+NUMERO DA UC                     ;n_uc;1;;11
+NUMERO DO INFORMANTE             ;n_infor;2;;12
+ESTRATO GEOGRAçFICO;estrato;2;;14
+FATOR DE EXPANSAO 1 (DESENHO AMOSTRAL)           ;fator_exp;14;8;16
+FATOR DE EXPANSAO 2 (AJUSTADO P/ ESTIMATIVAS)           ;fator_exp_2;14;8;30
+NUMERO DO QUADRO                 ;n_quadro;2;;44
+CODIGO DO ITEM                   ;cod_item;5;;46
+FORMA DE AQUISICAO               ;forma_aqui;2;;51
+VALOR DA DESPESA / AQUISICAO                ;valor_despe;11;2;53
+ESTADO DE AQUISICAO                  ;esta_aqui;1;;64
+FATOR DE ANUALIZACAO                ;fator_anu;2;;65
+DEFLATOR FATOR               ;deflator;5;2;67
+VALOR DA DESPESA DEFLACIONADO     ;desp_defla;11;2;72
+VALOR DA DESPESA ANUALIZADO E EXPANDIDO (FATOR2)    ;desp_anu_exp;16;2;83
+CODIGO DE IMPUTACAO                  ;cod_impu;2;;99
+RENDA MONETAçRIA MENSAL DA UC      ;rend_mon_mes_uc;16;2;101
+RENDA NAO MONETçARIA MENSAL DA UC  ;rend_nmon_mes_uc;16;2;117
+RENDA TOTAL MENSAL DA UC                ;rend_tot_mes_uc;16;2;133
+CODIGO DO LOCAL DE AQUISICAO;cod_loc_aqui;5;;149

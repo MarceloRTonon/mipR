@@ -1,0 +1,28 @@
+nome;variavel;tamanho;decimais; inicial
+TIPO DE REGISTRO                  ;registro;2;;1
+CODIGO DA UF;uf;2;;3
+NUMERO SEQUENCIAL;n_seq;3;;5
+DV DO SEQUENCIAL;dv_seq;1;;8
+NUMERO DO DOMICIêLIO;n_dom;2;;9
+NUMERO DA UC                      ;n_uc;1;;11
+NUMERO DO INFORMANTE             ;n_infor;2;;12
+ESTRATO GEOGRAFICO;estrato;2;;14
+FATOR DE EXPANSAO 1 (DESENHO AMOSTRAL)           ;fator_exp;14;8;16
+FATOR DE EXPANSAO 2 (AJUSTADO P/ ESTIMATIVAS)           ;fator_exp_2;14;8;30
+NUMERO DO QUADRO                  ;n_quadro;2;;44
+CODIGO DO ITEM                    ;cod_item;5;;46
+VALOR DO RENDIMENTO;val_rend;11;2;51
+VALOR DA DEDUCAO;val_ded;11;2;62
+CODIGO DA DEDUCAO;cod_ded;5;;73
+MES DO ULTIMO RENDIMENTO;mes_ult_rend;2;;78
+NUMERO MESES RECEBIDOS;num_mes_rec;2;;80
+FATOR DE ANUALIZACAO                 ;fator_anu;2;;82
+DEFLATOR FATOR                ;deflator;5;2;84
+VALOR DO RENDIMENTO DEFLACIONADO;val_rend_def;11;2;89
+VALOR DA DEDUCAO DEFLACIONADO;val_ded_def;11;2;100
+VALOR DO RENDIMENTO ANUALIZADO E EXPANDIDO (FATOR2);val_rend_anu_exp;16;2;111
+VALOR DA DEDUCAO ANUALIZADO E EXPANDIDO (FATOR2);val_ded_anu_exp;16;2;127
+CODIGO DE IMPUTACAO                   ;cod_impu;2;;143
+RENDA MONETçARIA MENSAL DA UC       ;rend_mon_mes_uc;16;2;145
+RENDA NAO MONETAçRIA MENSAL DA UC   ;rend_nmon_mes_uc;16;2;161
+RENDA TOTAL MENSAL DA UC                 ;rend_tot_mes_uc;16;2;177
