@@ -1,7 +1,7 @@
 ---
 title: "Tópico 5 - Lendo dados de forma automatizada"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "31/07/2020"
+date: "27/07/2021"
 output: html_document
 ---
 
@@ -80,7 +80,7 @@ Na lista de  exercicios 4, em questões para depois do dia 09/07/2020, vamos usa
 
 ## Strings no geral e no R
 
-Vamos agora apresentar o que seria uma `string` e como isso se difere de um `character`. Em programação de modo geral, um "character" é somente o caracter isolado, por exemplo, a letra, um número, um símbolos, etc. Por sua vez, uma "string" é um conjunto de caracteres que podem, por exemplo formar uma palavra ou uma frase. Dentro de uma string podemos ter diversos caracteres (inclusive uma combinação de letras, numéricos ou símbolos). Uma forma comum de diferenciar `character` e `string` é usando aspas simples para caracteres (por exemplo, 'a') e aspas duplas para strings ("palavra ou frase").
+Vamos agora apresentar o que seria uma `string` e como isso se difere de um `character`. Em programação de modo geral, um "character" é somente o caracter isolado, por exemplo, a letra, um número, um símbolo, etc. Por sua vez, uma "string" é um conjunto de caracteres que podem, por exemplo formar uma palavra ou uma frase. Dentro de uma string podemos ter diversos caracteres (inclusive uma combinação de letras, numéricos ou símbolos). Uma forma comum de diferenciar `character` e `string` é usando aspas simples para caracteres (por exemplo, 'a') e aspas duplas para strings ("palavra ou frase").
 
 No caso específico do R, não há diferenciação entre `character` e `string`, sendo todos objetos desse tipo sendo tratados como `character`. Ainda assim, é importante ter essa diferenciação na sua cabeça, para realizar tarefas que envolvam frases ou palavras.
 
@@ -95,14 +95,14 @@ typeof(y)
 
 ```
 
-Percebe-se que para ambos o tipo de é "character". Isso não traz nenhum problemas em específico, mas difere o R de alguma outras linguagens de programação. O R lê basicamente o que seria uma `string` como um conjunto de caracteres, o que não demandaria a criação de um novo tipo do objeto. Podemos, por exemplo, usar a função `nchar()` para contar quantos caracteres existem em um dado objeto.
+Percebe-se que para ambos o tipo de é "character". Isso não traz nenhum problema em específico, mas difere o R de algumas outras linguagens de programação. O R lê basicamente o que seria uma `string` como um conjunto de caracteres, o que não demandaria a criação de um novo tipo do objeto. Podemos, por exemplo, usar a função `nchar()` para contar quantos caracteres existem em um dado objeto.
 
 ```{r, eval=T}
 nchar(x)
 
 nchar(y)
 ```
-Perceba que, o número de caracteres do que seria nossa `string` leva em conta o espaço entre as palavras. Qualquer elemento dentro das aspas será contabilizado como um caracter (exceto alguns especificos como a `/` não contam).
+Perceba que o número de caracteres do que seria nossa `string` leva em conta o espaço entre as palavras. Qualquer elemento dentro das aspas será contabilizado como um caracter (exceto alguns especificos como a `/` não contam).
 
 
 Uma observação importante é, ainda que não exista a distinção entre `character` e `string` no R, dentro do pacote `xtable` há uma função chamada `is.string()`, que é usada apenas no contexto de criação de tabelas tex a partir do R, mas que não tem influência no funcionamento geral da linguagem.
@@ -228,7 +228,7 @@ Uma observação importante é que para elementos dentro de algum objeto, em esp
 
 O pacote `stringr` nos fornece a possibilidade de manipular informações que estão organizadas no que seriam as `strings`. Isso é particulamente útil caso sua base de dados não seja númerica ou talvez uma mescla entre informações escritas e númericas.
 
-Vamos usar como exemplo uma base de dados que já foi apresentada no lista de exercícios do tópico 3, a `vignette` que apresenta descrições mais detalhes sobre os pacotes instalados. Essa base vai mudar de acordo com os pacotes instalados no R, mas apresentam strings em sua base, principalmente na quarta lista interna. Vamos criar uam data.frame com esses elementos:
+Vamos usar como exemplo uma base de dados que já foi apresentada no lista de exercícios do tópico 3, a `vignette` que apresenta descrições mais detalhes sobre os pacotes instalados. Essa base vai mudar de acordo com os pacotes instalados no R, mas apresentam strings em sua base, principalmente na quarta lista interna. Vamos criar um data.frame com esses elementos:
 
 ```{r,eval=T}
 
@@ -275,7 +275,7 @@ siglas_pacote_resumo <- siglas_pacote  %>% distinct()
 head(siglas_pacote_resumo)
 ```
 
-Importante não confundir esta função com `str_subset()`. Ao contrário de `str_sub()`, a função `str_subset()` retornará os elementos que satisfaçam algum padrão em uma string. Isso é particulamente útil para fazer subseting em variáveis como nomes, ou até mesmo para buscar arquivos:
+Importante não confundir esta função com `str_subset()`. Ao contrário de `str_sub()`, a função `str_subset()` retornará os elementos que satisfaçam algum padrão em uma string. Isso é particulamente útil para fazer subseting em variáveis com nomes, ou até mesmo para buscar arquivos:
 
 ```{r, eval=F}
 
@@ -376,8 +376,8 @@ Vamos usar como exemplo, o download de informações que podem a vir serem neces
 
 ```{r}
 
-download.file("ftp://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2017/tabelas_xls/tabelas_de_recursos_e_usos/nivel_68_2010_2017_xls.zip", destfile = "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip", mode = "wb")
-TRU_2010_2017 <- "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2017.zip"
+download.file("https://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2018/tabelas_xls/tabelas_de_recursos_e_usos/nivel_68_2010_2018_xls.zip", destfile = "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2018.zip", mode = "wb")
+TRU_2010_2018 <- "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2018.zip"
 
 ```
 
@@ -399,7 +399,7 @@ Partindo do nosso exemplo das TRUs, podemos usar a função `unzip` para realiza
 
 ```{r}
 
-unzip(TRU_2010_2017,exdir = "TRU", junkpaths = T)
+unzip(TRU_2010_2018,exdir = "TRU", junkpaths = T)
 
 ```
 
@@ -468,6 +468,12 @@ escrever_xlsx <- function(dados, anos){
   
 }
 
+# Podemos agora usar duas funções discutidas no tópico 4:
+
+# Com iwalk:
+iwalk(VA_corrente, escrever_xlsx)
+
+# Com map2:
 map2(VA_corrente,names(VA_corrente),escrever_xlsx)
 
 ```
