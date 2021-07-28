@@ -540,7 +540,7 @@ lstQ3.9 <- lstQ3.8 %>% map(map, diag)
 
 #### Q.3.10 - Crie uma lista `AQ3` com os resultados de uma multiplicação da matrizes `lstQ3.6` pelas da `lstQ3.9`. Essa  é a Matriz de Coeficientes Técnicos.
 
-```{r}
+```{r, error=TRUE}
 tic()
 AQ3 <- lstQ3.6 %>% map2(lstQ3.9, map2, function(x,y) as.matrix(type_convert(x)[,-c(1:4)]) %*% as.matrix(y))
 toc()
@@ -551,15 +551,25 @@ AQ3 <- lstQ3.6 %>% map(map, function(x) type_convert(x)[,-c(1:4)]) %>%
   map2(lstQ3.9, map2, function(x,y) x %*% as.matrix(y))
 toc()
 ```
+### Importante: As questões 3.11 e 3.12 retornam erro!
 
-#### Q.3.11 - Crie uma lista `InvLeontief` com a Inversa de Leontief obtidas a partir de `AQ3`
+As matrizes  de `AQ3` são singulares (determinante igual à 0). Logo, não tem como ter uma inversa.
 
-```{r}
-  
+#### Q.3.11 - Crie uma lista `InvLeontief` com a Inversa de Leontief obtidas a partir de `AQ3`. Porém tente criar um código que você acha que resolveria o problema.
+
+
+
+```{r, eval=FALSE}
+#Retornará error
 InvLeontief <- map(AQ3, map, function(x) solve(diag(nrow(x))- x))
+```
 
+```{r, error=TRUE}
 CalcLeontief <- function(x) solve(diag(nrow(x)) - x)
+```
 
+
+```{r, error=TRUE}
 InvLeontief <- map(AQ3, map, purrr::safely(CalcLeontief))
 ```
 
@@ -569,7 +579,7 @@ InvLeontief <- map(AQ3, map, purrr::safely(CalcLeontief))
 
 Dica: `lstQ3.6` pode lhe ser utíl.
 
-```{r}
+```{r, eval=FALSE}
 desc_vars <- lstQ3.6$AUS$`2000`[c("Code", "Description")]
 
 InvLeontief <- InvLeontief %>% map(map, function(x) data.frame(desc_vars, InvLeontief))
@@ -595,10 +605,9 @@ t_2 = \begin{pmatrix}
 t_3 = \begin{pmatrix}
 3.2 \\
 2.4
-\end{pmatrix}
-$$
+\end{pmatrix}$$
 
-```{r}
+```{r, include =TRUE}
 l_vetor <- list(t1 = matrix(c(3.1, 2.2)),
                 t2 = matrix(c(3.3, 2.0)),
                 t3 = matrix(c(3.3, 2.4))
@@ -619,10 +628,9 @@ t_2 = \begin{pmatrix}
 t_3 = \begin{pmatrix}
 0.33&0.22 \\
 0.09&0.25
-\end{pmatrix}
-$$
+\end{pmatrix}$$
 
-```{r}
+```{r, include = TRUE}
 A_matrixes <- list(
      t1 = matrix(c(0.3,0.1,.2,.4), nrow =2), 
      t2 = matrix(c(0.35,0.12,.25,.30), nrow =2),
@@ -643,10 +651,9 @@ t_2 = \begin{pmatrix}
 t_3 = \begin{pmatrix}
 80 \\
 30
-\end{pmatrix}
-$$
+\end{pmatrix}$$
 
-```{r}
+```{r, include=TRUE}
 finalDemand <- list(t1 = matrix(c(50,20)),
                     t2 = matrix(c(60,15)),
                     t3 = matrix(c(80,30))
@@ -661,30 +668,69 @@ map(A_matrixes, det)
 ```
 #### Q.4.3 - Crie uma lista `Q4.Leontief`, com a inversa de Leontief $[I-A]^{-1}$ de `A_matrixes`
 
+
 ```{r}
-Q4.Leontief <- map(A_matrixes, function(x) solve(diag(nrow(x)) - x))
+Q4.Leontief <- map(A_matrixes,
+                   function(x) solve(diag(nrow(x)) - x))
 ```
 
-#### Q.4.4 - Crie uma lista `x_VBP` com os vetores do valor bruto da produção obtido pela Inversa de Leontief (`Q4.Leontief`) multiplicada pelo vetor da demanda final (`finalDemand`)
+#### Q.4.4 - Crie uma lista `x_VBP` com os vetores do valor bruto da produção obtido pela Inversa de Leontief (`Q4.Leontief`) multiplicada pelo vetor da demanda final (`finalDemand`).
+Dica: `map2()`
 
 ```{r}
 x_VBP <- map2(Q4.Leontief, finalDemand, function(x,y) x %*% y)
 x_VBP <- map2(Q4.Leontief, finalDemand, function(.x,.y) .x %*% .y)
 x_VBP <- map2(Q4.Leontief, finalDemand, ~ .x %*% .y)
-# crossprod é mais rápido do que %*%!
-x_VBP <- map2(Q4.Leontief, finalDemand, crossprod)
+# Usando método prefixo com ``
+x_VBP <- map2(Q4.Leontief, finalDemand, `%*%`)
 ```
+
+####  Q.4.4.b Existe a função `transpose()`, que faz:
+
+```{r, eval =FALSE, include=TRUE}
+# Lista é uma list() que tem dois níveis de profundidade, com anos e países.
+transLista <- transpose(Lista)
+# i país qualquer
+# j ano qualquer
+lista[[i]][[j]] == transLista[[j]][[i]]
+```
+
+Vamos reescrever a definição de `x_VBP` de `Q.4.4` só que sem usar `map2`. Antes vamos criar uma lista com as duas listas que usamos
+
+```{r, include=TRUE}
+input44b <- list("Leontief" = Q4.Leontief,
+                 "fDem" = finalDemand) %>%
+  transpose()
+```
+Para um ano é:
+```{r, include=TRUE}
+input44b[[1]]$Leontief %*% input44b[[1]]$fDem
+```
+
+Como você faria para ter os mesmos valores de `x_VBP` à partir de `input44b`?
+```{r, include=FALSE}
+calcVBP <- function(L, fd) L %*% fd
+calcxVBP <- function(x) x$Leontief %*% x$fDem
+
+
+x_VBP_b <- input44b %>%
+  map(function(x) x$Leontief %*% x$fDem)
+
+x_VBP_c <- input44b %>%
+  map(calcxVBP)
+```
+
 
 #### Q.4.5 - Crie uma lista `l_matrixes`, com as matrizes de impacto do trabalho.
 
-As matrizes de impacto de trabalho são dadas pela seguinte fórmula: $\hat{l}[I-A]^-1$
+As matrizes de impacto de trabalho são dadas pela seguinte fórmula: $\hat{l}[I-A]^{-1}$
 
 Faça tanto usando a lista `Q4.Lentief` quanto direto da lista `A_matrixes`.^[Lembrando que $\hat{x}$ significa que o vetor $x$ foi diagonalizado. Se você tiver problemas com a função `diag()`, lembre-se do que falamos sobre ela e como ela funciona de forma diferente a depender do input que você fornece.]
 
 ```{r}
-l_matrixes <- map2(l_vetor, Q4.Leontief, function(x,y) crossprod(diag(c(x)), y))
+l_matrixes <- map2(l_vetor, Q4.Leontief, function(x,y) diag(c(x)) %*% y)
 
-create_lA <- function(x,y) crossprod(diag(c(x)), solve(diag(nrow(y))- y)) 
+create_lA <- function(x,y) `%*%`(diag(c(x)), solve(diag(nrow(y))- y)) 
 
 l_matrixes <- map2(l_vetor, A_matrixes, create_lA)
 ```
@@ -696,7 +742,7 @@ l_matrixes <- map2(l_vetor, A_matrixes, create_lA)
 Dica: no caso de `l_vetor` extraia a coluna usando `[,1]`.
 
 ```{r}
-L_setor1 <- map2(l_matrixes, finalDemand, crossprod)
+L_setor1 <- map2(l_matrixes, finalDemand, `%*%`)
 
 L_setor2 <- map2(l_vetor, x_VBP, function(x,y) diag(x[,1]) %*% y)
 
@@ -706,7 +752,27 @@ L_setor2 <- map2(l_vetor, x_VBP, function(x,y) diag(x[,1]) %*% y)
 
 ```{r}
 L_setor3 <- list(l_vetor, Q4.Leontief, finalDemand) %>%
-  pmap(function(x,y,z) crossprod(diag(c(x)), crossprod(y, z)))
+  pmap(function(x,y,z) diag(c(x))%*%y %*% z)
+
+calcProd3 <- function(x,y,z){
+  diag(c(x))%*%y %*% z
+}
+
+L_setor3b <- list(l_vetor,
+                  Q4.Leontief,
+                  finalDemand) %>%
+  pmap(calcProd3)
+
+calcL <- function(L,fd,l){
+  diag(c(l))%*%L %*% fd
+}
+
+InputList46b <- list("l"= l_vetor,
+                  "L" = Q4.Leontief,
+                  "fd" = finalDemand)
+
+L_setor3b_c <- InputList46b %>%
+  pmap(calcL)
 ```
 
 
