@@ -152,6 +152,8 @@ Você pode buscar as correspondências do `unicodes` para cada letra grega que d
 
 ### Nomes Impossíveis e Nomes Reservados
 
+*IMPORTANTE*: Depois de rodar os códigos dessa função favor apagar antes de avançar para as próximas!
+
 Outra importante questão são os nomes reservados e que não podem ser usados como nomes de objetos. Tratam-se de nomes que exercem alguma função essencial para o funcionamento da sua programação. Imagine que você queira nomear um objeto com a palavra "TRUE", nesse caso, o R trará uma mensagem de erro pois a palavra exerce uma papel fundamental nas operações lógicas. No próprio R existe uma lista com os nomes reservados, para isso basta colocar no console `?Reserved`. A lista é a seguinte:
 
 
@@ -403,6 +405,8 @@ unzip(TRU_2010_2018,exdir = "TRU", junkpaths = T)
 
 ```
 
+*IMPORTANTE*: Se obter um erro no argumento `junkpaths`, provavelmente há resquicíos da seção sobre nomes impossíveis e reservados que não foram apagados. 
+
 
 O argumento `junkpaths=T` extrairá apenas os arquivos ignorando os `path` delas no arquivo compactado. 
 
@@ -430,7 +434,7 @@ head(TRUfiles)
 Vamos então agora fazer a leitura da aba "VA" em todos esses arquivos. Essa aba não consta em todos os arquivos listados, somente nas tab2, então:
 
 ```{r, eval=T}
-TRU_tab2 <- str_subset(TRUfiles, pattern ="tab2")
+TRU_tab2 <- str_subset(TRUfiles, pattern ="tab2") %>% str_sort()
 TRU_tab2
 ```
 
