@@ -12,14 +12,6 @@ knitr::opts_chunk$set(eval = T, include = TRUE, warning = F)
 # Todos os chunks em que estiver escrito "MT" quer dizer = Mensagem do Tonon. É um quadro dando dicas e etc... Use r = Mensagem do Felipe.
 ```
 
-```{r MTcronograma_tonon, eval = F, include=F}
-
-# O que eu penso em fazer para este topico é fazer uma decomposição aditiva, uma multiplicativa e uma com a decomposição da matriz de leontief. Vou repetir o exemplo do Dietzenbacher, Lahr e Los (2004) para 2010-2015 só que também focando na aditiva. Assim os passos serão:
-
-# 1- Baixar os arquivos (pois é o primeiro)
-# 2- Int
-```
-
 ## Pacotes Necessários
 
 ```{r, warning=FALSE}
@@ -38,7 +30,6 @@ library(dplyr)
 library(rlang)
 library(gridExtra)
 ```
-
 
 ## Objetivos do Tópico
 
@@ -355,7 +346,6 @@ Podemos ver que a diferença de um é compensada na do outro:
 map2_dbl(deltaX1, deltaX2, ~sum(.y) - sum(.x))
 ```
 
-
 Dietzenbacher e Los (1998), mostram que ao tirarmos os valores médios das decomposições aditivas temos um resultado aceitável:
 
 $$\Delta X = (1/2) \Delta L (f^0 + f^1) + (1/2) (L^0 + L^1) \Delta f $$
@@ -417,7 +407,6 @@ plotdeltaX_f <- data.frame("delta1" = sum(deltaX1[[2]]),
 
 grid.arrange(plotdeltaX_L, plotdeltaX_f, ncol =2)
 ```
-
 
 ### Decomposições aditivas com mais de 2 variáveis
 
@@ -748,7 +737,7 @@ Psi_geoAv %>%
   all.equal(txPsi)
 ```
 
-### Decomposição  Não Linear
+### Decomposição Não Linear
 
 Essa parte é baseada no capítulo 13 do Miller e Blair (2009, p. 603-604), usando o termo de . Nela os autores chamam isso de decomposição da matriz de coeficientes diretos. No entanto esse ferramental também pode servir para decompor gastos endógenos (como o consumo induzido). Por isso, por falta de definição melhor, escolhemos usar o termo *matriz interna*[^6], que no fim se refere à uma matriz $M$ qualquer de matriz interna em relação à $N$ se ela define $N$ da seguinte forma: $$N = [I-M]^{-1}$$
 
@@ -898,115 +887,6 @@ decAnpart %>%
 
 Podemos então substituir $\Delta A_n = \Delta A_{n1} + \Delta A_{n2}$ em $\Delta L$ e novamente em $\Delta X$ novamente. Podemos também ao invés disso, ao invés de particionar $A_n$ particionar $B_n$ e ver qual o efeito das variações das partes de $B_n$ sobre $\Delta A_n$ (e repetir o processo até $\Delta X$).
 
-
-
-<!-- ## Decompondo o conteúdo doméstico a partir da demanda total 
-
-   Abrir citando a Joan Robinson e o Eatwell falando de demanda sem oferta e oferta sem demanda.
-   Apresentar as 3 formas de se fazer a decomposição do conteudo doméstico a partir do conteúdo total:
-      1. Subtração de x_m:
-              $B_n = (B - B_m)$
-              $F_n = F - f_m$
-      2. multiplicação de um menos coeficientes de importação (igual eu estou fazendo na minha tese):
-              $B_n = (1-\mu_B) \odot B$
-              $F_n = (I-\hat{\mu_F}) F = (1-\mu_F) \odot F$
-      3. multiplicação do coeficiente doméstico: 
-              $B_n = \eta_B \odot B$
-              $F_n = \hat{\eta} F = \eta \odot F$
-
-#  Explicar as diferenças entre esses três tipos:
-
-##        Apontar os problemas do modo 1 (valores da demanda intermediaria e final negativos...). Voltar nas questões de estabilidade e também no próprio sentido do que são as importações.
-###       Mostrar como isso pode gerar um erro numa decomposição, em especial dentro da leontief...
-###       Mostrar como que a proporção das importações aumenta neste sentido.
-###       Falar da questão do problema de separar nível e composição na demanda setorial separadamente para F_m e F_n, e que no final uma análise mais rigorosa acaba indo para o modo 2.
-
-
-###       Levantar a bola:
-            Será que, para além de alguma praticidade, existe alguma justificativa para o método 1 em detrimento dos outros métodos? A principio o método 3 pode muito bem substituir o método 1. Uma possível justificativa é se partir da hipótese de que as importações tem um coeficiente próprio em detrimento da demanda total. Ou seja, o contéudo local se ajusta mais do que o conteúdo importado (no caso dos coeficientes técnicos). Ou que o volume das importações da demanda final não tem relação com o volume total da demanda final. Isso continuaria demandando que você confira as condições de estabilidade para $B_n$.
-
-##        Colocar a questão Small block spliting para 1 e 2
-###             Qualquer Soma ou Subtração(para além daquela que segue a matriz identidade na inversa de leontief)
-###             multiplica por 2 o número de decomposições. Vamos chamar isso de blocos pequenos (smallBlocks).
-###             Isso também vale por exemplo para coisas de 
-###             Você vai ter um smallblock para o conteúdo total e outro para o conteúdo importado:
-###             Explicar como que isso **não quer dizer** que tudo que está dentro de um bloco seja necessariamente contribuição disso.
-
-##        Falar de como o método 2 e 3 partem do mesmo princípio como na equação abaixo para o caso de $B$:
-$$ \eta_B \odot B = (1-\mu_B) \odot B \Rightarrow \eta_B = 1-\mu_B$$
-
-Porém a depender do que você vá fazer as escolhas não são tão triviais. Se você for decompor ainda mais, por exemplo, se abrirmos $\eta$ e $\mu$ por preços relativos e volume, é _bye bye_ qualquer correspôndencia, veja:
-                $$(\eta_B^p \odot \eta_B^v) \odot B = (1-(\mu_B^p \odot \mu_B^v))\odot B \Rightarrow \eta_B^p \odot \eta_B^v = (1-(\mu_B^p \odot \mu_B^v))$$
-Não dá para fazer nenhuma correspondência direta apenas entre $\eta_B^p$ e $\mu_B^p$ sem passar por $\eta_B^v$ e $\mu_B^v$, e vice-versa. Veja, vamos tentar definir $\eta_B^p$:
-$$\eta_B^p = \eta_B^p \odot (\eta_B^v \oslash \eta_B^v) = (1-(\mu_B^p \odot \mu_B^v)) \oslash \eta_B^v$$
-O que nos leva à:
-$$\eta_B^p = ((1 \oslash \eta_B^v) - (\mu_B^p \odot \mu_B^v) \eta_B^v)= (1 \oslash \eta_B^v) - \mu_B^p \odot (\mu_B^v \oslash \eta_B^v)$$
-Ou seja não há como fazer um correspondência entre as contribuições dos preços relativos do conteúdo domeśtico com as dos preços relativos do contéudo importado sem passar por volume. O mesmo pode ser visto para o caso do volume, dada as propriedades cumulativas das operações de Hadamard:
-
-$$
-\eta_B^v = \eta_B^p \oslash \eta_B^p \odot \eta_B^v = (1-(\mu_B^p \odot \mu_B^v)) \oslash \eta_B^p
-$$
-
-$$
-\eta_B^v = ((1 \oslash \eta_B^p) - (\mu_B^p \odot \mu_B^v) \eta_B^p)= (1 \oslash \eta_B^p) - \mu_B^v \odot (\mu_B^p \oslash \eta_B^p)
-$$
-
-Como vimos a ánalise dos efeitos dos preços relativos dos dois casos não pode ser diretamente traduzida para a da outra sem passar por outras variáveis. Desse modo, qual das duas será realizada vai depender de qual é a pergunta feita. Se tratar explicitamente as importações ou o padrão do comércio de modo geral tem que estar em sua análise, então o método 2 é com certeza o mais indicado. Por outro lado, se você quer olhar o comportamento do conteúdo domeśtico _per se_ frente a demanda total, então o método 3 é uma escolha melhor. Além disso, por não criar _smallBlocks_, o método 3 é facilmente inserido em decomposições multiplicativas, APESAR de decomposições da Leontief não são facilmente inseridas em decomposições multiplicativas. Assim, muito provavelmente a avaliação seria mais para variáveis da demanda final por exemplo.
-
-
-
--->
-<!--
-
-## Os problemas com a variação de estoque! 
-
-Pergunte a qualquer um que desagrega os componentes institucionais da demanda final e quer separar os efeitos nível daqueles de composição setorial na hora de fazer uma decomposição e ele te falará como variação de estoque é um estraga prazer. O problema se encontra na própria natureza da variação do estoque enquanto vetor de demanda final, uma vez que esta não tem necessariamente um sinal homogêneo, podendo ter setores que no mesmo período acumularam estoques enquanto outros se desfizeram dos seus. Decomposição de um vetor $f$ em nível e quantidade é geralmente feito como:
-
-$$\Gamma = i'f \\
-a_f = \frac{f}{i'f} \\
-f = a_f \Gamma
-$$
-
-Em que $\Gamma$ é um escalar referente ao nível do gasto da demanda final e $a_f$ é um vetor de composição setorial, de modo que $i'a_f= 1$. Para os outros componente $f$ da demanda final que não seja $\Delta e$, podemos considerar três caracteristicas garantidas para qualquer período do tempo em que ele possuí, dado que ele seja um vetor de sinal homogênio^[O que pode se considerar o caso, dado que apenas a variação dos estoques é que possuí sinais negativos.] que contenha pelo menos um elemento $j$ maior do que `0`:
- $$\Gamma > 0 \\
-i'|a_f| = 1 \\
-1 \geq a_{f_{(j)}} \geq 0$$
-
-A consequência disso é que comparar níveis e composições ao longo do tempo pode ser feito de forma consistente e segura. Agora vamos supor os seguintes casos de $\Delta e$ no `tibble` `estoque_casos` abaixo:
-
-```{r}
-estoque_casos <- tibble::tibble(Caso1= c(2,3,4),
-                        Caso2 = c(-1,-5,-7),
-                        Caso3 = c(-1,2, 0),
-                        Caso4 = c(0, -1.5, 2),
-                        Caso5 = c(1, 0, -3),
-                        Caso6 = c(15, -20, 4.9999),
-                        Caso7 = c(1.5, -2, 0.5))
-estoque_casos
-```
-
-Repare que no código, o terceiro elemento de `caso6` não é `5` como aparece arredondado no documento agora, mas sim `4.9999`. O porquê da escolha desses valores no exemplo ficará claro mais para frente. Vamos fazer então a separação composição setorial do nível da demanda final:
-
-```{r}
-Gamma_estoque_casos <- estoque_casos %>% colSums() %>% as.list
-Gamma_estoque_casos %>% print
-
-a_estoque_casos <- purrr::map2_dfc(estoque_casos, Gamma_estoque_casos, `/`)
-a_estoque_casos
-```
-
-Fazendo $i'|a_f| = 1$:
-```{r}
-a_estoque_casos  %>% colSums()
-a_estoque_casos %>% abs %>% colSums()
-```
-A primeira coisa que podemos perceber é que em `a_estoque_casos$Caso7` existem elementos `Inf` e `-Inf` e isso faz com que a soma em módulo de seus valores seja `Inf` ao invés de 1. Isso se dá pois `Gamma_estoque_casos$Caso7` é igual à 0, e qualquer número divido por 0 é `Inf` ou `-Inf`. Repare também que `estoque_casos$Caso7` não possuí **nenhum** elemento igual `0`. Ou seja, mesmo um vetor não nulo pode ter sua soma igual à `0` se ele for não homogêneo e a soma dos elementos negativos em módulo foram iguais à soma dos elementos positivos. Pode-se argumentar no entanto que essa última condição é relativamente difícil de ocorrer. Porém, ele vamos à um caso com valores quais idênticos em `estoque_casos$Caso6`.
-
-Nesse caso, você tem que  `sum(a_estoque_casos$Caso6)` é igual à 1, porém veja que os elementos de `a_estoque_casos$Caso6` são todos tais que por folga fazem: $1 < |a_i|$. Ou seja, qualquer pequena alteração de $\Gamma$ gera uma grande alteração em todos esses setores.
-
--->
-
-
 ## ggplot2
 
 Vamos agora aproveitar os dados elaborados para a decomposição e visualizá-los aplicando o pacote `ggplot2`. Trata-se de um pacote com várias possibilidades de configurações, de forma que será impossível explorar todo o pacote, mas ao menos as principais configurações possíveis.
@@ -1040,11 +920,11 @@ Diversos aspectos podem ser modificados, podemos definir a cor dos pontos, das l
 
 Para escolher a cor das bordas, do preenchimento, ou ambas, existem algumas opções a serem inseridos na opção `colour=`:
 
-- Pode ser através do __nome__ da cor, tal como "red", "blue", etc. Lembrando que a lista de cores possíveis pode ser obtida por `colours()`.
+-   Pode ser através do **nome** da cor, tal como "red", "blue", etc. Lembrando que a lista de cores possíveis pode ser obtida por `colours()`.
 
-- Pode ser uma especificação RGB (red, green and blue) por meio de uma string da forma "#RRGGBB", com cada par representando a escala de cada cor. 
+-   Pode ser uma especificação RGB (red, green and blue) por meio de uma string da forma "\#RRGGBB", com cada par representando a escala de cada cor.
 
-- Para deixar sem cor (transparente), usar o `NA`.
+-   Para deixar sem cor (transparente), usar o `NA`.
 
 #### Linhas
 
@@ -1148,12 +1028,11 @@ Um gráfico muito usado no pacote `ggplot2` é o `geom_point()`. Ele permite apr
 
 Vamos, por exemplo, ver a relação entre os multiplicadores entre os anos 2010 e 2015 da variável emprego já apresentada anteriormente.
 
+-   A single character, to use that character as a plotting symbol.
 
-- A single character, to use that character as a plotting symbol.
+-   A . to draw the smallest rectangle that is visible, usualy 1 pixel.
 
-- A . to draw the smallest rectangle that is visible, usualy 1 pixel.
-
-- An NA, to draw nothing.
+-   An NA, to draw nothing.
 
 #### Tipos de Gráficos
 
@@ -1198,9 +1077,10 @@ Perceba que apesar de ainda parecer ter uma correlação positiva, ela já não 
 
 Este é decerto o principal gráfico para análises de decomposição, tendo em vista que é a melhor forma de se avaliar contribuições para um total. Inclusive, os gráficos já visualizados anteriormente (e que serão replicados aqui de forma simplificada) são gráficos de colunas e gerados por `geom_col`.
 
-Agora explorando um dos outros gráficos criados. No exemplo original apresentamos dois gráficos lado a lado, mas para focalizar no ggplot2 não iremos explorar esse recurso, que advém do pacote `gridExtra` e a função `gridArrange()`. 
+Agora explorando um dos outros gráficos criados. No exemplo original apresentamos dois gráficos lado a lado, mas para focalizar no ggplot2 não iremos explorar esse recurso, que advém do pacote `gridExtra` e a função `gridArrange()`.
 
 ```{r plotDeltaX2}
+
 # Essa primeira parte é para colocar fórmulas matemáticas no título e não será explorada aqui
 DLf0 <-   expression(Delta * L * f^{0})
 DLf1 <-  expression(Delta * L * f^{1})
@@ -1222,8 +1102,8 @@ plotdeltaX_L <- data.frame("delta1" = sum(deltaX1[[1]]),
         axis.title.y = element_blank())
 
 plotdeltaX_L
-```
 
+```
 
 O segundo exemplo é o gráfico da decomposição do emprego em três componentes, inserindo comentários ao longo do código indicando a tarefa que está sendo realizada para obter o gráfico.
 
@@ -1249,7 +1129,6 @@ plotdeltaPsiMedia <- plotdeltaPsiMedia %>%
 plotdeltaPsiMedia  
 ```
 
-
 #### Gráficos de Linhas
 
 Este é um dos gráficos mais utilizados na economia, principalmente para representar séries temporais. Como já citado, a análise de insumo-produto, em geral, não trabalhamm com séries muito longas. Iremos aqui usar uma base de dados nativa do R para representar esse tipo de gráfico, que é a `economics` com dados da economia estadunidense. Este exemplo é semelhante ao realizado em Wickham, Navarro e Pedersen (2016). Para criar gráficos de linha usamos a função `geom_line()`, tal como será apresentada a série de desempregados nos Estados Unidos:
@@ -1269,6 +1148,7 @@ economics$tx_desemp <- 100*economics$unemploy/economics$pop
 ```
 
 As séries podem ser inseridas sequencialmente, tal como o exemplo a seguir:
+
 ```{r}
 ggplot(economics)+
   geom_line(aes(date, tx_desemp), color="blue")+
@@ -1276,7 +1156,7 @@ ggplot(economics)+
   labs(x='tempo',y='percentual')
 ```
 
-No entanto, a melhor forma de se trabalhar no ggplot2 é com uma base longa, com os dados empilhados. Uma potencial maneira de ajustar os seus dados do formado `wide` para `long` é pela função `pivot_longer()`. No caso da base `economics` já existe essa base de forma nativa no banco de dados do R como `economics_long`, mas iremos rapidamente explicar o uso da pivot_longer:
+No entanto, a melhor forma de se trabalhar no ggplot2 é com uma base longa, com os dados empilhados. Uma potencial maneira de ajustar os seus dados do formado `wide` para `long` é pela função `pivot_longer()`. No caso da base `economics` já existe essa base de forma nativa no banco de dados do R como `economics_long`, mas iremos rapidamente explicar o uso da pivot\_longer:
 
 ```{r}
 economics_long2 <- economics %>% select(date, tx_desemp, psavert) %>% pivot_longer(-date, names_to = "Variavel")
@@ -1302,7 +1182,6 @@ ggplot(economics)+
   geom_point(aes(colour=year(date)))
   
 ```
-
 
 #### Guardando e Salvando os Resultados
 
@@ -1359,15 +1238,10 @@ DIETZENBACHER, Erik; LOS, Bart. Structural decomposition analyses with dependent
 
 KREPSKY, Camila. Output growth and household consumption in Brazil from 2000 to 2016: a structural decomposition analysis, 2019. Dissertação de Mestrado. UFRJ
 
-
 LAHR, Michael L.; DIETZENBACHER, Erik. Structural decomposition and shift-share analyses: let the parallels converge. In: Regional Research Frontiers-Vol. 2. Springer, Cham, 2017. p. 209-220.
-
-
 
 ### ggplot2
 
 [How to make any plot in ggplot2?](http://r-statistics.co/ggplot2-Tutorial-With-R.html)
 
 [The R Graph Gallery](https://www.r-graph-gallery.com/)
-
-

@@ -347,7 +347,7 @@ m_vbp <- L %>% colSums() %>% data.frame()
 
 Os demais multiplicadores, também denominados de multiplicadores da variáveis exógenas são obtidos primeiramente mediante a divisão da variável alvo pelo valor da produção. Em seguida, multiplica-se essa razão pelo multiplicador da valor da produção, obtendo-se assim os impactos sobre a variável escolhida. 
 
-Uma forma alternativa é também criar uma matriz de impacto para variável selecionada. Nesse caso, a matriz de impacto original é pré-multiplicada pela razão variável selecionada e em seguida somada as colunas dessa matriz.
+Uma forma alternativa é também criar uma matriz de impacto para variável selecionada. Nesse caso, a matriz de impacto original é pré-multiplicada pela razão variável selecionada e em seguida somada as colunas dessa matriz. Essa pode ser uma boa opção pois é possível criar uma matriz para essas variáveis e obtidos outros tipos de indicadores.
 
 O primeiro passo é, portando, obter as razões das variáveis de interesse: valor adiocionado, salários e emprego. Importante lembrar que essas informações estão nas TRUs e não diretamente na MIP para a divulgação do IBGE.
 
@@ -363,12 +363,32 @@ l_vbp <- TRU_2015["Fator trabalho (ocupações)",] / TRU_2015["Valor da produç�
 Com posse das razões de cada variável podemos estimar os multiplicadores:
 
 ```{r}
+
+# Pela multiplicação direta elemento a elemento (importante não usar a multiplicação matricial %*%):
+
 m_va <- t(y_vbp) * m_vbp
   
 m_w <- t(w_vbp) * m_vbp
 
 m_l <- t(l_vbp) * m_vbp
-  
+
+
+# Criando uma matriz:
+
+va_matriz <- diag(y_vbp) %*% as.matrix(L)
+m_va_matriz <- va_matriz %>% colSums()
+
+w_matriz <- diag(w_vbp) %*% as.matrix(L)
+m_w_matriz <- w_matriz %>% colSums()
+
+l_matriz <- diag(l_vbp) %*% as.matrix(L)
+m_l_matriz <- l_matriz %>% colSums()
+
+
+# Testando se são iguais
+
+all.equal(m_va, m_va_matriz)
+    
 ```
 
 
