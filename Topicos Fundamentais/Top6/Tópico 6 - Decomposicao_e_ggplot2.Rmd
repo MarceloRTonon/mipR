@@ -46,7 +46,7 @@ Esse tópico irá introduzir tanto o tema de análise de decomposição estrutur
 
 Para a parte de decomposição estrutural, a bibliografia utilizada será o capítulo 13 do livro de Miller e Blair (2009), bem como os artigos de Dietzenbacher e Los (1998) e Dietzenbacher, Lahr e Los (2004).
 
-Para a parte de criação de gráficos com o `ggplot2` a bibliografia utilizada será o
+Para a parte de criação de gráficos com o `ggplot2` a bibliografia utilizada será o 
 
 **Importante:** Ambos os temas são de tal profundidade que este material não poderia nem presumir esgotar ambos os tópicos.
 
