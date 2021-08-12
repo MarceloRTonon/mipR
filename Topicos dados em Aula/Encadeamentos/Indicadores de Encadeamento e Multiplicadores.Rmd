@@ -341,22 +341,39 @@ Por fim, outra tipo de informação muito utilizada a partir das matrizes de ins
 
 O multiplicador do valor da produção representa o quanto há de aumento do valor da produção para uma variação unitária da demanda final. Trata-se do principal multiplicador e que serve como base para os demais. A sua obtenção equivale exatamente ao indicador de encadeamentos para trás - ou seja, à soma das colunas da matriz de Leontief:
 
+$$ m'_x = i'L $$
+
 ```{r}
-m_vbp <- L %>% colSums() %>% data.frame()
+m_vbp <- L %>% colSums()
 ```
 
-Os demais multiplicadores, também denominados de multiplicadores da variáveis exógenas são obtidos primeiramente mediante a divisão da variável alvo pelo valor da produção. Em seguida, multiplica-se essa razão pelo multiplicador da valor da produção, obtendo-se assim os impactos sobre a variável escolhida. 
+Os demais multiplicadores, também denominados de multiplicadores da variáveis exógenas são obtidos primeiramente mediante a multiplicação da razão da variável alvo em relação ao vbp. Em seguida, há a multiplicação da transposta dessa razão pela matriz de impacto. Denominando de y uma variável exógena qualquer (valor adicionado, emprego, emissões de carbono, etc) podemos definir a razão com os elementos definidos da seguinte forma:
 
-Uma forma alternativa é também criar uma matriz de impacto para variável selecionada. Nesse caso, a matriz de impacto original é pré-multiplicada pela razão variável selecionada e em seguida somada as colunas dessa matriz. Essa pode ser uma boa opção pois é possível criar uma matriz para essas variáveis e obtidos outros tipos de indicadores.
+$$ y_{c, j} = \frac{y_j}{x_j}   $$
+Em seguida, aplicar sobre a matriz de impacto, tal como na obtenção dos multiplicadores do produto:
+
+$$ m'_y = y'_cL $$
+
+Uma forma alternativa é também criar uma matriz de impacto para variável selecionada. Nesse caso, a matriz de impacto original é pré-multiplicada pela razão variável selecionada e em seguida somada as colunas dessa matriz. Essa pode ser uma boa opção pois é possível criar uma matriz para essas variáveis e obtidos outros tipos de indicadores. No caso a matriz de multiplicadores de produção ($M_x$) é exatamente a matriz de impacto ($L$), enquanto a matriz de multiplicadores da demais variáveis ($M_y$) é da forma:
+
+$$ M_x = L$$
+
+$$ M_y = \hat{y_c}L$$
 
 O primeiro passo é, portando, obter as razões das variáveis de interesse: valor adiocionado, salários e emprego. Importante lembrar que essas informações estão nas TRUs e não diretamente na MIP para a divulgação do IBGE.
 
 ```{r}
-y_vbp <- TRU_2015["Valor adicionado bruto ( PIB )",] / TRU_2015["Valor da produção",]    
 
-w_vbp <- TRU_2015["Salários",] / TRU_2015["Valor da produção",] 
+# Obtendo os dados que estão nas linhas e, em seguida, transformando-os em um vetor coluna:
 
-l_vbp <- TRU_2015["Fator trabalho (ocupações)",] / TRU_2015["Valor da produção",]
+v_vbp_temp <- TRU_2015["Valor adicionado bruto ( PIB )",] / TRU_2015["Valor da produção",]
+v_vbp <- t(v_vbp_temp)
+
+w_vbp_temp <- TRU_2015["Salários",] / TRU_2015["Valor da produção",] 
+w_vbp <- t(w_vbp_temp)
+
+l_vbp_temp <- TRU_2015["Fator trabalho (ocupações)",] / TRU_2015["Valor da produção",]
+l_vbp <- t(l_vbp_temp)
 
 ```
 
@@ -364,30 +381,32 @@ Com posse das razões de cada variável podemos estimar os multiplicadores:
 
 ```{r}
 
-# Pela multiplicação direta elemento a elemento (importante não usar a multiplicação matricial %*%):
+# Pela multiplicação matricial da transposta da razão pela matriz de impacto:
 
-m_va <- t(y_vbp) * m_vbp
+m_va <- t(v_vbp) %*% as.matrix(L)
   
-m_w <- t(w_vbp) * m_vbp
+m_w <- t(w_vbp) %*% as.matrix(L)
 
-m_l <- t(l_vbp) * m_vbp
+m_l <- t(l_vbp) %*% as.matrix(L)
 
 
 # Criando uma matriz:
 
-va_matriz <- diag(y_vbp) %*% as.matrix(L)
+va_matriz <- diag(c(v_vbp)) %*% as.matrix(L) 
 m_va_matriz <- va_matriz %>% colSums()
 
-w_matriz <- diag(w_vbp) %*% as.matrix(L)
+w_matriz <- diag(c(w_vbp)) %*% as.matrix(L)
 m_w_matriz <- w_matriz %>% colSums()
 
-l_matriz <- diag(l_vbp) %*% as.matrix(L)
+l_matriz <- diag(c(l_vbp)) %*% as.matrix(L) 
 m_l_matriz <- l_matriz %>% colSums()
 
 
 # Testando se são iguais
 
-all.equal(m_va, m_va_matriz)
+all.equal(m_va, as.matrix(m_va_matriz), check.attributes=F)
+all.equal(m_w, as.matrix(m_w_matriz), check.attributes=F)
+all.equal(m_l, as.matrix(m_l_matriz), check.attributes=F)
     
 ```
 
@@ -397,7 +416,7 @@ Unindo os resultados em um data.frame, a comparação dos resultados é tal que:
 
 ```{r}
 # Unindo os dados
-Multiplicadores <- data.frame(m_vbp, m_va, m_w, m_l)
+Multiplicadores <- data.frame(m_vbp, t(m_va), t(m_w), t(m_l))
 names(Multiplicadores) <- c("VBP", "VA", "Salários", "Emprego")
 
 # Gerando a tabela
