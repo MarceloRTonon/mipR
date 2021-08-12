@@ -1,5 +1,5 @@
 ---
-title: "Indicadores de Encadeamentos"
+title: "Indicadores de Encadeamentos e Multiplicadores"
 author: "Felipe Cornelio e Marcelo Tonon"
 date: "11/08/2021"
 output: html_document
@@ -335,7 +335,62 @@ formattable(Indicadores,list(
 
 ```
 
-# 5. Referências
+# 5. Multiplicadores
+
+Por fim, outra tipo de informação muito utilizada a partir das matrizes de insumo-produto são os multiplicadores da demanda final. De forma geral, temos quatro principais tipos de multiplicadores: *valor da produção*, *valor adicionado*. *salários* e *emprego*.
+
+O multiplicador do valor da produção representa o quanto há de aumento do valor da produção para uma variação unitária da demanda final. Trata-se do principal multiplicador e que serve como base para os demais. A sua obtenção equivale exatamente ao indicador de encadeamentos para trás - ou seja, à soma das colunas da matriz de Leontief:
+
+```{r}
+m_vbp <- L %>% colSums() %>% data.frame()
+```
+
+Os demais multiplicadores, também denominados de multiplicadores da variáveis exógenas são obtidos primeiramente mediante a divisão da variável alvo pelo valor da produção. Em seguida, multiplica-se essa razão pelo multiplicador da valor da produção, obtendo-se assim os impactos sobre a variável escolhida. 
+
+Uma forma alternativa é também criar uma matriz de impacto para variável selecionada. Nesse caso, a matriz de impacto original é pré-multiplicada pela razão variável selecionada e em seguida somada as colunas dessa matriz.
+
+O primeiro passo é, portando, obter as razões das variáveis de interesse: valor adiocionado, salários e emprego. Importante lembrar que essas informações estão nas TRUs e não diretamente na MIP para a divulgação do IBGE.
+
+```{r}
+y_vbp <- TRU_2015["Valor adicionado bruto ( PIB )",] / TRU_2015["Valor da produção",]    
+
+w_vbp <- TRU_2015["Salários",] / TRU_2015["Valor da produção",] 
+
+l_vbp <- TRU_2015["Fator trabalho (ocupações)",] / TRU_2015["Valor da produção",]
+
+```
+
+Com posse das razões de cada variável podemos estimar os multiplicadores:
+
+```{r}
+m_va <- t(y_vbp) * m_vbp
+  
+m_w <- t(w_vbp) * m_vbp
+
+m_l <- t(l_vbp) * m_vbp
+  
+```
+
+
+Unindo os resultados em um data.frame, a comparação dos resultados é tal que:
+
+
+```{r}
+# Unindo os dados
+Multiplicadores <- data.frame(m_vbp, m_va, m_w, m_l)
+names(Multiplicadores) <- c("VBP", "VA", "Salários", "Emprego")
+
+# Gerando a tabela
+formattable(Multiplicadores,list(
+  VBP = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("(R: %02g) %.2f", rank(-x), x)),
+  VA = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("(R: %02g) %.2f", rank(-x), x)),
+  Salários = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("(R: %02g) %.2f", rank(-x), x)),
+  Emprego = formatter("span", style = x ~ style(color = ifelse(rank(-x) <= 5, "darkgreen", "gray")), x ~ sprintf("(R: %02g) %.2f", rank(-x), x))))  %>% as.datatable()
+
+```
+
+
+# 6. Referências
 
 CHENERY, H.B. and WATANABE, T. (1958): **International Comparisons of the Structure of Production**. Econometrica, 26, 487–521.
 
