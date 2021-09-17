@@ -76,9 +76,9 @@ rownames(TRU_2015) <- nomes_va
 
 # Soma do Comercio Varejo e Atacado
 
-Comercio <- TRU_2015[,42]+TRU_2015[,43]
-TRU_2015[,42] <- Comercio
-TRU_2015[,43] <- NULL
+Comercio <- TRU_2015[,41]+TRU_2015[,42]
+TRU_2015[,41] <- Comercio
+TRU_2015[,42] <- NULL
 ```
 
 # 2. Indicadores de Encadeamento para Trás e para Frente
