@@ -13,7 +13,7 @@ Esse tópico pressupõe que você conseguiu instalar o R e o RStudio. Neste docu
 
 A lista de exercicios associada a este Tópico pressupõe a leitura das partes *"Principais Conceitos"* e *"O modelo de Leontief"* do material ***"Introdução à álgebra linear com R"*** feito pelo Kaio Vital.
 
-## Sua primeira vez no **R**!
+## [Sua primeira vez no **R**!](#PrimeiraVez)
 
 *Ou melhor dizendo*: no **RStudio**! Se você abrir o programa que vem escrito apenas **R**, você não irá se sentir muito convidado. Por outro lado, como já dissemos antes, o **RStudio** por ser um IDE foi feito para ser intuitivo, simples e interativo.^[Na primeira monitoria nós também iremos apresentar o RStudio de forma melhor.]
 
@@ -30,7 +30,7 @@ d <- c(a,b, 5) #"d" é uma variável. c() é uma função que combina elementos 
  sum(d) # sum() é uma função que retorna a soma de todos os valores de uma variável
 ```
 
-Se você não usar `<-` na programação, a conta será feita, o valor estabelecido não será associado à nenhum objeto, e deste modo não poderá ser recuperado depois, lhe obrigando a fazer todas as contas no futuro.
+Se você não usar `<-` no código, a conta será feita, o valor estabelecido não será associado à nenhum objeto, e deste modo não poderá ser recuperado depois, lhe obrigando a fazer todas as contas no futuro.
 
 **R** é em sua base uma linguagem multiparadigma . Ou seja, você pode usar ela tanto como [orientada à objetos](https://pt.wikipedia.org/wiki/Orienta%C3%A7%C3%A3o_a_objetos), quanto no [modo funcional](https://pt.wikipedia.org/wiki/Programa%C3%A7%C3%A3o_funcional), especialmente com o uso de  pacotes tal qual o `purrr`. Desse modo, para usar o pacote `purrr` no **R** por exemplo,  devemos instala-lo, usando a função `install.packages()`, e depois carrega-lo, com a função `library()`. O código no **R** pode ser escrito de duas formas, veja abaixo:
 
@@ -72,7 +72,7 @@ objeto <- 1:4 %>%
 
 
 
-Se vamos escrever tudo na mesma linha ou em linhas diferentes fica a cargo da comodidade e praticidade. Poupar linhas faz o seu código ficar mais direto ao ponto, o que sem dúvidas é bom. Por outro lado, uma linha de comando muito longa, especialmente com o código escrito do modo *nested*, pode se tornar confusa demais. Além disso, muitas vezes podemos querer no futuro o `novo_objeto` e o `novo_objeto_2`.
+Se vamos escrever tudo na mesma linha ou em linhas diferentes fica a cargo da comodidade e praticidade. Poupar linhas faz o seu código ficar mais direto ao ponto, o que sem dúvidas é bom. Por outro lado, uma linha de comando muito longa, especialmente com o código escrito do modo *nested*, pode se tornar confusa demais. Além disso, muitas vezes podemos querer no futuro o `novo_objeto` e o `novo_objeto_2`. Falaremos mais de como escrever pelo no modo *pipe* no final deste tópico.
 
 Uma interrogação `?` acessa os documentos de help, baixados no seu computador. Ao digitarmos duas interrogações, `??`, o *RStudio* procura via internet os documentos presentes no CRAN. Ao passo que `?solve` funciona, se tentarmos aplicar diretamente com símbolos, como `?%<-%` ou `?:`, não irá funcionar. Para tanto, basta colocar o símbolo entre aspas, como  `?"<-"` ou `?":"`.
 
@@ -82,7 +82,7 @@ Até agora falamos muitas vezes sobre os *pacotes*, então vamos agora deixar cl
 a <- c(1,3,2,4)
 d <- c(0,-2,3,1)
 
-b <- sum(((((a+d)*4)^(2))-2)/3)
+b <- sum(((((a+(2*d))*4)^(2))-2)/3)
 
 # + é o comando da soma 
 # - é o comando da subtração 
@@ -96,7 +96,7 @@ b <- sum(((((a+d)*4)^(2))-2)/3)
 
 #Estabelecendo uma função
 soma_doida <- function(objeto_1,objeto_2){ #function estabelece que soma_doida() será uma função. Colocar x,y estabelece que ela precisa de dois insumos para funcionar. Já "{" estabelece o inicio de tudo que está dentro de uma função.
- temp_b <- objeto_1 + objeto_2
+ temp_b <- objeto_1 + (2*objeto_2)
  temp_b <- temp_b+4
  temp_b <- temp_b^2
  temp_b <- temp_b-2
@@ -119,7 +119,7 @@ Além disso, fazer suas próprias funções tem ao menos [três vantagens](https
 - Você tem menos problemas para resolver, uma vez que cada linha do código é usada em mais lugares: se você consertou em um lugar, consertou em todos.
 
 
-# Tipo de objetos.
+# [Tipo de objetos.](#TiposObjetos)
 
 Existem diferentes tipos (`types`) de objetos no `R`. Uma função básica (como `sum` ou `+`) é do tipo `builtin`, enquanto a nossa função `soma_doida` será do tipo `closure`. Porém o que nos interessa neste momento é tratar dos tipos dos objetos que irão guardar dados e resultados. Podemos descobrir o tipo de um objeto ao usarmos a função `typeof`. Abaixo vamos descobrir rapidamente os quatro principais:
 
@@ -146,7 +146,9 @@ typeof(b)
 
 Não trataremos aqui de outros dois tipos `complex` (para números complexos) and `raw` (para valores binários).
 
-# Estrutura básica dos dados no **R**
+Uma coisa interessante de se pensar é que o **R** é mais prático do que as linguagens de "baixo nível", como  **C**, na hora de criar vetores, isso porque o **R** não requer que você defina qual será o tipo de dado do vetor. Isso é importante também pois você pode não necessariamente saber qual será o tipo do vetor. A função `all.equal` por exemplo pode retornar tanto `TRUE` quanto um vetor do tipo `character`. Essa comodidade é muito útil, em especial para quando se está iniciando.
+
+# [Estrutura básica dos dados no **R**](#EstruturaVetor)
 
 A estrutura básica de estruturar os dados no **R** são os vetores, que podem ser subdivididos em duas categorias: Vetores atômicos e Listas. Vetores atômicos obrigam que todos os seus elementos sejam de mesmo tipo, enquanto uma lista permite que eles possam variar. Para criar um vetor atômico usamos `c()`, enquanto para criarmos uma lista usamos `list()`. Além disso, ao contrário dos vetores atômicos, uma lista pode ser *recursiva*, ou seja podemos ter listas de listas que estão contidas em uma lista (e assim por diante).
 
@@ -159,7 +161,7 @@ Existem 3 propriedades fundamentais que tanto listas quanto vetores atômicos po
 - Atributos: metadados adicionais arbitrários `attributes()`
 
 
-## Vetores Atômicos
+## [Vetores Atômicos](#AtomVectors)
 
 Algumas funcionalidades que podemos fazer com vetores:
 
@@ -207,7 +209,7 @@ as.character(vetor_exemplo) # transforma o vetor em tipo character.
  - double
  - character
 
-## Listas
+## [Listas](#ListasTop1)
 
 Ao contrário dos vetores atômicos, as listas não forçam que seus elementos sejam do mesmo tipo. Além disso, uma lista pode ser recursiva  indefinidamente. Vejamos o que isso quer dizer:
 
@@ -231,7 +233,7 @@ str(lista_2)
 
 **Importante:** A depender da situação é necessário usar `[]` ou `[[]]` para acessar elementos de uma lista. Não trataremos disso aqui, mas saiba que com `[[]]` você conseguirá acessar apenas um elemento da lista por vez, mas quase sempre funcionará. Enquanto com `[]` você conseguirá acessar multiplos elementos da lista, porém nem sempre irá funcionar (especialmente com elementos como matrizes e dataframes). Via de regra, vale usar `[[]]` como o padrão.
 
-## Dataframes e matrizes
+## [Dataframes e matrizes](#dfMatrix)~
 
 A maioria dos dados em **R** estão por sua vez salvos em tabelas da classe `data.frame`. Tabelas também podem ser da classe `matrix`. A diferença entre ambas é que `data.frame` pode conter vetores de diferentes tipos, enquanto `matrix` não. Pense em `data.frame` como uma lista de vetores e `matrix` como um vetor atômico que foi dividido em multiplas colunas. Vale notar que cada coluna de um `data.frame` é um vetor atômico, logo, os seus elementos tem que ser do mesmo tipo. Podemos criar ambos objetos usando as matrizes `data.frame()` e `matrix()`
 
@@ -290,6 +292,186 @@ df_a[c(1,3,5),]
 
 ```
 
-## Matrizes e Operações Matriciais
+## [Matrizes e Operações Matriciais](#AlgLin)
 
 Como dito no inicio deste tópico, essa parte  está disponível na apostila ***"Introdução álgebra linear com R"*** na parte *"Principais Conceitos"*x. Lá você será introduzido às funções `matrix`, `diag`, `solve`, `%*%` e  `cbind`. Na parte *"O modelo de Leontief"* você verá como calcular a inversa de Leontief.
+
+
+# [Escrevendo com o **pipe**](#pipe)
+
+```{r}
+library(magrittr)
+```
+
+No inicio do tópico nós abordamos de forma rápida o modo *nested* e *pipe* de se escrever, o código. O modo *nested* é `baseR` enquanto o operador `%>%` é do pacote `magrittr`. Aqui vale gastar um momento para entender o espírito da coisa: *pipe* em inglês pode significar "cano"^[2], ou seja, o objetivo do pipe é justamente fazer com que o código **desça pelo cano**. Ou seja, que a escrita do código seja tal que a sua leitura fique a maís próxima o possível da de um texto normal: saindo da esquerda para a direita e indo de cima para baixo.^[2] O pacote `magrittr` por sua vez tem esse nome por conta do pintor surrealista René Magritte. Isso porque *pipe* em inglês e francês também pode significar cachimbo, fazendo o pacote `magrittr` uma referência ao famoso quadro _La trahison des images_ de Magritte, em que aparece um cachimbo com os dizeres _Ceci n'est pas une pipe_ (Isto não é um cachimbo).
+
+![](pipeJoke.jpg)
+
+Misturando o operador `%>%` com uma boa prática na escrita, podemos criar códigos de fácil compreensão. Isso é o que muitos diriam ser a definição de um "código elegante": fácil compreensão e manutenção do código. Vamos ver o caso abaixo:
+
+```{r,eval=FALSE, include = TRUE}
+#Modo nested
+objeto2 <- funcao3(funcao2(funcao1(objeto1, arg1 = FALSE), arg2= par1), arg3= par2, arg4 = par3)
+```
+
+Nesse modo, temos que procurar qual é o parentêses mais "interior" de todos para começar a entender o código e ir lendo a função e os seus argumentos. Em funções complicadas, isso pode se tornar bastante obscuro. Alterando isso usando o operador `%>%`:
+
+```{r, eval =FALSE}
+objeto2 <- objeto1 %>% funcao1(arg1=FALSE) %>% funcao2(arg2=par1) %>% funcao3(arg3=par2, arg4=par3)
+```
+
+Agora lemos o código da esquerda para a direita, facilitando a nossa compreensão. Vamos considerar então agora, a definição do `objeto2b`:
+
+```{r, eval=FALSE}
+# objeto2b definido via modo nested
+objeto2b <- funcao5(funcao4(funcao3(funcao2(funcao1(objeto1, arg1 = FALSE), arg2= par1), arg3= par2, arg4 = par3), arg5= TRUE, arg6=par4), arg7 = par5, arg8 = par6) 
+```
+
+Exceto que você tenha um monitor muito largo, esse código estará quebrado em ao menos duas linhas no editor. O mesmo ocorrerá se você usar o operador `%>%`:
+```{r, eval =FALSE}
+# Objeto2b definido com %>%
+objeto2b <- objeto1 %>% funcao1(arg1=FALSE) %>% funcao2(arg2=par1) %>% funcao3(arg3=par2, arg4=par3) %>% funcao4(arg5=TRUE, arg6 =par4) %>% funcao5(arg7 = par5, arg8 = par6) 
+```
+
+
+
+O problema nas definições de `objeto2b` acima não é eles ocuparem mais de uma linha, é o fato de da quebra das linhas atrapalhar a inteligibilidade do código. Por sorte o R permite que você faça quebra uma linha em várias, como se fosse uma mesma linha:
+
+```{r, eval =FALSE}
+# Objeto2b definido com %>% dividido em 2 linhas
+objeto2b <- objeto1 %>% funcao1(arg1=FALSE) %>% funcao2(arg2=par1) %>%
+   funcao3(arg3=par2, arg4=par3) %>% funcao4(arg5=TRUE, arg6 =par4) %>% funcao5(arg7 = par5, arg8 = par6)
+```
+
+Aqui dividimos a linha em duas. Porém nada nos impede de enfiar o pé na jaca e fazermos uma quebra de linha depois de cada operador pipe:
+
+```{r, eval =FALSE}
+# Objeto2b definido com %>%  dividido em 6 linhas
+objeto2b <- objeto1 %>%
+   funcao1(arg1=FALSE) %>%
+   funcao2(arg2=par1) %>%
+   funcao3(arg3=par2, arg4=par3) %>%
+   funcao4(arg5=TRUE, arg6 =par4) %>%
+   funcao5(arg7 = par5, arg8 = par6)
+```
+
+## O outro operador pipe: |>
+
+Antes do operador `%>%` do pacote magrittr ser introduzido em 2014, não existia um operador pipe no R. Eram tempos dificeis. No entanto, depois da atualização 4.1 do **R** em 2021 agora existe um operador pipe ***nativo***, ou seja, do *baseR*. Esse é o operador `|>`. Esse operador é **ligeiramente** mais rápido do que o operador do pacote magrittr e tem a vantagem de não ter dependência externa. Tal qual `%>%`, o operador `|>` funcionaria sem nenhum problema e seria inclusive mais rápido:
+
+```{r, eval=F}
+objeto2b <- objeto1 |>
+   funcao1(arg1=FALSE) |>
+   funcao2(arg2=par1) |>
+   funcao3(arg3=par2, arg4=par3) |>
+   funcao4(arg5=TRUE, arg6 =par4) |>
+   funcao5(arg7 = par5, arg8 = par6)
+```
+
+No entanto, `|>` é mais restrito do que o operador `%>%`. Veja abaixo
+
+```{r}
+1:5 %>% sum() #Funciona
+1:5 %>% sum #Funciona
+1:5 |> sum() #Funciona
+```
+```{r, error=TRUE}
+1:5 |> sum # Não funciona
+```
+
+Se uma função não tiver argumento além do que está à esquerda do operador *pipe*, `%>%` aceita que você escreva-a sem o `()`, enquanto o operador `|>` não.
+
+## O ponto final no operador %>% ?
+
+O operador `%>%` tem uma maior flexibilidade em relação à `|>` não só por permitir algo como `1:5 %>% sum`, mas também por aceitar o ponto final `.` como representação do objeto no seu lado esquerdo. A função `soma_doida` que definimos anteriormente temos dois paramêtros: `objeto1` e `objeto2`. Na definição da função, o argumento `objeto1` veio antes de `objeto2`: `soma_doida <- function(objeto1, objeto2){...}`, assim sendo se não especificarmos, o primeiro parametro fornecido será o `objeto1`:
+
+```{r}
+# Definindo o argumento que recebe o parametro na ordem da função
+soma_doida(objeto_1 = 1:4, # Você pode quebrar uma linha depois da virgula se convir
+           objeto_2 = 11:14) 
+
+# Definindo o argumento que recebe o parametro, mas colocando na ordem da função
+soma_doida(1:4, 11:14) 
+```
+
+Agora, podemos definir o parametro de `objeto_2` antes de `objeto_1`:
+
+```{r}
+# Definindo o argumento que recebe o parametro fora da ordem da função
+soma_doida(objeto_2 = 11:14,
+           objeto_1 = 1:4) 
+```
+
+Se você não nomeia nenhum argumento, o R sempre segue a ordem da função:
+
+```{r}
+# Na ordem da função
+soma_doida(11:14, 1:4) == soma_doida(objeto_1 = 11:14, objeto_2 = 1:4)
+# Fora da ordem da função
+soma_doida(11:14, 1:4) == soma_doida(objeto_2 = 11:14, objeto_1 = 1:4)
+```
+Por que isso é importante? Por que o lado esquerdo do operador pipe é por padrão entendido pelo **R** como o primeiro argumento:
+
+```{r}
+# Na ordem
+1:4 |> soma_doida(11:14)
+1:4 %>% soma_doida(11:14)
+# "Fora de ordem"
+11:14 |> soma_doida(1:4)
+11:14 %>% soma_doida(1:4)
+```
+Isso pode ser resolvido definindo o argumento de 
+
+ Usaremos a seguir a comparação do operador `%>%` com  `|>`, para descobrirmos outras facilidade
+
+
+Uma coisa que não falamos antes é que existe um operador `pipe` do *baseR*, o operador `|>`.
+mas de se escrever no 
+Dada a natureza do *Tidyverse*, será mais usada nessa parte o operador *pipe* `%>%`, ao invés da escrita *nested*. Sempre que você carregar algum dos pacotes Relembrando o uso dele abaixo:
+
+```{r, eval = FALSE}
+#Modo Nested
+objeto2 <- funcao3(funcao2(funcao1(objeto1)))
+
+
+#Modo Pipe
+objeto2 <- objeto1 %>% funcao1() %>% funcao2() %>% funcao3()
+```
+
+Ou seja, ao invés de uma escrita que vai de dentro (`objeto1`) para fora (`funcao3`) como no modo *nested*, você tem uma escrita da esquerda (`objeto1`) para a direita (`funcao3`). Veja alguns exemplos abaixo:
+
+```{r, eval = FALSE}
+# mtcars é uma base de dados interna do R usada para dar exemplos. 
+
+#calcular a media de cada coluna usando colMeans
+
+#modo nested
+means_mtcars <- colMeans(mtcars)
+
+# modo pipe %>%
+means_mtcars <- mtcars %>% colMeans
+
+#modo_nested
+colMeans(mtcars)[5]
+
+# modo pipe %>%
+mtcars %>% colMeans %>% .[5]
+
+# Há também o operador %$%, dentro do pacote magrittr também do tidyverse
+mtcars %>% colnames() %>% .[5]
+mtcars %$% mean(drat) 
+
+# Repare que ao usar %$% não é necessario usar "" para ser referir ao nome das colunas! 
+```
+
+Quanto mais longo a linha de comando, melhor será aplicar o modo *pipe* em detrimento do *nested*. O modo *pipe* que usamos foi desenvolvido no pacote `magrittr`, sendo que o operador *pipe forward* `%>%` estará disponível para uso sempre que você carregar um pacote do `tidyverse`. Isso não é o caso do operador *exposition pipe*, que é necessário que você carregue explicitamente o pacote `magrittr`, pois este não é um dos pacotes do "núcleo" do *Tidyverse*. Existem outros dois operadores dentro do pacote `magrittr`[^5] que são o *tee pipe* `%T>%` e o *compound assignment pipe* `%<>%`, mas que não serão discutidos aqui[^6].
+
+[^2]: No mundo corporativo também tem o conceito de ***pipeline*** que é justamente o estabelecimento de um fluxo especifico de produção e vendas. No fim, o espírito da coisa permanece o mesmo: tentar tornar algo o mais linear possível. 
+
+[^5]: E ficam disponíveis apenas se você carregar o `magrittr` explicitamente.
+
+[^6]: Para mais informações sobre o `magrittr` veja <https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html>
+
+
+
+
