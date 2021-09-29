@@ -484,7 +484,7 @@ xor(a &gt; 2, b == 2)</code></pre>
 <table>
 <colgroup>
 <col width="10%" />
-<col width="48%" />
+<col width="47%" />
 <col width="23%" />
 <col width="18%" />
 </colgroup>
@@ -764,54 +764,6 @@ aa</code></pre>
 ## [3,]    2    0</code></pre>
 </div>
 </div>
-<div id="o-tidyverse-introdução" class="section level2">
-<h2><a href="#tidyverseintro">3.6 - O tidyverse: Introdução</a></h2>
-<p>A familia de pacotes do <code>tidyverse</code> fortalece bastante a análise e manipulação de dados no R, especialmente para bases de dados retangulares e mais ainda para bases <em>tidy</em>. Vale notar, que este não é o caso de Matrizes Insumo Produto (que no geral são bases de dados quadradas), porém além de várias funcionalidades uteis como um todo, além do maravilhoso pacote <em>purrr</em> que veremos no Tópico sobre automatizar as tarefas.</p>
-<p>Os pacotes do núcleo duro do <em>tidyverse</em> são:</p>
-<ul>
-<li><p><strong><em>tibble</em></strong>: Já falamos, brevemente, desse pacote no Tópico 2. Um <code>tibble</code> é como um <code>data.frame</code> só que, na propria definição do site do <a href="https://tibble.tidyverse.org/"><code>tidyverse</code></a>, mais preguiçoso e ranzinza. Ele não facilita sua vida como o <code>data.frame</code> o faz. Por exemplo, ele não muda nem o nome nem o tipo das variáveis e irão reclamar mais. Importante notar que antes um <code>tibble</code> e um <code>data.frame</code> eram mais diferentes do que são hoje<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>, pois a função <code>data.frame</code> por default convertia <code>strings</code> em <code>factor</code>, o que mudou na atualização 4.0.0 do R.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> A principio, o <code>tibble</code> não será mais abordado aqui no curso, (pelo fato de que teremos um ) assim que desejar se aprofundar mais nele pode conferir o capitulo 10 do <a href="https://r4ds.had.co.nz/tibbles.html"><em>R for Data Science</em></a> e <a href="https://tibble.tidyverse.org/articles/tibble.html">neste artigo</a>.</p></li>
-<li><p><strong><em>readr</em></strong>: No Tópico 2, também já falamos sobre o pacote <code>readr</code>, e como ele é muito mais rápido que o <code>base</code> R para importar uma base de dados. É importante considerar apenas que ele importa a base como um <code>tibble</code> e não um <code>data.frame</code>. Vamos falar um pouco dele aqui também.</p></li>
-<li><p><strong><em>dplyr</em></strong>: O pacote <code>dplyr</code> é <strong>O</strong> pacote para manipular os dados. Ele irá te ajudar a lidar conscientemente com problemas comuns na hora de manipular a base de dados. Uma parte das suas utilidades será apresentada no Tópico 3<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. Os capítulos <a href="https://r4ds.had.co.nz/transform.html">5</a> e <a href="https://r4ds.had.co.nz/relational-data.html">13</a> do <em>R for Data Science</em> introduzem uma boa parte das funções que <code>dplyr</code> oferece, inclusive algumas das que não falaremos aqui.</p></li>
-<li><p><strong><em>tidyr</em></strong>: O pacote <code>tidyr</code> é por sua vez focado em deixar uma base de dados mais bem comportada, especificamente no modo <code>tidy</code>. Assim, o <code>tidyr</code> é muito voltado para base de dados retangulares. Algumas poucas funções do <code>tidyr</code> serão apresentadas no Tópico 3, em especial as mais úteis para Matriz Insumo Produto. Para uma visão (bem) mais abrangente do <code>tidyr</code> olhe o capítulo <a href="https://r4ds.had.co.nz/tidy-data.html">12</a> do <em>R for Data Science</em></p></li>
-<li><p><strong><em>purrr</em></strong>: O pacote <code>purrr</code> traz consigo um poderoso ferramental para lidar com automação de tarefas e com estruturas de dados muito recursivas (listas). Sua abordagem radicalmente funcional te dá uma grande vantagem frente ao loop tradicional do base R. Uma parte deste pacote será abordado no Tópico 4, sendo também abordado no capítulo <a href="https://r4ds.had.co.nz/iteration.html">21</a> do <em>R for Data Science</em> e no <a href="https://adv-r.hadley.nz/functionals.html">9</a> do <em>Advanced R</em>.</p></li>
-<li><p><strong><em>stringr</em></strong>: Esse pacote lida com dados que na realidade são textos, as chamadas <code>strings</code>. Assim sendo, é uma ferramenta muito poderosa, que para além de questões óbvias, serve de apoio para o <code>subsetting</code> e a automação de determinadas tarefas. O pacote <code>stringr</code> e suas aplicações será discutido no Tópico 5. As funcionalidades do pacote são explicadas no capítulo <a href="https://r4ds.had.co.nz/strings.html">14</a> do <em>R for Data Science</em>.</p></li>
-<li><p><strong><em>ggplot2</em></strong>: A ferramente mais poderosa de construção de gráficos do R. É o que se tem para falar do <code>ggplot2</code>. Ele será introduzido no Tópico 6. Uma abordagem mais ampla de todo o seu poder pode ser vista no livro <a href="https://ggplot2-book.org/"><em>ggplot2: Elegant Graphics for Data Analysis</em></a> feito pelo Hadley Wickham.</p></li>
-<li><p><strong><em>forcats</em></strong>: Este pacote é útil para lidar com <code>factors</code> (<em>forcats</em> é um anagrama de <em>factors</em>), que é uma <code>classe</code> de vetores que servem para dar categorias à um <code>data.frame</code>. <code>factors</code> já foram mais comuns no R do que são hoje, em especial após a expansão do <em>Tidyverse</em> e da versão 4.0.0 da linguagem. Por conta disso, não vamos entrar em <code>factors</code> nesse curso à principio, sendo que com o <code>stringr</code> se consegue fazer tudo e mais um pouco que se faz com <code>factors</code>. Para quem tiver interesse, vale acessar o capitulo <a href="https://r4ds.had.co.nz/factors.html">15 do R for Data Science</a> para aprender sobre o <em>forcats</em>. Para usar <em>factors</em> com um maior enfoque no base-R, vale a leitura da subseção <a href="https://rstudio-education.github.io/hopr/r-objects.html#factors">5.5.2</a> do <em>Hands-on Programming with R</em>, e das subseções <a href="https://adv-r.hadley.nz/vectors-chap.html#s3-atomic-vectors">3.4</a> e <a href="https://adv-r.hadley.nz/subsetting.html#atomic-vectors-1">4.2.1</a> do <em>Advanced R</em>.</p></li>
-</ul>
-<div id="escrevendo-com-o-pipe" class="section level3">
-<h3><a href="#361pipe">3.6.1 Escrevendo com o <strong>pipe</strong></a></h3>
-<p>Dada a natureza do <em>Tidyverse</em>, será mais usada nessa parte o operador <em>pipe</em> <code>%&gt;%</code>, ao invés da escrita <em>nested</em>. Sempre que você carregar algum dos pacotes Relembrando o uso dele abaixo:</p>
-<pre class="r"><code>#Modo Nested
-objeto2 &lt;- funcao3(funcao2(funcao1(objeto1)))
-
-
-#Modo Pipe
-objeto2 &lt;- objeto1 %&gt;% funcao1() %&gt;% funcao2() %&gt;% funcao3()</code></pre>
-<p>Ou seja, ao invés de uma escrita que vai de dentro (<code>objeto1</code>) para fora (<code>funcao3</code>) como no modo <em>nested</em>, você tem uma escrita da esquerda (<code>objeto1</code>) para a direita (<code>funcao3</code>). Veja alguns exemplos abaixo:</p>
-<pre class="r"><code># mtcars é uma base de dados interna do R usada para dar exemplos. 
-
-#calcular a media de cada coluna usando colMeans
-
-#modo nested
-means_mtcars &lt;- colMeans(mtcars)
-
-# modo pipe %&gt;%
-means_mtcars &lt;- mtcars %&gt;% colMeans
-
-#modo_nested
-colMeans(mtcars)[5]
-
-# modo pipe %&gt;%
-mtcars %&gt;% colMeans %&gt;% .[5]
-
-# Há também o operador %$%, dentro do pacote magrittr também do tidyverse
-mtcars %&gt;% colnames() %&gt;% .[5]
-mtcars %$% mean(drat) 
-
-# Repare que ao usar %$% não é necessario usar &quot;&quot; para ser referir ao nome das colunas! </code></pre>
-<p>Quanto mais longo a linha de comando, melhor será aplicar o modo <em>pipe</em> em detrimento do <em>nested</em>. O modo <em>pipe</em> que usamos foi desenvolvido no pacote <code>magrittr</code>, sendo que o operador <em>pipe forward</em> <code>%&gt;%</code> estará disponível para uso sempre que você carregar um pacote do <code>tidyverse</code>. Isso não é o caso do operador <em>exposition pipe</em>, que é necessário que você carregue explicitamente o pacote <code>magrittr</code>, pois este não é um dos pacotes do “núcleo” do <em>Tidyverse</em>. Existem outros dois operadores dentro do pacote <code>magrittr</code><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> que são o <em>tee pipe</em> <code>%T&gt;%</code> e o <em>compound assignment pipe</em> <code>%&lt;&gt;%</code>, mas que não serão discutidos aqui<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>.</p>
-</div>
-</div>
 <div id="subsetting-com-o-tidyverse" class="section level2">
 <h2><a href="#tidyversesubset">3.7 - Subsetting com o <code>tidyverse</code></a></h2>
 <div id="extraindo-colunas-a-partir-dos-seus-nomes" class="section level3">
@@ -997,7 +949,7 @@ CO2 %&gt;% filter(uptake &lt;= 10)</code></pre>
 <pre><code>##   Plant        Type Treatment conc uptake
 ## 1   Qc2      Quebec   chilled   95    9.3
 ## 2   Mc2 Mississippi   chilled   95    7.7</code></pre>
-<p>Repare que a ordem que você escreve os elementos a serem comparados não alteram o funcionamento da função. Você pode então Você pode deixa o uso de <code>filter</code> muito mais complexo. Veja abaixo um exemplo com as funções <code>mean</code>, <code>median</code> e moda<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>:</p>
+<p>Repare que a ordem que você escreve os elementos a serem comparados não alteram o funcionamento da função. Você pode então Você pode deixa o uso de <code>filter</code> muito mais complexo. Veja abaixo um exemplo com as funções <code>mean</code>, <code>median</code> e moda<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>:</p>
 <pre class="r"><code>CO2 %&gt;% filter(conc &gt; mean(conc))</code></pre>
 <pre><code>##    Plant        Type  Treatment conc uptake
 ## 1    Qn1      Quebec nonchilled  500   35.3
@@ -1239,7 +1191,7 @@ CO2 %&gt;% filter(xor(conc == moda(conc), uptake &lt;= median(uptake)))</code></
 
 CO2 %&gt;% filter(conc == moda(conc) &amp; !uptake &lt;= median(uptake))</code></pre>
 <pre><code>## [1] Plant     Type      Treatment conc      uptake   
-## &lt;0 linhas&gt; (ou row.names de comprimento 0)</code></pre>
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
 <pre class="r"><code># !A &amp; B: Exclui de B tudo que é de A. Ou seja, B menos a interseção de A e B.
 
 CO2 %&gt;% filter(!conc == moda(conc) &amp; uptake &lt;= median(uptake))</code></pre>
@@ -1399,7 +1351,7 @@ near(x,y,0.5)</code></pre>
 <pre class="r"><code># Filtrando as linhas com valores de uptake próximos de 40 pela tolerância default:
 CO2 %&gt;% filter(near(uptake, 40))</code></pre>
 <pre><code>## [1] Plant     Type      Treatment conc      uptake   
-## &lt;0 linhas&gt; (ou row.names de comprimento 0)</code></pre>
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
 <pre class="r"><code># Filtrando as linhas com valores de uptake próximos de 40 pela tolerância de 1:
 CO2 %&gt;% filter(near(uptake, 40, tol = 1))</code></pre>
 <pre><code>##   Plant   Type  Treatment conc uptake
@@ -1646,12 +1598,7 @@ df &lt;- df %&gt;% filter(Codigo != &quot;Nome dos Setores&quot; )</code></pre>
 <hr />
 <ol>
 <li id="fn1"><p>O inverso não seria verdadeiro por outro lado. A instalação do <code>dplyr</code> não garante a instalação do resto dos pacotes.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>Até agora (Junho de 2020) nem o <a href="https://tibble.tidyverse.org/">site</a> nem a documentação do <code>tibble</code> no R foram atualizadas nesse sentido.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>Veja mais na documentação de <code>data.frame</code>, em especial no argumento de <code>stringAsFactors</code>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
-<li id="fn4"><p>A mais relacionada com <code>subsetting</code><a href="#fnref4" class="footnote-back">↩︎</a></p></li>
-<li id="fn5"><p>E ficam disponíveis apenas se você carregar o <code>magrittr</code> explicitamente.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
-<li id="fn6"><p>Para mais informações sobre o <code>magrittr</code> veja <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html" class="uri">https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html</a><a href="#fnref6" class="footnote-back">↩︎</a></p></li>
-<li id="fn7"><p>Feita a partir deste código: <a href="https://www.tutorialspoint.com/r/r_mean_median_mode.htm" class="uri">https://www.tutorialspoint.com/r/r_mean_median_mode.htm</a><a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Feita a partir deste código: <a href="https://www.tutorialspoint.com/r/r_mean_median_mode.htm" class="uri">https://www.tutorialspoint.com/r/r_mean_median_mode.htm</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
