@@ -1,0 +1,179 @@
+---
+title: "Análise de Decomposição Estrutural"
+author: "Marcelo Tonon e Felipe Cornelio"
+date: "08/12/2021"
+output: bookdown::html_document2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(purrr)
+```
+
+|               Material de apoio de Análise de Decomposição Estrutural, em inglês _Structural Decomposition Analysis_ (SDA).^[Há de certo modo, uma sobreposição com o Tópico 6, mas no futuro é provável que reestruturemos aquela parte.]
+\
+
+# Introdução {-}
+
+|               Aqui vamos apresentar as principais práticas associados à metodologia. Assim, esse material terá bastante conteúdo matemático. **Importante:** para o real entendimento e assimilação do tópico, sugerimos fortemente acompanhar a sua leitura com o papel e caneta e tentar replicar os passos um à um.^[Além disso, reler a bibliografia sugerida é também altamente sugerido.] Sério, coloque [_Papel, Caneta e Coração_ do Emicida](https://www.youtube.com/watch?v=rVRdTOMb6vQ) para tocar e manda brasa. 
+
+|               Dominar SDA permite realizar uma série de estimações, em que podemos atribuir uma variação a mais de uma variável. Assim sendo, SDA tem como base a Teoria de Números Índice, em inglês _Index Number Theory_ (INT). Aqui vamos falar sobre INT, mas muito rapidamente, apenas do que nos serve. Não precisa ficar ressabiado. Já dissemos que é para ir fazendo o passo a passo com na mão?
+Sério, é cognitivamente a melhor forma de você absorver [álgebra](https://www.researchgate.net/publication/221297591_Benefits_of_Handwritten_Input_for_Students_Learning_Algebra_Equation_Solving) de modo geral. 
+
+|               O plano é no futuro ter uma seção de apêndices com códigos de aplicação práticas. No entanto, o objetivo principal aqui é entender SDA. Hoje o texto está organizado da seguinte forma: a primeira parte apresentamos o problema da decomposição e os conceitos de INT relevantes. Depois apresentamos cada uma das formas da decomposição aditiva, inclusive a Sato-Vartia Aditiva que **não** é recomendada. Depois apresentamos as formas referentes a Decomposição Multiplicativa. Então apresentamos como se decompõe matrizes como a Inversa de Leontief em função das suas "matrizes internas" ( _nested matrices_ ). Então, fazemos um apanhado geral e elencamos sugestões. Por fim, no final do texto, indicamos e discutimos 6 leituras básicas (em inglês) no qual esse material foi em parte baseado.
+
+
+# Decomposição Estrutural: fundamentos, aplicação, problemas.
+
+|               A Decomposição Estrutural é o processo de usar partes do todo, e as suas relações, para explicar uma variação sistemica mais complexa. Seja $X$ um valor determinado como $X = f(X^a,X^b)$, queremos saber para $\Delta X = X_{t} - X_{t-1}$, quanto foi a contribuição especifica de $\Delta X^a = X^a_t - X^a_{t-1}$ e $\Delta X^b = X^b_t - X^b_{t-1}$. O objetivo da Decomposição Estrutural é, a partir de uma relação conhecida, entender como as partes do todok contribuem para a variação desse todo.
+<br>
+<br>
+
+|               Se a relação entre $X = f(X^a, X^b)$ é uma adição, $X = X^a + X^b$, calcular a contribuição das partes é meramente ver qual a variação de $X^a$ e $X^b$. Ademais, para entender isso, basta fazer as derivadas parciais $\dfrac{\partial X}{\partial X^a} = \dfrac{\partial X}{\partial X^b} = 1$. Assim sendo, a contribuição de $X^a$ para $\Delta X$ é igual à 1 multiplicada pela variação de $X^a$: $\Delta X^a * \dfrac{\partial X}{\partial X^a} = \Delta X^a * 1 = \Delta X^a $.
+<br>
+<br>
+
+|               Por outro lado, se a definição do sistema se der por uma multiplicação, $X = X^a * X^b$, temos dois casos. No primeiro, supondo que o valor de $X^b$ seja fixo, $X^b = \bar{X^b}$, a relação passa a ser $X = f(X^a) = X^a * \bar{X^b}$. Como para a relação aditiva, podemos então fazer a contribuição de $X^a$ tirando a derivada parcial de $\dfrac{\partial X}{\partial X^a} = \bar{X^b}$. Neste caso, a contribuição de $\Delta X^a$ para $\Delta X$ seria, $\Delta X^a * \frac{\partial X}{\partial X^a} = \Delta X^a * \bar{X^b}$. No segundo caso, mais realista, tanto $X^a$ quanto $X^b$ variam ao longo do tempo. Seguindo a mesma lógica de se usar as derivadas parciais poderiamos fazer:
+
+\begin{equation}
+
+\begin{split}
+\Delta X & = \Delta X^a * \left(\frac{\partial X}{\partial X^a}\right) + \Delta X^b * \left(\frac{\partial X}{\partial X^b}\right) + \left( \Delta X^a * \Delta X^b\right) * \left(\frac{\partial \partial X}{\partial X^a \partial X^b}\right)  \\
+& = (\Delta X^a * X^b_{t-1}) + (\Delta X^b * X^a_{t-1}) + (\Delta X^a * \Delta X^b)
+\end{split}
+(\#eq:parDer)
+\end{equation}
+
+## Resíduo
+
+|               Ao observar a equação \@ref(eq:parDer), nos dois primeiros termos, temos uma atribuição óbvia para as contribuições $\Delta X^a$ e $\Delta X^b$ em relação à $\Delta X$. No caso do terceiro termo, não há _a priori_^[Com a discussão feita na Seção \@ref(DecAdd), referente à Decomposição Aditiva, é possível atribuir esse termo residual, porém o entendimento do porquê imprescinde da discussão que será feita na Decomposição Aditiva.] nenhuma regra para determinar como esse residuo deve ser atribuído à $X^a$ ou à $X^b$. Assim, muitos chamaram esse terceiro termo simplesmente de ***termo de interação***, e analisaram-o como tal. No entanto, como o propósito da SDA é justamente conseguir atribuir as variações de todo o sistema nas suas variáveis determinantes, pode-se argumentar que a presença de um residuo é indesejável.
+
+## Reversibilidade Temporal dos Indicadores
+
+|               Até agora, ao analisar $\Delta X$, analisamos a variação de $t-1$ para $t$, ou seja $\Delta X = X_{t} - X_{t-1}$. No entanto, o que acontece no caso de querermos mudar a direção, invertendo a temporalidade ? As contribuições de $X^a$ e $X^b$ permanecem as mesmas?
+
+<br>
+<br>
+
+|               Para responder essa pergunta, consideremos com $\Delta^\Re X  = - \Delta X = X_{t-1} - X_t$, de modo que $\Delta^\Re X^a = -\Delta X^a = X^a_{t-1}-X^a_t$ e $\Delta^\Re X^b = -\Delta X^b = X^b_{t-1}-X^b_t$. A equação equivalente da \@ref(eq:parDer)  para esse caso seria:
+
+\begin{align}
+\Delta^\Re X &= (\Delta^\Re X^a * X^b_{t}) + (\Delta^\Re X^b * X^a_{t}) + (\Delta^\Re X^a * \Delta^\Re X^b)(\#eq:parDerRe0)
+\end{align}
+
+|               Se colocarmos a equação \@ref(eq:parDerRe0) em termos de $-\Delta$ ao invés de $\Delta^\Re$, teremos então:
+
+\begin{align}
+-\Delta X &= ((-)\Delta X^a * X^b_{t}) +((-)\Delta X^b * X^a_{t}) + ((-)\Delta X^a * (-)\Delta X^b) \notag \\
+-\Delta X &= (-)* (\Delta X^a * X^b_{t}) +(-)* (\Delta X^b * X^a_{t}) + ((-)* (-))* (\Delta X^a * \Delta X^b) \notag \\
+-\Delta X &= -(\Delta X^a * X^b_{t}) -(\Delta X^b * X^a_{t}) + (\Delta X^a * \Delta X^b)(\#eq:parDerRe1)
+\end{align}
+
+|               Para que a decomposição tenha uma reversibilidade temporal, é necessário que para cada um dos termos, $-\Delta^\Re X^i= \Delta^i$. Consideremos abaixo usando o `R`, valores para `x_a` e `x_b`, de modo que:
+
+```{r}
+x_a <- c("t0" = 3, "t1" = 5)
+x_b <- c("t0" = 10, "t1" = 18)
+x <- x_a * x_b
+```
+
+|               O primeiro valor de cada objeto, `t0`, refere-se à $t-1$ e o segundo valor, `t1`, à $t$. Consideremos agora, uma função para calcular os três termos da decomposição para $\Delta X$:
+```{r}
+dec3Termos <- function(a,b){
+        da<- a[2]-a[1]
+        db<- b[2]-b[1]
+        c("Termo1" = da*b[1],
+          "Termo2" = db*a[1],
+          "TermoResiduo" = db*da)
+        }
+```
+
+|               Façamos agora o mesmo para $\Delta^\Re X$:
+
+```{r}
+decRe3Termos <- function(a,b){
+        da<- a[1]-a[2]
+        db<- b[1]-b[2]
+        c("Termo1" = da*b[2],
+          "Termo2" = db*a[2],
+          "TermoResiduo" = db*da)
+        }
+```
+
+|               O valor de $\Delta X$ para esse valores de `x` é `r x[2]-x[1]`. Por definição os valores das duas decomposições tem que ser igual _em módulo_:
+
+```{r}
+abs(sum(dec3Termos(x_a, x_b))) == abs(sum(decRe3Termos(x_a, x_b)))
+```
+|               Para que a decomposição tenha reversibilidade temporal, cada um dos elementos de `dec3Termos(x_a, x_b)` e `decRe3Termos(x_a, x_b)` precisam ser iguais, _em módulo_: 
+
+```{r}
+abs(dec3Termos(x_a, x_b)) == abs(decRe3Termos(x_a,x_b))
+```
+
+|               Como podemos ver, esse não é o caso para a decomposição com residuo. Assim, essa não é uma decomposição cujas contribuições possuam o atributo de Reversibilidade temporal.
+
+**Importante:** O que chamamos aqui de Reversibilidade Temporal (_Time Reversal_ em inglês), é referida por varios nomes: Tratamento Simétrico de Tempo,  Reversibilidade de Fatores (_Factor Reversal_ em inglês). Além disso, quando a decomposição compara diferentes regiões, esse conceito pode ser referido como Tratamento Simétrico de Lugar. De todo modo, a forma mais abstrata desse conceito seria Reversibilidade de Fatores.
+
+## A diferença entre Decomposição Aditiva e Multiplicativa {#addXmult}
+
+Nas suas respectivas seções, entraremos com mais detalhes em relação a decomposição [Aditivas](#DecAdd) e a [Multiplicativas](#DecMult). Aqui vamos apenas explicar o que diferencia ambos. A decomposição apresentada até aqui é uma forma de decomposição aditiva. Uma vez que ela decompõe a variação em termos absolutos entre um período e outro. No caso de uma decomposição multiplicativa, a decomposição é feita na taxa de variação entre um período e outro. Abaixo explicamos melhor:
+
+\begin{align}
+X_t &= X_{t-1} + \left(X_{t} - X_{t-1}\right)  \\
+X_t &= X_{t-1}\left(1+ \frac{X_t}{X_{t-1}}\right)
+\end{align}
+
+## Indicadores Ideais e Robustez de Sinal
+
+É chamado de **indicador ideal, aquele que tem o atributo da Reversibilidade Temporal.**
+
+Outro aspecto importante é se existe uma robustez na **troca de sinal das variáveis**. Ou seja, caso $X^a_t <0$ e $X^a_{t-1}>0$, o método de decomposição consegue lidar com ele? Esse não é o caso por exemplo de método que usam média logarítmica. Ou seja, antes de utilizar um método, é necessário avaliar a base de dados e procurar se há troca de sinais. Caso haja, é necessário escolher um método com essa robustez.
+
+
+
+## Média Logaritmica {#MediaLogaritmica}
+
+Vamos utilizar aqui
+
+# Decomposição Aditiva {#DecAdd}
+
+Até aqui apresentamos uma decomposição aditiva.
+
+## Decomposição Aditiva de multiplas variáveis {#DecAdd_nVars}
+
+### D&L, Shapley-Bennet e Sun {#DLosShapleySun}
+
+## Montgomery Aditiva {#AddMont}
+## Sato-Vartia Aditiva (Não recomendada) {#AddSatoVartia}
+
+# Decomposição Multiplicativa {#DecMult}
+
+Uma decomposição multiplicativa é
+
+## Fisher
+## Montgomery-Vartia
+## Sato-Vartia
+
+# Decompondo a Inversa de Leontief
+
+
+# Bibliografia Básica Sugerida
+
+Colocamos uma pequena lista, não exaustiva, de textos canônicos sobre SDA que podem ajudar quem está começando  e quer outras abordagens que não a nossa sobre o assunto. Ela está ordenada de forma que pressupomos ser a melhor para a compreensão para quem está totalmente cru em SDA. Inclusive já sugerimos ao longo do nosso material que se mesmo após tentar com caneta e papel entender o ponto  não tenha ficado claro, vale ler a passagem do texto original. **De todo modo**, reafirmamos que: consideramos como fundamental acompanhar com papel e caneta os passos matemáticos para absorver o conteúdo. Só ler não fará você internalizar a intuição. São 6 textos que considero que além de tudo fazem referência ao debate mais amplo que tem sobre o tema. Os três primeiros são mais antigos enquanto os três últimos são uma trilogia do Paul de Boer em que ele apresenta formas interessantes de se estudar o tema. 
+
+ - **Miller e Blair (2009, p.593-621 e 655-656)**: Na sua seção 1 do **capítulo 13**, o livro referência de Insumo Produto apresenta o tema com muita calma para quem está no início. A questão é que ele não saí muito do básico. Por exemplo, ele não aborda a parte envolvendo Decomposição de Montgomery. De todo modo, vale começar de lá a leitura sobre SDA. Um ponto importante, é ao ler a parte 13.1.2 (p. 598-601), ir ler o Apêndice 13.1 (p. 655-656). **A principal qualidade** é que é um livro-texto base, então é somente nele onde o passo a passo está exposto. De todo modo, se mantenha fiel ao lema "Papel, Caneta e Coração." De todos os sugeridos aqui, é o único que trata sobre a decomposição da Inversa de Leontief (13.1.4). Um defeito desse livro-texto como material básico é que não fala sobre SDA multiplicativa.^[As decomposições multiplicativas abordadas no Miller e Blair são para estudos de feedbacks internos das matrizes, muito usadas em Matrizes de Contabilidade Social (SAM) e Matrizes Interregionais.]
+ - **Dietzenbacher e Los (1998)**: Provavelmente o texto mais citado quando se trata de SDA aditiva. Discute bastante o problema de haver uma única forma via a "decomposição aditiva tradicional", e que para se decompor em _n_ variáveis de forma completa, se deveria realizar _n!_ formas e tirar a média. A partir dele que a média das decomposições polares ficou por muito tempo como a prática padrão do campo.
+ - **Dietzebacher, Lahr e Los (2004)**: Apesar de menos badalado, considero que é para a decomposição multiplicativa, o que o texto anterior é para a aditiva. Para decomposição à lá Fisher considero a exposição na seção 3 a mais didática de todas. A seção 4 é uma leitura muito indicada, pois trabalha um caso que não é tão simples assim, o que ajuda a assentar o tema.
+ - **de Boer (2008)**: Nesse texto o de Boer retorna o debate de Dietzenbacher e Los (1998) e apresenta a decomposição de Montgomery para SDA aditiva que usa média logaritmica. Nesse texto começa a ficar mais clara a relação entre INT e SDA. O interessante desse texto é que tirando a decomposição de Montgomery aditiva, ele não tem MUITA coisa nova se você leu os 3 textos de antes. Você consegue entender o que a Montgomery bem lendo ele e vê o problema do texto.
+ - **de Boer (2009)**: Esse segundo texto apresenta o método de Sato Vartia para decomposições multiplicativas. Assim como a Montgomery aditiva, esse método também usa médias logarítmicas. Esse é o texto que apresenta de forma mais didática e extensa esse método.
+ - **de Boer (2019)**: Esse último texto discute Análise de Decomposição Estrutural como um todo. Além disso, apresenta também a forma Montgomery Vartia para decomposições multiplicativas. O texto se aprofunda na discussão sobre INT, apresentando conceitos e propriedades de indicadores, e elenca os pontos fortes e fracos de cada método, indicando quando usar cada uma. É o texto referência mais recente e também o mais completo sobre o tema (a exceção da decomposição da invers de Leontief).
+
+# Bibliografia
+
+DIETZENBACHER, Erik; LAHR, Michael L.; LOS, Bart. The decline in labor compensation’s share of GDP: A structural decomposition analysis for the United States, 1982 to 1997. Wassily Leontief and Input-Output Economics, p. 138-185, 2004.
+
+DIETZENBACHER, Erik; LOS, Bart. Structural decomposition techniques: sense and sensitivity. Economic Systems Research, v. 10, n. 4, p. 307-324, 1998.
+
+MILLER, Ronald E.; BLAIR, Peter D. Input-output analysis: foundations and extensions. Cambridge university press, 2009.
+
