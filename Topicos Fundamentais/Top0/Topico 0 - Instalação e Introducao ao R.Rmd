@@ -107,7 +107,7 @@ Vá em https://cran.r-project.org/ e siga o procedimento da imagem abaixo (a ver
 
 ![](gifs/gif_intro_download_R.webp)
 
-A versão da tela é a 3.6.3, mas pode baixar qualquer uma que aparecer. Depois siga os procedimentos abaixo para a instalação:
+A versão da tela é a 3.6.3, mas pode baixar qualquer uma que aparecer.^[4] Depois siga os procedimentos abaixo para a instalação:
 
 ![](gifs/gif_intro_install_R.webp)
 
@@ -137,7 +137,7 @@ Os pacotes do núcleo duro do *tidyverse* são:
 
 -   ***readr***: No Tópico 2, também já falamos sobre o pacote `readr`, e como ele é muito mais rápido que o `base` R para importar uma base de dados. É importante considerar apenas que ele importa a base como um `tibble` e não um `data.frame`. Vamos falar um pouco dele aqui também.
 
--   ***dplyr***: O pacote `dplyr` é **O** pacote para manipular os dados. Ele irá te ajudar a lidar conscientemente com problemas comuns na hora de manipular a base de dados. Uma parte das suas utilidades será apresentada no Tópico 3[^4]. Os capítulos [5](https://r4ds.had.co.nz/transform.html) e [13](https://r4ds.had.co.nz/relational-data.html) do *R for Data Science* introduzem uma boa parte das funções que `dplyr` oferece, inclusive algumas das que não falaremos aqui.
+-   ***dplyr***: O pacote `dplyr` é **O** pacote para manipular os dados. Ele irá te ajudar a lidar conscientemente com problemas comuns na hora de manipular a base de dados. Uma parte das suas utilidades será apresentada no Tópico 3[^5]. Os capítulos [5](https://r4ds.had.co.nz/transform.html) e [13](https://r4ds.had.co.nz/relational-data.html) do *R for Data Science* introduzem uma boa parte das funções que `dplyr` oferece, inclusive algumas das que não falaremos aqui.
 
 -   ***tidyr***: O pacote `tidyr` é por sua vez focado em deixar uma base de dados mais bem comportada, especificamente no modo `tidy`. Assim, o `tidyr` é muito voltado para base de dados retangulares. Algumas poucas funções do `tidyr` serão apresentadas no Tópico 3, em especial as mais úteis para Matriz Insumo Produto. Para uma visão (bem) mais abrangente do `tidyr` olhe o capítulo [12](https://r4ds.had.co.nz/tidy-data.html) do *R for Data Science*
 
@@ -152,6 +152,6 @@ Os pacotes do núcleo duro do *tidyverse* são:
 [^2]: Até agora (Junho de 2020) nem o [site](https://tibble.tidyverse.org/) nem a documentação do `tibble` no R foram atualizadas nesse sentido.
 
 [^3]: Veja mais na documentação de `data.frame`, em especial no argumento de `stringAsFactors`.
-
-[^4]: A mais relacionada com `subsetting`
+[^4]: Imagem retirada do tutorial da [Datacamp](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu).
+[^5]: A mais relacionada com `subsetting`
 

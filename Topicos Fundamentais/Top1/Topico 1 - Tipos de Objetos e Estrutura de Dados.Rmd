@@ -47,7 +47,7 @@ a <- 1:4 %>% c() %>% sum
 #Perceba, que podemos escrever 1,2,3,4 como 1:4
 ```
 
-O pacote `magrittr`, que estabelece o *pipe*, é automaticamente carregado por todos os pacotes que compõem  o `tidyverse`, que são pacotes que facilitam muito a sua vida. Neste curso não iremos usar o *pipe*, `%>%`, sempre que julgarmos ser mas interessente, principalmente por conta de como esta forma ajuda a entender como a escrita tradicional (*nested*) do R funciona. Nesta forma, nós temos do lado direito a seguinte estrutura `função_2(função_1(objeto))`, enquanto no modo *pipe* nós temos `objeto %>% função_1 %>% função_2`. Desse modo, podemos perceber que no caso do modo *nested* uma `função()` sempre irá atuar sobre o objeto que esta entre o seu parênteses. Assim sendo, num mesmo comando do script podemos escrever multiplas funções.
+O pacote `magrittr`, que estabelece o *pipe*, é automaticamente carregado por todos os pacotes que compõem  o `tidyverse`, que são pacotes que facilitam muito a sua vida. Neste curso iremos sempre usar o *pipe*, `%>%`. Nesta forma, nós temos do lado direito a seguinte estrutura `função_2(função_1(objeto))`, enquanto no modo *pipe* nós temos `objeto %>% função_1 %>% função_2`. Desse modo, podemos perceber que no caso do modo *nested* uma `função()` sempre irá atuar sobre o objeto que esta entre o seu parênteses. Assim sendo, num mesmo comando do script podemos escrever multiplas funções.
 
 ```{r eval=FALSE}
 
