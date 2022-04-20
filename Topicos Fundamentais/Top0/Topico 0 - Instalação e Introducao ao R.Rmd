@@ -81,6 +81,10 @@ Podemos dizer que algumas das qualidades do **R** que mais nos interessam neste 
 
 - O **RStudio** tem uma conexão **git** direta, o que permite à você trabalhar remotamente.
 
+- O **R** é voltado para o tal do __datascience__ . Ou seja, você para usa-lo no dia a dia você precisa aprender menos conceitos ligados ao desenvolvimento de software do que para outras linguagens. Isso por exemplo se expressa no **R** o índice começar no `1`, enquanto a maioria das linguagens começa no `0`. Isso na hora de pensar uma matriz pode fazer muita diferença.
+
+- Seguindo do ponto anterior, várias funções de algebra linear são próprias do **R**. Não é necessario carregar nenhum pacote ou algo do gênero para inverter uma matriz.
+
 Obviamente **R** não é perfeito, então podemos dizer que o **R** tem algumas desvantagens:
 
 - Existem linguagens mais rápidas para certas coisas, como é o caso do Python. No entanto, em niveis mais avançados, há a possibilidade de você integrar o **R** com linguagens mais rápidas como `Fortran`, `C` e o `C++`
@@ -99,7 +103,7 @@ Vale dar uma olhada no manual em inglês do [DataCamp](https://www.datacamp.com/
 
 ### Instalando o **R**
 
-Vá em https://cran.r-project.org/ e siga o procedimento da imagem abaixo:
+Vá em https://cran.r-project.org/ e siga o procedimento da imagem abaixo (a versão provavelmnete será diferente da figura):
 
 ![](gifs/gif_intro_download_R.webp)
 
@@ -117,7 +121,7 @@ Depois de baixado, apenas vá clicando `NEXT` tal qual no exemplo do R e o servi
 
 ### Instalando o **Rtools**
 
-**Importante: Se por algum motivo você não conseguir instalar o Rtools, não tem problema para os exercicios que iremos fazer neste momento. Porém algumas funcionalidades de certos pacotes do R pressupõe o Rtools.**
+**Importante: Se por algum motivo você não conseguir instalar o Rtools, não tem problema para os exercicios que iremos fazer neste curso. Porém algumas funcionalidades de certos pacotes do R pressupõe o Rtools.**
 
 Se você usa Windows, para algumas das funcionalidades do **R** e do **RStudio** será necessário **Rtools**. Se você não tem baixe o Java neste link https://www.java.com/pt_BR/download/ e o instale.
 
