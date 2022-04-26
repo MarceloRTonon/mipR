@@ -1,3 +1,5 @@
+library(magrittr)
+library(purrr)
 a <- 1:10
 
 sum(a)

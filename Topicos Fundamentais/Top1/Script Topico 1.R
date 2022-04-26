@@ -22,6 +22,7 @@ a/c_0
 a*c_0 
 a^c_0 
 
+
 # Pergunta: O que aconteceria se fizessemos as operacoes com "b" e nao com "c"?
 
 # Formas de se aplicar uma funcao ####
@@ -203,10 +204,13 @@ df_a[2,4]
 
 # Temos três funcões e um operador matricial fundamentais para lidar com matrizes no R:
 
-## 1. Transposição de matriz: função t()
+##### 1. Transposição de matriz: função t() #####
 
 matriz_a %>% t()
 t(matriz_a)
+
+
+
 
 # Para entender melhor t() vamos ver as linhas e colunas com a função dim()
 
@@ -215,7 +219,7 @@ matriz_a %>% dim()
 # Lembrando que a transposta de uma transposta de uma matriz é a própria matriz.
 
 
-## 2. A função diag()
+##### 2. A função diag() #####
 
 # A função diag pode ter vários usos.
 
@@ -231,7 +235,7 @@ diag(1:3)
 
 matrix(1:9, nrow = 3, ncol = 3) %>% diag()
 
-## 3. A multiplicação matricial com o operador %*%
+##### 3. A multiplicação matricial com o operador %*% #####
 
 matriz_a %*% matrix(1:9, nrow = 3, ncol = 3) 
 
@@ -245,3 +249,135 @@ matrix(1:4, nrow =2, ncol =2) %>% solve
 # Se a matriz for singular, e portanto não tiver inversa, irá retornar erro!
 
 matrix(1:9, nrow = 3, ncol = 3) %>% solve()
+
+
+
+# Matrizes com uma coluna Vs Vetores Atômicos -----------------------------
+
+vec <- c(1:10)
+mat <- matrix(c(1:10), ncol =1, nrow =10)
+# vec é um vetor atômico, e mat é uma matrix de uma coluna.
+all.equal(vec,mat)
+
+# Muitas vezes se comportam da mesma forma.
+vec %>% t()
+mat %>% t()
+t(mat) %>% all.equal(t(vec))
+
+## Subsetting ######
+# Em certos aspectos matrizes com uma só coluna tem um comportamento mais parecido com vetores atomicos do que com matrizes de 2+ colunas
+# Definamos vec2 e mat2:
+vec2 <- vec[1:5]
+vec2 %>% is.matrix() # Claramente não é uma matrix
+
+mat2.0 <- mat[1:5]
+
+mat2.0 %>% is.matrix 
+
+mat[1:5,] %>% is.matrix() # Não é uma matrix.
+
+matb <- matrix(1:20, ncol =2) # Matrix com duas colunas
+matb[1:5,] %>% is.matrix() # É uma matrix
+
+# Ou seja, se o objeto que você subselecionar não resultar em 2 colunas, o R transforma ele em atomico
+# A forma mais segura de garantir que o resultado será uma matrix é fazer:
+
+mat2 <- mat[1:5,] %>% matrix(ncol = 1) # Forma 1
+
+mat2 <- mat[1:5,]%>% matrix(ncol = ncol(mat)) # Forma 2
+
+### Pergunta pros alunos:
+## Por que a Forma 2 seria melhor do que a Forma 1?
+
+## Operações #####
+
+# É importante relembrar que em muitos aspectos vec não é uma matrix como mat (e vice e versa).
+# Um aspecto que isso fica muito claro é nas operações matemáticas
+
+# Na divisão, mat e vec podem ser divididos um pelo outro sem problema
+mat/vec
+vec/mat
+
+# O mesmo vale para as outras operações
+
+mat+vec
+vec-mat
+vec*mat
+
+# Porém diferenças emergem quando os elementos tem tamanhos diferentes.
+# As matrizes não mudam de tamanho por conta da operação.
+# Ou seja, o resultado tem que ser do tamanho dela, ou retornará um erro.
+mat2+mat 
+
+# No caso de uma operação entre uma matriz um vetor atõmico, é um pouco mais complicado.
+
+# Nessa situação sempre retornará erro se:
+# length(matrix) < length(vec)
+mat2+vec
+
+## Caso de Exceção
+# length(matrix) > length(vec) 
+
+mat+vec2
+mat/vec2
+
+# Para não retornar um warning tem uma condição:
+# (length(elem1)%%length(elem2))==0 
+# Ou seja, o tamanho de elem1 tem que ser multiplo do de elem2
+mat+1:9
+
+#Isso também vale para quando são 2 vetores atômicos:
+vec + 1:9
+
+### Importante: VOCÊ QUER O ERRO ####
+# As vezes o warning pode não aparecer (ou passar desapercebido quando rodar um código muito longo).
+# Dessa forma, é mais seguro você colocar tudo em matrix para garantir o erro.
+
+vecRuim <- 1:9
+vecRuim+mat
+
+matRuim <- vecRuim %>% as.matrix(ncol = 1)
+
+matRuim + mat
+
+## Jogando na retranca #####
+
+# Como vimos acima a melhor forma de garantir que o código vai funcionar do modo desejado é ser extra cuidadoso.
+# Por isso, abrace o Celso Roth que existe em vocẽ:
+# Coloque três zagueiros e três volantes, fale pros laterais não subirem muito e mande o atacante marcar.
+
+# Um caso em que não afeta tanto o resultado ser extra cuidadoso:
+
+vec %>% 
+  matrix(ncol =1) %>% # transforma em matrix
+  t() 
+vec %>% t()
+
+mat %>%
+  c() %>% # transforma em vetor atômico
+  t()
+
+mat %>%
+  t()
+
+# Casos em que afeta:
+vec %>% matrix(ncol =1) %>% diag()
+vec %>% diag()
+
+# Não vamos explicar aqui o porquê da função diag() fazer isso, pois é o dever de casa!
+# Veja mais casos:
+vec[10] %>% diag()
+vec[10] %>% matrix(ncol =1) %>% diag()
+
+# O mesmo podemos pensar pra mat
+
+mat %>% diag()
+
+mat %>% c() %>% diag()
+
+# O ponto aqui é: você sabe a priori qual caso vai afetar ou não vai afetar?
+# Ao longo do código é fácil perder quando cada objeto tá de um jeito e não de outro.
+#Logo, na dúvida, o melhor é jogar seguro:
+
+mat %>% as.matrix() %>% diag()
+vec %>% c() %>% diag()
