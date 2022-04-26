@@ -45,9 +45,11 @@ a <-  sum(c(1:4))
 a <- 1:4 %>% c() %>% sum
 
 #Perceba, que podemos escrever 1,2,3,4 como 1:4
+1:4
+c(1,2,3,4)
 ```
 
-O pacote `magrittr`, que estabelece o *pipe*, é automaticamente carregado por todos os pacotes que compõem  o `tidyverse`, que são pacotes que facilitam muito a sua vida. Neste curso iremos sempre usar o *pipe*, `%>%`. Nesta forma, nós temos do lado direito a seguinte estrutura `função_2(função_1(objeto))`, enquanto no modo *pipe* nós temos `objeto %>% função_1 %>% função_2`. Desse modo, podemos perceber que no caso do modo *nested* uma `função()` sempre irá atuar sobre o objeto que esta entre o seu parênteses. Assim sendo, num mesmo comando do script podemos escrever multiplas funções.
+O pacote `magrittr`, que estabelece o *pipe*, é automaticamente carregado por todos os pacotes que compõem  o `tidyverse`, que são pacotes que facilitam muito a sua vida. Neste curso iremos sempre usar o *pipe*, `%>%`. Existe uma outra forma de escrever no *R*, o modo *nested*, que era a única nativa do R até a versão `4.1`. Nesta forma, nós temos do lado direito a seguinte estrutura `função_2(função_1(objeto))`, enquanto no modo *pipe* nós temos `objeto %>% função_1 %>% função_2`. Desse modo, podemos perceber que no caso do modo *nested* uma `função()` sempre irá atuar sobre o objeto que esta entre o seu parênteses. Assim sendo, num mesmo comando do script podemos escrever multiplas funções.
 
 ```{r eval=FALSE}
 
@@ -67,10 +69,7 @@ objeto <- 1:4 %>%
 # Descubra para o que serve a função solve() digitando ?solve no console.
 ?solve
 
-
 ```
-
-
 
 Se vamos escrever tudo na mesma linha ou em linhas diferentes fica a cargo da comodidade e praticidade. Poupar linhas faz o seu código ficar mais direto ao ponto, o que sem dúvidas é bom. Por outro lado, uma linha de comando muito longa, especialmente com o código escrito do modo *nested*, pode se tornar confusa demais. Além disso, muitas vezes podemos querer no futuro o `novo_objeto` e o `novo_objeto_2`. Falaremos mais de como escrever pelo no modo *pipe* no final deste tópico.
 
@@ -420,14 +419,64 @@ Por que isso é importante? Por que o lado esquerdo do operador pipe é por padr
 11:14 |> soma_doida(1:4)
 11:14 %>% soma_doida(1:4)
 ```
-Isso pode ser resolvido definindo o argumento de 
 
- Usaremos a seguir a comparação do operador `%>%` com  `|>`, para descobrirmos outras facilidade
+O operador **pipe** irá por _default_ usar o elemento a sua esquerda como o primeiro argumento da função. Ou seja:
+
+```{r, eval = FALSE}
+# Não rodar!
+funcao <- function(x, y) x/y
+
+resultado <-   objeto %>%
+   funcao(y = z)
+
+# É a mesma coisa que:
+funcao(x = objeto, y =z)
+```
+
+Para atribuir o elemento a esquerda de `%>%` como outro argumento basta fazer:
+```{r, eval = FALSE}
+# Não rodar
+objeto %>%
+   funcao(x=z)
+
+objeto |>
+   funcao(x=z)
+```
+
+Nesse caso, ocupamos o argumento `x` com o objeto `z`. No exemplo prático podemos fazer isso da seguinte forma:
+
+```{r}
+11:14 %>% soma_doida(objeto_1 = 1:4)
+1:4 %>% soma_doida(objeto_2 = 11:14)
+```
 
 
-Uma coisa que não falamos antes é que existe um operador `pipe` do *baseR*, o operador `|>`.
-mas de se escrever no 
-Dada a natureza do *Tidyverse*, será mais usada nessa parte o operador *pipe* `%>%`, ao invés da escrita *nested*. Sempre que você carregar algum dos pacotes Relembrando o uso dele abaixo:
+Usaremos a seguir a comparação do operador `%>%` com  `|>`, para descobrirmos outra facilidade do operador `%>%`: o uso do ponto final. Vejamos o exemplo abaixo:
+
+```{r}
+sum(1:15, 2, NA, na.rm=TRUE)
+```
+No caso acima, o `na.rm`, abreviação de "NA remove", é um argumento que decide se é para levar em conta valores `NA` ou não. Se houver mesmo que apenas um elemento `NA`, o resultado será `NA` se `na.rm =  FALSE`:
+
+```{r}
+sum(1:15,2,NA, na.rm=FALSE)
+# na.rm= FALSE é o valor padrão da função sum.
+sum(1:15,2,NA)
+```
+Suponha agora o caso abaixo:
+```{r}
+verdade <- TRUE
+
+verdade %>%
+   sum(1:15, 2, NA)
+```
+Nesse caso, precisamos estabelecer que o objeto `verdade` será usado em um argumento especifico. Com o `%>%` e apenas ele, podemos usar o `.` para mostrar qual o argumento queremos usar o objeto a esquerda do operador **pipe**:
+
+```{r}
+verdade %>%
+   sum(1:15, 2, NA, na.rm=.)
+```
+Dada a natureza do *Tidyverse*, será mais usada nessa parte o operador *pipe* `%>%`, ao invés da escrita *nested*. Veja mais alguns exemplos abaixo:
 
 ```{r, eval = FALSE}
 #Modo Nested

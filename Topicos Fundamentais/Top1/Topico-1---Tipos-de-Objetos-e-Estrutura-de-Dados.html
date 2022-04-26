@@ -196,8 +196,10 @@ a &lt;-  sum(c(1:4))
 #Pipe (usando o R com magrittr)
 a &lt;- 1:4 %&gt;% c() %&gt;% sum
 
-#Perceba, que podemos escrever 1,2,3,4 como 1:4</code></pre>
-<p>O pacote <code>magrittr</code>, que estabelece o <em>pipe</em>, é automaticamente carregado por todos os pacotes que compõem o <code>tidyverse</code>, que são pacotes que facilitam muito a sua vida. Neste curso iremos sempre usar o <em>pipe</em>, <code>%&gt;%</code>. Nesta forma, nós temos do lado direito a seguinte estrutura <code>função_2(função_1(objeto))</code>, enquanto no modo <em>pipe</em> nós temos <code>objeto %&gt;% função_1 %&gt;% função_2</code>. Desse modo, podemos perceber que no caso do modo <em>nested</em> uma <code>função()</code> sempre irá atuar sobre o objeto que esta entre o seu parênteses. Assim sendo, num mesmo comando do script podemos escrever multiplas funções.</p>
+#Perceba, que podemos escrever 1,2,3,4 como 1:4
+1:4
+c(1,2,3,4)</code></pre>
+<p>O pacote <code>magrittr</code>, que estabelece o <em>pipe</em>, é automaticamente carregado por todos os pacotes que compõem o <code>tidyverse</code>, que são pacotes que facilitam muito a sua vida. Neste curso iremos sempre usar o <em>pipe</em>, <code>%&gt;%</code>. Existe uma outra forma de escrever no <em>R</em>, o modo <em>nested</em>, que era a única nativa do R até a versão <code>4.1</code>. Nesta forma, nós temos do lado direito a seguinte estrutura <code>função_2(função_1(objeto))</code>, enquanto no modo <em>pipe</em> nós temos <code>objeto %&gt;% função_1 %&gt;% função_2</code>. Desse modo, podemos perceber que no caso do modo <em>nested</em> uma <code>função()</code> sempre irá atuar sobre o objeto que esta entre o seu parênteses. Assim sendo, num mesmo comando do script podemos escrever multiplas funções.</p>
 <pre class="r"><code>objeto &lt;- 1:4
 novo_objeto &lt;- sum(objeto)
 novo_objeto_2 &lt;- solve(novo_objeto)
@@ -481,9 +483,47 @@ soma_doida(11:14, 1:4) == soma_doida(objeto_2 = 11:14, objeto_1 = 1:4)</code></p
 <pre><code>## [1] 628.6667</code></pre>
 <pre class="r"><code>11:14 %&gt;% soma_doida(1:4)</code></pre>
 <pre><code>## [1] 628.6667</code></pre>
-<p>Isso pode ser resolvido definindo o argumento de</p>
-<p>Usaremos a seguir a comparação do operador <code>%&gt;%</code> com <code>|&gt;</code>, para descobrirmos outras facilidade</p>
-<p>Uma coisa que não falamos antes é que existe um operador <code>pipe</code> do <em>baseR</em>, o operador <code>|&gt;</code>. mas de se escrever no Dada a natureza do <em>Tidyverse</em>, será mais usada nessa parte o operador <em>pipe</em> <code>%&gt;%</code>, ao invés da escrita <em>nested</em>. Sempre que você carregar algum dos pacotes Relembrando o uso dele abaixo:</p>
+<p>O operador <strong>pipe</strong> irá por <em>default</em> usar o elemento a sua esquerda como o primeiro argumento da função. Ou seja:</p>
+<pre class="r"><code># Não rodar!
+funcao &lt;- function(x, y) x/y
+
+resultado &lt;-   objeto %&gt;%
+   funcao(y = z)
+
+# É a mesma coisa que:
+funcao(x = objeto, y =z)</code></pre>
+<p>Para atribuir o elemento a esquerda de <code>%&gt;%</code> como outro argumento basta fazer:</p>
+<pre class="r"><code># Não rodar
+objeto %&gt;%
+   funcao(x=z)
+
+objeto |&gt;
+   funcao(x=z)</code></pre>
+<p>Nesse caso, ocupamos o argumento <code>x</code> com o objeto <code>z</code>. No exemplo prático podemos fazer isso da seguinte forma:</p>
+<pre class="r"><code>11:14 %&gt;% soma_doida(objeto_1 = 1:4)</code></pre>
+<pre><code>## [1] 1335.333</code></pre>
+<pre class="r"><code>1:4 %&gt;% soma_doida(objeto_2 = 11:14)</code></pre>
+<pre><code>## [1] 1335.333</code></pre>
+<p>Usaremos a seguir a comparação do operador <code>%&gt;%</code> com <code>|&gt;</code>, para descobrirmos outra facilidade do operador <code>%&gt;%</code>: o uso do ponto final. Vejamos o exemplo abaixo:</p>
+<pre class="r"><code>sum(1:15, 2, NA, na.rm=TRUE)</code></pre>
+<pre><code>## [1] 122</code></pre>
+<p>No caso acima, o <code>na.rm</code>, abreviação de “NA remove”, é um argumento que decide se é para levar em conta valores <code>NA</code> ou não. Se houver mesmo que apenas um elemento <code>NA</code>, o resultado será <code>NA</code> se <code>na.rm =  FALSE</code>:</p>
+<pre class="r"><code>sum(1:15,2,NA, na.rm=FALSE)</code></pre>
+<pre><code>## [1] NA</code></pre>
+<pre class="r"><code># na.rm= FALSE é o valor padrão da função sum.
+sum(1:15,2,NA)</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>Suponha agora o caso abaixo:</p>
+<pre class="r"><code>verdade &lt;- TRUE
+
+verdade %&gt;%
+   sum(1:15, 2, NA)</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>Nesse caso, precisamos estabelecer que o objeto <code>verdade</code> será usado em um argumento especifico. Com o <code>%&gt;%</code> e apenas ele, podemos usar o <code>.</code> para mostrar qual o argumento queremos usar o objeto a esquerda do operador <strong>pipe</strong>:</p>
+<pre class="r"><code>verdade %&gt;%
+   sum(1:15, 2, NA, na.rm=.)</code></pre>
+<pre><code>## [1] 122</code></pre>
+<p>Dada a natureza do <em>Tidyverse</em>, será mais usada nessa parte o operador <em>pipe</em> <code>%&gt;%</code>, ao invés da escrita <em>nested</em>. Veja mais alguns exemplos abaixo:</p>
 <pre class="r"><code>#Modo Nested
 objeto2 &lt;- funcao3(funcao2(funcao1(objeto1)))
 
