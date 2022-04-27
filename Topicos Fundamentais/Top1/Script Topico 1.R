@@ -21,7 +21,7 @@ a-c_0
 a/c_0 
 a*c_0 
 a^c_0 
-
+a%%c_0
 
 # Pergunta: O que aconteceria se fizessemos as operacoes com "b" e nao com "c"?
 
@@ -35,7 +35,10 @@ library(purrr)
 # Podemos reescrever o valor de "c" nas duas formas:
 
 c_1 <- sum(c(a,4))
+
 c_2 <- c(a,4) %>% sum()
+c_2b <- a %>% c(4)%>% sum()
+
 
 # Como saber se os valores sao iguais?
 teste_1 <- c_0 == c_1
@@ -85,7 +88,7 @@ typeof(e)
 l <- c(TRUE, FALSE, T, F) # TRUE e FALSE podem ser escritos somente por T ou F
 typeof(l)
 
-Exemplo
+#Exemplo
 typeof(teste_1)
 typeof(teste_2)
 
@@ -102,7 +105,7 @@ View(vetor_exemplo)
 length(vetor_exemplo)
 
 # Agora, eu desejo saber qual e o segundo valor do meu vetor:
-vetor_exemplo[2] 
+vetor_exemplo[2]
 # No caso o [] e usado para indicar a posicao dentro do vetor (ou matriz, como veremos mais a frente):
 
 # outras opera??es

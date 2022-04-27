@@ -24,6 +24,11 @@ Criar_MIP_0 <- function(setores, seed = 1){
   
   # Precisamos testar se [I-A_d] é não singular. Como fazemos?
   
+  
+  teste_Det <- det(diag(setores)-A_d)==0
+  
+  if(teste_Det) stop("(I_matrix - A_d) é uma matriz singular, ou seja sem inversa") 
+    
   Leon_Inv <- solve(diag(setores)-A_d)
   
   listaMIP <- list(f_d = f_d,

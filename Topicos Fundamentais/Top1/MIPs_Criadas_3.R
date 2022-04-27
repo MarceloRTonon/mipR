@@ -3,14 +3,14 @@ library(magrittr)
 set.seed(1)
 
 # MIP no R
-#x = U_d + f_d
+# x = U_d + f_d
 
 f_d <- runif(3, min= 1, max = 10)
 U_d <- runif(3^2, min =1, max = 10) %>% matrix(nrow =3)
 x <- rowSums(U_d)+f_d
 
 
-# U = A_d x -> A_d = U_d/x
+# U_d = A_d x -> A_d = U_d_ij/x_i
 # Pegadinha no R: qual o problema de fazer U_d/x ???
 U_d/x
 
@@ -20,7 +20,7 @@ diag(x)
 # A primeira vista os dois valores abaixo deveriam dar o mesmo resultado. Por que não dão?
 
 U_d/diag(x)
-U_d*diag(1/x)
+U_d%*%diag(1/x)
 
 
 A_d <- U_d%*%diag(1/x)
@@ -33,7 +33,7 @@ U_d
 
 all.equal(U_d, A_d%*%diag(x))
 
-.Machine$double.eps # "erro" computacional
+sqrt(.Machine$double.eps) # "erro" computacional
 
 # Quais testes queremos fazer aqui??
 
