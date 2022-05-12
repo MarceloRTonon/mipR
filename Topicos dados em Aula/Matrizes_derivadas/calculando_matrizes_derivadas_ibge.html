@@ -11,6 +11,7 @@
 
 <meta name="author" content="Marcelo Tonon e Felipe Cornelio" />
 
+<meta name="date" content="2022-09-05" />
 
 <title>Calculando as matrizes derivadas do IBGE</title>
 
@@ -365,7 +366,7 @@ pre code {
 <h1 class="title toc-ignore">Calculando as matrizes derivadas do
 IBGE</h1>
 <h4 class="author">Marcelo Tonon e Felipe Cornelio</h4>
-<h4 class="date">18/07/2020</h4>
+<h4 class="date">09/05/2022</h4>
 
 </div>
 
@@ -404,15 +405,15 @@ arquivo_2015 &lt;- &quot;Matriz_de_Insumo_Produto_2015_Nivel_67.xls&quot;</code>
 <p>Vamos estabelecer também os nomes para os vetores de produto, de
 atividade e de demanda final:</p>
 <pre class="r"><code># Lendo a quarta linha da Tabela 1 com as Atividades:
-atividades &lt;- read_excel(arquivo_2015, sheet = 1, &quot;H4:BV4&quot;, col_names = FALSE) %&gt;%
+atividades &lt;- read_excel(arquivo_2015, sheet = 1, range = &quot;H4:BV4&quot;, col_names = FALSE) %&gt;%
         as.character() 
 
 # Lendo a segunda coluna da Tabela 1 com os Produtos:
-produtos &lt;- read_excel(arquivo_2015, sheet = 1, &quot;B6:B132&quot;, col_names = FALSE) %&gt;%
+produtos &lt;- read_excel(arquivo_2015, sheet = 1, range = &quot;B6:B132&quot;, col_names = FALSE) %&gt;%
         unlist()
 
 # Lendo a quarta linha da Tabela 3 na parte da Demanda Final:
-demanda_final &lt;- read_excel(arquivo_2015, sheet = 3, &quot;BT4:BY4&quot;, col_names = FALSE) %&gt;%
+demanda_final &lt;- read_excel(arquivo_2015, sheet = 3, range = &quot;BT4:BY4&quot;, col_names = FALSE) %&gt;%
         as.character()</code></pre>
 <p>Nas abas deste arquivo estão dispostas todas as tabelas necessárias
 para o cálculo de uma matriz de coeficientes técnicos e de uma inversa
@@ -468,11 +469,11 @@ e Usos, vejamos o Quadro 1 (IBGE, 2018) abaixo:</p>
 - TRU</h4>
 <table>
 <colgroup>
-<col width="22%" />
-<col width="21%" />
-<col width="11%" />
 <col width="20%" />
-<col width="24%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -669,10 +670,10 @@ a nível de atividade</p></li>
 <h4>Calculando <span class="math inline">\(B_n\)</span> e <span class="math inline">\(B_m\)</span></h4>
 <p>Para calcularmos as matrizes de coeficientes técnicos dos insumos
 nacionais e dos importados, fazemos:</p>
-<p><span class="math display">\[\begin{align}
+<span class="math display">\[\begin{align}
 B_n &amp;= U_n (\hat{g}^{-1}) \\
 B_m &amp;= U_m (\hat{g}^{-1})
-\end{align}\]</span></p>
+\end{align}\]</span>
 <pre class="r"><code>B_n &lt;- U_n %&gt;% as.matrix %*% solve(diag(c(g)))
 
 B_m &lt;- U_m %&gt;% as.matrix %*% solve(diag(c(g)))</code></pre>
@@ -746,10 +747,10 @@ trabalho.</p>
 <p>Para calcular o valor adicionado da produção a preços básicos <span class="math inline">\(y\)</span>, precisamos identificar o Consumo
 intermediário a preços do consumidor e subtrair do valor da produção ao
 nível de atividades:</p>
-<p><span class="math display">\[\begin{align}
+<span class="math display">\[\begin{align}
 CI &amp;= U_n + U_m \\
 y &amp;= g - i&#39;(CI +T_p)
-\end{align}\]</span></p>
+\end{align}\]</span>
 <pre class="r"><code>CI &lt;- U_n + U_m
 
 y &lt;- g - colSums(CI + T_p) </code></pre>
@@ -765,7 +766,7 @@ Janeiro: IBGE, Coordenação de Contas Nacionais, 2018.</p>
 <ol>
 <li id="fn1"><p>Use <code>install.packages(&quot;nomedopacote&quot;)</code> para
 instalar os pacotes.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p> <a href="ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls">Clique
+<li id="fn2"><p><a href="ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls">Clique
 aqui</a> para baixar o arquivo fora do R.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 <li id="fn3"><p>Neste caso, extrapolamos da notação de IBGE(2018), uma
 vez que <span class="math inline">\(F_N\)</span> é representa a matriz

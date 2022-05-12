@@ -1,7 +1,7 @@
 ---
 title: "Calculando as matrizes derivadas do IBGE"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "18/07/2020"
+date: "09/05/2022"
 output: html_document
 ---
 
@@ -12,21 +12,28 @@ options(scipen=999999999)
 
 ## Pacotes Necessários, Arquivo e Notação
 
-O objetivo desse texto é calcular as tabelas derivadas a partir das matrizes básicas. Faremos isso tudo usando o R. Aqui se pressupõe que os conhecimentos passados nos Tópicos 0, 1, 2 e 3 das monitorias de R foram absorvidos. Além disso, os seguintes pacotes devem estar instalados no R^[Use ```install.packages("nomedopacote")``` para instalar os pacotes.].
+O objetivo desse texto é calcular as tabelas derivadas a partir das matrizes básicas. Faremos isso tudo usando o R. Aqui se pressupõe que os conhecimentos passados nos Tópicos 0, 1, 2 e 3 das monitorias de R foram absorvidos. Além disso, os seguintes pacotes devem estar instalados no R[^1].
+
+[^1]: Use `install.packages("nomedopacote")` para instalar os pacotes.
 
 ```{r message=FALSE, warning=FALSE}
 library(readxl)
 library(tidyverse)
 ```
 
+Vamos usar como referência a material do [IBGE(2018)](https://biblioteca.ibge.gov.br/visualizacao/livros/liv101604.pdf). Muitas partes aqui são inclusive transcrições integrais de lá. Vamos também usar o arquivo[^2] de Excel para a [Matriz Insumo Produto de 2015](https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9085-matriz-de-insumo-produto.html).
 
-Vamos usar como referência a material do [IBGE(2018)](https://biblioteca.ibge.gov.br/visualizacao/livros/liv101604.pdf). Muitas partes aqui são inclusive transcrições integrais de lá. Vamos também usar o arquivo^[ [Clique aqui](ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls) para baixar o arquivo fora do R.] de Excel para a [Matriz Insumo Produto de 2015](https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9085-matriz-de-insumo-produto.html).
+[^2]:  [Clique aqui](ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls) para baixar o arquivo fora do R.
 
-Importante notar que iremos manter aqui a notação usada em IBGE (2018). Desse modo, algumas letras que muitas vezes são usadas representando outro elemento, terão o significado definido pelo IBGE(2018). Este é o caso de $y$ por exemplo, que aqui representará o vetor de valor adicionado a preços básicos, em outros trabalhos é tido como o vetor do total da demanda final doméstica por atividades à preços básicos (que neste trabalho é tido como $e_N$^[Neste caso, extrapolamos da notação de IBGE(2018), uma vez que $F_N$ é representa a matriz de demanda final doméstica a nível do produto dividido por cada componente da demanda final e $f_N$ representa o vetor do total por produto da demanda final doméstica. Assim sendo, como $E_N$ é o equivalente de $F_N$ só que a nível de atividade, fizemos com que $e_N$ fosse o equivalente de $f_N$, só que a nível de atividade.] )
+Importante notar que iremos manter aqui a notação usada em IBGE (2018). Desse modo, algumas letras que muitas vezes são usadas representando outro elemento, terão o significado definido pelo IBGE(2018). Este é o caso de $y$ por exemplo, que aqui representará o vetor de valor adicionado a preços básicos, em outros trabalhos é tido como o vetor do total da demanda final doméstica por atividades à preços básicos (que neste trabalho é tido como $e_N$[^3] )
+
+[^3]: Neste caso, extrapolamos da notação de IBGE(2018), uma vez que $F_N$ é representa a matriz de demanda final doméstica a nível do produto dividido por cada componente da demanda final e $f_N$ representa o vetor do total por produto da demanda final doméstica. Assim sendo, como $E_N$ é o equivalente de $F_N$ só que a nível de atividade, fizemos com que $e_N$ fosse o equivalente de $f_N$, só que a nível de atividade.
 
 ## Baixando o arquivo pelo R.
 
-Primeiramente iremos baixar o arquivo pelo R. Se você enfrentar problemas com este passo^[O que muito provavelmente por conta do sistema operacional que você esteja usando. Em especifico, a parte abaixo do código foi feita pensando em quem tem Windows.], baixe o arquivo manualmente e coloque ele no diretório de trabalho faça e associe ele ao objeto `arquivo_2015`.
+Primeiramente iremos baixar o arquivo pelo R. Se você enfrentar problemas com este passo[^4], baixe o arquivo manualmente e coloque ele no diretório de trabalho faça e associe ele ao objeto `arquivo_2015`.
+
+[^4]: O que muito provavelmente por conta do sistema operacional que você esteja usando. Em especifico, a parte abaixo do código foi feita pensando em quem tem Windows.
 
 ```{r download}
 #download.file("ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", destfile = "Matriz_de_Insumo_Produto_2015_Nivel_67.xls", mode = "wb")
@@ -38,18 +45,17 @@ Vamos estabelecer também os nomes para os vetores de produto, de atividade e de
 
 ```{r}
 # Lendo a quarta linha da Tabela 1 com as Atividades:
-atividades <- read_excel(arquivo_2015, sheet = 1, "H4:BV4", col_names = FALSE) %>%
+atividades <- read_excel(arquivo_2015, sheet = 1, range = "H4:BV4", col_names = FALSE) %>%
         as.character() 
 
 # Lendo a segunda coluna da Tabela 1 com os Produtos:
-produtos <- read_excel(arquivo_2015, sheet = 1, "B6:B132", col_names = FALSE) %>%
+produtos <- read_excel(arquivo_2015, sheet = 1, range = "B6:B132", col_names = FALSE) %>%
         unlist()
 
 # Lendo a quarta linha da Tabela 3 na parte da Demanda Final:
-demanda_final <- read_excel(arquivo_2015, sheet = 3, "BT4:BY4", col_names = FALSE) %>%
+demanda_final <- read_excel(arquivo_2015, sheet = 3, range = "BT4:BY4", col_names = FALSE) %>%
         as.character()
 ```
-
 
 Nas abas deste arquivo estão dispostas todas as tabelas necessárias para o cálculo de uma matriz de coeficientes técnicos e de uma inversa de Leontief. Mas antes de ler propriamente os dados, vamos dar uma rápida passada sobre a estrutura da matriz.
 
@@ -59,75 +65,77 @@ O arquivo `.xls` que acabamos de baixar, contém 15 abas. As abas de 1 a 10 são
 
 O conjunto de Tabelas são:
 
- - Tabela 01 - Recursos de bens e serviços 
- - Tabela 02 - Usos de bens e serviços 
- - Tabela 03 - Oferta e demanda da produção nacional a preço básico 
- - Tabela 04 - Oferta e demanda de produtos importados a preço básico 
- - Tabela 05 - Destino dos impostos sobre produtos nacionais 
- - Tabela 06 - Destino dos impostos sobre produtos importados 
- - Tabela 07 - Destino da margem de comércio sobre produtos nacionais 
- - Tabela 08 - Destino da margem de comércio sobre produtos importados 
- - Tabela 09 - Destino da margem de transporte sobre produtos nacionais 
- - Tabela 10 - Destino da margem de transporte sobre produtos importados 
- - Tabela 11 - Matriz dos coeficientes técnicos dos insumos nacionais - Matriz Bn 
- - Tabela 12 - Matriz dos coeficientes técnicos dos insumos importados - Matriz Bm 
- - Tabela 13 - Matriz de participação setorial na produção dos produtos nacionais - Matriz D - Market Share 
- - Tabela 14 - Matriz dos coeficientes técnicos intersetoriais - Matriz D.Bn 
- - Tabela 15 - Matriz de impacto intersetorial - Matriz de Leontief 
+-   Tabela 01 - Recursos de bens e serviços
+-   Tabela 02 - Usos de bens e serviços
+-   Tabela 03 - Oferta e demanda da produção nacional a preço básico
+-   Tabela 04 - Oferta e demanda de produtos importados a preço básico
+-   Tabela 05 - Destino dos impostos sobre produtos nacionais
+-   Tabela 06 - Destino dos impostos sobre produtos importados
+-   Tabela 07 - Destino da margem de comércio sobre produtos nacionais
+-   Tabela 08 - Destino da margem de comércio sobre produtos importados
+-   Tabela 09 - Destino da margem de transporte sobre produtos nacionais
+-   Tabela 10 - Destino da margem de transporte sobre produtos importados
+-   Tabela 11 - Matriz dos coeficientes técnicos dos insumos nacionais - Matriz Bn
+-   Tabela 12 - Matriz dos coeficientes técnicos dos insumos importados - Matriz Bm
+-   Tabela 13 - Matriz de participação setorial na produção dos produtos nacionais - Matriz D - Market Share
+-   Tabela 14 - Matriz dos coeficientes técnicos intersetoriais - Matriz D.Bn
+-   Tabela 15 - Matriz de impacto intersetorial - Matriz de Leontief
 
 No arquivo de excel, as abas de cada Tabela estão nomeadas de acordo com o seu número, de modo que a aba da Tabela 1 se chama `"1"`. Para fazer a derivação das tabelas 11-15 nós iremos precisar apenas das Tabelas 1,2,3 e 4. No entanto, é bem provável que o conhecimento a ser adquirido aqui seja suficiente para vocês realizarem a leitura dos demais arquivos, case necessitem.
 
 Para entendermos a composição das informações das Tabelas de Recursos e Usos, vejamos o Quadro 1 (IBGE, 2018) abaixo:
 
-#### Quadro 1 -  Composição das informações das Tabelas de Recursos e Usos - TRU
+#### Quadro 1 - Composição das informações das Tabelas de Recursos e Usos - TRU
+
 |                         | Produtos<br>Nacionais | Atividades | Demanda<br>Final | Valor da <br>Produção |
-|:------------------------|:---------------------:|:----------:|:--------------------:|:-------------------------:|
-| Produtos Nacionais      |                       | $U_n$      | $F_n$                | $q$                       |
-| Produtos Importados     |                           | $U_m$      | $F_m$                |                           |
-| Atividades              | $V$                       |            | $E$                  | $g$                       |
-| Impostos                |                           | $T_P$      | $T_E$                |                           |
-| Valor Adicionado Bruto  |                           | $y'$       |                      |                           |
-| Valor Bruto da Produção | $q'$                      | $g'$       |                      |                           |
-**Fonte:** IBGE(2018, p. 13)  
+|:--------------|:-------------:|:-------------:|:-------------:|:-------------:|
+| Produtos Nacionais      |                       |   $U_n$    |      $F_n$       |          $q$          |
+| Produtos Importados     |                       |   $U_m$    |      $F_m$       |                       |
+| Atividades              |          $V$          |            |       $E$        |          $g$          |
+| Impostos                |                       |   $T_P$    |      $T_E$       |                       |
+| Valor Adicionado Bruto  |                       |    $y'$    |                  |                       |
+| Valor Bruto da Produção |         $q'$          |    $g'$    |                  |                       |
+
+**Fonte:** IBGE(2018, p. 13)
 
 As informações do Quadro 1 acima podem ser explicadas e importadas ao R pela seguinte forma:
 
- - $V$ - Matriz de Produção: apresenta para cada atividade o valor bruto da produção de cada um dos produtos. Pode ser encontrada na Tabela 1, entre `H6:BV132`.
- 
+-   $V$ - Matriz de Produção: apresenta para cada atividade o valor bruto da produção de cada um dos produtos. Pode ser encontrada na Tabela 1, entre `H6:BV132`.
+
 ```{r}
 V <- read_excel(arquivo_2015, sheet =1, range = "H6:BV132", col_names = atividades)
 rownames(V) <- produtos
 ```
 
- - $U_n$ - Matriz de Consumo Intermediário Nacional:  apresenta para cada atividade o valor consumido de produtos de origem interna; Pode ser encontrada na Tabela 3, entre `D6:BR132`.
+-   $U_n$ - Matriz de Consumo Intermediário Nacional: apresenta para cada atividade o valor consumido de produtos de origem interna; Pode ser encontrada na Tabela 3, entre `D6:BR132`.
 
 ```{r}
 U_n <- read_excel(arquivo_2015, sheet =3, range = "D6:BR132", col_names = atividades)
 row.names(U_n) <- produtos
 ```
 
- - $U_m$  -  Matriz  de  consumo  intermediário  importado:  apresenta  para  cada  atividade  o  valor  consumido  de  produtos  de  origem externa; Pode ser encontrada na Tabela 4, entre `D6:BR132`.
+-   $U_m$ - Matriz de consumo intermediário importado: apresenta para cada atividade o valor consumido de produtos de origem externa; Pode ser encontrada na Tabela 4, entre `D6:BR132`.
 
 ```{r}
 U_m <- read_excel(arquivo_2015, sheet =4, range = "D6:BR132", col_names = atividades)
 row.names(U_m) <- produtos
 ```
 
- - $F_n$ - Matriz da demanda final por produtos nacionais: apresenta o valor consumido de produtos de origem interna por categoria da demanda final (consumo final do governo, consumo final das Instituições sem fins de lucro a serviço das famílias, consumo final das famílias, exportações, formação bruta de capital fixo e variação de estoques); Pode ser encontrada na Tabela 3, entre `BT6:BY132`.
+-   $F_n$ - Matriz da demanda final por produtos nacionais: apresenta o valor consumido de produtos de origem interna por categoria da demanda final (consumo final do governo, consumo final das Instituições sem fins de lucro a serviço das famílias, consumo final das famílias, exportações, formação bruta de capital fixo e variação de estoques); Pode ser encontrada na Tabela 3, entre `BT6:BY132`.
 
 ```{r}
 F_n <- read_excel(arquivo_2015, sheet =3, range = "BT6:BY132", col_names = demanda_final)
 row.names(F_n) <- produtos
 ```
 
- - $F_m$ - Matriz da demanda final por produtos importados: apresenta o valor dos produtos de origem externa consumidos pelas categorias da demanda final. Pode ser encontrada na Tabela 4, entre `BT6:BY132`.
+-   $F_m$ - Matriz da demanda final por produtos importados: apresenta o valor dos produtos de origem externa consumidos pelas categorias da demanda final. Pode ser encontrada na Tabela 4, entre `BT6:BY132`.
 
 ```{r}
 F_m <- read_excel(arquivo_2015, sheet =4, range = "BT6:BY132", col_names = demanda_final)
 row.names(F_m) <- produtos
 ```
 
- - $q$ - Vetor com o valor bruto da produção total por produto: Pode ser calculado a partir de $q = Vi_{67}$ ou $q = U_ni_{67} + F_ni_{6}$.
+-   $q$ - Vetor com o valor bruto da produção total por produto: Pode ser calculado a partir de $q = Vi_{67}$ ou $q = U_ni_{67} + F_ni_{6}$.
 
 ```{r}
 q <- V %>% rowSums()
@@ -137,11 +145,10 @@ q <- V %>% rowSums()
 # q2 <- rowSums(U_n) + rowSums(F_n)
 ```
 
+-   $E$ - Matriz da demanda final por atividade: representa a parcela do valor bruto da produção de uma atividade destinada à demanda final. Pode ser calculando usando a $F_n$ (ou $F_M$) e a Matriz de Market Share (falaremos desta mais a frente).
 
- - $E$ - Matriz da demanda final por atividade: representa a parcela do valor bruto da produção de uma atividade destinada à demanda final. Pode ser calculando usando a $F_n$ (ou $F_M$) e a Matriz de Market Share (falaremos desta mais a frente).
+-   $T_p$ - Matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos (insumos) pelas atividades produtivas. Pode ser encontrada na Tabela 5 (nacionais) e Tabela 6 (importados), entre `D6:BR132`.
 
- - $T_p$ - Matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos (insumos) pelas atividades produtivas. Pode ser encontrada na Tabela 5 (nacionais) e Tabela 6 (importados), entre `D6:BR132`.
- 
 ```{r}
 T_p_n <- read_excel(arquivo_2015, sheet = 5, range = "D6:BR132", col_names = atividades)
 row.names(T_p_n) <- produtos
@@ -151,8 +158,8 @@ row.names(T_p_m) <- produtos
 
 T_p <- T_p_n + T_p_m
 ```
- 
- - $T_e$  -  Matriz  dos  valores  dos  impostos  e  subsídios  associados  a  produtos,  incidentes  sobre  bens  e  serviços  absorvidos  pela demanda final. Pode ser encontrada nas Tabelas 5 e 6, entre `BT6:BY132`.
+
+-   $T_e$ - Matriz dos valores dos impostos e subsídios associados a produtos, incidentes sobre bens e serviços absorvidos pela demanda final. Pode ser encontrada nas Tabelas 5 e 6, entre `BT6:BY132`.
 
 ```{r}
 T_e_n <- read_excel(arquivo_2015, sheet = 5, range = "BT6:BY132", col_names = demanda_final)
@@ -164,15 +171,15 @@ row.names(T_e_m) <- produtos
 T_e <- T_e_n + T_e_m
 ```
 
-
- - $g$ - Vetor coluna com o valor bruto da produção total por atividade. Pode ser calculada a partir de $g = V'i_{127}$
-
+-   $g$ - Vetor coluna com o valor bruto da produção total por atividade. Pode ser calculada a partir de $g = V'i_{127}$
 
 ```{r}
 g <- colSums(V)
 ```
 
- - $y$ - Vetor  coluna  com  o  valor  adicionado  total  gerado  pelas  atividades  produtivas: é  considerado  como  um  vetor  por  medida de simplificação, na prática é uma matriz por atividade com o valor adicionado bruto a preços básicos, as remu-nerações (salários e contribuições sociais), o excedente bruto operacional (obtido por saldo) e os impostos e subsídios incidentes sobre as atividades. Esses valores podem ser encontrados nas Tabelas de Recursos e Usos do IBGE^[porém podem também ser calculados a partir das matrizes derivadas.]
+-   $y$ - Vetor coluna com o valor adicionado total gerado pelas atividades produtivas: é considerado como um vetor por medida de simplificação, na prática é uma matriz por atividade com o valor adicionado bruto a preços básicos, as remu-nerações (salários e contribuições sociais), o excedente bruto operacional (obtido por saldo) e os impostos e subsídios incidentes sobre as atividades. Esses valores podem ser encontrados nas Tabelas de Recursos e Usos do IBGE[^5]
+
+[^5]: porém podem também ser calculados a partir das matrizes derivadas.
 
 Além dessas presentes na tabela, podemos também já calcular os vetores $f_n = F_ni_{6}$ e $f_m=F_mi_{6}$
 
@@ -182,48 +189,43 @@ f_n <- rowSums(F_n)
 f_m <- rowSums(F_m)
 ```
 
-
 ## Tabelas Derivadas
 
 Com as matrizes importadas, podemos então calcular as seguintes tabelas derivadas:
 
+-   $B_n$ - Matriz dos coeficientes técnicos dos insumos nacionais (Tabela 11)
 
+-   $B_m$ - Matriz dos coeficientes técnicos dos insumos importados (Tabela 12)
 
- - $B_n$ - Matriz dos coeficientes técnicos dos insumos nacionais (Tabela 11) 
- 
- - $B_m$ - Matriz dos coeficientes técnicos dos insumos importados (Tabela 12)
- 
- - $D$ - Matriz de participação setorial na produção dos produtos nacionais - Market Share (Tabela 13)
+-   $D$ - Matriz de participação setorial na produção dos produtos nacionais - Market Share (Tabela 13)
 
- - $A_n$ - Matriz dos coeficientes técnicos intersetoriais nacionais (Tabela 14)
+-   $A_n$ - Matriz dos coeficientes técnicos intersetoriais nacionais (Tabela 14)
 
- - $L$ - Matriz de impacto intersetorial - Matriz de Leontief (Tabela 15)
+-   $L$ - Matriz de impacto intersetorial - Matriz de Leontief (Tabela 15)
 
 Além das cinco matrizes derivadas que podem ser encontradas no arquivo baixado, podemos também estimar as duas matrizes abaixo, além dos vetores da demanda final ao nível das atividades:
 
- - $A_m$ - Matriz dos coeficientes técnicos intersetoriais importados
+-   $A_m$ - Matriz dos coeficientes técnicos intersetoriais importados
 
- - $A_{Tot}$ - Matriz dos coeficientes técnicos intersetoriais totais
+-   $A_{Tot}$ - Matriz dos coeficientes técnicos intersetoriais totais
 
- - $E$ - Vetores de Demanda Final a nível de atividade
+-   $E$ - Vetores de Demanda Final a nível de atividade
 
 #### Calculando $B_n$ e $B_m$
 
 Para calcularmos as matrizes de coeficientes técnicos dos insumos nacionais e dos importados, fazemos:
 
+```{=tex}
 \begin{align}
 B_n &= U_n (\hat{g}^{-1}) \\
 B_m &= U_m (\hat{g}^{-1})
 \end{align}
-
-
-
+```
 ```{r}
 B_n <- U_n %>% as.matrix %*% solve(diag(c(g)))
 
 B_m <- U_m %>% as.matrix %*% solve(diag(c(g)))
 ```
-
 
 #### Calculando $D$
 
@@ -234,7 +236,6 @@ $$D = V' (\hat{q}^{-1})$$
 ```{r}
 D_MS <- t(V) %*% solve(diag(c(q)))
 ```
-
 
 #### Calculando $A_n$
 
@@ -276,15 +277,14 @@ $$A_{Tot} = A_n + A_m$$
 A_Tot <- A_n + A_m
 ```
 
-
 #### Calculando $E$
 
 Para calcular os vetores de Demanda Final à nível de Atividade, $E$, basta:
 
 $$E = D F$$
- 
- De modo que para ter $E_n$ usasse $F_n$ e para ter $E_m$ usasse $F_m$.
- 
+
+De modo que para ter $E_n$ usasse $F_n$ e para ter $E_m$ usasse $F_m$.
+
 ```{r}
 E_n <- D_MS %*% as.matrix(F_n)
 
@@ -298,12 +298,12 @@ e_n <- rowSums(E_n)
 e_m <- rowSums(E_m)
 ```
 
-
 #### Avaliando se as contas estão corretas
 
 Se até esse ponto tudo aconteceu de forma correta, caso realizarmos a multiplicação da matriz de impacto pelo vetor de demanda final, deveríamos obter o vetor $g$, tal que:
 
 $$g=(I-A_n)^{-1}e_n=Le_n$$
+
 ```{r}
 # Calculando o valor bruto da produção pelas matrizes deduzidas:
 g_leontief <- Leontief%*%e_n
@@ -319,21 +319,18 @@ Se no seu código sair a resposta `TRUE`, é um bom indício de que tudo ocorreu
 
 Para calcular o valor adicionado da produção a preços básicos $y$, precisamos identificar o Consumo intermediário a preços do consumidor e subtrair do valor da produção ao nível de atividades:
 
-
+```{=tex}
 \begin{align}
 CI &= U_n + U_m \\
 y &= g - i'(CI +T_p)
 \end{align}
-
-
-
+```
 ```{r}
 
 CI <- U_n + U_m
 
 y <- g - colSums(CI + T_p) 
 ```
-
 
 ## Referências:
 
