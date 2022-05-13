@@ -1,7 +1,7 @@
 ---
 title: "Tópico 3 - Condicionalidades e Manipulação de Dados"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "04/06/2021"
+date: "13/05/2022"
 output: html_document
 ---
 
@@ -642,9 +642,9 @@ aa[is.na(aa)] <- 0
 aa
 ```
 
-## [3.7 - Subsetting com o `tidyverse`](#tidyversesubset)
+## [3.6 - Subsetting com o `tidyverse`](#tidyversesubset)
 
-### 3.7.1 - Extraindo colunas a partir dos seus nomes
+### 3.6.1 - Extraindo colunas a partir dos seus nomes
 
 Existe duas funções para você retirar colunas a partir dos seus nomes, `select` e `pull`. O `select` irá manter a estrutura de dados, enquanto `pull` irá alocar todos os dados selecionados num vetor atômico. Veja os exemplos abaixo:
 
@@ -695,11 +695,11 @@ selExemplo9 <- mtcars %>%
 
 Existem outros elementos que fazem parte dos `select_helpers` se você quiser saber mais.
 
-### 3.7.2 - Linhas
+### 3.6.2 - Linhas
 
 No que tange o subsetting via as linhas, temos três funções relevantes: `filter`, `distinct` e `arrange`.
 
-#### 3.7.2.1 - filter
+#### 3.6.2.1 - filter
 
 A função `filter` irá filtrar as linhas a partir de uma condição. Que fique claro, quando falarmos abaixo em *filtrar* determinadas linhas, é que apenas essas linhas serão selecionadas. Você pode usar e abusar das comparações lógicas ( `==`, `!=`, `>`, `>=`, `<`, `<=`). Veja os exemplos abaixo para usar `filter` com apenas uma condição e repare que a ordem dos argumentos não importa:
 
@@ -862,7 +862,7 @@ CO2 %>% filter(near(uptake, 40, tol = 1))
  
 ```
 
-#### 3.7.2.2 - Removendo duplicatas com `distinc`
+#### 3.6.2.2 - Removendo duplicatas com `distinc`
 
 A função `distinct` remove linhas duplicadas dos seus data.frames. Veja o exemplo abaixo:
 
@@ -874,7 +874,7 @@ ex_df %>% distinct()
 
 ```
 
-#### 3.7.2.3 - Reordenando as linhas com `arrange`
+#### 3.6.2.3 - Reordenando as linhas com `arrange`
 
 A função `arrange` serve para reordenar as linhas de acordo com uma coluna.
 
@@ -892,7 +892,7 @@ Também é possível fazer isso em vetores `character`:
 iris %>% arrange(Species) %>% head()
 ```
 
-#### 3.7.2.4 - Removendo linhas `NA` diretamente
+#### 3.6.2.4 - Removendo linhas `NA` diretamente
 
 Se queremos apenas remover linhas que tem `NA`, há uma forma mais direta do que combinar a função `filter` do pacote `dplyr`, com o argumento `is.na`. Tal forma é podemos usar a função `drop_na` do pacote `tidyr` para eliminar linhas com `NA`.
 
@@ -906,11 +906,11 @@ Você pode escolher inclusive se você quer que sejam eliminadas linhas com `NA`
 airquality %>% tidyr::drop_na("Ozone") %>% head()
 ```
 
-## [3.8 - Arrumando dados.](#arrumandodadostidyverse)
+## [3.7 - Arrumando dados.](#arrumandodadostidyverse)
 
 Como vocês puderam ver no Tópico 2, nem todos os dados vem como gostariamos que eles viessem. Vamos aqui tratar apenas de alguns casos mais simples.
 
-### 3.8.1 - Juntar colunas
+### 3.7.1 - Juntar colunas
 
 Veja o `data.frame` abaixo:
 
@@ -950,7 +950,7 @@ df_ex <- df_ex %>% tidyr::unite("DE", D:E, sep = "")
 
 O argumento `sep= ""` foi colocado ali acima pois o valor *default* do separador é `_`.
 
-### 3.8.2 - Separar colunas
+### 3.7.2 - Separar colunas
 
 Maioria das vezes, você irá querer muito mais separar colunas do que junta-las. Para tanto, basta usar a função `separate` do `tidyr`
 
@@ -958,7 +958,7 @@ Maioria das vezes, você irá querer muito mais separar colunas do que junta-las
 df_ex %>% separate("DE", into = c("D", "E"), sep = 3)
 ```
 
-### 3.8.3 - Mudar comprimento de um vetor
+### 3.7.3 - Mudar comprimento de um vetor
 
 Suponha que ocorreu uma corrida e havia 6 participantes inscritos. Desses 6, só alguns apareceram, e apenas esses tiveram o seu tempo em minutos anotado. Desse modo temos os dois `data.frames` abaixo:
 
@@ -1035,7 +1035,7 @@ Agora suponha que se quer saber quais dos corredores inscritos foram jogar bolar
 df_futebol %>% inner_join(df_inscritos, by = c( "Jogador" = "Nomes"))
 ```
 
-### 3.8.4 - Alterando tipos de colunas
+### 3.7.4 - Alterando tipos de colunas
 
 A primeira vista pode ser desafiador trocar os tipos de uma coluna no R. Isso pode ser especialmente problemático quando se trata de uma base de dados de Matrizes Insumo Produto. Isso porque muitas vezes os dados vão ser acompanhados por duas linhas de texto. Uma contendo um código e outra uma descrição. Veja um exemplo abaixo:
 

@@ -23,7 +23,7 @@ library(tidyverse)
 
 Vamos usar como referência a material do [IBGE(2018)](https://biblioteca.ibge.gov.br/visualizacao/livros/liv101604.pdf). Muitas partes aqui são inclusive transcrições integrais de lá. Vamos também usar o arquivo[^2] de Excel para a [Matriz Insumo Produto de 2015](https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9085-matriz-de-insumo-produto.html).
 
-[^2]:  [Clique aqui](ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls) para baixar o arquivo fora do R.
+[^2]: [Clique aqui](ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls) para baixar o arquivo fora do R.
 
 Importante notar que iremos manter aqui a notação usada em IBGE (2018). Desse modo, algumas letras que muitas vezes são usadas representando outro elemento, terão o significado definido pelo IBGE(2018). Este é o caso de $y$ por exemplo, que aqui representará o vetor de valor adicionado a preços básicos, em outros trabalhos é tido como o vetor do total da demanda final doméstica por atividades à preços básicos (que neste trabalho é tido como $e_N$[^3] )
 
@@ -36,7 +36,7 @@ Primeiramente iremos baixar o arquivo pelo R. Se você enfrentar problemas com e
 [^4]: O que muito provavelmente por conta do sistema operacional que você esteja usando. Em especifico, a parte abaixo do código foi feita pensando em quem tem Windows.
 
 ```{r download}
-#download.file("ftp://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", destfile = "Matriz_de_Insumo_Produto_2015_Nivel_67.xls", mode = "wb")
+#download.file("https://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls", destfile = "Matriz_de_Insumo_Produto_2015_Nivel_67.xls", mode = "wb")
 
 arquivo_2015 <- "Matriz_de_Insumo_Produto_2015_Nivel_67.xls"
 ```
