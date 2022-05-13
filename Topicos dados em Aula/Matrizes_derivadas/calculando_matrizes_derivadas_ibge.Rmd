@@ -88,7 +88,7 @@ Para entendermos a composição das informações das Tabelas de Recursos e Usos
 #### Quadro 1 - Composição das informações das Tabelas de Recursos e Usos - TRU
 
 |                         | Produtos<br>Nacionais | Atividades | Demanda<br>Final | Valor da <br>Produção |
-|:--------------|:-------------:|:-------------:|:-------------:|:-------------:|
+|:------------------------|:---------------------:|:----------:|:----------------:|:---------------------:|
 | Produtos Nacionais      |                       |   $U_n$    |      $F_n$       |          $q$          |
 | Produtos Importados     |                       |   $U_m$    |      $F_m$       |                       |
 | Atividades              |          $V$          |            |       $E$        |          $g$          |
