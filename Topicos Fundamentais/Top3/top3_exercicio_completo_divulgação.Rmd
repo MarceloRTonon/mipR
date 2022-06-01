@@ -80,28 +80,55 @@ Se você quer acessar essa documentação de um pacote que você ainda não inst
 
 ### 1. Lendo a NIOT 2016 para a Italia (WIOD) pela primeira vez
 
-Vamos agora usar a base de dados NIOT para praticar o que foi passado nos últimos tópicos. As NIOT (em inglês National Input Output Tables) estão disponíveis no [site da WIOD](http://www.wiod.org/). Para acessar a página de download das NIOT', clique na aba `Release 2016` opção `Input-Output Tables` e numa coluna na parte direita da tela escrito `Related Tables` clique na opção `National Tables`([Clique aqui](http://www.wiod.org/database/niots16) para acessar a página). Lá terá a opção `Italy NIOT` para baixar, ou [clique aqui](http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx).
+**IMPORTANTE:** Essa parte abaixo pode muito facilmente parar de funcionar no futuro, uma vez que ela depende de links de um site externo.
 
-Porém vamos agora mostrar uma outra forma de baixar, os dados sem precisar sair do Rstudio. (E sem gravar no disco rígido esse arquivo, usando apenas um arquivo temporário)
-
-```{r, include = TRUE}
-library(readxl)
-#Criando um arquivo temporário
-arq_temp <- tempfile(fileext = ".xlsx")
-#Baixando o arquivo
-# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
-download.file(url = "http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx", destfile = arq_temp, mode = "wb")
-
-# Importando a NIOT para o R:
-niotITA <- read_xlsx(arq_temp, sheet = 2)
-
-# Excluindo arq_temp
-unlink(arq_temp)
+Vamos agora usar a base de dados NIOT para praticar o que foi passado nos últimos tópicos. As NIOT (em inglês National Input Output Tables) da WIOD, estão disponíveis no [site da Universidade de Groningen](https://www.rug.nl/ggdc/valuechain/wiod/wiod-2016-release).^[Antigamente era possível baixar cada país individualmente. No entanto, agora é necessário baixar toda a série e então fazer a depuração.] Indo na tabela _Input-Output tables of the WIOD 2016 release_, tem o link que baixa um arquivo zip com o [Excel para todos os países](https://dataverse.nl/api/access/datafile/199099). Para o exercicio que vamos realizar, precisamos apenas do arquivo referente à Italia. Extraia esse arquivo, `ITA_NIOT_nov16.xlsx` no `working directory`. Como vimos no Tópico 2, para descobrir qual é o seu `working directory` basta fazer o comando no R:
+```{r,  eval = FALSE, include=TRUE}
+getwd()
 ```
 
+Para ler o arquivo basta fazer:
+```{r}
+library(readxl)
+arq_NiotITA <- "ITA_NIOT_nov16.xlsx"
+niotITA <- read_xlsx(arq_NiotITA, sheet = 2)
+```
+
+
+
+
+```{r, include=FALSE, eval =FALSE}
+ (Porém vamos agora mostrar uma outra forma de baixar, os dados sem precisar sair do Rstudio. (E sem gravar no disco rígido esse arquivo, usando apenas um arquivo temporário). Esse método vai demorar mais do que o mecânico, porém, desconsiderando as mudanças de links Está com problemas pois o )
+```
+
+```{r, include = FALSE, eval = FALSE}
+
+# Essa parte esta com problema pois o api não aceita mais que 60s de download via R.
+library(readxl)
+#Criando um arquivo temporário
+tempzip <- tempfile(fileext = ".zip")
+#Baixando o arquivo
+# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
+download.file(url = "https://dataverse.nl/api/access/datafile/199099", destfile = tempzip, mode = "wb")
+
+arq_NiotITA <- "ITA_NIOT_nov16.xlsx"
+
+unz(description = tempzip, 
+    filename = arq_NiotITA) %>%
+  read_xlsx(sheet = 2)
+# Importando a NIOT para o R:
+niotITA <- read_xlsx(arq_NiotITA, sheet = 2)
+
+# Excluindo arq_temp
+
+```
+```{r, include=F, eval =F}
 Existem vantagens e desvantagens de você baixar as coisas diretamente do seu terminal. Uma desvantagem é que pode ser mais lento baixar pelo R do que pelo brownser. Além disso, se sua conexão for instável, pode dar tudo errado no meio do caminho. Além disso nem sempre dá certo o download pelo R. Por outro lado, você ter até o download no seu código aumenta bastante a reprodutibilidade dele, fazendo que com que não seja necessário nada além do código para baixar ele. A sugestão dada é na primeira vez, baixar o arquivo manualmente, e então ver como você pode tratar o(s) arquivo(s) e então buscar automatizar no código o download.
 
 Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter problemas. Rode o código acima para seguir no exercicio a seguir.
+
+```
+
 
 ## Parte 1 - Operadores Lógicos e Booleanos
 
@@ -228,9 +255,9 @@ xor(pessoa_1, pessoa_2)
 
 **Dica:** Avalie o que são os testes dentro dos parêntesis e veja então o que está sendo comparado.
 
-#### Desafio D.1.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como `TRUE`). Como você faria isso? Por que não dá para vocẽ usar
+#### Desafio D.1.2 Seguindo o desafio anterior, suponha que você quer criar uma função para saber se o vetor como um todo passa nesse teste (ou seja, se ele retorna tudo como `TRUE`). Como você faria isso?
 
-\_ **Detalhe:** O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.
+ **Detalhe:** O código que vocẽ vai fazer aqui vai ser ineficiente mesmo. É só para você tentar entender a questão como um todo.
 
 ```{r, include=F}
 func_D_1_2 <- function(x,y) {
@@ -303,7 +330,7 @@ nomes_colunas <- c("Year", "Code", "Description", "Origin", niotITA[1,5:67])
 #niotITA_3.2 <- niotITA[2:1081,] %>% type_convert()
 #niotITA_3.2 <- niotITA[2:nrow(niotITA),] %>% type_convert()
 niotITA_3.2 <- niotITA[-1,] %>% type_convert()
-#colnames(niotITA_3.2) <- nomes_colunas
+colnames(niotITA_3.2) <- nomes_colunas
 ```
 
 #### Q.3.3 - Extraia da sua base valores somente para o ano de 2008. Salve como `niotITA_3.3`
@@ -345,10 +372,13 @@ niotITA_3.6d <- niotITA_3.5[,1:(ncol(niotITA_3.5)-7)]
 
 **Dica**: Usar a matriz criada na questão 3.6, com a demanda intermediária e buscar na base inicial (`niotITA_3.2`) a informação sobre o produto total a preços básicos. Importante: os valores em cada coluna devem ser divididos pelo produto total de um mesmo setor.
 
+$A = U \hat{x}^{-1}$
 
 ```{r, include=FALSE}
 
 total_output <- niotITA_3.2[niotITA_3.2$Year == "2008" & niotITA_3.2$Description == "Output at basic prices",]
+
+total_output_diag <- diag(1/as.double(total_output[,5:60])); total_output_diag[is.nan(total_output_diag)|is.infinite(total_output_diag)] <-0
 
 solveDiag <- function(x){
   dbl_x <- 1/c(as.double(x))
@@ -356,7 +386,7 @@ solveDiag <- function(x){
   return(diag(dbl_x))
 }
 
-total_output_diag <- diag(1/as.double(total_output[,5:60])); total_output_diag[is.nan(total_output_diag)|is.infinite(total_output_diag)] <-0
+
 
 solveDiag(total_output[,5:60]) %>% all.equal(total_output_diag, check.attributes = FALSE)
 Dem_Int_matrix <- niotITA_3.6[,-c(1:4)] %>% as.matrix()
@@ -393,7 +423,7 @@ Dem_Fin <-rowSums((as.data.frame(niotITA_3.5))[,61:66])
 
 Dem_Tot <-Dem_Int+Dem_Fin
 
-all.equal(Dem_Tot, as.double(niotITA_3.5$GO))
+all.equal(Dem_Tot, as.double(niotITA_3.5$`Total output`))
 
 niotITA_3.7 <- cbind(niotITA_3.5[,1:4],Dem_Int,Dem_Fin,Dem_Tot) 
 ```
@@ -665,7 +695,7 @@ vecQ3.5 <- ItaQ1.9 %>% filter(Origin == "Domestic", Year == 2000) %>%
   .[,-c(1:4)] %>% rowSums()
 ```
 
-### 4. Treinando join e arrange
+1### 4. Treinando join e arrange
 
 Vamos praticar os verbos da familia `join` do pacote `dplyr` agora. Tenha certeza que leu a parte referente a ela no Tópico 3! Qualquer coisa use o `help()` ou veja as partes ***Mutating joins*** e ***Types of join*** em `vignette("two-table")`.
 
