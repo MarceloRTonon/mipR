@@ -1,7 +1,7 @@
 ---
 title: "Tópico 4 - Automatizando tarefas"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "01/07/2020"
+date: "06/07/2021"
 output: html_document
 ---
 
@@ -257,8 +257,8 @@ toc()
 
 exemplo_g <- vector(mode = "character", length = length(exemplo_f))
 tic()
-for(i in i:length(exemplo_g)){
-  exemplo_g[i] <- paste0("Usando paste0 como se não fosse vetorizado", exemplo_f)
+for(i in 1:length(exemplo_g)){
+  exemplo_g[i] <- paste0("Usando paste0 como se não fosse vetorizado", exemplo_f[i])
 }
 toc()
 ```
@@ -438,6 +438,7 @@ No caso em que usamos `map2` dentro de uma função anônima, repare que usamos 
 lista_recursiva3 <- map(lista_recursiva, function(x) map2(x, lista_escalares, function(z,y) z*y))
 
 lista_recursiva3 <- map(lista_recursiva, map2, lista_escalares, function(x,y) x*y)
+#lista_recursiva3a <- map(.x = lista_recursiva, ~ map2(.x, .y = lista_escalares, .f = `*`))
 ```
 
 O que ocorre no exemplo acima, é que mandamos a função `map` aplicar sobre os elementos de `lista_recursiva`, que são listas, a função `map2`. Essa por sua vez, vai multiplicar cada elemento de `lista_recursiva[[i]]`, que são numéricos, com os elementos de `lista_escalares`, que também são númericos.
@@ -487,6 +488,218 @@ Podemos então fazer o mesmo que fizemos para criar `lst_CO2`, só que com a pr�
 ```{r}
 lst_CO2_b <- map(lst_type, function(x) map(lst_CO2, function(y) filter(y, Type ==x)))
 ```
+
+## Introduzindo a map variants
+
+A família map é composta por, até onde sabemos, pelo menos 23 funções(!). Diversas delas já foram apresentadas aqui, dentre as quais destaca-se `map()`, `map2()` e `pmap()`.  Iremos aqui apresentar algumas outras que são úteis, mas que não vamos explorar a fundo. O [capítulo 9 do Advanced R](https://adv-r.hadley.nz/functionals.html) fornece uma descrição ampla da programação funcional (mas também sem exaurir todas a variedade de funções do map).
+
+### Obtendo resultados em vetores atômicos
+
+Em geral o uso da função `map()` e suas extensões diretas (`map2()` e `pmap()`), resultarão também listas. No entanto, podem ter situações em que você queira obter vetores atômicos de diferentes tipos como resultado. Nesse caso, há uma função map para cada um desses tipos, sintetizados nas senguintes funções: `map_lgl()`, `map_int()`, `map_dbl()` e `map_chr()`. Vamos trabalhar com `lst_CO2` para entender melhor como funciona cada função. 
+
+```{r, error=T}
+
+# map_chr() retorna um vetor atômico do tipo "character"
+m_chr <- map_chr(lst_CO2[[1]], typeof)
+m_chr
+typeof(m_chr)
+
+# Dará erro
+m_chr_2 <- map_dbl(lst_CO2[[1]], typeof)
+
+# map_lgl() retorna um vetor atômico do tipo "logical"
+m_lgl <- map_lgl(lst_CO2[[1]], is.double)
+m_lgl
+typeof(m_lgl)
+
+# map_int() retorna um vetor atômico do tipo "integer"
+tam_unique <- function(x) length(unique(x))
+m_int <- map_int(lst_CO2[[1]], tam_unique)
+m_int
+typeof(m_int)
+
+```
+
+A função `map_dbl()` retornaria um vetor atômico do tipo "double". No entanto, como nesse caso nem todas as colunas são double e a função mean só se aplica nesse tipo, o resultado para os objetos que não são `double` serão um `NA`.
+
+```{r}
+# Caso que dá erro:
+map_dbl(lst_CO2[[1]], mean)
+
+```
+
+Para a aplicação plenamente correta é necessário primeiro selecionar os que atendem ao requesito, informação esta já foi calculada no objeto `m_lgl`, que foi o exemplo da função `map_lgl()`.
+
+```{r}
+m_dbl <- map_dbl(lst_CO2[[1]][,m_lgl], mean)
+m_dbl
+typeof(m_dbl)
+```
+
+Importante se atentar para que a função a ser usada deve ser compatível com o resultado desejado pois, caso contrário, a função retornará algum erro. Por exemplo, não faz sentido usar `map_dbl()` com uma função `as.character`:
+
+```{r, error=T}
+map_dbl(1:2, as.character)
+```
+
+### Aplicando funções em níveis da lista
+
+Resgatando a ideia da recursividade das listas, em que criamos listas dentro de listas, a função `map_depth` é de grande utilidade nesses casos. Imagine que você deseja aplicar uma função usando o `map` sobre listas que estão no terceiro nível interno de uma lista. Os principais elementos de `map_depth` são: 
+
+
+```{r, eval=F}
+map_depth(.x, .depth, .f, ..., .ragged = FALSE)
+```
+
+- *.x*: assim como nos casos anteriores, aqui colocamos a lista com as informações que serão aplicadas a função.
+- *.depth*: aqui está o ponto central dessa função, em que determinamos o nível em que serão realizadas as operações. No caso a sintaxe é da por meio de um valor numérico, em que valores negativos realizarão a contagem do nível partindo do "final" da lista (do elemento mais interno da lista). No argumento `.depth=` a lógica pode ser interpretada ad seguitne forma
+    - `map_depth(x, 0, fun)`, seria o mesmo que aplicar uma função diretamente sobre x (`fun(x)`);
+    - `map_depth(x, 1, fun)`, equivale à função map sobre a lista, tal como `x <- map(x, fun)`;
+    - `map_depth(x, 2, fun)`, nesse caso seria a aplicação de da função `map` usando a própria `map` tal como `x <- map(x, ~ map(., fun))`;
+    - e assim sucessivamente.
+- *.f*: assim como anteriormente, é a função a ser aplicada.
+- *.ragged*: é um argumento do tipo `logical`, em que se é colocado `TRUE` ele aplicará a função mesmo se tiverem elementos vazios, e caso seja `FALSE` retornará uma mensagem de erro para elementos espaços vazios dentro da lista.
+
+Em termos mais práticos, ela uma boa alternativa para uso de funções dentro da map para atuar dentro de algum elemento da lista. Ou seja, ao invés de criarmos o objeto `lista_recursiva2` usando alguma função, podemos usar a `map_depth`:
+
+```{r}
+# Usando a map_depth:
+
+lista_recursiva2_depth <- map_depth(lista_recursiva, 2, vezes.dois)
+
+# Usando o argumento negativo
+
+lista_recursiva2_depth_b <- map_depth(lista_recursiva, -1, vezes.dois)
+
+# Comparando se são iguais:
+all.equal(lista_recursiva2, lista_recursiva2_depth)
+all.equal(lista_recursiva2_depth, lista_recursiva2_depth_b)
+
+```
+
+### Mantendo o tipo do objeto
+
+Outra opção muito útil para o caso de não estivermos trabalhando diretamente com listas ou não queremos um resultado na forma de lista, é a função `modify()`. Essa função é particularmente útil se estamos por exemplo trabalhando em um `data.frame` e queremos manter dessa forma. Sua operacionalidade é basicamente a mesma da função `map()`, mas vamos explorar rapidamente as diferenças nos resultados das funções. Primeiramente, vamos criar um `data.frame` como exemplo:
+
+```{r}
+df <- data.frame(
+  x = 1:5,
+  y = 3:7,
+  z = 20:24
+)
+```
+
+Vamos agora realizar uma operação de multiplicação e comparar como os resultados saem:
+
+```{r}
+df_map <- df %>% map(., ~ .x * 2)
+df_map
+class(df_map)
+
+df_mod <- df %>% modify(., ~ .x * 2)
+df_mod
+class(df_mod)
+```
+
+Perceba que tanto visualmente quanto pela classe do objeto, é possível perceber que a estrutura dos dados está diferente. As variantes da função `modify()`, as `modify2()`  e `pmodify()`, operam da mesma forma que as suas equivalentes para o `map()`.
+
+
+### Interação entre valores e índices
+
+Essa classe de funções trabalha como uma alternativa para loops com o `for`:
+
+Gerar loop nos elementos: `for (x in objeto)`
+Por meio de índices numéricos: `for (i in seq_along(objeto))`
+Através dos nomes: `for (nm in names(objeto))`
+
+A primeira forma é semelhante ao que a função `map()` realiza para os elementos de uma lista, só que no `for` aplicando determinada tarefa (ou função) sobre os elementos de um objeto. As duas últimas formas são semelhantes ao que a `imap()` realizada, operando iterações sobre os valores e os índices do vetor em paralelo colocado no argumento. Os elementos da função são semelhantes à map, tal que:
+
+```{r, eval=F}
+imap(.x, .f, ...)
+```
+
+
+Outra funcionalidade do imap é a criação de frases, como por exemplo indicando o tipo de cada variável:
+
+```{r}
+
+imap_chr(lst_CO2[[1]], ~ paste0("A tipo de ", .y, " é ", typeof(.x)))
+
+```
+
+### Aplicar uma função sem guardar um resultado
+
+Outra classe de map variant é a função `walk()`, a qual não retornará nenhum objeto como resultado. Ela é particulamente útil para funções que não visam realizar uma tarefa que necessite ser guardada no R. O exemplo mais claro para o nosso caso é a criação de arquivos para o excel com os resultados dos procedimentos, por meio, por exemplo, da função `write.csv()`. Mais para frente também será ensinado a criação de gráficos e figuras, as quais também podem se beneficar da função `walk()`.
+
+Como exemplo, vamos salvar alguns dos dados usados anteriormente e usar a função `iwalk()` para salvá-las. Vamos resgatar o objeto `df_map`, que é uma lista de 3 variáveis, para exemplificar:
+
+```{r}
+
+df_map %>% iwalk(.,~ write.csv(.x, file=paste0("Variável ", .y,".csv")))
+
+```
+
+No argumento `.y` estaria operando como o índice do `iwalk()` (da mesma forma como seria na `imap()`). Sendo `df_map` uma lista nomeada, o argumento `.y` estaria realizando o papel de `names()`.
+
+### Síntese dos tipos de função
+
+Tomando novamente como fonte o Advanced R, existe uma tabela que sintetiza de forma simples quais as funcionalidades dessas map variants que atuam sobre ou resultam em objetos de tipos diferentes. No caso, estão apresentadas as funções `map()`, `map_tipo()`, `modify()` e `walk()`. A `map_tipo()` é uma representação simbólica do grupo `map_dbl`, `map_lgl`, `map_chr` e `map_int`.
+
+|  *Argumentos*      | *Lista* | *Vetor Atômico* | *Mesmo tipo* | *Nenhum*   |
+|--------------------|---------|-----------------|--------------|------------|
+|  Um argumento      | `map()` |   `map_tipo()`  |  `modify()`  |  `walk()`  |
+|Dois argumentos     | `map2()`|   `map2_tipo()` | `modify2()`  |  `walk2()` |
+|Um argumento +índice| `imap()`|   `imap()`      | `imodify()`  | `iwalk()`  |
+|N argumentos        | `pmap()`|   `pmap_tipo()` |     ----     | `pwalk()`  |
+
+No caso, a tabela também descreve as variantes dessas função para mais de uma varíavel (objeto) à ser aplicada a função (2 para 2 objetos e p para p objetos), tal como já descrito anteriormente para `map()`, `map2()` e `pmap()`. Na tabela somente as funções que necessitam de índice é que não foram abordadas até aqui. Vamos explicar brevemente o que são elas, mas por ora sem explorá-las a fundo.
+
+
+### Aplicando funções condicionalmente
+
+Outra funcionalidade é o uso de condicionais para realizar operações dentro de suas listas. Tratam-se das funções `map_if()` e `map_at()`. A primeira opera como uma função do `if` e `else`, em que a função somente será aplicada aos elementos da lista que atendem à determinada condição. Já na segunda, é necessário incluir um argumento indicando quais serão os elementos da lista a receberem a função. A sintaxe das funções é da seguinte forma:
+
+```{r, eval=F}
+
+map_if(.x, .p, .f, ..., .else = NULL)
+
+map_at(.x, .at, .f, ...)
+```
+
+- *.x* e *.f* são exatamente iguais aos casos anteriores.
+- *.p* é um predicado (booleano) com um resultado do tipo `TRUE` ou `FALSE` decorrente do estabelecimento de alguma condição ou proposição. Pode ser portanto uma função que avalia se determinada condição é satisfeita ou um vetor lógico com proposições de valores `T` ou `F`. Somente aqueles que apresentam `T` é que terçao a função aplicada.
+- *.else* opera da mesma forma que `.p` no entanto somente para os elementos que obtivem `FALSE` no argumento `.p`. Caso não queira que nenhuma operação seja realizada, basta manter o `NULL` (que é o default da função).
+- *.at* nesse caso, ao contrário de `map_if`, aqui deverá ser introduzida um vetor de nomes, valores positivos a incluir ou valores negativos para excluir determinadas posições. Importante destacar que algumas funções do `tidyverse` podem ser úteis, como a `vars()` e a `tidyselect`.
+
+A `map_if`, dentre diversas outras possibilidades, é útil para resolver questões de aplicar determinadas funções somente em variáveis que atendem às condições. Passamos recentemente por esse problema ao tentar aplicar `map_dbl()` sobre uma lista que tinha variáveis de outros tipos que não `double`, mas isso também se aplica a funções básicas como, por exemplo, `sum()` e `mean()`. Vamos nos manter no exemplo de `lst_CO2`
+
+```{r, error=T}
+
+# A map diretamente não seria aplicável sobre uma lista com elementos de diferentes tipos: 
+lst_CO2_map <- lst_CO2[[1]] %>% map(sum)
+
+# Usando agora a map_if e resgatando o objeto m_lgl que testa quais são as variáveis do tipo double
+lst_CO2_map_if <- lst_CO2[[1]] %>% map_if(., m_lgl, sum, .else=unlist(.))
+lst_CO2_map_if
+
+```
+
+Já para o caso da `map_at()` os inputs são mais manuais, necessitando indicar exatamente em quais elementos aplicar a função. No caso anterior, como sabemos que apenas os dois últimos são passíveis de receber a função `sum()` esta operação seria possível, caso contrário seria necessário investigar mais a fundo a lista para saber exatamente onde podem ser aplicadas.
+
+```{r}
+lst_CO2_map_at <- lst_CO2[[1]] %>% map_at(., c(4,5), sum)
+lst_CO2_map_at
+
+```
+
+No entanto, nesse caso ainda estaríamos mantendo a lista completa para aqueles que não foram indicando, necessitanto de outro passo para obter um resultado equivalente ao de `map_if()`:
+
+```{r}
+lst_CO2_map_at <- lst_CO2_map_at %>% map_at(., c(1:3), unlist(.))
+lst_CO2_map_at
+```
+
+
 
 ## Fonte
 
