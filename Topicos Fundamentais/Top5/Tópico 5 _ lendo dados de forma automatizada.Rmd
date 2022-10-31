@@ -378,8 +378,8 @@ Vamos usar como exemplo, o download de informações que podem a vir serem neces
 
 ```{r}
 
-download.file("https://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2018/tabelas_xls/tabelas_de_recursos_e_usos/nivel_68_2010_2018_xls.zip", destfile = "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2018.zip", mode = "wb")
-TRU_2010_2018 <- "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2018.zip"
+download.file("https://ftp.ibge.gov.br/Contas_Nacionais/Sistema_de_Contas_Nacionais/2019/tabelas_xls/tabelas_de_recursos_e_usos/nivel_68_2010_2019_xls.zip", destfile = "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2019.zip", mode = "wb")
+TRU_2010_2018 <- "Tabelas_de_Recursos_e_Usos_nivel_68_2010_2019.zip"
 
 ```
 

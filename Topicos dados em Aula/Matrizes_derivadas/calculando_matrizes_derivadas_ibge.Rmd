@@ -88,7 +88,7 @@ Para entendermos a composição das informações das Tabelas de Recursos e Usos
 #### Quadro 1 - Composição das informações das Tabelas de Recursos e Usos - TRU
 
 |                         | Produtos<br>Nacionais | Atividades | Demanda<br>Final | Valor da <br>Produção |
-|:------------------------|:---------------------:|:----------:|:----------------:|:---------------------:|
+|:--------------|:-------------:|:-------------:|:-------------:|:-------------:|
 | Produtos Nacionais      |                       |   $U_n$    |      $F_n$       |          $q$          |
 | Produtos Importados     |                       |   $U_m$    |      $F_m$       |                       |
 | Atividades              |          $V$          |            |       $E$        |          $g$          |
@@ -222,9 +222,9 @@ B_m &= U_m (\hat{g}^{-1})
 \end{align}
 ```
 ```{r}
-B_n <- U_n %>% as.matrix %*% solve(diag(c(g)))
+B_n <- as.matrix(U_n) %*% solve(diag(c(g)))
 
-B_m <- U_m %>% as.matrix %*% solve(diag(c(g)))
+B_m <- as.matrix(U_m) %*% solve(diag(c(g)))
 ```
 
 #### Calculando $D$

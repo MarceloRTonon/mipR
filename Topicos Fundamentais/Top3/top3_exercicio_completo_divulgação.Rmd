@@ -80,7 +80,9 @@ Se você quer acessar essa documentação de um pacote que você ainda não inst
 
 ### 1. Lendo a NIOT 2016 para a Italia (WIOD) pela primeira vez
 
-Vamos agora usar a base de dados NIOT para praticar o que foi passado nos últimos tópicos. As NIOT (em inglês National Input Output Tables) estão disponíveis no [site da WIOD](http://www.wiod.org/). Para acessar a página de download das NIOT', clique na aba `Release 2016` opção `Input-Output Tables` e numa coluna na parte direita da tela escrito `Related Tables` clique na opção `National Tables`([Clique aqui](http://www.wiod.org/database/niots16) para acessar a página). Lá terá a opção `Italy NIOT` para baixar, ou [clique aqui](http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx).
+Vamos agora usar a base de dados NIOT para praticar o que foi passado nos últimos tópicos. As NIOT (em inglês National Input Output Tables) estão disponíveis no [site da WIOD](
+
+). Para acessar a página de download das NIOT', clique na aba `Release 2016` opção `Input-Output Tables` e numa coluna na parte direita da tela escrito `Related Tables` clique na opção `National Tables`([Clique aqui](http://www.wiod.org/database/niots16) para acessar a página). Lá terá a opção `Italy NIOT` para baixar, ou [clique aqui](http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx).
 
 Porém vamos agora mostrar uma outra forma de baixar, os dados sem precisar sair do Rstudio. (E sem gravar no disco rígido esse arquivo, usando apenas um arquivo temporário)
 
@@ -93,7 +95,7 @@ arq_temp <- tempfile(fileext = ".xlsx")
 download.file(url = "http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx", destfile = arq_temp, mode = "wb")
 
 # Importando a NIOT para o R:
-niotITA <- read_xlsx(arq_temp, sheet = 2)
+niotITA <- read_xlsx("ITA_niot_nov16.xlsx", sheet = 2)
 
 # Excluindo arq_temp
 unlink(arq_temp)
