@@ -121,7 +121,7 @@ Depois de baixado, apenas vá clicando `NEXT` tal qual no exemplo do R e o servi
 
 ### Instalando o **Rtools**
 
-**Importante: Se por algum motivo você não conseguir instalar o Rtools, não tem problema para os exercicios que iremos fazer neste curso. Porém algumas funcionalidades de certos pacotes do R pressupõe o Rtools.**
+**Importante: Se por algum motivo você não conseguir instalar o Rtools, não tem problema para os exercicios que iremos fazer neste curso. Porém algumas funcionalidades de certos pacotes do R pressupõem o Rtools.**
 
 Se você usa Windows, para algumas das funcionalidades do **R** e do **RStudio** será necessário **Rtools**. Se você não tem baixe o Java neste link https://www.java.com/pt_BR/download/ e o instale.
 
