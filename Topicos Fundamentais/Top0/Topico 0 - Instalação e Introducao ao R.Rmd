@@ -1,7 +1,7 @@
 ---
 title: "Tópico 0 - Apresentação do curso e Introdução ao R"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: '2020'
+date: '2023'
 output:
   html_document: default
 ---

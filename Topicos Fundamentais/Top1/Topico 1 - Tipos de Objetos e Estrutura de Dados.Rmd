@@ -1,7 +1,7 @@
 ---
 title: "Tópico 1 - Básico: Tipos de Objetos e Estruturas de Dados"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "11/05/2021"
+date: "`r format(Sys.time(), '%d/%m/%y')`"
 output: html_document
 ---
 
