@@ -1,7 +1,7 @@
 ---
 title: "Tópico 2 - Leitura e Exportação de Dados"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "18/05/2021"
+date: "`r format(Sys.time(), '%d/%m/%y')`"
 output: html_document
 ---
 
@@ -255,7 +255,7 @@ O item 4 é uma questão de comodidade pura, há de se admitir. O item 3 pode ou
 
 ### 5.0 Baixando a matriz
 
-E iremos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las](ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls) ou procure no site do IBGE se o link estiver desatualizado. E coloque na pasta `top2`. No geral, tem formas de se baixar diretamente pelo console, porém no site do IBGE isso sempre dá erro.
+E iremos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las](https://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls) ou procure no site do IBGE se o link estiver desatualizado. E coloque na pasta `top2`. No geral, tem formas de se baixar diretamente pelo console, porém no site do IBGE isso sempre dá erro.
 
 ### 5.1 Abrindo e analisando a planilha
 

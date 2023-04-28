@@ -1,7 +1,7 @@
 ---
 title: "Exercícios - Tópico 2"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "18/05/2021"
+date: "`r format(Sys.time(), '%d/%m/%y')`"
 output: html_document
 ---
 
@@ -53,7 +53,7 @@ Se você ainda não dominou bem o passo **3** dessa lista confira se você fez b
 
 ## 1. Lendo os dados em Excel
 
-Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE\_2015.**
+Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](https://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE\_2015.**
 
 **Importante:** Se você não conseguir baixar por esse link, entre no site do IBGE e baixe diretamente de lá!
 

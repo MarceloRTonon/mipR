@@ -16,12 +16,12 @@ c_0 <- sum(b) # "sum()" e uma funcao que retorna a soma de todos elementos do co
 
 # Operacoes basicas
 
-a+c_0 
-a-c_0 
-a/c_0 
-a*c_0 
-a^c_0 
-a%%c_0
+a + c_0 
+a - c_0 
+a / c_0 
+a * c_0 
+a ^ c_0 
+a %% c_0
 
 # Pergunta: O que aconteceria se fizessemos as operacoes com "b" e nao com "c"?
 
@@ -36,8 +36,11 @@ library(purrr)
 
 c_1 <- sum(c(a,4))
 
-c_2 <- c(a,4) %>% sum()
-c_2b <- a %>% c(4)%>% sum()
+c_2 <- c(a,4) %>% 
+  sum()
+c_2b <- a %>% 
+  c(4) %>% 
+  sum()
 
 
 # Como saber se os valores sao iguais?
