@@ -1,7 +1,7 @@
 ---
 title: "Tópico 3 - Exercicio"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "04/06/2021"
+date: "`r format(Sys.time(), '%d/%m/%y')`"
 output: html_document
 ---
 
