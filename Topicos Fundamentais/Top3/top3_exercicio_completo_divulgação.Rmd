@@ -251,8 +251,6 @@ teste_Q1_10 <- all(pessoa_1 | pessoa_2)
 teste_Q1_10
 ```
 
-%\#\#\#\# Q.1.11 Para qualquer combinação de pessoas listadas o operador `&&` sempre retornará o mesmo resultado. Olhe para os dados e diga: por que não pode ser diferente? Quais características nos vetores seriam necessárias para usar isso. Por que isso não é o caso de `||`?
-
 #### Desafio D.1.1 O que o código abaixo está testando? Como você poderia substituir isso de forma muito simples?
 
 ```{r, eval=FALSE}
@@ -277,7 +275,7 @@ func_D_1_2(pessoa_1, pessoa_2)
 func_D_1_2(pessoa_1, pessoa_3)
 ```
 
-#### Q.1.12 - Explique as diferenças entre `&`, `&&`, `|` e `||`.
+#### Q.1.11 - Explique as diferenças entre `&`, `&&`, `|` e `||`.
 
 ```{r, eval=FALSE, include=FALSE}
 
@@ -320,6 +318,20 @@ b <- matrix(c(4,3,0,6,2,0,5,1,0), 3, 3)
 tem_inversa <- function(x){
   ifelse(det(x) != 0, "Tem Inversa", "Não tem Inversa")
 }
+
+# Naira deu essa solução (função vetorizada)
+tem_inversa2 <- function(x){
+  if(det(x) != 0) {
+    output <- list(resp = "Tem Inversa", result = solve(x))
+  }
+  
+  else{
+    output <- "Não tem Inversa"
+  }
+  
+  return(output)
+}
+
 ```
 
 ## Parte 3 - Subsetting Base R
