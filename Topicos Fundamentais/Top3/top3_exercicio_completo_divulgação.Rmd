@@ -476,7 +476,7 @@ class(niotITA)
 ```{r, include=FALSE}
 ItaQ1.3 <- niotITA %>% dplyr::filter((!is.na(Year)))
 # Usando filter_all
-ItaQ1.3 <- niotITA %>% dplyr::filter_all(all_vars(!is.na(.)))
+ItaQ1.3b <- niotITA %>% dplyr::filter_all(all_vars(!is.na(.)))
 ```
 
 #### Q.1.4 Usando o pacote `tidyr`, crie um objeto `ItaQ1.4` que exclui de `niotITA` as linhas que possuem NA.
@@ -620,7 +620,7 @@ Repare que esses codes são os mesmos que os nomes das colunas de `ItaQ2.1`. E q
 vecQ2.3 <- c(colnames(ItaQ2.1)[1:4], CodeQ2.2$Code)
 ```
 
-#### Q.2.4 Crie uma base de dados `ItaQ2.4` selecionando os dados de `ItaQ1.9` que são da demanda intersetorial (ou seja, não são da demanda final). **Não use nenhum número arbitrário**. De quantas formas você consegue fazer isso? Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.
+#### Q.2.4 Crie uma base de dados `ItaQ2.4` selecionando os dados de `ItaQ1.9` que são da demanda intersetorial (ou seja, não são da demanda final). **Não use nenhum número arbitrário nessa questão (use informações anteriores)**. De quantas formas você consegue fazer isso? Não deixe de selecionar as 4 primeiras colunas com as informações dos dados.
 
 ```{r, include=FALSE}
 ItaQ2.4 <- ItaQ1.9 %>%
@@ -650,7 +650,7 @@ Q2.7 <- ncol(ItaQ1.9) - ncol(ItaQ2.4)
 
 ```
 
-#### D.2.1 Provido do número de colunas de `ItaQ1.9` e do valor `Q2.7`, crie um objeto chamado `ItaD2.1` que seja igual à `ItaQ2.4`. *Não use nenhum número arbitrário*.
+#### D.2.1 Provido do número de colunas de `ItaQ1.9` e do valor `Q2.7`, crie um objeto chamado `ItaD2.1` que seja igual à `ItaQ2.4`. *Não use nenhum número arbitrário (exceto o número 1)*. *Dica*: Usar o base R pode ser útil. 
 
 ```{r, include=FALSE}
 ItaD2.1 <- ItaQ1.9[,1:(ncol(ItaQ1.9)-Q2.7)]
