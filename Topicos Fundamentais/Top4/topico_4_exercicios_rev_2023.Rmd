@@ -161,15 +161,10 @@ O passo 3 no exemplo acima pode ser considerado supérfluo e você provavelmente
 paisesQ2.1 <- c("AUS", "HUN", "ESP")
 ```
 
-#### Q.2.2 - No exercicio do Tópico 2 foi realizado o download dos dados da niot para a Italia, cujo código era `ITA`. Naquele caso a url era:
-```{r, eval= FALSE, include=TRUE}
-"http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx"
-```
-
-Sabendo que todos os links da niot seguem o mesmo padrão, crie um vetor `urlsQ2.2` usando os valores de `paisesQ2.1` para criar um vetor com os links dos países de `paisesQ2.1`.
+#### Q.2.2 - No exercicio do Tópico 2 foi os dados da niot para a Italia, cujo código era `ITA`. Sabendo que todos os arquivos de outros paises da niot seguem o mesmo padrão, crie um vetor `niotQ2.2` usando os valores de `paisesQ2.1` para criar um vetor com os links dos países de `paisesQ2.1`.
 
 ```{r, include=FALSE}
-urlsQ2.2 <- paste0("http://www.wiod.org/protected3/data16/niot/", paisesQ2.1,"_niot_nov16.xlsx")
+niotQ2.2 <- paste0("Topicos Fundamentais/Top4/", paisesQ2.1,"_NIOT_nov16.xlsx")
 ```
 
 #### Q.2.3 - É necessário usar `for` neste caso? Por que?
@@ -179,23 +174,16 @@ urlsQ2.2 <- paste0("http://www.wiod.org/protected3/data16/niot/", paisesQ2.1,"_n
 
 #### Q.2.4 - Crie uma lista vazia chamada `niotQ2`
 
-#### Q.2.5 - Extraia apenas o primeiro valor de `urlsQ2.2` e use-o para importar a base de dados a partir dessa url tal qual foi feito para `niotITA` no inicio do exercicio do Tópico 3. Aloque esse tibble como o primeiro elemento de `niotQ2`
+#### Q.2.5 - Extraia apenas o primeiro valor de `niotQ2.2` e use-o para importar a base de dados a partir desse arquivo tal qual foi feito para `niotITA` no inicio do exercicio do Tópico 3. Aloque esse tibble como o primeiro elemento de `niotQ2`
 
 ```{r}
-niotQ2 <- list()
+
 library(readxl)
-#Criando um arquivo temporário
-arq_temp <- tempfile(fileext = ".xlsx")
-#Baixando o arquivo
-# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
-download.file(url = urlsQ2.2[1], destfile = arq_temp, mode = "wb")
 
 # Importando a NIOT para o R:
 niotQ2 <- list()
-niotQ2[[1]] <- read_xlsx(arq_temp, sheet = 2)
+niotQ2[[1]] <- read_xlsx(niotQ2.2[[1]], sheet = 2)
 
-# Excluindo arq_temp
-unlink(arq_temp)
 ```
 
 #### Q.2.6 Faça o "Passo 3" do exemplo dado no inicio da questão e substitua 1 por i onde é necessário.
