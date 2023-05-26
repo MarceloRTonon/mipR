@@ -182,7 +182,7 @@ library(readxl)
 
 # Importando a NIOT para o R:
 niotQ2 <- list()
-niotQ2[[1]] <- read_xlsx(niotQ2.2[[1]], sheet = 2)
+niotQ2[[1]] <- read_xlsx(niotQ2.2[1], sheet = 2)
 
 ```
 
