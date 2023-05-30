@@ -164,7 +164,8 @@ paisesQ2.1 <- c("AUS", "HUN", "ESP")
 #### Q.2.2 - No exercicio do Tópico 2 foi os dados da niot para a Italia, cujo código era `ITA`. Sabendo que todos os arquivos de outros paises da niot seguem o mesmo padrão, crie um vetor `niotQ2.2` usando os valores de `paisesQ2.1` para criar um vetor com os links dos países de `paisesQ2.1`.
 
 ```{r, include=FALSE}
-niotQ2.2 <- paste0("Topicos Fundamentais/Top4/", paisesQ2.1,"_NIOT_nov16.xlsx")
+wd <- getwd()
+niotQ2.2 <- paste0(paisesQ2.1,"_NIOT_nov16.xlsx")
 ```
 
 #### Q.2.3 - É necessário usar `for` neste caso? Por que?
@@ -190,18 +191,9 @@ niotQ2[[1]] <- read_xlsx(niotQ2.2[1], sheet = 2)
 
 ```{r}
 i <- 1
-niotQ2 <- list()
-#Criando um arquivo temporário
-arq_temp <- tempfile(fileext = ".xlsx")
-#Baixando o arquivo
-# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
-download.file(url = as.character(urlsQ2.2[i]), destfile = arq_temp, mode = "wb")
-
 # Importando a NIOT para o R:
-niotQ2[[i]] <- read_xlsx(arq_temp, sheet = 2)
-
-# Excluindo arq_temp
-unlink(arq_temp)
+niotQ2.6 <- list()
+niotQ2.6[[i]] <- read_xlsx(niotQ2.2[i], sheet = 2)
 ```
 
 #### Q.2.7 Meça o tempo que o R demora para realizar a tarefa de `Q.2.6`
@@ -209,36 +201,24 @@ unlink(arq_temp)
 ```{r}
 tic()
 i <- 1
-#Criando um arquivo temporário
-arq_temp <- tempfile(fileext = ".xlsx")
-#Baixando o arquivo
-# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
-download.file(url = urlsQ2.2[i], destfile = arq_temp, mode = "wb")
 
 # Importando a NIOT para o R:
-niotQ2[[i]] <- read_xlsx(arq_temp, sheet = 2)
-
-# Excluindo arq_temp
-unlink(arq_temp)
+niotQ2.6 <- list()
+niotQ2.6[[i]] <- read_xlsx(niotQ2.2[i], sheet = 2)
 toc()
 ```
 
-#### Q.2.8 Automatize com o for a questão `Q.2.5` e meça o tempo total requerido.
+#### Q.2.8 Automatize com o `for` a questão `Q.2.5` e meça o tempo total requerido.
 
 ```{r}
 tic()
-for(i in 1:length(urlsQ2.2)){
-  #Criando um arquivo temporário
-arq_temp <- tempfile(fileext = ".xlsx")
-#Baixando o arquivo
-# Usamos 'mode = "wb"' porque iremos baixar um arquivo binário (que não é texto puro, como no caso de csv).
-download.file(url = urlsQ2.2[i], destfile = arq_temp, mode = "wb")
+
+niotQ2 <- list()
+
+for(i in 1:length(niotQ2.2)){
 
 # Importando a NIOT para o R:
-niotQ2[[i]] <- read_xlsx(arq_temp, sheet = 2)
-
-# Excluindo arq_temp
-unlink(arq_temp)
+niotQ2[[i]] <- read_xlsx(niotQ2.2[i], sheet = 2)
 }
 toc()
 ```
