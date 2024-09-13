@@ -80,13 +80,6 @@ Se você quer acessar essa documentação de um pacote que você ainda não inst
 
 ### 1. Lendo a NIOT 2016 para a Italia (WIOD) pela primeira vez
 
-<<<<<<< HEAD
-Vamos agora usar a base de dados NIOT para praticar o que foi passado nos últimos tópicos. As NIOT (em inglês National Input Output Tables) estão disponíveis no [site da WIOD](
-
-). Para acessar a página de download das NIOT', clique na aba `Release 2016` opção `Input-Output Tables` e numa coluna na parte direita da tela escrito `Related Tables` clique na opção `National Tables`([Clique aqui](http://www.wiod.org/database/niots16) para acessar a página). Lá terá a opção `Italy NIOT` para baixar, ou [clique aqui](http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx).
-=======
-**IMPORTANTE:** Essa parte abaixo pode muito facilmente parar de funcionar no futuro, uma vez que ela depende de links de um site externo.
->>>>>>> 022ecdd7c16dc598bd596ea1ed1ed0b8e5acaf57
 
 Vamos agora usar a base de dados NIOT para praticar o que foi passado nos últimos tópicos. As NIOT (em inglês National Input Output Tables) da WIOD, estão disponíveis no [site da Universidade de Groningen](https://www.rug.nl/ggdc/valuechain/wiod/wiod-2016-release).^[Antigamente era possível baixar cada país individualmente. No entanto, agora é necessário baixar toda a série e então fazer a depuração.] Indo na tabela _Input-Output tables of the WIOD 2016 release_, tem o link que baixa um arquivo zip com o [Excel para todos os países](https://dataverse.nl/api/access/datafile/199099). Para o exercicio que vamos realizar, precisamos apenas do arquivo referente à Italia. Extraia esse arquivo, `ITA_NIOT_nov16.xlsx` no `working directory`. Como vimos no Tópico 2, para descobrir qual é o seu `working directory` basta fazer o comando no R:
 ```{r,  eval = FALSE, include=TRUE}
@@ -111,6 +104,7 @@ niotITA <- read_xlsx(arq_NiotITA, sheet = 2)
 
 # Essa parte esta com problema pois o api não aceita mais que 60s de download via R.
 library(readxl)
+library(openxlsx)
 #Criando um arquivo temporário
 tempzip <- tempfile(fileext = ".zip")
 #Baixando o arquivo
@@ -120,14 +114,17 @@ download.file(url = "https://dataverse.nl/api/access/datafile/199099", destfile 
 arq_NiotITA <- "ITA_NIOT_nov16.xlsx"
 
 unz(description = tempzip, 
-    filename = arq_NiotITA) %>%
+    filename = arq_NiotITA) |> 
+  openxlsx::read.xlsx(sheet= 2)
+
+%>%
   read_xlsx(sheet = 2)
 # Importando a NIOT para o R:
-<<<<<<< HEAD
-niotITA <- read_xlsx("ITA_niot_nov16.xlsx", sheet = 2)
-=======
+
+niotITA <- read_xlsx("ITA_niot_nov16.xlsx",
+                     sheet = 2)
+
 niotITA <- read_xlsx(arq_NiotITA, sheet = 2)
->>>>>>> 022ecdd7c16dc598bd596ea1ed1ed0b8e5acaf57
 
 # Excluindo arq_temp
 
@@ -138,6 +135,8 @@ Existem vantagens e desvantagens de você baixar as coisas diretamente do seu te
 Nesse caso, por ser um arquivo relativamente leve (1.6 mb) você não deve ter problemas. Rode o código acima para seguir no exercicio a seguir.
 
 ```
+
+
 
 
 ## Parte 1 - Operadores Lógicos e Booleanos
