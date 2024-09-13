@@ -1,7 +1,7 @@
 ---
 title: "Calculando as matrizes derivadas do IBGE"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "09/05/2022"
+date: "`r format(Sys.time(), '%d/%m/%y')`"
 output: html_document
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: "Exercícios - Tópico 2"
 author: "Marcelo Tonon e Felipe Cornelio"
-date: "18/05/2021"
+date: "`r format(Sys.time(), '%d/%m/%y')`"
 output: html_document
 ---
 
@@ -53,7 +53,7 @@ Se você ainda não dominou bem o passo **3** dessa lista confira se você fez b
 
 ## 1. Lendo os dados em Excel
 
-Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE\_2015.**
+Assim como na parte expositiva, vamos usar as matrizes do IBGE de 2015. [Clique aqui para baixa-las se você não o fez](https://ftp.ibge.gov.br/Contas_Nacionais/Matriz_de_Insumo_Produto/2015/Matriz_de_Insumo_Produto_2015_Nivel_67.xls). Iremos nos referir a esse arquivo como **IBGE\_2015.**
 
 **Importante:** Se você não conseguir baixar por esse link, entre no site do IBGE e baixe diretamente de lá!
 
@@ -115,10 +115,13 @@ vignette("lifecycle")
 -   `dfQ1.5` tenha row.names com a Descrição de atividades.
 -   `dfQ1.5` seja uma matriz quadrada (67 x 67), apenas com os dados númericos
 
-**Dica:** Ao contrario do que foi exposto na Aula 2, há um modo em que não é necessário uma nova linha apenas para mudar os `row.names` de `dfQ1.5`. Veja a documentação de `as.data.frame` para ver como. **Isso está errado**
+**Dica:** Ao contrario do que foi exposto na Aula 2, há um modo em que não é necessário uma nova linha apenas para mudar os `row.names` de `dfQ1.5`. Veja a documentação de `as.data.frame` para ver como. Tome cuidado com o tipo de objeto entrará como input da função (pensar em `unlist` e `c()`).
 
 ```{r respostaQ_1_5}
-dfQ1.5 <- as.data.frame(dfQ1.1[,-c(1:2)])
+dfQ1.5 <- as.data.frame(dfQ1.1[,-c(1:2)],)
+dfQ1.5b <- as.data.frame(dfQ1.1[,-c(1:2)], row.names = unlist(dfQ1.1[,2]))
+dfQ1.5c <- as.data.frame(dfQ1.1[,-c(1:2)], row.names = c(dfQ1.1[,2]))
+
 rownames(dfQ1.5) <- unlist(dfQ1.1[,2])
 
 
@@ -153,7 +156,7 @@ dfQ1.6 <-  column_to_rownames(dfQ1.2[,-1], var = colnames(dfQ1.2[,2]))
 
 ```{r respostaD_1_2}
 tb_to_df <- function(data, column, RowNames = NULL){
-  as.data.frame(data[, column], row.names = RowNames)
+  as.data.frame(data[, -column], row.names = RowNames)
 }
 ```
 
