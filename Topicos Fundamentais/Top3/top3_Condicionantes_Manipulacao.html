@@ -11,7 +11,6 @@
 
 <meta name="author" content="Marcelo Tonon e Felipe Cornelio" />
 
-<meta name="date" content="2023-04-05" />
 
 <title>Tópico 3 - Condicionalidades e Manipulação de Dados</title>
 
@@ -299,23 +298,17 @@ overflow-y: auto;
 border: 1px solid #ddd;
 border-radius: 4px;
 }
-.tabset-dropdown > .nav-tabs > li.active:before {
-content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+content: "\e259";
 font-family: 'Glyphicons Halflings';
 display: inline-block;
 padding: 10px;
 border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-content: "";
-border: none;
-}
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-content: "";
+content: "\e258";
 font-family: 'Glyphicons Halflings';
-display: inline-block;
-padding: 10px;
-border-right: 1px solid #ddd;
+border: none;
 }
 .tabset-dropdown > .nav-tabs > li.active {
 display: block;
@@ -359,7 +352,7 @@ display: none;
 <h1 class="title toc-ignore">Tópico 3 - Condicionalidades e Manipulação
 de Dados</h1>
 <h4 class="author">Marcelo Tonon e Felipe Cornelio</h4>
-<h4 class="date">04/05/23</h4>
+<h4 class="date">13/09/24</h4>
 
 </div>
 
@@ -785,16 +778,10 @@ inverte o sinal lógico do elemento:</p>
 <pre class="r"><code># Caso você queira extrair o resultado de uma condição escolhida use &quot;!&quot;:
 !(a &gt; 2) # Que equivale a receber o resultado lógico do teste TRUE ou FALSE</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<p>Em alguns casos, outra opção é usar dois operadores em sequência
-<code>&amp;&amp;</code> ou <code>||</code> que realizaram a mesma tarefa
-mas poupará a capacidade computacional do seu computador. Na caso de
-<code>&amp;&amp;</code>, o resultado é automaticamente dado como
-<code>FALSE</code> caso a primeira condição já não seja atendida. Já
-para <code>||</code>, caso a primeira condição seja atendida, o
-resultado automaticamente é <code>TRUE</code>. Uma boa analogia de
-<code>||</code> e <code>&amp;&amp;</code> é de <code>identical</code> e
-<code>==</code>, que caso você tenha feito os desafios do Tópico 1 você
-se lembrará que:</p>
+<p><strong>IMPORTANTE (Nota em 13/09/2024)</strong> O funcionamento de
+<code>&amp;&amp;</code> e <code>||</code> mudou desde que a parte a
+seguir foi feita. Logo <strong>IGNORE</strong> tudo referente à ela na
+tabela a seguir:</p>
 <center>
 <p><strong>Testando igualdade no R</strong></p>
 </center>
@@ -874,23 +861,10 @@ dentro de <code>any()</code></td>
 </tr>
 </tbody>
 </table>
-<p>A coluna “Primeira Célula” da linhas “Todos” e “Algum” diz respeito
-aos resultados de <code>&amp;&amp;</code> e <code>||</code> em relação a
-preposição lógica da linha.</p>
-<p><strong>É muito importante</strong> que você entenda que
-<code>&amp;&amp;</code> e <code>||</code> retornar <code>TRUE</code>
-<strong>NÃO</strong> quer dizer que o teste foi feito para todo o vetor
-analisado e portanto ele é <code>TRUE</code>. Só que o teste para os
-primeiros valores responderam <code>TRUE</code>. Por outro lado, se o
-resultado retorna <code>FALSE</code> você sabe que os vetores não são
-suficientes. Para ficar mais claro, vamos considerar os seguintes
-vetores:</p>
 <pre class="r"><code>vetor_a &lt;- c(TRUE, FALSE, FALSE, TRUE)
 vetor_b &lt;- c(TRUE, TRUE, TRUE, FALSE)
 vetor_c &lt;- c(FALSE, TRUE, TRUE, FALSE)
 vetor_d &lt;- c(FALSE, FALSE, TRUE, FALSE)</code></pre>
-<p>Agora vamos aplicar os operadores em <code>vetor_a</code> e
-<code>vetor_b</code>:</p>
 <pre class="r"><code>list(&quot;E&quot; = vetor_a &amp; vetor_b,
      &quot;E/OU&quot; = vetor_a | vetor_b,
      &quot;OU_Exc&quot; = xor(vetor_a, vetor_b))</code></pre>
@@ -902,24 +876,6 @@ vetor_d &lt;- c(FALSE, FALSE, TRUE, FALSE)</code></pre>
 ## 
 ## $OU_Exc
 ## [1] FALSE  TRUE  TRUE  TRUE</code></pre>
-<pre class="r"><code>list(vetor_a &amp;&amp; vetor_b,
-     vetor_a || vetor_b)</code></pre>
-<pre><code>## Warning in vetor_a &amp;&amp; vetor_b: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;
-
-## Warning in vetor_a &amp;&amp; vetor_b: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;</code></pre>
-<pre><code>## Warning in vetor_a || vetor_b: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;</code></pre>
-<pre><code>## [[1]]
-## [1] TRUE
-## 
-## [[2]]
-## [1] TRUE</code></pre>
-<p>Sabemos que nem todos os valores do teste célula à célula para
-<code>vetor_a</code> e <code>vetor_b</code> retornam <code>TRUE</code>,
-mas mesmo assim os teste <code>&amp;&amp;</code> e <code>||</code>
-retornam <code>TRUE</code> pois tem TRUE na primeira célula. Assim
-sendo, nesse caso acima, não podemos dizer nada sobre a relação do
-<code>vetor_a</code> e <code>vetor_b</code> como um todo. No caso de
-<code>vetor_c</code> e <code>vetor_d</code>, temos que:</p>
 <pre class="r"><code>list(&quot;E&quot; = vetor_c &amp; vetor_d,
      &quot;E/OU&quot; = vetor_c | vetor_d,
      &quot;OU_Exc&quot; = xor(vetor_c, vetor_d))</code></pre>
@@ -931,17 +887,7 @@ sendo, nesse caso acima, não podemos dizer nada sobre a relação do
 ## 
 ## $OU_Exc
 ## [1] FALSE  TRUE FALSE FALSE</code></pre>
-<pre class="r"><code>list(vetor_c &amp;&amp; vetor_d,
-     vetor_c || vetor_d)</code></pre>
-<pre><code>## Warning in vetor_c &amp;&amp; vetor_d: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;</code></pre>
-<pre><code>## Warning in vetor_c || vetor_d: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;
-
-## Warning in vetor_c || vetor_d: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;</code></pre>
-<pre><code>## [[1]]
-## [1] FALSE
-## 
-## [[2]]
-## [1] FALSE</code></pre>
+<pre class="r"><code>#list(vetor_a &amp;&amp; vetor_b,    vetor_a || vetor_b)</code></pre>
 <p>Ou seja, quando a primeiras células dos resultados dos testes de
 <code>&amp;</code> e <code>|</code> for <code>FALSE</code>, teremos que
 o mesmo ocorrerá com <code>&amp;&amp;</code> e <code>||</code>
@@ -953,51 +899,18 @@ possível realizar um teste usando a função <code>all()</code>:</p>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code>all(a &gt;= 2, b &gt; 2, 5 %in% d) # agora com todas sendo antendidas</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<p>Vamos ver isso agora para reforçar a ideia de <code>&amp;&amp;</code>
-e <code>||</code> serem necessária mas não suficiente:</p>
-<pre class="r"><code>all(vetor_a &amp; vetor_b) == (vetor_a &amp;&amp; vetor_b)</code></pre>
-<pre><code>## Warning in vetor_a &amp;&amp; vetor_b: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;
-
-## Warning in vetor_a &amp;&amp; vetor_b: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;</code></pre>
-<pre><code>## [1] FALSE</code></pre>
 <p>O resultado é <code>FALSE</code>, pois <code>all</code> retorna
 <code>FALSE</code> ao avaliar que os resultados de <code>&amp;</code>
 não são todos <code>TRUE</code>, enquanto <code>&amp;&amp;</code>avaliou
 apenas os primeiros valores, assim sendo, a comparação
 <code>TRUE ==FALSE</code> retorna <code>FALSE</code>. Por outro lado,
 para o caso de <code>vetor_c&amp;&amp; vetor_d</code>, temos:</p>
-<pre class="r"><code>all(vetor_c &amp; vetor_d) == (vetor_c &amp;&amp; vetor_d)</code></pre>
-<pre><code>## Warning in vetor_c &amp;&amp; vetor_d: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<p>Como ambos os resultados dão <code>FALSE</code>, temos que a
-comparação retorna <code>TRUE</code>. Ou seja, quando
-<code>&amp;&amp;</code> retorna <code>FALSE</code>, <code>all</code>
-necessariamente retornará o mesmo valor. Condição necessária, mas não
-suficiente. A extensão disso para o caso de <code>||</code> é deixado
-como exercicio para o leitor.</p>
 <p>Temos também o caso de <code>any</code>, em que retorna
 <code>TRUE</code> se algum dos valores analisados for
 <code>TRUE</code>.</p>
 <pre class="r"><code># Caso você tenha várias condições, você pode perguntar se qualquer uma delas é atendida usando o &quot;any()&quot; ou se todas são atendidas com &quot;all()&quot;:
 any(a &gt; 2, b == 2, 6 %in% d) # nenhuma é atendido logo devemos receber &quot;FALSE&quot;
 any(a &gt;= 2, b == 2, 6 %in% d) # mudando a condição, agora &quot;a &gt;= 2&quot; é atendida</code></pre>
-<p>Temos agora o caso inverso de antes. Se <code>a||b</code> ou
-<code>a&amp;&amp;b</code> retornar <code>TRUE</code>, então a análise de
-<code>any(a|b)</code> ou <code>any(a&amp;b)</code> necessariamente
-retornará <code>TRUE</code>. Porém, se os testes de
-<code>&amp;&amp;</code> ou <code>||</code> retornar <code>FALSE</code>,
-não pode-se dizer que <code>any()</code> retornará <code>FALSE</code>.
-Veja os casos abaixo:</p>
-<pre class="r"><code>#Ambos dão TRUE
-any(vetor_a &amp; vetor_b) == (vetor_a &amp;&amp; vetor_b)</code></pre>
-<pre><code>## Warning in vetor_a &amp;&amp; vetor_b: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;
-
-## Warning in vetor_a &amp;&amp; vetor_b: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>#&amp;&amp; retorna FALSE, mas any() retorna TRUE
-any(vetor_c &amp; vetor_d) == (vetor_c &amp;&amp; vetor_d)</code></pre>
-<pre><code>## Warning in vetor_c &amp;&amp; vetor_d: &#39;length(x) = 4 &gt; 1&#39; in coercion to &#39;logical(1)&#39;</code></pre>
-<pre><code>## [1] FALSE</code></pre>
 <p>Por fim, novamente, todas essas operações podem ser usadas
 conjuntamente com <code>if</code>, <code>else</code> e
 <code>ifelse</code>. Isso amplia seu leque de opções quando deseja
@@ -1246,11 +1159,12 @@ abaixo:</p>
 selExemplo1 &lt;- select(mtcars, 5)
 pullExemplo1 &lt;- pull(mtcars, 5)
 
-# Selecionando as colunas 1,3,7
+# Selecionando as colunas 1,3,7 (Se voltar um erro, tente entender o motivo)
 
 selExemplo2 &lt;- mtcars %&gt;% select(c(1,3,7))
 pullExemplo2 &lt;- mtcars %&gt;% pull(c(1,3,7))
-# Excluindo as colunas 1,3,7
+
+# Excluindo as colunas 1,3,7 (Se voltar um erro, tente entender o motivo)
 
 selExemplo3 &lt;- mtcars %&gt;% select( -c(1, 3, 7))
 pullExemplo3 &lt;- mtcars %&gt;% pull(-c(1, 3, 7))
@@ -2015,7 +1929,7 @@ efetivamente. Podemos fazer isso usando o grupo de funções
 <code>join</code>, mais especificamente a função
 <code>left_join</code>:</p>
 <pre class="r"><code>df_inscritos %&gt;% left_join(df_km)</code></pre>
-<pre><code>## Joining, by = &quot;Nomes&quot;</code></pre>
+<pre><code>## Joining with `by = join_by(Nomes)`</code></pre>
 <pre><code>##       Nomes Idade Tempo_min
 ## 1     Maria    15        NA
 ## 2      João    16       121
@@ -2031,7 +1945,7 @@ as linhas de <code>df_inscritos</code> e alocou as linhas de
 <code>df_km</code> foram preservadas. Veja o que ocorre se trocarmos a
 ordem dos argumentas na função:</p>
 <pre class="r"><code>df_km %&gt;% left_join(df_inscritos)</code></pre>
-<pre><code>## Joining, by = &quot;Nomes&quot;</code></pre>
+<pre><code>## Joining with `by = join_by(Nomes)`</code></pre>
 <pre><code>##       Nomes Tempo_min Idade
 ## 1      João       121    16
 ## 2    Silvia       100    13
@@ -2053,7 +1967,7 @@ mesmo incluindo quem não estava inscrito. Para tanto podemos usar a
 função <code>full_join</code>, que irá manter as linhas dos dois
 dataframes. Veja abaixo:</p>
 <pre class="r"><code>df_km2 %&gt;% full_join(df_inscritos)</code></pre>
-<pre><code>## Joining, by = &quot;Nomes&quot;</code></pre>
+<pre><code>## Joining with `by = join_by(Nomes)`</code></pre>
 <pre><code>##       Nomes Tempo_min Idade
 ## 1      João       121    16
 ## 2    Silvia       100    13
@@ -2074,7 +1988,7 @@ tempo.</li>
 <p>Para conseguir essas duas coisas num único comando, basta usar a
 função <code>semi_join</code>:</p>
 <pre class="r"><code>df_km2 %&gt;% semi_join(df_inscritos)</code></pre>
-<pre><code>## Joining, by = &quot;Nomes&quot;</code></pre>
+<pre><code>## Joining with `by = join_by(Nomes)`</code></pre>
 <pre><code>##       Nomes Tempo_min
 ## 1      João       121
 ## 2    Silvia       100
@@ -2086,7 +2000,7 @@ tiverem em y, porém descarta as colunas de y.</p>
 <code>df_inscritos</code>, você quer saber quem foi o penetra na
 corrida. Basta você então usar a função <code>anti_join</code>:</p>
 <pre class="r"><code>df_km2 %&gt;% anti_join(df_inscritos)</code></pre>
-<pre><code>## Joining, by = &quot;Nomes&quot;</code></pre>
+<pre><code>## Joining with `by = join_by(Nomes)`</code></pre>
 <pre><code>##     Nomes Tempo_min
 ## 1 Juliano        92</code></pre>
 <p>Vamos supor mais uma situação: houve uma partida de futebol no dia

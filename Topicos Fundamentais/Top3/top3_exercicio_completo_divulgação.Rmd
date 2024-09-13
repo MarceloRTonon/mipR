@@ -274,10 +274,10 @@ func_D_1_2(pessoa_1, pessoa_2)
 func_D_1_2(pessoa_1, pessoa_3)
 ```
 
-#### Q.1.11 - Explique as diferenças entre `&`, `&&`, `|` e `||`.
+
 
 ```{r, eval=FALSE, include=FALSE}
-
+#### Q.1.11 - Explique as diferenças entre `&`, `&&`, `|` e `||`.
 & e | irão avaliar se todas as condições estabelecidas serão satisfeitas ou não.
 Já && e || irão avaliar as condições (da esquerda para direita) e caso alguma das condições não seja atendida, o resultado é automaticamente obtido sem que se faça os demais.
 

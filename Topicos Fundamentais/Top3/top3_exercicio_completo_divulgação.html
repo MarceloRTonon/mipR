@@ -11,7 +11,6 @@
 
 <meta name="author" content="Marcelo Tonon e Felipe Cornelio" />
 
-<meta name="date" content="2023-04-05" />
 
 <title>Tópico 3 - Exercicio</title>
 
@@ -299,23 +298,17 @@ overflow-y: auto;
 border: 1px solid #ddd;
 border-radius: 4px;
 }
-.tabset-dropdown > .nav-tabs > li.active:before {
-content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+content: "\e259";
 font-family: 'Glyphicons Halflings';
 display: inline-block;
 padding: 10px;
 border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-content: "";
-border: none;
-}
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-content: "";
+content: "\e258";
 font-family: 'Glyphicons Halflings';
-display: inline-block;
-padding: 10px;
-border-right: 1px solid #ddd;
+border: none;
 }
 .tabset-dropdown > .nav-tabs > li.active {
 display: block;
@@ -358,7 +351,7 @@ display: none;
 
 <h1 class="title toc-ignore">Tópico 3 - Exercicio</h1>
 <h4 class="author">Marcelo Tonon e Felipe Cornelio</h4>
-<h4 class="date">04/05/23</h4>
+<h4 class="date">13/09/24</h4>
 
 </div>
 
@@ -459,23 +452,6 @@ do pacote.</p>
 <h1>Exercicios</h1>
 <div id="lendo-a-niot-2016-para-a-italia-wiod-pela-primeira-vez" class="section level3">
 <h3>1. Lendo a NIOT 2016 para a Italia (WIOD) pela primeira vez</h3>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Vamos agora usar a base de dados
-NIOT para praticar o que foi passado nos últimos tópicos. As NIOT (em
-inglês National Input Output Tables) estão disponíveis no [site da
-WIOD](</p>
-</div>
-</div>
-<div id="para-acessar-a-página-de-download-das-niot-clique-na-aba-release-2016-opção-input-output-tables-e-numa-coluna-na-parte-direita-da-tela-escrito-related-tables-clique-na-opção-national-tablesclique-aqui-para-acessar-a-página.-lá-terá-a-opção-italy-niot-para-baixar-ou-clique-aqui." class="section level1">
-<h1>). Para acessar a página de download das NIOT’, clique na aba
-<code>Release 2016</code> opção <code>Input-Output Tables</code> e numa
-coluna na parte direita da tela escrito <code>Related Tables</code>
-clique na opção <code>National Tables</code>(<a href="http://www.wiod.org/database/niots16">Clique aqui</a> para acessar
-a página). Lá terá a opção <code>Italy NIOT</code> para baixar, ou <a href="http://www.wiod.org/protected3/data16/niot/ITA_niot_nov16.xlsx">clique
-aqui</a>.</h1>
-<p><strong>IMPORTANTE:</strong> Essa parte abaixo pode muito facilmente
-parar de funcionar no futuro, uma vez que ela depende de links de um
-site externo. &gt;&gt;&gt;&gt;&gt;&gt;&gt;
-022ecdd7c16dc598bd596ea1ed1ed0b8e5acaf57</p>
 <p>Vamos agora usar a base de dados NIOT para praticar o que foi passado
 nos últimos tópicos. As NIOT (em inglês National Input Output Tables) da
 WIOD, estão disponíveis no <a href="https://www.rug.nl/ggdc/valuechain/wiod/wiod-2016-release">site da
@@ -491,6 +467,7 @@ vimos no Tópico 2, para descobrir qual é o seu
 <pre class="r"><code>library(readxl)
 arq_NiotITA &lt;- &quot;ITA_NIOT_nov16.xlsx&quot;
 niotITA &lt;- read_xlsx(arq_NiotITA, sheet = 2)</code></pre>
+</div>
 <div id="parte-1---operadores-lógicos-e-booleanos" class="section level2">
 <h2>Parte 1 - Operadores Lógicos e Booleanos</h2>
 <div id="q.1.1---revise-a-table-7.1-do-hopr-para-deixar-claro-como-funciona-cada-operador-lógico." class="section level4">
@@ -597,11 +574,6 @@ uma dupla que se complementa. Teste para saber se a dupla possuí, em
 pelo menos um de seus membros, cada caracteristica listada.</h4>
 <p>Detalhe: o vetor da resposta correta tem comprimento
 <code>1</code>.</p>
-<p>%#### Q.1.11 Para qualquer combinação de pessoas listadas o operador
-<code>&amp;&amp;</code> sempre retornará o mesmo resultado. Olhe para os
-dados e diga: por que não pode ser diferente? Quais características nos
-vetores seriam necessárias para usar isso. Por que isso não é o caso de
-<code>||</code>?</p>
 </div>
 <div id="desafio-d.1.1-o-que-o-código-abaixo-está-testando-como-você-poderia-substituir-isso-de-forma-muito-simples" class="section level4">
 <h4>Desafio D.1.1 O que o código abaixo está testando? Como você poderia
@@ -618,10 +590,6 @@ isso?</h4>
 <p><strong>Detalhe:</strong> O código que vocẽ vai fazer aqui vai ser
 ineficiente mesmo. É só para você tentar entender a questão como um
 todo.</p>
-</div>
-<div id="q.1.12---explique-as-diferenças-entre-e-." class="section level4">
-<h4>Q.1.12 - Explique as diferenças entre <code>&amp;</code>,
-<code>&amp;&amp;</code>, <code>|</code> e <code>||</code>.</h4>
 </div>
 </div>
 </div>
@@ -796,13 +764,13 @@ consegue fazer isso.</h4>
 das quatro primeiras colunas de <code>ItaQ2.1</code> e todos os valores
 de Code.</h4>
 </div>
-<div id="q.2.4-crie-uma-base-de-dados-itaq2.4-selecionando-os-dados-de-itaq1.9-que-são-da-demanda-intersetorial-ou-seja-não-são-da-demanda-final.-não-use-nenhum-número-arbitrário.-de-quantas-formas-você-consegue-fazer-isso-não-deixe-de-selecionar-as-4-primeiras-colunas-com-as-informações-dos-dados." class="section level4">
+<div id="q.2.4-crie-uma-base-de-dados-itaq2.4-selecionando-os-dados-de-itaq1.9-que-são-da-demanda-intersetorial-ou-seja-não-são-da-demanda-final.-não-use-nenhum-número-arbitrário-nessa-questão-use-informações-anteriores.-de-quantas-formas-você-consegue-fazer-isso-não-deixe-de-selecionar-as-4-primeiras-colunas-com-as-informações-dos-dados." class="section level4">
 <h4>Q.2.4 Crie uma base de dados <code>ItaQ2.4</code> selecionando os
 dados de <code>ItaQ1.9</code> que são da demanda intersetorial (ou seja,
-não são da demanda final). <strong>Não use nenhum número
-arbitrário</strong>. De quantas formas você consegue fazer isso? Não
-deixe de selecionar as 4 primeiras colunas com as informações dos
-dados.</h4>
+não são da demanda final). <strong>Não use nenhum número arbitrário
+nessa questão (use informações anteriores)</strong>. De quantas formas
+você consegue fazer isso? Não deixe de selecionar as 4 primeiras colunas
+com as informações dos dados.</h4>
 </div>
 <div id="q.2.5-crie-uma-base-de-dados-itaq2.5-selecionando-as-colunas-de-itaq1.9-que-são-da-demanda-final-ou-seja-não-são-da-demanda-intersetorial.-não-use-nenhum-número-arbitrário.-não-deixe-de-selecionar-as-4-primeiras-colunas-com-as-informações-dos-dados." class="section level4">
 <h4>Q.2.5 Crie uma base de dados <code>ItaQ2.5</code> selecionando as
@@ -816,11 +784,12 @@ as informações dos dados.</h4>
 <code>ItaQ1.9</code> diferença em relação à <code>ItaQ2.4</code>. Nomeie
 o valor de <code>Q2.7</code></h4>
 </div>
-<div id="d.2.1-provido-do-número-de-colunas-de-itaq1.9-e-do-valor-q2.7-crie-um-objeto-chamado-itad2.1-que-seja-igual-à-itaq2.4.-não-use-nenhum-número-arbitrário." class="section level4">
+<div id="d.2.1-provido-do-número-de-colunas-de-itaq1.9-e-do-valor-q2.7-crie-um-objeto-chamado-itad2.1-que-seja-igual-à-itaq2.4.-não-use-nenhum-número-arbitrário-exceto-o-número-1.-dica-usar-o-base-r-pode-ser-útil." class="section level4">
 <h4>D.2.1 Provido do número de colunas de <code>ItaQ1.9</code> e do
 valor <code>Q2.7</code>, crie um objeto chamado <code>ItaD2.1</code> que
-seja igual à <code>ItaQ2.4</code>. <em>Não use nenhum número
-arbitrário</em>.</h4>
+seja igual à <code>ItaQ2.4</code>. <em>Não use nenhum número arbitrário
+(exceto o número 1)</em>. <em>Dica</em>: Usar o base R pode ser
+útil.</h4>
 </div>
 </div>
 <div id="treinando-subsetting-de-linhas" class="section level3">
